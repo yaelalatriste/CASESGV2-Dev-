@@ -1,0 +1,99 @@
+﻿@* Principal de Traslado de Expedientes*@
+@model IEnumerable<CedulasEvaluacion.Entities.Vistas.VCedulas>
+@{
+    ViewData["Title"] = "Traslado y Maniobras para el Levantamiento de Expedientes";
+}
+<div class="row" id="Prrueba">
+    <div class="col-lg-12">
+        <table class="table table-hover table-responsive-xl" id="dt_traslado">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Estatus</th>
+                    <th>Servicio</th>
+                    <th>Folio</th>
+                    <th>Mes</th>
+                    <th>Año</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                        @if (item.Estatus.Equals("Enviado a DAS"))
+                        {
+                            <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("En Proceso"))
+                        {
+                            <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Rechazada"))
+                        {
+                            <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Aceptada"))
+                        {
+                            <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        <td>@Html.DisplayFor(modelItem => item.Servicio)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Folio)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Mes)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Anio)</td>
+                        <td>
+                            @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                            {
+                                <a href="/trasladoExp/revision/@item.Id" class="text-center">
+                                    <i class="fad fa-eye text-success"></i>
+                                </a>
+                            }
+                            @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
+                            {
+                                <a asp-action="evaluacion" asp-controller="TrasladoExp" asp-route-id="@item.Id" class="text-center ml-2">
+                                    <i class="fad fa-pencil text-primary"></i>
+                                </a>
+                            }
+                            @if (item.Estatus.Equals("Enviado a DAS") || item.Estatus.Equals("Aceptada") || item.Estatus.Equals("Rechazada"))
+                            {
+                                <a href="/reporteMensajeria/@item.Id" class="text-center pdf ml-2">
+                                    @if (item.Estatus.Equals("Aceptada"))
+                                    {
+                                        <i class="fal fa-file-pdf text-success"></i>
+                                    }
+                                    else @if (item.Estatus.Equals("Rechazada"))
+                               {
+                                <i class="fal fa-file-pdf text-danger"></i>
+                            }
+                            else
+                            {
+                                <i class="fal fa-file-pdf text-primary"></i>
+                            }
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(function () {
+            $("#dt_traslado").DataTable({
+                paging: true,
+                bLengthChange: false,
+                pageLength: 10,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+                },
+            });
+
+
+        });
+    </script>
+}
+

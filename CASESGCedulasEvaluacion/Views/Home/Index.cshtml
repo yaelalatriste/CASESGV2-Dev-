@@ -1,0 +1,93 @@
+﻿@model IEnumerable<CedulasEvaluacion.Entities.Models.Dashboard>
+@{
+    ViewData["Title"] = "Bienvenido " + System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(@User.Claims.ElementAt(1).Value);
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 text-justify">
+            <h3>Dashboard de Servicios</h3>
+        </div>
+    </div>
+    <!-- Small boxes (Stat box) -->
+    @if (Model.Count() > 0)
+    {
+        <div class="row mt-3">
+            @foreach (var ds in Model)
+            {
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box @ds.Fondo">
+                        <div class="inner">
+                            <h3>@ds.Total</h3>
+                            @if (@ds.Estatus.Equals("Enviado a DAS"))
+                            {
+                                <div class="form-row">
+                                    <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "Enviadas a DAS"' data-placement="top">
+                                        <i class="fas fa-eye text-white"></i>
+                                    </a>
+                                    <strong><p>Cédulas Enviadas a DAS</p></strong>
+                                </div>
+                            }
+                            else if (@ds.Estatus.Equals("En Proceso"))
+                            {
+                                <div class="form-row">
+                                    <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "En Proceso"' data-placement="top">
+                                        <i class="fas fa-eye text-dark"></i>
+                                    </a>
+                                    <strong> <p>Cédulas en Proceso</p></strong>
+                                </div>
+                            }
+                            else if (@ds.Estatus.Equals("Trámite Rechazado"))
+                            {
+                                <div class="form-row">
+                                    <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion con "Trámite Rechazado"' data-placement="top">
+                                        <i class="fas fa-eye text-white"></i>
+                                    </a>
+                                    <strong> <p>Cédulas con Trámite Rechazado</p></strong>
+                                </div>
+                            }
+                            else if (@ds.Estatus.Equals("Trámite de Pago"))
+                            {
+                                <div class="form-row">
+                                    <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion en "Trámite de Pago"' data-placement="top">
+                                        <i class="fas fa-eye text-white"></i>
+                                    </a>
+                                    <strong> <p>Cédulas en @ds.Estatus</p></strong>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-row">
+                                    <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "@Html.DisplayFor(item => ds.Estatus)s"' data-placement="top">
+                                        <i class="fas fa-eye text-white"></i>
+                                    </a>
+                                    <strong><p>Cédulas @Html.DisplayFor(item => ds.Estatus)</p></strong>
+                                </div>
+                            }
+                        </div>
+                        <div class="icon">
+                            @Html.Raw(@ds.Icono)
+                        </div>
+                        <a href="/CedulasEstatus/@ds.Estatus" class="small-box-footer">Mas Información <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="col-lg-12 text-center text-danger h4">
+            Aún no has evaluado ningún servicio
+        </div>
+    }
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

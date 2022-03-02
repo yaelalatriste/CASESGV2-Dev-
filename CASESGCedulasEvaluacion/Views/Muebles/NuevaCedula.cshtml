@@ -1,0 +1,189 @@
+﻿@model CedulasEvaluacion.Entities.MMuebles.CedulaMuebles;
+@using Newtonsoft.Json
+
+@{
+    ViewData["title"] = "Servicio de Transportación de Bienes Muebles";
+}
+<div class="container-fluid" id="limpieza">
+    <div class="card">
+        <div class="card-header bg-joke text-white">
+            <h5 class="mt-2">Generar Cédula</h5>
+        </div>
+        <div class="card-body">
+            <div class="row col-lg-12">
+                <div class="col-lg-4">
+                    <label for="">Año:</label>
+                    <select class="form-control" asp-for="@Model.Anio" id="select_anio" required>
+                        <option value="">Seleccione el Año</option>
+                        <option value="2022">2022</option>
+                    </select>
+                </div>
+                <div class=" col-lg-4">
+                    <label for="">Inmueble de Origen:</label>
+                    <select class="form-control" asp-for="@Model.InmuebleOrigenId" id="select_inmueble" required disabled="true"></select>
+                </div>
+                <div class="col-lg-4">
+                    <label>Inmueble Destino</label>
+                    <div class="select2-purple">
+                        <select class="form-control select2bs4" data-dropdown-css-class="select2-purple" asp-for="@Model.InmuebleDestinoId" id="select_inmuebleDestino" required disabled="true"></select>
+                    </div>
+                </div>
+                <div class=" col-lg-4">
+                    <label for="">Mes:</label>
+                    <select class="form-control" asp-for="@Model.Mes" id="select_mes" required disabled="true"></select>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class=" col-lg-12">
+                <a href="/home" class="btn btn-danger float-right ml-2">Cancelar</a>
+                <button type="submit" class="btn btn-success float-right" id="verificarPeriodo">Generar Cédula</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        window.onload = function () {
+            var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            var facturas = new Array();
+
+            $('[data-toggle="tooltip"]').tooltip();
+            $(".select2").select2();
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            /***********Llenamos el Combo de inmuebles*****************/
+            $("#select_anio").change(function () {
+                let optionsInmueble = "<option value=''>Seleccione el Inmueble</option>";
+                $('#select_inmueble').prop("disabled", false);
+                axios.get('/inmuebles/evaluar').then(response => {
+                    response = response.data;
+                    response.forEach(function (inm) {
+                        optionsInmueble += "<option value=" + inm.id + ">" + inm.nombre + "</option>"
+                    });
+                    $("#select_inmueble").html(optionsInmueble);
+                });
+                changeInput = true;
+            });
+            /************ Fin del Combo de inmuebles ******************/
+
+            /************* Llenamos el Combo de inmuebles *************/
+            $("#select_inmueble").change(function () {
+                let optionsInmueble = "<option value=''>Seleccione el Inmueble</option>";
+                $('#select_inmuebleDestino').prop("disabled", false);
+                axios.get('/inmuebles/getInmuebles').then(response => {
+                    response = response.data;
+                    response.forEach(function (inm) {
+                        optionsInmueble += "<option value=" + inm.id + ">" + inm.nombre + "</option>"
+                    });
+                    $("#select_inmuebleDestino").html(optionsInmueble);
+                });
+                changeInput = true;
+            });
+            /*********** Fin del llenado del combo inmuebles *********/
+
+            $("#select_inmuebleDestino").change(function () {
+                let optionsMes = "<option value=''>Seleccione el Mes</option>";
+                $('#select_mes').prop("disabled", false);
+                meses.forEach(function (mes) {
+                    optionsMes += "<option value=" + mes + ">" + mes + "</option>"
+                });
+                $("#select_mes").html(optionsMes);
+                changeInput = true;
+            });
+
+
+            /**************** Validación/Guardado al generar el folio ******************/
+            $('#verificarPeriodo').click(function (event) {
+                event.preventDefault();
+                var isContinue = validaFormulario();
+                var inmuebleOrigen = $('#select_inmueble').val();
+                var inmuebleDestino = $('#select_inmuebleDestino').val();
+                var anio = $('#select_anio').val();
+                var mes = $('#select_mes').val();
+
+
+                if (isContinue == true) {
+                    axios.post('/muebles/new', {
+                        InmuebleOrigenId: parseInt(inmuebleOrigen), InmuebleDestinoId: parseInt(inmuebleDestino), Anio: parseInt(anio), Mes: mes
+                    }).then(res => {
+                        Swal.fire({
+                            'icon': 'success',
+                            'title': 'Servicio de Bienes Muebles',
+                            'text': 'La cédula del servicio de bienes muebles fue generada de manera correcta.'
+                        }).then(function () {
+                            window.location.href = '/muebles/evaluacion/' + res.data;
+                        });
+                    }).catch(error => {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Bienes Muebles',
+                            'text': 'Error al generar la cédula del servicio de bienes muebles'
+                        });
+                    });
+                    
+                }
+            });
+
+            function validaFormulario() {
+                var anio = $('#select_anio').val();
+                var inmuebleOrigen = $('#select_inmueble').val();
+                var inmuebleDestino = $('#select_inmuebleDestino').val();
+                var mes = $('#select_mes').val();
+
+                if (anio == "") {
+                    Swal.fire({
+                        'icon': "error",
+                        'title': 'Servicio de Bienes Muebles',
+                        'html': 'Por favor seleccione el año correspondiente.'
+
+                    });
+
+                    return false;
+                }
+
+                if (inmuebleOrigen == "") {
+                    Swal.fire({
+                        'icon': "error",
+                        'title': 'Servicio de Bienes Muebles',
+                        'html': 'Por favor seleccione el inmueble de origen correspondiente.'
+                    });
+
+                    return false;
+                }
+
+                if (inmuebleDestino == "") {
+                    Swal.fire({
+                        'icon': "error",
+                        'title': 'Servicio de Bienes Muebles',
+                        'html': 'Por favor seleccione el inmueble destino correspondiente.'
+                    });
+
+                    return false;
+                }
+
+                if (mes == "") {
+                    Swal.fire({
+                        'icon': "error",
+                        'title': 'Servicio de Agua para Beber',
+                        'html': 'Por favor seleccione el mes correspondiente.'
+                    });
+
+                    return false;
+                }
+
+                return true;
+            }
+
+
+
+            /*************** Fin de Validación/Guardado al generar el folio ************/
+
+        }
+    </script>
+}
+

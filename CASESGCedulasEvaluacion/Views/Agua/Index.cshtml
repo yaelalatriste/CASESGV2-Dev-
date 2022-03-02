@@ -1,0 +1,150 @@
+﻿@model IEnumerable<CedulasEvaluacion.Entities.Vistas.VCedulas>
+@{
+    ViewData["Title"] = "Listado de Cédulas del Servicio Suministro de Agua Purificada para Beber";
+}
+<div class="row" id="Prrueba">
+    <div class="col-lg-12">
+        <table class="table table-responsive-xl" id="dt_inmuebles">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Estatus</th>
+                    <th>Servicio</th>
+                    <th>Inmueble</th>
+                    <th>Folio</th>
+                    <th>Mes</th>
+                    <th>Año</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 0;}
+                @foreach (var item in Model)
+                {
+                    i++;
+                    <tr>
+
+                        <td>@i</td>
+                        @if (item.Estatus.Equals("Enviado a DAS"))
+                        {
+                            <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("En Proceso") || item.Estatus.Equals("En Trámite"))
+                        {
+                            <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("Trámite Rechazado"))
+                        {
+                            <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite") || item.Estatus.Equals("Trámite de Pago"))
+                        {
+                            <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        <td>@Html.DisplayFor(modelItem => item.Servicio)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Folio)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Mes)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Anio)</td>
+                        <td>
+                            @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                            {
+                                <a href="/agua/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
+                                    <i class="fad fa-eye text-success"></i>
+                                </a>
+                            }
+                            @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
+                            {
+                                <a asp-action="evaluacion" asp-controller="Agua" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                    <i class="fad fa-pencil text-primary"></i>
+                                </a>
+                            }
+                            @if (item.Estatus.Equals("En Proceso"))
+                            {
+                                <a href="#" class="text-center ml-2 delete_cedula" data-id="@item.Id" data-folio="@item.Folio" data-toggle="tooltip" title="Eliminar Cédula" data-placement="top">
+                                    <i class="fad fa-times text-danger"></i>
+                                </a>
+                            }
+                            @if (!item.Estatus.Equals("En Proceso"))
+                            {
+                                <a href="/reporte/agua/@item.Id" class="text-center pdf ml-2" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                    @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
+                                    {
+                                        <i class="fal fa-file-pdf text-success"></i>
+                                    }
+                                    else @if (item.Estatus.Equals("Rechazada"))
+                               {
+                                <i class="fal fa-file-pdf text-danger"></i>
+                            }
+                            else
+                            {
+                                <i class="fal fa-file-pdf text-primary"></i>
+                            }
+                                </a>
+                            }
+                            @if (!item.Estatus.Equals("En Proceso")){
+                            <a href="/agua/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top"><i class="fas fa-file-import text-primary"></i></a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            localStorage.clear();
+
+            $("#dt_inmuebles").DataTable({
+                paging: true,
+                bLengthChange: false,
+                pageLength: 10,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+                },
+            });
+
+            $(document).on("click", ".delete_cedula", function () {
+                var id = $(this).data("id");
+                var folio = $(this).data("folio");
+
+                Swal.fire({
+                    'icon': 'warning',
+                    'title': 'Servicio de Agua para Beber',
+                    'html': '¿Estás seguro de eliminar la cédula con folio: ' + folio + '?',
+                    'confirmButtonColor': '#3085d6',
+                    'cancelButtonColor': '#d33',
+                    'confirmButtonText': 'Si, Eliminar Cédula',
+                    'cancelButtonText': 'Cancelar',
+                    'showCancelButton': true
+                }).then(response => {
+                    if (response.isConfirmed) {
+                        axios.get("/agua/eliminar/" + id).then(response => {
+                            if (response.status == 200) {
+                                Swal.fire({
+                                    'title': 'Servicio de Agua para Beber',
+                                    'html': 'La cédula fue eliminada con éxito.',
+                                    'icon': 'success'
+                                }).then(function () {
+                                    window.location.reload();
+                                });
+                            }
+                        }).catch(error => {
+                            Swal.fire({
+                                'title': 'Servicio de Agua para Beber',
+                                'html': 'No se eliminó la cédula fue eliminada. Contacte al administrador del sistema.',
+                                'icon': 'error'
+                            });
+                        });
+                    }
+                });
+
+            });
+
+        });
+    </script>
+}
+

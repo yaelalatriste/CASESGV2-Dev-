@@ -1,0 +1,300 @@
+﻿<!-- Main Sidebar Container -->
+<aside class="main-sidebar elevation-4" style="background-image: radial-gradient(circle at 5.99% 5.99%, #675770 0, #544468 16.67%, #3e3160 33.33%, #1f1f59 50%, #001052 66.67%, #00004c 83.33%, #000047 100%);">
+    <!-- Brand Logo -->
+    <a href="/home" class="brand-link mb-3 ml-3">
+        <img src="~/dist/img/logos/logoCJFblanco.png" alt="AdminLTE Logo" class="brand-image-xl">
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar Menu -->
+        <nav class="mt-4">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="font-size: 15px;">
+                <li class="nav-item has-treeview" id="li_Inicio">
+                    <a href="/" class="nav-link text-white">
+                        <i class="fad fa-home mr-2"></i>
+                        <p>
+                            Inicio
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview" id="li_Perfiles">
+                    <a href="#" class="nav-link text-white">
+                        <i class="far fa-user-cog mr-1"></i>
+                        <p>
+                            Perfiles
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/perfiles/index" class="nav-link ml-2 text-white">
+                                <i class="fad fa-address-card nav-icon"></i>
+                                <p>
+                                    Listado de Perfiles
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/perfiles/new" class="nav-link ml-2 text-white">
+                                <i class="fad fa-address-card nav-icon"></i>
+                                <p>
+                                    Nuevo Perfil
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview" id="li_Usuarios">
+                    <a href="/usuarios/index" class="nav-link text-white">
+                        <i class="fad fa-users mr-1"></i>
+                        <p>
+                            Usuarios
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview" id="li_Administraciones">
+                    <a href="/inmuebles/administraciones" class="nav-link text-white">
+                        <i class="fad fa-building mr-2"></i>
+                        <p>
+                            Administraciones
+                        </p>
+                    </a>
+                </li>
+                <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+                <li class="nav-item has-treeview" id="li_Limpieza">
+                    <a href="#" class="nav-link text-white">
+                        <i class="fad fa-soap mr-2"></i>
+                        <p>
+                            Servicio de limpieza
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-controller="Limpieza" asp-action="NuevaCedula" class="nav-link ml-2 text-white">
+                                <i class="fal fa-file nav-icon"></i>
+                                <p>Generar Cédula</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/limpieza/index" class="nav-link ml-2 text-white">
+                                <i class="fal fa-clipboard-check nav-icon"></i>
+                                <p>Listado de Cédulas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview mt-1" id="li_Fumigación">
+                    <a href="#" class="nav-link text-white">
+                        <i class="fad fa-bug mr-2"></i>
+                        <p>
+                            Servicio de Fumigación
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-controller="Fumigacion" asp-action="NuevaCedula" class="nav-link ml-2 text-white">
+                                <i class="fal fa-file nav-icon"></i>
+                                <p>Generar Cédula</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Fumigacion" asp-action="Index" class="nav-link ml-2 text-white">
+                                <i class="fal fa-clipboard-check nav-icon"></i>
+                                <p>Listado de Cédulas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview mt-1" id="li_Mensajeria">
+                    <a href="#" class="nav-link text-white">
+                        <i class="far fa-shipping-fast mr-1"></i>
+                        <p>
+                            Servicio de Mensajería
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-controller="Mensajeria" asp-action="NuevaCedula" class="nav-link ml-2 text-white">
+                                <i class="fal fa-file nav-icon"></i>
+                                <p>Generar Cédula</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Mensajeria" asp-action="Index" class="nav-link ml-2 text-white">
+                                <i class="fal fa-clipboard-check nav-icon"></i>
+                                <p>Listado de Cédulas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview mt-1" id="li_Traslado_de_Expedientes">
+                    <a href="#" class="nav-link text-white">
+                        <i class="far fa-file-export mr-2"></i>
+                        <p>
+                            Traslado de Expedientes
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-controller="TrasladoExp" asp-action="NuevaCedula" class="nav-link ml-2 text-white">
+                                <i class="fal fa-file nav-icon"></i>
+                                <p>Generar Cédula</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="TrasladoExp" asp-action="Index" class="nav-link ml-2 text-white">
+                                <i class="fal fa-clipboard-check nav-icon"></i>
+                                <p>Listado de Cédulas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview mt-1" id="li_Telefonia_Celular">
+                    <a href="#" class="nav-link text-white">
+                        <i class="fad fa-mobile-android mr-3"></i>
+                        <p>
+                            Telefonía Celular
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-controller="Celular" asp-action="NuevaCedula" class="nav-link ml-2 text-white">
+                                <i class="fal fa-file nav-icon"></i>
+                                <p>Generar Cédula</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Celular" asp-action="Index" class="nav-link ml-2 text-white">
+                                <i class="fal fa-clipboard-check nav-icon"></i>
+                                <p>Listado de Cédulas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview mt-1" id="li_Telefonia_Convencional">
+                    <a href="#" class="nav-link text-white">
+                        <i class="fal fa-phone-office mr-2"></i>
+                        <p>
+                            Telefonía Convencional
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-controller="Convencional" asp-action="NuevaCedula" class="nav-link ml-2 text-white">
+                                <i class="fal fa-file nav-icon"></i>
+                                <p>Generar Cédula</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Convencional" asp-action="Index" class="nav-link ml-2 text-white">
+                                <i class="fal fa-clipboard-check nav-icon"></i>
+                                <p>Listado de Cédulas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview mt-1" id="li_RPBI">
+                    <a href="#" class="nav-link text-white">
+                        <i class="fal fa-biohazard mr-2"></i>
+                        <p>
+                            RPBI
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-controller="Residuos" asp-action="NuevaCedula" class="nav-link ml-2 text-white">
+                                <i class="fal fa-file nav-icon"></i>
+                                <p>Generar Cédula</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Residuos" asp-action="Index" class="nav-link ml-2 text-white">
+                                <i class="fal fa-clipboard-check nav-icon"></i>
+                                <p>Listado de Cédulas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview mt-1" id="li_Agua_Para_Beber">
+                    <a href="#" class="nav-link text-white">
+                        <i class="fad fa-glass mr-2"></i>
+                        <p>
+                            Agua Para Beber
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-controller="Agua" asp-action="NuevaCedula" class="nav-link ml-2 text-white">
+                                <i class="fal fa-file nav-icon"></i>
+                                <p>Generar Cédula</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Agua" asp-action="Index" class="nav-link ml-2 text-white">
+                                <i class="fal fa-clipboard-check nav-icon"></i>
+                                <p>Listado de Cédulas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview mt-1" id="li_Transporte_de_Personal">
+                    <a href="#" class="nav-link text-white">
+                        <i class="fal fa-car-building mr-2"></i>
+                        <p>
+                            Transporte de Personal
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-controller="Transporte" asp-action="NuevaCedula" class="nav-link ml-2 text-white">
+                                <i class="fal fa-file nav-icon"></i>
+                                <p>Generar Cédula</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Transporte" asp-action="Index" class="nav-link ml-2 text-white">
+                                <i class="fal fa-clipboard-check nav-icon"></i>
+                                <p>Listado de Cédulas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview mt-1" id="li_Bienes_Muebles">
+                    <a href="#" class="nav-link text-white">
+                        <i class="fa-light fa-truck-clock mr-2"></i>
+                        <p>
+                            Bienes Muebles
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-controller="Muebles" asp-action="NuevaCedula" class="nav-link ml-2 text-white">
+                                <i class="fal fa-file nav-icon"></i>
+                                <p>Generar Cédula</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Muebles" asp-action="Index" class="nav-link ml-2 text-white">
+                                <i class="fal fa-clipboard-check nav-icon"></i>
+                                <p>Listado de Cédulas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

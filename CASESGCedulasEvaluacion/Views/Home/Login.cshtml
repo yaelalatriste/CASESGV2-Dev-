@@ -1,0 +1,157 @@
+﻿@{
+    var returnUrl = ViewData["ReturnUrl"] as string;
+    var error = TempData["Error"] as string;
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3 mt-2">
+            <img src="~/img/logo_color.png" alt="" height="80" class="ml-5">
+        </div>
+        <div class="col-lg-8 mt-5 ml-5 text-right">
+            <strong>@DateTime.Now.ToString("D", @System.Globalization.CultureInfo.CreateSpecificCulture("es")) <i class="fal fa-clock-desk"></i></strong>
+        </div>
+    </div>
+    <hr style="background-color: #24135F; font-weight: bold;" />
+    <div class="container">
+        <div class="col-lg-12 mt-2">
+            <h3 class="font-weight-bold text-center" style="color:#21006A;">Sistema para el Registro de Cédulas Automatizadas de Supervisión y Evaluación de Servicios Generales (CASESG)</h3>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <h3 class="ml-5">Inicio del Sistema</h3>
+        </div>
+    </div>
+    <div class="row col-lg-12">
+        <div class="col-lg-6 mt-5">
+            <form action="/login?ReturnUrl=@System.Net.WebUtility.UrlEncode(returnUrl)" method="post">
+                <div class="input-group mr-1 mb-3 col-lg-8 float-right">
+                    <input type="text" class="form-control" name="username" placeholder="u + número de expediente" id="usr_expediente">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fal fa-user-circle"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-lg-12"></div>
+                <div class="input-group mr-1 mb-3 col-lg-8 float-right">
+                    <input type="password" class="form-control" name="password" placeholder="Contraseña" id="usr_password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fal fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-lg-12"></div>
+                <div class="row mb-3 ml-4 col-lg-12 float-left">
+                    @if (!string.IsNullOrEmpty(error))
+                    {
+                        <h5 class="text-danger" style="padding: 20px;">@error</h5>
+                    }
+                </div>
+                <div class="row mb-3 mr-1 col-lg-4 float-right">
+                    <button type="submit" class="btn btn-cjf btn-block" id="iniciar_sesion">Iniciar Sesión</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-6 mt-5 text-justify">
+            Para capturar el usuario, recuerde colocar la letra “u” antes de su número de expediente.<BR />
+            Ejemplo: u + 56, el usuario será: u56
+        </div>
+    </div>
+</div>
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+    <div class="p-3">
+        <h5>Title</h5>
+        <p>Sidebar content</p>
+    </div>
+</aside>
+<!-- Footer -->
+<footer class="page-footer font-small teal pt-4" style="background-color:#21006A; color: white;">
+    <!-- Footer Text -->
+    <div class="container-fluid text-center text-md-left">
+        <!-- Grid row -->
+        <div class="row">
+            <!-- Grid column -->
+            <div class="col-md-6 mt-md-0 mt-3" style="background-color:#21006A; color: white;">
+                <!-- Content -->
+                <h5 class="font-weight-bold">Edificio Sede</h5>
+                <p class="ml-3">
+                    <i class="fad fa-building"></i>
+                    &nbsp;&nbsp;Edificio Sede Insurgentes Sur 2417
+                    San Ángel. Álvaro Obregón <br />
+                </p>
+                <p class="ml-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C.P. 01000, Ciudad de México</p>
+                <p class="ml-3"><i class="fad fa-phone"></i>&nbsp; +52 (55) 5490-8000</p>
+
+            </div>
+            <!-- Grid column -->
+
+            <hr class="clearfix w-100 d-md-none pb-3">
+            <!-- Grid column -->
+            <div class="col-md-6 mb-md-0 mb-3" style="background-color:#21006A; color: white;">
+                <!-- Content -->
+                <h5 class="font-weight-bold">¿Problemas con el sistema?</h5>
+                <p><i class="fad fa-phone"></i>&nbsp;&nbsp;&nbsp;Ext. 2574, Red nacional #318-2574</p>
+                <p><i class="fad fa-envelope-open-text"></i> &nbsp;&nbsp;juan.miranda.alatriste@correo.cjf.gob.mx</p>
+            </div>
+            <!-- Grid column -->
+
+        </div>
+        <!-- Grid row -->
+
+    </div>
+    <!-- Footer Text -->
+    <!-- Copyright -->
+    <div class="page-footer text-center py-3" style="background-color:#21006A; color: white; font-weight: bold;">
+        ©2021 - CASESG - Consejo de la Judicatura Federal
+    </div>
+    <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+<style>
+    footer {
+        position: absolute;
+        bottom: 0;
+        height: 60px;
+        width: 100%;
+    }
+</style>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#iniciar_sesion").click(function () {
+                if ($("#usr_expediente").val() == "" && $("#usr_password").val() == "") {
+                    Swal.fire({
+                        'icon': 'error',
+                        'title': 'Iniciar Sesion',
+                        'html': 'Favor de capturar su usuario y contraseña que utiliza para ingresar al sistema de nóminas de la institución.'
+                    });
+                    return false;
+                } else if ($("#usr_password").val() == "" && $("#usr_expediente").val() != "") {
+                    Swal.fire({
+                        'icon': 'error',
+                        'title': 'Iniciar Sesion',
+                        'html': 'Favor de capturar su contraseña que utiliza para ingresar al sistema de nóminas de la institución.'
+                    });
+                    return false;
+                } else if ($("#usr_password").val() != "" && $("#usr_expediente").val() == "") {
+                    Swal.fire({
+                        'icon': 'error',
+                        'title': 'Iniciar Sesion',
+                        'html': 'Favor de capturar su usuario que utiliza para ingresar al sistema de nóminas de la institución.'
+                    });
+                    return false;
+                } else {
+
+                    return true;
+                }
+            });
+        });
+    </script>
+}
