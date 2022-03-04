@@ -9,6 +9,7 @@ namespace CedulasEvaluacion.Entities.Models
     {
         public int Id { get; set; }
         public int CedulaLimpiezaId { get; set; }
+        public int Pregunta { get; set; }
         public int IncidenciaId { get; set; }
         public DateTime FechaIncidencia { get; set; }
         public string Comentarios { get; set; }

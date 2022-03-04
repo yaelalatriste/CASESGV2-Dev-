@@ -18,7 +18,7 @@ namespace CedulasEvaluacion.Interfaces
         Task<CedulaLimpieza> CedulaById(int id);
         Task<int> GuardaRespuestas(List<RespuestasEncuesta> respuestasEncuestas);
         Task<List<RespuestasEncuesta>> obtieneRespuestas(int id);
-        Task<int> enviaRespuestas(List<RespuestasEncuesta> respuestasEncuestas);
+        Task<int> enviaRespuestas(int id);
         Task<int> apruebaRechazaCedula(CedulaLimpieza cedulaLimpieza);
         Task<int> capturaHistorial(HistorialCedulas historialCedulas);
         Task<List<HistorialCedulas>> getHistorial(int cedula);

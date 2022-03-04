@@ -61,6 +61,11 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_7" role="tab" aria-controls="contact" aria-selected="false">Pregunta 7</a>
                         </li>
+                        @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador")) {
+                            <li class="nav-item" role="presentation">
+                               <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_8" role="tab" aria-controls="contact" aria-selected="false">Capacitación del Personal</a>
+                            </li>
+                        }
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#entregables" role="tab" aria-controls="contact" aria-selected="false">Entregables</a>
                         </li>
@@ -87,7 +92,7 @@
                                 <label for="radioSuccess4">No</label>
                             </div>
                             <div class="row col-lg-12 mt-3" id="incidencias_pr2">
-                                <button type='button' class='btn btn-primary mr-2' id="btn_addInci">Capturar Incidencia</button>
+                                <button type='button' class='btn btn-primary mr-2' id="btn_addInci" data-pregunta="2">Capturar Incidencia</button>
                                 <button type='button' class='btn btn-primary' id="consulta_incidencias">Consultar Incidencias</button>
                             </div>
                         </div>
@@ -117,7 +122,7 @@
                                 <label for="radioSuccess8">No</label>
                             </div>
                             <div class="row col-lg-12 mt-3" id="incidencias_pr4">
-                                <button type='button' class='btn btn-primary mr-2' id="btn_inciEquipo">Capturar Incidencia</button>
+                                <button type='button' class='btn btn-primary mr-2' id="btn_inciEquipo" data-pregunta="4">Capturar Incidencia</button>
                                 <button type='button' class='btn btn-primary' id="btn_showInciEquipo">Consultar Insidencias</button>
                             </div>
                         </div>
@@ -198,6 +203,19 @@
                             </div>
                         </div>
                         @* Fin de la Pregunta 7 *@
+                        @* Pregunta 8 *@
+                        <div class="tab-pane fade mt-2 ml-3" id="pregunta_8" role="tabpanel" aria-labelledby="home-tab">
+                            <p class="text-black h5 mb-3">1.- ¿El prestador de servicios demostró que el personal cuenta con la capacitación para cumplir debídamente con el Servicio de Limpieza?</p>
+                            <div class="icheck-success d-inline">
+                                <input type="radio" name="pregunta8" value="true" id="radioSuccess15" class="pregunta8">
+                                <label for="radioSuccess15">Si</label>
+                            </div>
+                            <div class="icheck-success d-inline ml-3">
+                                <input type="radio" name="pregunta8" value="false" id="radioSuccess16" class="pregunta8">
+                                <label for="radioSuccess16">No</label>
+                            </div>
+                        </div>
+                        @* Fin de la Pregunta 8 *@
                         @* Entregables *@
                         <div class="tab-pane fade mt-2 ml-3" id="entregables" role="tabpanel" aria-labelledby="contact-tab">
                             <div class="col-lg-12 mt-3">
@@ -226,8 +244,14 @@
         </div>
         <div class="card-footer">
             <div class=" col-lg-12">
-                <button type="button" class="btn btn-primary float-right ml-3 btn_enviar" data-toggle="tooltip" title='Enviar la "Cédula" a la DAS' data-placement="top">Enviar a DAS</button>
-                <button type="button" class="btn btn-success float-right btn_guardar" data-toggle="tooltip" title='Guardar la información capturada sin enviar a la DAS' data-placement="top">Guardar Cédula</button>
+                @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                {
+                    <button type="button" class="btn btn-joke float-right ml-3 revisar_cedula" data-toggle="tooltip" title='Continuar a la Revisión de la Cédula' data-placement="top">
+                        Concluir Evaluación
+                    </button>
+                }
+                    <button type="button" class="btn btn-primary float-right ml-3 btn_enviar" data-toggle="tooltip" title='Enviar la "Cédula" a la DAS' data-placement="top">Enviar a DAS</button>
+                    <button type="button" class="btn btn-success float-right btn_guardar" data-toggle="tooltip" title='Guardar la información capturada sin enviar a la DAS' data-placement="top">Guardar Cédula</button>
             </div>
         </div>
     </div>
@@ -353,6 +377,7 @@
                     <div class="col-lg-12">
                         <div class="form-row">
                             <input type="hidden" id="id_incidencia" />
+                            <input type="hidden" id="id_pregunta" />
                             <div class="form-group col-md-6">
                                 <label for="fechaIncidencia">Fecha de la Incidencia: </label>
                                 <input type="date" class="form-control" id="fecha_incidencia" name="fechaIncidencia">
@@ -463,6 +488,7 @@
                     <div class="col-lg-12">
                         <div class="form-row">
                             <input type="hidden" id="id_incidencia" />
+                            <input type="hidden" id="id_pregunta" />
                             <div class="form-group col-md-6">
                                 <label for="fechaIncidencia">Fecha de la Incidencia: </label>
                                 <input type="date" class="form-control" id="fecha_inciEquipo" name="fechaIncidencia">
@@ -570,12 +596,20 @@
                     <div class="form-group col-lg-4">
                         <label for="tipoIncidencia">Tipo de Entregable:</label>
                         <select class="form-control" id="tipo_entregable">
-                            <option value="">Seleccione un Entregable</option>
-                            <option value="ActaER">Acta Entrega - Recepción</option>
-                            <option value="Factura">Factura</option>
-                            <option value="SAT">Validación del SAT</option>
-                            <option value="NotaCredito">Nota de Crédito</option>
-                            <option value="Reporte(s)">Reporte(s)</option>
+                            @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                            {
+                                <option value="">Seleccione un Entregable</option>
+                                <option value="ActaER">Acta Entrega - Recepción</option>
+                                <option value="Factura">Factura</option>
+                                <option value="SAT">Validación del SAT</option>
+                                <option value="NotaCredito">Nota de Crédito</option>
+                                <option value="Reporte(s)">Reporte(s)</option>
+                            }
+                            else
+                            {
+                                <option value="">Seleccione un Entregable</option>
+                                <option value="EBD">Entregable Bajo Demanda</option>
+                            }
                         </select>
                         <div class="col-sm-12" id="error_tipoEntre">
                             <small id="dateHelp" class="text-danger">
@@ -1016,6 +1050,7 @@
                     }
                     return true;
                 }
+
                  $('#agregarFactura').click(function () {
                      var id = $("#idFactura").val();
 
@@ -1161,6 +1196,7 @@
                     $('#btn_addInci').click(function () {
                         $('#modal-incidencias').modal('show');
                         $('#id_incidencia').val('');
+                        $('#id_pregunta').val($(this).data('pregunta'));
                     });
 
                     axios.get("/limpieza/getTiposIncidencia").then(response => {
@@ -1293,11 +1329,13 @@
                             }
 
                         return isContinue;
-                    }
+                }
+
                 $('#guardaIncidencia').click(function () {
                         let html = "";
                         let id = $('#id_incidencia').val();
                         let fecha = $('#fecha_incidencia').val();
+                        let pregunta = $('#id_pregunta').val();
                         let tipo = $('#tipo_incidencia').val();
                         let area = $('#area_incidencia').val();
                         let comentarios = $('#comentarios_incidencias').val();
@@ -1305,7 +1343,7 @@
                             id = 0;
                         }
                         if (validaCamposIncidencia()) {
-                            axios.post("/limpieza/guardaIncidencias", { Id: parseInt(id), CedulaLimpiezaId: @Model.Id, FechaIncidencia: fecha, Comentarios: comentarios,
+                            axios.post("/limpieza/guardaIncidencias", { Id: parseInt(id), CedulaLimpiezaId: @Model.Id, FechaIncidencia: fecha, Comentarios: comentarios, Pregunta: parseInt(pregunta),
                                                                     Incidencia: { Tipo: tipo, Nombre: area }
                             }).then(response => {
                                 if (response.status == 200) {
@@ -1408,6 +1446,7 @@
                                 $('#area_inciEquipo option[value="' + editIncidencia + '"]').attr('selected', 'selected');
                             }
                         });
+                        $('#id_pregunta').val($(this).data('pregunta'));
                         $('#modal-equipos').modal('show');
                     });
                 /*FIN Incidencias Equipo*/
@@ -1501,7 +1540,7 @@
                         return true;
                     }
 
-                $('#guardaInciEquipo').click(function () {
+                    $('#guardaInciEquipo').click(function () {
                         let html = "";
                         let id = $('#id_incidencia').val();
                         let fecha = $('#fecha_inciEquipo').val();
@@ -1514,7 +1553,7 @@
 
                         if (validaCamposIncidenciaIncidenciaEquipo()) {
                             axios.post("/limpieza/guardaIncidencias", {
-                                Id: parseInt(id), CedulaLimpiezaId: @Model.Id, FechaIncidencia: fecha, Comentarios: comentarios,
+                                Id: parseInt(id), CedulaLimpiezaId: @Model.Id, FechaIncidencia: fecha, Comentarios: comentarios, Pregunta: parseInt(pregunta),
                                 Incidencia: { Tipo: tipo, Nombre: area }
                             }).then(response => {
                                 if (response.status == 200) {
@@ -2006,7 +2045,7 @@
                             });
                             return false;
                         } else {
-                            axios.post("/cedLimpieza/sendCedula", respuestas).then(response => {
+                            axios.post("/cedLimpieza/sendCedula/"+model.id).then(response => {
                                 if (response.status == 200) {
                                     Swal.fire({
                                         'icon': "success",
@@ -2173,6 +2212,34 @@
                                 }
 
                         validaEntregables();
+                    });
+
+                $(".revisar_cedula").click(function () {
+                        let pregunta = 8;
+                        let respuesta = $("input[name=pregunta8]:checked").val();
+                        if (respuesta == "" || respuesta == null) {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
+                                'html': 'Para continuar, capture si el personal está capacitado debídamente para prestar el servicio.'
+                            });
+                            return false;
+                        } else {
+                            respuestas.push({ CedulaLimpiezaId: parseInt(model.id), Pregunta: pregunta, Respuesta: (respuesta == "true"), Detalles: "Capacitación" });
+                            axios.post("/cedLimpieza/evaluation", respuestas).then(response => {
+                                if (response.status == 200) {
+                                    axios.post("/cedLimpieza/sendCedula/" + model.id).then(response => {
+                                        Swal.fire({
+                                            'icon': "success",
+                                            'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
+                                            'html': "Se guardaron las respuestas de la cédula correctamente."
+                                        }).then(function () {
+                                            window.location.href = "/limpieza/revision/" + model.id;
+                                        });
+                                    });
+                                }
+                            });
+                        }
                     });
                 /*Enviar de guardar la cedula*/
 

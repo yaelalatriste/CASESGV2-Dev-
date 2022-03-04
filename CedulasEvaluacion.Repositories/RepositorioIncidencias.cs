@@ -93,6 +93,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@id", incidencia.Id)).Direction = System.Data.ParameterDirection.Output;
                         cmd.Parameters.Add(new SqlParameter("@cedula", incidencia.CedulaLimpiezaId));
+                        cmd.Parameters.Add(new SqlParameter("@pregunta", incidencia.Pregunta));
                         cmd.Parameters.Add(new SqlParameter("@tipo", incidencia.Incidencia.Tipo));
                         cmd.Parameters.Add(new SqlParameter("@nombre", incidencia.Incidencia.Nombre));
                         cmd.Parameters.Add(new SqlParameter("@fechaIncidencia", incidencia.FechaIncidencia));

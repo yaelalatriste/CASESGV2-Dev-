@@ -2659,6 +2659,11 @@ a.btn.disabled, fieldset:disabled a.btn {
     box-shadow: none
 }
 
+.btn-joke {
+    background-color: #5c3eca !important;
+    color: #fff;
+}
+
 .btn-incidencias {
     color: #ffffff;
     background-color: #118216 !important;

@@ -250,73 +250,23 @@ namespace CedulasEvaluacion.Repositories
         }
 
         /*Envío de la Cedula*/
-        public async Task<int> enviaRespuestas(List<RespuestasEncuesta> respuestasEncuestas)
+        public async Task<int> enviaRespuestas(int id)
         {
             var send = 0;
-            decimal calificacion = 0;
             try
             {
-                foreach (var question in respuestasEncuestas)
-                {
-                    using (SqlConnection sql = new SqlConnection(_connectionString))
-                    {
-                        using (SqlCommand cmd = new SqlCommand("sp_calculaPenalizacionesPregunta", sql))
-                        {   
-                            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                            cmd.Parameters.Add(new SqlParameter("@penaTotal", SqlDbType.Decimal)).Direction = ParameterDirection.Output;
-                            cmd.Parameters.Add(new SqlParameter("@pregunta", question.Pregunta));
-                            cmd.Parameters.Add(new SqlParameter("@cedulaId", question.CedulaLimpiezaId));
-
-                            await sql.OpenAsync();
-
-                            var update = await cmd.ExecuteNonQueryAsync();
-                        }
-                    }
-                }
-
-                foreach (var question in respuestasEncuestas)
-                {
-                    using (SqlConnection sql = new SqlConnection(_connectionString))
-                    {
-                        using (SqlCommand cmd2 = new SqlCommand("sp_calculaCalificacionLimpieza", sql))
-                        {
-                            cmd2.CommandType = System.Data.CommandType.StoredProcedure;
-                            cmd2.Parameters.Add(new SqlParameter("@calificacionFinal", SqlDbType.VarChar, 4)).Direction = ParameterDirection.Output;
-                            cmd2.Parameters.Add(new SqlParameter("@pregunta", question.Pregunta));
-                            cmd2.Parameters.Add(new SqlParameter("@cedulaId", question.CedulaLimpiezaId));
-                            cmd2.Parameters.Add(new SqlParameter("@calificacion", calificacion));
-                            await sql.OpenAsync();
-                            send = await cmd2.ExecuteNonQueryAsync();
-                            string p = cmd2.Parameters["@calificacionFinal"].Value.ToString();
-
-                            calificacion = Convert.ToDecimal(cmd2.Parameters["@calificacionFinal"].Value.ToString());
-                        }
-                    }
-                }
-
                 using (SqlConnection sql = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand cmd2 = new SqlCommand("sp_calificacionEntregablesBDLimpieza", sql))
+                    using (SqlCommand cmd2 = new SqlCommand("sp_calculaCalificacionLimpieza", sql))
                     {
                         cmd2.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd2.Parameters.Add(new SqlParameter("@cedulaId", respuestasEncuestas[0].CedulaLimpiezaId));
+                        cmd2.Parameters.Add(new SqlParameter("@cedulaId", id));
                         await sql.OpenAsync();
                         await cmd2.ExecuteNonQueryAsync();
+                        send = 1;
                     }
                 }
-
-                using (SqlConnection sql = new SqlConnection(_connectionString))
-                {
-                    using (SqlCommand cmd2 = new SqlCommand("sp_calificacionCapacitacionLimpieza", sql))
-                    {
-                        cmd2.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd2.Parameters.Add(new SqlParameter("@cedulaId", respuestasEncuestas[0].CedulaLimpiezaId));
-                        await sql.OpenAsync();
-                        await cmd2.ExecuteNonQueryAsync();
-                    }
-                }
-
-                return send == 1 ? send : 0;
+                return send == 1 ? send : -1;
             }
             catch (Exception ex)
             {

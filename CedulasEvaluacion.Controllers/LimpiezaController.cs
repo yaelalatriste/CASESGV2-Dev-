@@ -107,7 +107,7 @@ namespace CedulasEvaluacion.Controllers
             if (success == 1)
             {
                 CedulaLimpieza cedulaLimpieza = await vlimpieza.CedulaById(id);
-                if (cedulaLimpieza.Estatus.Equals("Enviado a DAS"))
+                if (cedulaLimpieza.Estatus.Equals("Enviado a DAS") && isEvaluate() == true)
                 {
                     return Redirect("/error/cedSend");
                 }
@@ -178,7 +178,14 @@ namespace CedulasEvaluacion.Controllers
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
                 TempData["Title"] = "Cédula de Limpieza con número de folio: ";
-                return View(cedLim);
+                if(cedLim.RespuestasEncuesta.Count == 8)
+                {
+                    return View(cedLim);
+                }
+                else
+                {
+                    return Redirect("/limpieza/evaluacion/" + id);
+                }
             }
             return Redirect("/error/denied");
         }
@@ -233,11 +240,11 @@ namespace CedulasEvaluacion.Controllers
 
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
-        [Route("/cedLimpieza/sendCedula")]
-        public async Task<IActionResult> enviaCedula([FromBody] List<RespuestasEncuesta> respuestas)
+        [Route("/cedLimpieza/sendCedula/{id?}")]
+        public async Task<IActionResult> enviaCedula(int id)
         {
             int success = 0;
-            success = await vlimpieza.enviaRespuestas(respuestas);
+            success = await vlimpieza.enviaRespuestas(id);
             if (success != -1)
             {
                 return Ok();
@@ -315,6 +322,14 @@ namespace CedulasEvaluacion.Controllers
         private string modulo()
         {
             return "Limpieza";
+        }
+        private bool isEvaluate()
+        {
+            if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+            {
+                return true;
+            }
+            return false;
         }
 
     }

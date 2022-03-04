@@ -52,7 +52,7 @@
                                     <i class="fad fa-eye text-success"></i>
                                 </a>
                             }
-                            @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
+                            @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso") || !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                             {
                                 <a asp-action="evaluacion" asp-controller="Limpieza" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
                                     <i class="fad fa-pencil text-primary"></i>
