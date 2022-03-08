@@ -221,6 +221,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 Id = (int)reader["Id"],
                 CedulaFumigacionId = (int)reader["CedulaFumigacionId"],
+                DHAtraso = reader["DHAtraso"] != DBNull.Value ? (int)reader["DHAtraso"] : 0,
                 Tipo = reader["Tipo"].ToString(),
                 Pregunta = reader["Pregunta"].ToString(),
                 FechaProgramada = reader["FechaProgramada"] != DBNull.Value ? Convert.ToDateTime(reader["FechaProgramada"]) : DateTime.Now,

@@ -95,7 +95,7 @@ namespace CedulasEvaluacion.Controllers
             if (success == 1)
             {
                 CedulaFumigacion cedulaFumigacion = await vFumigacion.CedulaById(id);
-                if (cedulaFumigacion.Estatus.Equals("Enviado a DAS"))
+                if (cedulaFumigacion.Estatus.Equals("Enviado a DAS") && isEvaluate() == true)
                 {
                     return Redirect("/error/cedSend");
                 }
@@ -162,6 +162,14 @@ namespace CedulasEvaluacion.Controllers
                 foreach (var user in cedFum.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
+                }
+                if (cedFum.RespuestasEncuesta.Count == 9)
+                {
+                    return View(cedFum);
+                }
+                else
+                {
+                    return Redirect("/fumigacion/evaluacion/" + id);
                 }
                 return View(cedFum);
             }
@@ -241,6 +249,15 @@ namespace CedulasEvaluacion.Controllers
         private string modulo()
         {
             return "Fumigación";
+        }
+
+        private bool isEvaluate()
+        {
+            if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+            {
+                return true;
+            }
+            return false;
         }
 
     }

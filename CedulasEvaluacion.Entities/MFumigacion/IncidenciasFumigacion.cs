@@ -8,6 +8,7 @@ namespace CedulasEvaluacion.Entities.MFumigacion
     {
         public int Id { get; set; }
         public int CedulaFumigacionId { get; set; }
+        public int DHAtraso { get; set; }
         public string Tipo { get; set; }
         public string Pregunta { get; set; }
         public DateTime FechaProgramada { get; set; }

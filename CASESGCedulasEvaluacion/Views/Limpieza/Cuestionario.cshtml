@@ -40,30 +40,34 @@
             <div class="row ">
                 <div class="col-lg-12">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#pregunta_1" role="tab" aria-controls="home" aria-selected="true">Pregunta 1</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#pregunta_2" role="tab" aria-controls="profile" aria-selected="false">Pregunta 2</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_3" role="tab" aria-controls="contact" aria-selected="false">Pregunta 3</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_4" role="tab" aria-controls="contact" aria-selected="false">Pregunta 4</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_5" role="tab" aria-controls="contact" aria-selected="false">Pregunta 5</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_6" role="tab" aria-controls="contact" aria-selected="false">Pregunta 6</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_7" role="tab" aria-controls="contact" aria-selected="false">Pregunta 7</a>
-                        </li>
-                        @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador")) {
+                        @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || (@User.Claims.ElementAt(2).Value).Contains("Administrador"))
+                        {
                             <li class="nav-item" role="presentation">
-                               <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_8" role="tab" aria-controls="contact" aria-selected="false">Capacitación del Personal</a>
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#pregunta_1" role="tab" aria-controls="home" aria-selected="true">Pregunta 1</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#pregunta_2" role="tab" aria-controls="profile" aria-selected="false">Pregunta 2</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_3" role="tab" aria-controls="contact" aria-selected="false">Pregunta 3</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_4" role="tab" aria-controls="contact" aria-selected="false">Pregunta 4</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_5" role="tab" aria-controls="contact" aria-selected="false">Pregunta 5</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_6" role="tab" aria-controls="contact" aria-selected="false">Pregunta 6</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_7" role="tab" aria-controls="contact" aria-selected="false">Pregunta 7</a>
+                            </li>
+                        }
+                        @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                        {
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_8" role="tab" aria-controls="contact" aria-selected="false">Capacitación del Personal</a>
                             </li>
                         }
                         <li class="nav-item" role="presentation">
@@ -71,151 +75,157 @@
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        @* Pregunta 1 *@
-                        <div class="tab-pane fade mt-2 ml-3 show active" id="pregunta_1" role="tabpanel" aria-labelledby="home-tab">
-                            <p class="text-black h5">1. ¿Cúando se estableció el cierre de mes?</p>
-                            <div class="form-group">
-                                <label for="fechaCierre">Fecha de Cierre</label>
-                                <input type="date" name="pregunta1" id="detalle1" class="form-control col-lg-4 pregunta1">
-                            </div>
-                        </div>
-                        @* Fin de la Pregunta 1 *@
-                        @* Pregunta 2 *@
-                        <div class="tab-pane fade mt-2 ml-3" id="pregunta_2" role="tabpanel" aria-labelledby="profile-tab">
-                            <p class="text-black h5">2. ¿El personal de limpieza cumplió con las actividades contempladas en el programa de operación?</p>
-                            <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta2" value="true" id="radioSuccess3" class="pregunta2">
-                                <label for="radioSuccess3">Si</label>
-                            </div>
-                            <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta2" value="false" id="radioSuccess4" class="pregunta2">
-                                <label for="radioSuccess4">No</label>
-                            </div>
-                            <div class="row col-lg-12 mt-3" id="incidencias_pr2">
-                                <button type='button' class='btn btn-primary mr-2' id="btn_addInci" data-pregunta="2">Capturar Incidencia</button>
-                                <button type='button' class='btn btn-primary' id="consulta_incidencias">Consultar Incidencias</button>
-                            </div>
-                        </div>
-                        @* Fin de la Pregunta 2 *@
-                        @* Pregunta 3 *@
-                        <div class="tab-pane fade mt-2 ml-3" id="pregunta_3" role="tabpanel" aria-labelledby="contact-tab">
-                            <p class="text-black h5">3. ¿El personal del servicio de limpieza portó uniforme e identificación en todo momento?</p>
-                            <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta3" value="true" id="radioSuccess5" class="pregunta3">
-                                <label for="radioSuccess5">Si</label>
-                            </div>
-                            <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta3" value="false" id="radioSuccess6" class="pregunta3">
-                                <label for="radioSuccess6">No</label>
-                            </div>
-                        </div>
-                        @* Fin de la Pregunta 3 *@
-                        @* Pregunta 4 *@
-                        <div class="tab-pane fade mt-2 ml-3" id="pregunta_4" role="tabpanel" aria-labelledby="contact-tab">
-                            <p class="text-black h5">4. ¿Hubo disponibilidad de equipo y maquinaria para la operación del servicio en el periodo?</p>
-                            <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta4" value="true" id="radioSuccess7" class="pregunta4">
-                                <label for="radioSuccess7">Si</label>
-                            </div>
-                            <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta4" value="false" id="radioSuccess8" class="pregunta4">
-                                <label for="radioSuccess8">No</label>
-                            </div>
-                            <div class="row col-lg-12 mt-3" id="incidencias_pr4">
-                                <button type='button' class='btn btn-primary mr-2' id="btn_inciEquipo" data-pregunta="4">Capturar Incidencia</button>
-                                <button type='button' class='btn btn-primary' id="btn_showInciEquipo">Consultar Insidencias</button>
-                            </div>
-                        </div>
-                        @* Fin de la Pregunta 4 *@
-                        @* Pregunta 5 *@
-                        <div class="tab-pane fade mt-2 ml-3" id="pregunta_5" role="tabpanel" aria-labelledby="contact-tab">
-                            <p class="text-black h5">5  . ¿Hubo inasistencias del personal de limpieza en el periodo?</p>
-                            <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta5" value="true" id="radioSuccess9" class="pregunta5">
-                                <label for="radioSuccess9">Si</label>
-                            </div>
-                            <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta5" value="false" id="radioSuccess10" class="pregunta5">
-                                <label for="radioSuccess10">No</label>
-                            </div>
-                            <div class="form-row col-lg-12 mt-2">
-                                <div class="form-group mt-2 col-md-6" id="evidencia_inasistencias">
-                                    <label for="fechaCierre">Cantidad de Insistencias: </label>
-                                    <br />
-                                    <input type="number" name="inasistencias" id="detalle5" class="form-control col-lg-6 float-left">
+                        @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || (@User.Claims.ElementAt(2).Value).Contains("Administrador"))
+                        {
+                            @* Pregunta 1 *@
+                            <div class="tab-pane fade mt-2 ml-3 show active" id="pregunta_1" role="tabpanel" aria-labelledby="home-tab">
+                                <p class="text-black h5">1. ¿Cúando se estableció el cierre de mes?</p>
+                                <div class="form-group">
+                                    <label for="fechaCierre">Fecha de Cierre</label>
+                                    <input type="date" name="pregunta1" id="detalle1" class="form-control col-lg-4 pregunta1">
                                 </div>
                             </div>
-                        </div>
-                        @* Fin de la Pregunta 5 *@
-                        @* Pregunta 6 *@
-                        <div class="tab-pane fade mt-2 ml-3" id="pregunta_6" role="tabpanel" aria-labelledby="contact-tab">
-                            <p class="text-black h5">6. ¿Fué entregado el comprobante de pago y las constancias de inscripción al IMSS (SUA) correspondientes al mes anterior?</p>
-                            <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta6" value="true" id="radioSuccess11" class="pregunta6">
-                                <label for="radioSuccess11">Si</label>
+                            @* Fin de la Pregunta 1 *@
+                            @* Pregunta 2 *@
+                            <div class="tab-pane fade mt-2 ml-3" id="pregunta_2" role="tabpanel" aria-labelledby="profile-tab">
+                                <p class="text-black h5">2. ¿El personal de limpieza cumplió con las actividades contempladas en el programa de operación?</p>
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="pregunta2" value="true" id="radioSuccess3" class="pregunta2">
+                                    <label for="radioSuccess3">Si</label>
+                                </div>
+                                <div class="icheck-success d-inline ml-3">
+                                    <input type="radio" name="pregunta2" value="false" id="radioSuccess4" class="pregunta2">
+                                    <label for="radioSuccess4">No</label>
+                                </div>
+                                <div class="row col-lg-12 mt-3" id="incidencias_pr2">
+                                    <button type='button' class='btn btn-primary mr-2' id="btn_addInci" data-pregunta="2">Capturar Incidencia</button>
+                                    <button type='button' class='btn btn-primary' id="consulta_incidencias">Consultar Incidencias</button>
+                                </div>
                             </div>
-                            <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta6" value="false" id="radioSuccess12" class="pregunta6">
-                                <label for="radioSuccess12">No</label>
+                            @* Fin de la Pregunta 2 *@
+                            @* Pregunta 3 *@
+                            <div class="tab-pane fade mt-2 ml-3" id="pregunta_3" role="tabpanel" aria-labelledby="contact-tab">
+                                <p class="text-black h5">3. ¿El personal del servicio de limpieza portó uniforme e identificación en todo momento?</p>
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="pregunta3" value="true" id="radioSuccess5" class="pregunta3">
+                                    <label for="radioSuccess5">Si</label>
+                                </div>
+                                <div class="icheck-success d-inline ml-3">
+                                    <input type="radio" name="pregunta3" value="false" id="radioSuccess6" class="pregunta3">
+                                    <label for="radioSuccess6">No</label>
+                                </div>
                             </div>
-                            <div class="form-row col-lg-12 mt-2" id="campos">
-                                <div class="form-row">
-                                    <div class="col col-lg-4">
-                                        <label for="fechaCierre">Fecha de Entrega del SUA</label><br />
-                                        <input type="date" name="fechaSua" id="detalle6" class="form-control float-left">
-                                    </div>
-                                    <div class="col-lg-5">
-                                        <label for="mesCorres">Corresponde al Mes:</label><br />
-                                        <select id="mes_correspondiente" class="form-control float-right"></select>
+                            @* Fin de la Pregunta 3 *@
+                            @* Pregunta 4 *@
+                            <div class="tab-pane fade mt-2 ml-3" id="pregunta_4" role="tabpanel" aria-labelledby="contact-tab">
+                                <p class="text-black h5">4. ¿Hubo disponibilidad de equipo y maquinaria para la operación del servicio en el periodo?</p>
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="pregunta4" value="true" id="radioSuccess7" class="pregunta4">
+                                    <label for="radioSuccess7">Si</label>
+                                </div>
+                                <div class="icheck-success d-inline ml-3">
+                                    <input type="radio" name="pregunta4" value="false" id="radioSuccess8" class="pregunta4">
+                                    <label for="radioSuccess8">No</label>
+                                </div>
+                                <div class="row col-lg-12 mt-3" id="incidencias_pr4">
+                                    <button type='button' class='btn btn-primary mr-2' id="btn_inciEquipo" data-pregunta="4">Capturar Incidencia</button>
+                                    <button type='button' class='btn btn-primary' id="btn_showInciEquipo">Consultar Insidencias</button>
+                                </div>
+                            </div>
+                            @* Fin de la Pregunta 4 *@
+                            @* Pregunta 5 *@
+                            <div class="tab-pane fade mt-2 ml-3" id="pregunta_5" role="tabpanel" aria-labelledby="contact-tab">
+                                <p class="text-black h5">5  . ¿Hubo inasistencias del personal de limpieza en el periodo?</p>
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="pregunta5" value="true" id="radioSuccess9" class="pregunta5">
+                                    <label for="radioSuccess9">Si</label>
+                                </div>
+                                <div class="icheck-success d-inline ml-3">
+                                    <input type="radio" name="pregunta5" value="false" id="radioSuccess10" class="pregunta5">
+                                    <label for="radioSuccess10">No</label>
+                                </div>
+                                <div class="form-row col-lg-12 mt-2">
+                                    <div class="form-group mt-2 col-md-6" id="evidencia_inasistencias">
+                                        <label for="fechaCierre">Cantidad de Insistencias: </label>
+                                        <br />
+                                        <input type="number" name="inasistencias" id="detalle5" class="form-control col-lg-6 float-left">
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row col-lg-12 mt-2" id="comentariosSua">
-                                <div class="form-group mt-2 col-md-6">
-                                    <label for="fechaCierre">Comentarios:</label><br>
-                                    <textarea name="fechaSua" id="comentarios_sua" class="form-control col-lg-12 float-left" maxlength="256"></textarea>
+                            @* Fin de la Pregunta 5 *@
+                            @* Pregunta 6 *@
+                            <div class="tab-pane fade mt-2 ml-3" id="pregunta_6" role="tabpanel" aria-labelledby="contact-tab">
+                                <p class="text-black h5">6. ¿Fué entregado el comprobante de pago y las constancias de inscripción al IMSS (SUA) correspondientes al mes anterior?</p>
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="pregunta6" value="true" id="radioSuccess11" class="pregunta6">
+                                    <label for="radioSuccess11">Si</label>
+                                </div>
+                                <div class="icheck-success d-inline ml-3">
+                                    <input type="radio" name="pregunta6" value="false" id="radioSuccess12" class="pregunta6">
+                                    <label for="radioSuccess12">No</label>
+                                </div>
+                                <div class="form-row col-lg-12 mt-2" id="campos">
+                                    <div class="form-row">
+                                        <div class="col col-lg-4">
+                                            <label for="fechaCierre">Fecha de Entrega del SUA</label><br />
+                                            <input type="date" name="fechaSua" id="detalle6" class="form-control float-left">
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <label for="mesCorres">Corresponde al Mes:</label><br />
+                                            <select id="mes_correspondiente" class="form-control float-right"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row col-lg-12 mt-2" id="comentariosSua">
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="fechaCierre">Comentarios:</label><br>
+                                        <textarea name="fechaSua" id="comentarios_sua" class="form-control col-lg-12 float-left" maxlength="256"></textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        @* Fin de la Pregunta 6 *@
-                        @* Pregunta 7 *@
-                        <div class="tab-pane fade mt-2 ml-3" id="pregunta_7" role="tabpanel" aria-labelledby="contact-tab">
-                            <p class="text-black h5">7. ¿Se entregó el Acta Entrega-Recepción de los servicios mensual?</p>
-                            <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta7" value="true" id="radioSuccess13" class="pregunta7">
-                                <label for="radioSuccess13">Si</label>
-                            </div>
-                            <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta7" value="false" id="radioSuccess14" class="pregunta7">
-                                <label for="radioSuccess14">No</label>
-                            </div>
-                            <div class="form-row col-lg-12 mt-2">
-                                <div class="form-group mt-2 col-md-6" id="evidencia_acta">
-                                    <label for="fechaActa">Fecha de Entrega</label><br>
-                                    <input type="date" id="detalle7" class="form-control col-lg-6 float-left">
+                            @* Fin de la Pregunta 6 *@
+                            @* Pregunta 7 *@
+                            <div class="tab-pane fade mt-2 ml-3" id="pregunta_7" role="tabpanel" aria-labelledby="contact-tab">
+                                <p class="text-black h5">7. ¿Se entregó el Acta Entrega-Recepción de los servicios mensual?</p>
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="pregunta7" value="true" id="radioSuccess13" class="pregunta7">
+                                    <label for="radioSuccess13">Si</label>
+                                </div>
+                                <div class="icheck-success d-inline ml-3">
+                                    <input type="radio" name="pregunta7" value="false" id="radioSuccess14" class="pregunta7">
+                                    <label for="radioSuccess14">No</label>
+                                </div>
+                                <div class="form-row col-lg-12 mt-2">
+                                    <div class="form-group mt-2 col-md-6" id="evidencia_acta">
+                                        <label for="fechaActa">Fecha de Entrega</label><br>
+                                        <input type="date" id="detalle7" class="form-control col-lg-6 float-left">
+                                    </div>
+                                </div>
+                                <div class="form-row col-lg-12 mt-2" id="comentariosActa">
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="fechaCierre">Comentarios:</label><br>
+                                        <textarea id="comentarios_acta" class="form-control col-lg-12 float-left" maxlength="256"></textarea>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-row col-lg-12 mt-2" id="comentariosActa">
-                                <div class="form-group mt-2 col-md-6">
-                                    <label for="fechaCierre">Comentarios:</label><br>
-                                    <textarea id="comentarios_acta" class="form-control col-lg-12 float-left" maxlength="256"></textarea>
+                            @* Fin de la Pregunta 7 *@
+                        }
+                        @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                        {
+                            @* Pregunta 8 *@
+                            <div class="tab-pane fade mt-2 ml-3" id="pregunta_8" role="tabpanel" aria-labelledby="home-tab">
+                                <p class="text-black h5 mb-3">1.- ¿El prestador de servicios demostró que el personal cuenta con la capacitación para cumplir debídamente con el Servicio de Limpieza?</p>
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="pregunta8" value="true" id="radioSuccess15" class="pregunta8">
+                                    <label for="radioSuccess15">Si</label>
+                                </div>
+                                <div class="icheck-success d-inline ml-3">
+                                    <input type="radio" name="pregunta8" value="false" id="radioSuccess16" class="pregunta8">
+                                    <label for="radioSuccess16">No</label>
                                 </div>
                             </div>
-                        </div>
-                        @* Fin de la Pregunta 7 *@
-                        @* Pregunta 8 *@
-                        <div class="tab-pane fade mt-2 ml-3" id="pregunta_8" role="tabpanel" aria-labelledby="home-tab">
-                            <p class="text-black h5 mb-3">1.- ¿El prestador de servicios demostró que el personal cuenta con la capacitación para cumplir debídamente con el Servicio de Limpieza?</p>
-                            <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta8" value="true" id="radioSuccess15" class="pregunta8">
-                                <label for="radioSuccess15">Si</label>
-                            </div>
-                            <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta8" value="false" id="radioSuccess16" class="pregunta8">
-                                <label for="radioSuccess16">No</label>
-                            </div>
-                        </div>
-                        @* Fin de la Pregunta 8 *@
+                            @* Fin de la Pregunta 8 *@
+                        }
                         @* Entregables *@
                         <div class="tab-pane fade mt-2 ml-3" id="entregables" role="tabpanel" aria-labelledby="contact-tab">
                             <div class="col-lg-12 mt-3">
@@ -247,11 +257,15 @@
                 @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                 {
                     <button type="button" class="btn btn-joke float-right ml-3 revisar_cedula" data-toggle="tooltip" title='Continuar a la Revisión de la Cédula' data-placement="top">
-                        Concluir Evaluación
+                        Revisar Cédula
                     </button>
                 }
+
+                @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || (@User.Claims.ElementAt(2).Value).Contains("Administrador"))
+                {
                     <button type="button" class="btn btn-primary float-right ml-3 btn_enviar" data-toggle="tooltip" title='Enviar la "Cédula" a la DAS' data-placement="top">Enviar a DAS</button>
                     <button type="button" class="btn btn-success float-right btn_guardar" data-toggle="tooltip" title='Guardar la información capturada sin enviar a la DAS' data-placement="top">Guardar Cédula</button>
+                }
             </div>
         </div>
     </div>

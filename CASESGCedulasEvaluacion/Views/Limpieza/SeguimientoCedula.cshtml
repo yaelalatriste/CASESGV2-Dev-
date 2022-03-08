@@ -108,41 +108,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @*<p class="text-sm">
-                                                @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                                                                                @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion
-                                                                                                                + Model.PenaCalificacion + Model.capacitacion.MontoPenalizacion + Model.TotalBajoDemanda);
-                                                }
-                                                @if (total > 0)
-                                                {
-                                                    <h5 class="text-danger">
-                                                        <b>Total Penalizable:</b> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total)
-                                                    </h5>
-                                                }
-                                                else
-                                                {
-                                                    <h5 class="text-success">
-                                                        <b>No hay Monto Penalizable</b>
-                                                    </h5>
-                                                }
-                                            </p>
-                                            <ul class="ml-4 mb-0 fa-ul">
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Uniforme: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades en Equipo: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Entregables Bajo Demanda: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.TotalBajoDemanda)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fal fa-head-side-brain"></i></span> <b>Capacitación de Personal: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.capacitacion.MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Calificación: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
-                                            </ul>*@
                                     </div>
                                 </div>
                             </div>
-                            @if (@Model.Estatus.Equals("Autorizada") || Model.Estatus.Equals("Trámite Rechazado"))
-                            {
-                                <div class="card-footer">
-                                    <div class="text-right" id="divAutoriza"></div>
-                                </div>
-                            }
                         </div>
                     </div>
                 </div>
@@ -622,7 +590,7 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "En Trámite"}).then(hist => {
+                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "En Trámite", Comentarios: "Se envió a trámite por parte de la administración."}).then(hist => {
                                 if (hist.status == 200) {
                                     axios.post('/cedLimpieza/aprovRechCed', { Id: model.id, Estatus: "En Trámite" }).then(response => {
                                         if (response.status == 200) {
@@ -659,7 +627,7 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "Trámite de Pago" }).then(hist => {
+                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "Trámite de Pago", Comentarios: "Se envió para trámite de pago." }).then(hist => {
                                 if (hist.status == 200) {
                                     axios.post('/cedLimpieza/aprovRechCed', { Id: model.id, Estatus: "Trámite de Pago" }).then(response => {
                                         if (response.status == 200) {
@@ -749,7 +717,8 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: model.usuarioId,Estatus: "Autorizado CAE"}).then(hist => {
+                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: model.usuarioId,Estatus: "Autorizado CAE", 
+                                                                           Comentarios: "Se autorizó la documentación por la CAE"}).then(hist => {
                                 if (hist.status == 200) {
                                     axios.post('/cedLimpieza/aprovRechCed', { Id: model.id, Estatus: "Autorizado CAE" }).then(response => {
                                         if (response.status == 200) {
@@ -798,7 +767,7 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "Revisión CAE" }).then(hist => {
+                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "Revisión CAE", Comentarios: "Se envía a revisión por la CAE" }).then(hist => {
                                 if (hist.status == 200) {
                                     axios.post('/cedLimpieza/aprovRechCed', { Id: model.id, Estatus: "Revisión CAE" }).then(response => {
                                         if (response.status == 200) {
