@@ -26,7 +26,11 @@
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
-            @{ bool autoriza = true; }
+            @{ bool estatus = false; }
+            @{ bool rechazat = false; }
+            @{ bool cedula = false; }
+            @{ bool memo = false; }
+            @{ bool omemo = false; }
             <div class="tab-pane fade show active" id="informacion_general" role="tabpanel" aria-labelledby="home-tab">
                 <div class="row justify-content-center align-items-center mt-4">
                     <div class="col-lg-12 h3 ml-4">
@@ -82,38 +86,53 @@
                                         </ul>
                                     </div>
                                     <div class="col-5">
-                                        @if (@Model.Estatus.Equals("Revisión"))
+                                        @if (@Model.Estatus.Equals("Enviado a DAS") || @Model.Estatus.Equals("Revisión CAE"))
                                         {
                                             <h5 class="text-primary lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                            <div class="col-lg-4" style="margin-top: -18px;">
+                                                <div class="small-box">
+                                                    <div class="icon">
+                                                        <i class="fa-regular fa-ballot-check text-primary text-primary"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         }
-                                        else if (@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite de Pago"))
+                                        else if (@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite de Pago") || @Model.Estatus.Equals("Autorizado CAE"))
                                         {
                                             <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <div class="col-lg-4" style="margin-top: -18px;">
+                                                <div class="small-box bg-success">
+                                                    <div class="icon">
+                                                        <i class="fa-solid fa-circle-check text-success"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         }
                                         else if (@Model.Estatus.Equals("Rechazada") || @Model.Estatus.Equals("Trámite Rechazado"))
                                         {
                                             <h5 class="text-danger lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <div class="col-lg-4" style="margin-top: -18px;">
+                                                <div class="small-box">
+                                                    <div class="icon">
+                                                        <i class="fa-solid fa-circle-xmark text-danger"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         }
                                         else
                                         {
                                             <h5 class="text-info lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
-                                        }
-                                        <div class="col-lg-4" style="margin-top: -18px;">
-                                            <div class="small-box bg-warning">
-                                                <div class="icon">
-                                                    <i class="fas fa-check-circle text-success"></i>
+                                            <div class="col-lg-4" style="margin-top: -18px;">
+                                                <div class="small-box bg-info">
+                                                    <div class="icon">
+                                                        <i class="fa-solid fa-list-check text-info"></i>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
-                            @if (@Model.Estatus.Equals("Autorizada") || Model.Estatus.Equals("Trámite Rechazado"))
-                            {
-                                <div class="card-footer">
-                                    <div class="text-right" id="divAutoriza"></div>
-                                </div>
-                            }
                         </div>
                     </div>
                 </div>
@@ -124,12 +143,17 @@
                 </div>
                 <div class="row col-lg-12">
                     <div class="col-lg-8">
-                        <p class="h6">El usuario adjunto los siguientes entregables.</p>
+                        <p class="h6">El usuario adjuntó los siguientes entregables.</p>
                     </div>
                 </div>
                 <div class="row col-lg-12 mt-1 h6">
                     <div class="col-lg-12">
-                        <div class="col-lg-12 mb-3" id="divAdjuntar"></div>
+                        <div class="col-lg-12 mb-3">
+                            @if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Autorizado CAE")) && ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || (@User.Claims.ElementAt(2).Value).Contains("Administrador")))
+                            {
+                                <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
+                            }
+                        </div>
                         <h6 class="mt-4"><strong>Entregables Adjuntos</strong></h6>
                         <table class="table" id="tableEntregables">
                             <thead>
@@ -137,8 +161,8 @@
                                     <th>Tipo</th>
                                     <th>Nombre</th>
                                     <th>Fecha de Creación</th>
-                                    <th>Ver</th>
                                     <th class="text-center">Estatus</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -166,14 +190,21 @@
                                             tipo = "Nota de Crédito";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
-                                        else if (entre.Tipo.Equals("Manifiesto"))
+                                        else if (entre.Tipo.Equals("Reporte(s)"))
                                         {
-                                            tipo = "Manifiesto de Entrega";
+                                            tipo = "Reporte(s)";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
                                         else if (entre.Tipo.Equals("Cedula_Firmada"))
                                         {
-                                            tipo = "Cedula Firmada";
+                                            cedula = true;
+                                            tipo = "Cédula Firmada";
+                                            <td>@Html.DisplayName(tipo)</td>
+                                        }
+                                        else if (entre.Tipo.Equals("Memorandum"))
+                                        {
+                                            memo = true;
+                                            tipo = "Memorándum";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
                                         else
@@ -183,61 +214,233 @@
                                         }
                                         <td>@entre.NombreArchivo</td>
                                         <td>@entre.FechaCreacion.ToString("dd-MM-yyyy")</td>
-                                        <td>
-                                            <a href='#' class='text-center mr-2 view_file' data-id="@entre.Id" data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo">
-                                                <i class='fas fa-eye text-success'></i>
-                                            </a>
-                                        </td>
-                                        @if (@entre.Estatus.Equals(""))
+                                        <!--Evaluador-->
+                                        @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                         {
-                                            @if((@User.Claims.ElementAt(2).Value).Contains("Administrador") || (@User.Claims.ElementAt(2).Value).Contains("Financieros")){ 
-                                                autoriza = false;
-                                                <td class="text-center">
-                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
-                                                        <i class="fal fa-check"></i>
-                                                    </a>
-                                                    <a href="#" class='btn-sm btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
-                                                        <i class="far fa-times"></i>
-                                                    </a>
+                                            @if (entre.Estatus.Equals(""))
+                                            {
+                                                estatus = true;
+                                                <td class="text-center text-info font-weight-bold">En Revisión</td>
+                                            }
+                                            else if (@entre.Estatus.Equals("Rechazado"))
+                                            {
+                                                @if (!@entre.Tipo.Equals("Memorandum"))
+                                                {
+                                                    rechazat = true;
+                                                }
+                                                else
+                                                {
+                                                    omemo = true;
+                                                }
+
+                                                <td class="row col-lg-12 justify-content-center">
+                                                    <div class="form-row" data-tipo="@entre.Tipo">
+                                                        <div class="icon mr-2 text-danger font-weight-bold" data-toggle="tooltip" title="Entregable Rechazado">
+                                                            <i class="fas fa-times-circle"></i> Rechazado
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else if (@entre.Estatus.Equals("Autorizado"))
+                                            {
+                                                <td class="row col-lg-12 justify-content-center">
+                                                    <div class="icon text-success font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Autorizado">
+                                                        <i class="fas fa-check-circle"></i> Autorizado
+                                                    </div>
                                                 </td>
                                             }
                                         }
-                                        else if (@entre.Estatus.Equals(""))
+                                        else if ((@User.Claims.ElementAt(2).Value).Contains("CAE"))
                                         {
-                                            autoriza = false;
-                                            <td class="text-center text-info font-weight-bold">En Revision</td>
-                                        }
-                                        else if (@entre.Estatus.Equals("Rechazado"))
-                                        {
-                                            autoriza = false;
-                                            <td class="row col-lg-12 justify-content-center">
-                                                <div class="form-row" data-tipo="@entre.Tipo">
-                                                    <div class="icon mr-2 text-danger font-weight-bold" data-toggle="tooltip" title="Entregable Rechazado">
-                                                        <i class="fas fa-times-circle"></i> Rechazado
+                                            @if (entre.Estatus.Equals("") && memo == false)
+                                            {
+                                                estatus = true;
+                                                <td class="text-center">
+                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
+                                                        <i class="fas fa-check ml-1"></i>
+                                                    </a>
+                                                    <a href="#" class='btn-xs btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                       data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
+                                                        <i class="fas fa-times ml-1 mr-1"></i>
+                                                    </a>
+                                                </td>
+                                            }
+                                            else if (@entre.Estatus.Equals("Rechazado"))
+                                            {
+                                                rechazat = true;
+                                                <td class="row col-lg-12 justify-content-center">
+                                                    <div class="form-row" data-tipo="@entre.Tipo">
+                                                        <div class="icon mr-2 text-danger font-weight-bold" data-toggle="tooltip" title="Entregable Rechazado">
+                                                            <i class="fas fa-times-circle"></i> Rechazado
+                                                        </div>
                                                     </div>
+                                                </td>
+                                            }
+                                            else if (@entre.Estatus.Equals("Autorizado"))
+                                            {
+                                                <td class="row col-lg-12 justify-content-center">
+                                                    <div class="icon text-success font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Autorizado">
+                                                        <i class="fas fa-check-circle"></i> Autorizado
+                                                    </div>
+                                                    @if (@Model.Estatus.Equals("Revisión CAE"))
+                                                    {
+                                                        <a href="#" class='btn btn-sm btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                           data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
+                                                            <i class="far fa-times"></i>
+                                                        </a>
+                                                    }
+                                                </td>
+                                            }
+                                            else if (entre.Estatus.Equals(""))
+                                            {
+                                                estatus = true;
+                                                <td class="text-center text-info font-weight-bold">En Revisión</td>
+                                            }
+                                        }
+                                        else if ((@User.Claims.ElementAt(2).Value).Contains("Financieros"))
+                                        {
+                                            <!--Financieros-->
+                                            if (@entre.Estatus.Equals("Autorizado"))
+                                            {
+                                                <td class="row col-lg-12 justify-content-center">
+                                                    <div class="icon text-success font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Autorizado">
+                                                        <i class="fas fa-check-circle"></i> Autorizado
+                                                    </div>
+                                                    @if (@Model.Estatus.Equals("En Trámite"))
+                                                    {
+                                                        <a href="#" class='btn btn-sm btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                           data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
+                                                            <i class="far fa-times"></i>
+                                                        </a>
+                                                    }
+                                                </td>
+                                            }
+                                            else if (@entre.Estatus.Equals("Rechazado"))
+                                            {
+                                                rechazat = true;
+                                                <td class="row col-lg-12 justify-content-center">
+                                                    <div class="form-row" data-tipo="@entre.Tipo">
+                                                        <div class="icon mr-2 text-danger font-weight-bold" data-toggle="tooltip" title="Entregable Rechazado">
+                                                            <i class="fas fa-times-circle"></i> Rechazado
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else if (entre.Estatus.Equals("") && @Model.Estatus.Equals("En Trámite"))
+                                            {
+                                                estatus = true;
+                                                <td class="text-center">
+                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
+                                                        <i class="fas fa-check ml-1"></i>
+                                                    </a>
+                                                    <a href="#" class='btn-xs btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                       data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
+                                                        <i class="fas fa-times ml-1 mr-1"></i>
+                                                    </a>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center text-info font-weight-bold">En Revisión</td>
+                                            }
+                                        }
+                                        <td class="text-center">
+                                            <a href='#' class='text-center mr-2 view_file' data-id="@entre.Id" data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo"
+                                               data-toggle="tooltip" title="Vista Previa de(la) @tipo" data-placement="top">
+                                                <i class='fas fa-eye text-success'></i>
+                                            </a>
+                                            @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                                            {
+                                                @if (@entre.Tipo.Equals("Memorandum") && @entre.Estatus.Equals("Rechazado") && rechazat == true)
+                                                {
+                                                    <a href='#' class='text-center mr-2 delete_files' data-id="@entre.Id" data-tipo="@entre.Tipo"
+                                                       data-toggle="tooltip" title="Eliminar Memorándum" data-placement="top">
+                                                        <i class='fas fa-times text-danger'></i>
+                                                    </a>
+                                                }
+                                                else if (@entre.Estatus.Equals("Rechazado") && estatus == false)
+                                                {
                                                     <a href='#' class="text-center mr-2 update_files" data-id="@entre.Id" data-coments="@entre.Comentarios"
                                                        data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo" data-toggle="tooltip" title="Actualizar @entre.Tipo"
                                                        data-placement="top">
-                                                        <i class='fas fa-edit text-primary'></i>
+                                                        <i class='fas fa-check-circle text-primary'></i>
                                                     </a>
-                                                </div>
-                                            </td>
-                                        }
-                                        else if (@entre.Estatus.Equals("Autorizado"))
-                                        {
-                                            <td class="text-center">
-                                                <div class="icon text-success font-weight-bold" data-toggle="tooltip" title="Entregable Autorizado">
-                                                    <i class="fas fa-check-circle"></i> Autorizado
-                                                </div>
-                                            </td>
-                                        }
+                                                }
+                                                else if (@entre.Estatus.Equals("Rechazado") && estatus == true)
+                                                {
+                                                    <a href='#' class='text-center mr-2 delete_files' data-id="@entre.Id" data-tipo="@entre.Tipo"
+                                                       data-toggle="tooltip" title="Eliminar Memorándum" data-placement="top">
+                                                        <i class='fas fa-times text-danger'></i>
+                                                    </a>
+                                                }
+                                            }
+                                            else if ((@User.Claims.ElementAt(2).Value).Contains("Administrador") && entre.Estatus.Equals("Rechazado"))
+                                            {
+                                                <a href='#' class="text-center mr-2 update_files" data-id="@entre.Id" data-coments="@entre.Comentarios"
+                                                   data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo" data-toggle="tooltip" title="Actualizar @entre.Tipo"
+                                                   data-placement="top">
+                                                    <i class='fas fa-check-circle text-primary'></i>
+                                                </a>
+                                                <a href='#' class='text-center mr-2 delete_files' data-id="@entre.Id" data-tipo="@entre.Tipo"
+                                                   data-toggle="tooltip" title="Eliminar Memorándum" data-placement="top">
+                                                    <i class='fas fa-times text-danger'></i>
+                                                </a>
+                                            }
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="row col-lg-12 justify-content-end mb-3">
+                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                    {
+                        @if (cedula == true && @Model.Estatus.Equals("Autorizada"))
+                        {
+                            <button href="" class="btn btn-primary float-right mr-3 revisar_cae" data-memo="@memo"><i class="fas fa-check mr-2"></i>Enviar a Revisión CAE</button>
+                        }
+                        else if (memo == true && @Model.Estatus.Equals("Autorizado CAE"))
+                        {
+                            <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
+                        }
+                        else if (@Model.Estatus.Equals("Trámite Rechazado"))
+                        {
+                            @if ((estatus == true && memo == false) || (omemo == true && estatus == true))
+                            {
+                                <button href="" class="btn btn-primary float-right mr-3 revisar_cae" data-memo="@memo"><i class="fas fa-check mr-2"></i>Enviar a Revisión CAE</button>
+                            }
+                            else if (omemo == false && memo == true)
+                            {
+                                <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
+                            }
+                        }
+                    }
+                    else if (@User.Claims.ElementAt(2).Value.Equals("CAE"))
+                    {
+                        @if (rechazat == true && @Model.Estatus.Equals("Revisión CAE"))
+                        {
+                            <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-check mr-2"></i>Rechazar Trámite</button>
+                        }
+                        else if (rechazat == false && estatus == false && @Model.Estatus.Equals("Revisión CAE"))
+                        {
+                            <!--Enviar a Revision por la CAE-->
+                            <button href="" class="btn btn-success float-right mr-3 autorizar_cae"><i class="fas fa-check mr-2"></i>Autorizar Documentación</button>
+                        }
+                    }
+                    else if (@User.Claims.ElementAt(2).Value.Equals("Financieros"))
+                    {
+                        @if (rechazat == false && estatus == false && @Model.Estatus.Equals("En Trámite"))
+                        {
+                            <button href="" class="btn btn-success float-right mr-3 tramitar_pago"><i class="fas fa-check mr-2"></i>Tramitar Pago</button>
+                        }
+                        else if (rechazat == true && !@Model.Estatus.Equals("Trámite Rechazado"))
+                        {
+                            <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-times mr-2"></i>Rechazar Trámite</button>
+                        }
+                    }
                 </div>
             </div>
             <div class="tab-pane fade" id="historial_cedula" role="tabpanel" aria-labelledby="contact-tab">
@@ -471,7 +674,7 @@
     <script>
         $(function () {
             var model = @Html.Raw(Json.Serialize(@Model));
-            var autoriza = @Html.Raw(Json.Serialize(autoriza));
+
             $('[data-toggle="tooltip"]').tooltip();
 
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -489,61 +692,89 @@
                 $('#myTab li:first').addClass('active');
             }
 
-            if (model.estatus == 'Autorizada') {
-                $("#divAdjuntar").html("<a href = '#' type = 'button' class='btn-sm btn-success mr-2 float-right btn_addFile' data - toggle='tooltip' title = 'Adjuntar Entregable'> <i class='fas fa-plus'></i></a>");
-            }
-
 
             /*Adjuntar Archivos*/
             $('#error_tipoEntre').css('display', 'none');
             $('#error_customFile').css('display', 'none');
             $('#error_comentariosEntre').css('display', 'none');
 
-            /*Inserta Boton Autoriza*/
-                if (autoriza == true) {
-                    $("#divAutoriza").html('<button href="" class="btn btn-success float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Envíar a Trámite</button>');
-                }
-                else if (autoriza == false)
-                {
-                    var files = ["Memorandum", "Cedula_Firmada", "ActaER", "Factura", "Manifiesto", "SAT"];
-                    var tramitar = new Array();
-                    axios.get("/residuos/getListadoEntregables/" + model.id).then(response => {
-                        response = response.data;
-                        let rechazado = false;
-                        for (var i = 0; i < files.length; i++) {
-                            for (var j = 0; j < response.length; j++) {
-                                if (files[i] == response[j].tipo && response[j].estatus == 'Rechazado') {
-                                    rechazado = true;
-                                    break;
-                                }
-                                tramitar.push(response[j].tipo);
-                            }
-                            if (rechazado == true) {
-                                break;
-                            }
-                        }
-                        if (rechazado == false && tramitar.includes("Memorandum") && tramitar.includes("Cedula_Firmada")){
-                            $("#divAutoriza").html('<button href="" class="btn btn-success float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Envíar a Trámite</button>');
-                        }
-                     });
-                }
-
             /*Tramitar Cedula*/
-            $(document).on('click', '.tramitar_cedula', function () {
-                if (model.usuarios.correo_electronico == "") {
-                    Swal.fire({
-                        'icon': 'error',
-                        'title': 'Servicio de RPBI',
-                        'text': 'No se puede "Aceptar" la cédula ya que aún no se registra un correo electrónico para notificarle al usuario.'
-                    });
-                } else {
+                $(document).on('click', '.tramitar_cedula', function () {
                     Swal.fire({
                         'icon': 'warning',
                         'title': 'Servicio de RPBI',
-                        'html': '¿Estas seguro de que deseas <b>Aceptar la cédula con el folio: ' + model.folio + ' ?',
+                        'html': '¿Está seguro que desea <b>tramitar la cédula con el folio: ' + model.folio + '?',
                         'confirmButtonColor': '#3085d6',
                         'cancelButtonColor': '#d33',
-                        'confirmButtonText': 'Si, aceptar cédula',
+                        'confirmButtonText': 'Si, enviar',
+                        'cancelButtonText': 'Cancelar',
+                        'showCancelButton': true
+                    }).then(confirm => {
+                        if (confirm.isConfirmed) {
+                            axios.post('/residuos/historialResiduos', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "En Trámite", Comentarios: "Se envió a trámite por parte de la administración."}).then(hist => {
+                                if (hist.status == 200) {
+                                    axios.post('/residuos/aprovRechCed', { Id: model.id, Estatus: "En Trámite" }).then(response => {
+                                        if (response.status == 200) {
+                                            Swal.fire({
+                                                'icon': 'success',
+                                                'title': 'Servicio de RPBI',
+                                                'text': 'Se envió a trámite la cédula de forma correcta.'
+                                            }).then(function () {
+                                                window.location.reload();
+                                            });
+                                        }
+                                    });
+                                }
+                            }).catch(er => {
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Servicio de RPBI',
+                                    'text': 'Ocurrio un error al tramitar la cédula. Por favor comunicate a la ext. 2574.'
+                                });
+                            });
+                        }
+                    });
+                 });
+
+                $(document).on('click', '.tramitar_pago', function () {
+                    Swal.fire({
+                        'icon': 'warning',
+                        'title': 'Servicio de RPBI',
+                        'html': '¿Está seguro que desea enviar a <b>trámite de pago la cédula con el folio: ' + model.folio + '</b>?',
+                        'confirmButtonColor': '#3085d6',
+                        'cancelButtonColor': '#d33',
+                        'confirmButtonText': 'Si, tramitar',
+                        'cancelButtonText': 'Cancelar',
+                        'showCancelButton': true
+                    }).then(confirm => {
+                        if (confirm.isConfirmed) {
+                            axios.post('/residuos/historialResiduos', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "Trámite de Pago", Comentarios: "Se envió para trámite de pago." }).then(hist => {
+                                if (hist.status == 200) {
+                                    axios.post('/residuos/aprovRechCed', { Id: model.id, Estatus: "Trámite de Pago" }).then(response => {
+                                        if (response.status == 200) {
+                                            Swal.fire({
+                                                'icon': 'success',
+                                                'title': 'Servicio de RPBI',
+                                                'text': 'Se envió a trámite de pago la cédula de forma correcta.'
+                                            }).then(function () {
+                                                window.location.reload();
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+
+                $(document).on('click', '.rechazar_tramite', function () {
+                    Swal.fire({
+                        'icon': 'warning',
+                        'title': 'Servicio de RPBI',
+                        'html': '¿Está seguro que desea <b>rechazar el trámite de la cédula con el folio: ' + model.folio + ' ?',
+                        'confirmButtonColor': '#3085d6',
+                        'cancelButtonColor': '#d33',
+                        'confirmButtonText': 'Si, rechazar',
                         'cancelButtonText': 'Cancelar',
                         'showCancelButton': true
                     }).then(confirm => {
@@ -551,27 +782,25 @@
                             Swal.fire({
                                 icon: 'info',
                                 'title': 'Servicio de RPBI',
-                                text: 'Por favor captura los comentarios para el trámite de la cédula.',
+                                text: 'Por favor capture los comentarios por el cual se rechaza el trámite de la cédula.',
                                 showCancelButton: true,
                                 confirmButtonColor: '#3085d6',
                                 cancelButtonColor: '#d33',
                                 cancelButtonText: 'Cancelar',
-                                confirmButtonText: 'Tramitar',
+                                confirmButtonText: 'Rechazar',
                                 input: 'text',
-                                inputPlaceholder: 'Escribe los comentarios correspondientes'
+                                inputPlaceholder: 'Escriba los comentarios correspondientes'
                             }).then(send => {
                                 if (send.value.length > 0) {
-                                    axios.post('/residuos/historialResiduos', {
-                                        CedulaId: model.id, UsuarioId: model.usuarioId,
-                                        Estatus: "En Trámite", Comentarios: send.value
+                                    axios.post('/residuos/historialResiduos', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "Trámite Rechazado", Comentarios: send.value
                                     }).then(hist => {
                                         if (hist.status == 200) {
-                                            axios.post('/residuos/aprovRechCed', { Id: model.id, Estatus: "En Trámite" }).then(response => {
+                                            axios.post('/residuos/aprovRechCed', { Id: model.id, Estatus: "Trámite Rechazado" }).then(response => {
                                                 if (response.status == 200) {
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de RPBI',
-                                                        'text': 'Se envío a trámite la cédula de forma correcta.'
+                                                        'text': 'Se rechazó el trámite de la cédula de forma correcta.'
                                                     }).then(function () {
                                                         window.location.reload();
                                                     });
@@ -582,7 +811,7 @@
                                         Swal.fire({
                                             'icon': 'error',
                                             'title': 'Servicio de RPBI',
-                                            'text': 'Ocurrio un error al tramitar la cédula. Por favor comunicate a la ext. 2574.'
+                                            'text': 'Ocurrió un error al rechazar el trámite de la cédula. Por favor contactar a Soporte técnico a la ext. #318 2574.'
                                         });
                                     });
                                 } else {
@@ -595,34 +824,120 @@
                             });
                         }
                     });
-                }
-            });
+                });
+
+                $(document).on('click', '.autorizar_cae', function () {
+                    Swal.fire({
+                        'icon': 'warning',
+                        'title': 'Servicio de RPBI',
+                        'html': '¿Está seguro que desea <b>autorizar la documentación de la cédula con el folio: ' + model.folio + ' ?',
+                        'confirmButtonColor': '#3085d6',
+                        'cancelButtonColor': '#d33',
+                        'confirmButtonText': 'Si, autorizar',
+                        'cancelButtonText': 'Cancelar',
+                        'showCancelButton': true
+                    }).then(confirm => {
+                        if (confirm.isConfirmed) {
+                            axios.post('/residuos/historialResiduos', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "Autorizado CAE", Comentarios: "Se autorizó la documentación por la CAE"}).then(hist => {
+                                if (hist.status == 200) {
+                                    axios.post('/residuos/aprovRechCed', { Id: model.id, Estatus: "Autorizado CAE" }).then(response => {
+                                        if (response.status == 200) {
+                                            Swal.fire({
+                                                'icon': 'success',
+                                                'title': 'Servicio de RPBI',
+                                                'text': 'Se autorizó la documentación de forma correcta.'
+                                            }).then(function () {
+                                                window.location.reload();
+                                            });
+                                        }
+                                    });
+                                }
+                            }).catch(er => {
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Servicio de RPBI',
+                                    'text': 'Ocurrió un error al autorizar la cédula. Por favor contactar a Soporte técnico a la ext. #318 2574.'
+                                });
+                            });
+                        }
+                    });
+                });
+
+                $(document).on('click', '.revisar_cae', function () {
+                    if ($(this).data('memo') == "True") {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de RPBI',
+                            'html': '<p style="text-align: justify">Por favor elimine el <strong>Memorándum</strong> del sistema CASESG en la sección de entregables usando el icono <i class="fas fa-times text-danger ml-1 mr-1"></i> y genere uno nuevo, el cual ' +
+                                'deberá ser enviado por correo electrónico para revisión y en su caso, sea firmado electrónicamente ' +
+                                'por la CAE.</p>'
+                        });
+
+                        return false;
+                    }
+
+                    Swal.fire({
+                        'icon': 'warning',
+                        'title': 'Servicio de RPBI',
+                        'html': '¿Está seguro que desea enviar <b> a revisión de la CAE la documentación de la cédula con el folio: ' + model.folio + '?',
+                        'confirmButtonColor': '#3085d6',
+                        'cancelButtonColor': '#d33',
+                        'confirmButtonText': 'Si, enviar',
+                        'cancelButtonText': 'Cancelar',
+                        'showCancelButton': true
+                    }).then(confirm => {
+                        if (confirm.isConfirmed) {
+                            axios.post('/residuos/historialResiduos', { CedulaId: model.id, UsuarioId: model.usuarioId, Estatus: "Revisión CAE", Comentarios: "Se envía a revisión por la CAE" }).then(hist => {
+                                if (hist.status == 200) {
+                                    axios.post('/residuos/aprovRechCed', { Id: model.id, Estatus: "Revisión CAE" }).then(response => {
+                                        if (response.status == 200) {
+                                            Swal.fire({
+                                                'icon': 'success',
+                                                'title': 'Servicio de RPBI',
+                                                'text': 'Se envió a revisión de la CAE de forma correcta.'
+                                            }).then(function () {
+                                                window.location.reload();
+                                            });
+                                        }
+                                    });
+                                }
+                            }).catch(er => {
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Servicio de RPBI',
+                                    'text': 'Ocurrio un error al enviar la cédula a revisión por la CAE. Por favor comunicate a la ext. 2574.'
+                                });
+                            });
+                        }
+                    });
+                });
             /*Fin de Tramitar Cedula*/
 
             /*Ver archivo en modal*/
             $(document).on('click', '.view_file', function () {
                 let nombre = $(this).data('file');
                 let tipo = $(this).data('tipo');
-                if (tipo == "Factura") {
-                    modalFacturas(nombre);
-                } else {
-                    let data = "<object width='100%' height='400px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre + "'></object>";
-                    $('#titlePDF').text("PDF - \"" + tipo + "\"");
-                    $('#objectPdf').html(data);
-                    $('#show_pdf').modal('show');
-                }
+                let data = "<object width='100%' height='450px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre + "'></object>";
+                $('#titlePDF').text("PDF - \"" + tipo + "\"");
+                $('#objectPdf').html(data);
+                $('#show_pdf').modal('show');
             });
             /*FIN de ver archivo en modal*/
 
             /*Autorizar Entregable*/
-            $(document).on('click', '.success_entregable', function () {
+                $(document).on('click', '.success_entregable', function () {
                 var tipo = $(this).data('tipo');
                 var id = $(this).data('id');
-
+                var mensaje = '';
+                if (tipo == "Memorándum") {
+                    mensaje = '¿Está seguro que desea autorizar el entregable <b>Memorándum</b>, el cual debe ser el acuse generado por el sistema de gestión documental (SIGDOC)?'
+                } else {
+                    mensaje = '¿Está seguro que desea autorizar el entregable <b>' + tipo + '</b>?';
+                }
                 Swal.fire({
                     'icon': 'warning',
-                    'title': 'Servicio RPBI',
-                    'html': '¿Estas seguro de que deseas autorizar el entregable <b>' + tipo+ '</b>?',
+                    'title': 'Servicio de RPBI',
+                    'html': mensaje,
                     'confirmButtonColor': '#3085d6',
                     'cancelButtonColor': '#d33',
                     'confirmButtonText': 'Si, autorizar',
@@ -630,30 +945,16 @@
                     'showCancelButton': true
                 }).then(confirm => {
                     if (confirm.isConfirmed) {
-                        Swal.fire({
-                            icon: 'info',
-                            title: 'Servicio RPBI',
-                            html: 'Por favor capture el motivo por el cual se autoriza el entregable <b>"'+tipo+'"</b>.',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            cancelButtonText: 'Cancelar',
-                            confirmButtonText: 'Autorizar',
-                            input: 'text',
-                            inputValue: 'Se autoriza el entregable',
-                        }).then(send => {
-                            if (send.value.length > 0) {
-                                axios.post('/residuos/entregables/historialEntregable', {
-                                    CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Tipo: tipo,
-                                    Estatus: "Autorizado", Comentarios: send.value
+                         axios.post('/residuos/entregables/historialEntregable', {
+                                    CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Tipo: tipo, Estatus: "Autorizado", Comentarios: "Se autoriza el entregable"
                                 }).then(hist => {
                                     if (hist.status == 200) {
                                         axios.post('/residuos/entregables/autoRecha', { Id: id, Estatus: "Autorizado", CedulaResiduosId: parseInt(model.id) }).then(response => {
                                             if (response.status == 200) {
                                                 Swal.fire({
                                                     'icon': 'success',
-                                                    title: 'Servicio RPBI',
-                                                    'text': 'Se autorizó el entregable correctamente'
+                                                    'title': 'Servicio de RPBI',
+                                                    'text': 'Se autorizó el entregable de forma correcta.'
                                                 }).then(function () {
                                                     window.location.reload();
                                                 });
@@ -663,21 +964,13 @@
                                 }).catch(er => {
                                     Swal.fire({
                                         'icon': 'error',
-                                        title: 'Servicio RPBI',
-                                        'text': 'Ocurrio un error al autorizar el entregable. Por favor comunicate a la ext. 2574.'
+                                        'title': 'Servicio de RPBI',
+                                        'text': 'Ocurrió un error al autorizar la cédula. Por favor contactar a Soporte técnico a la ext. #318 2574.'
                                     });
                                 });
-                            } else {
-                                Swal.fire({
-                                    'icon': 'error',
-                                    title: 'Servicio RPBI',
-                                    'text': 'Es necesario capturar los comentarios indicando el motivo por el cual se rechaza la cédula.'
-                                });
-                            }
-                        });
-                    }
+                         }
+                    });
                 });
-            });
             /*Fin de Autorizar Cedula*/
 
             /*Rechazar Entregable*/
@@ -687,8 +980,8 @@
 
                 Swal.fire({
                     'icon': 'warning',
-                    'title': 'Servicio RPBI',
-                    'html': '¿Estas seguro de que deseas rechazar el entregable <b>' + tipo+ '</b>?',
+                    'title': 'Servicio de RPBI',
+                    'html': '¿Está seguro que desea rechazar el entregable <b>' + tipo+ '</b>?',
                     'confirmButtonColor': '#3085d6',
                     'cancelButtonColor': '#d33',
                     'confirmButtonText': 'Si, Rechazar',
@@ -698,7 +991,7 @@
                     if (confirm.isConfirmed) {
                         Swal.fire({
                             icon: 'info',
-                            'title': 'Servicio RPBI',
+                            'title': 'Servicio de RPBI',
                             html: 'Por favor capture el motivo por el cual se rechaza el entregable <b>"'+tipo+'"</b>.',
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',
@@ -706,7 +999,7 @@
                             cancelButtonText: 'Cancelar',
                             confirmButtonText: 'Rechazar',
                             input: 'text',
-                            inputPlaceholder: 'Escribe los comentarios correspondientes'
+                            inputPlaceholder: 'Escriba los comentarios correspondientes'
                         }).then(send => {
                             if (send.value.length > 0) {
                                 axios.post('/residuos/entregables/historialEntregable', {
@@ -718,8 +1011,8 @@
                                             if (response.status == 200) {
                                                 Swal.fire({
                                                     'icon': 'success',
-                                                    'title': 'Servicio RPBI',
-                                                    'text': 'Se rechazó el entregable correctamente'
+                                                    'title': 'Servicio de RPBI',
+                                                    'text': 'Se rechazó el entregable de forma correcta.'
                                                 }).then(function () {
                                                     window.location.reload();
                                                 });
@@ -729,14 +1022,14 @@
                                 }).catch(er => {
                                     Swal.fire({
                                         'icon': 'error',
-                                        'title': 'Servicio RPBI',
+                                        'title': 'Servicio de RPBI',
                                         'text': 'Ocurrio un error al rechazar el entregable. Por favor comunicate a la ext. 2574.'
                                     });
                                 });
                             } else {
                                 Swal.fire({
                                     'icon': 'error',
-                                    'title': 'Servicio RPBI',
+                                    'title': 'Servicio de RPBI',
                                     'text': 'Es necesario capturar los comentarios indicando el motivo por el cual se rechaza la cédula.'
                                 });
                             }

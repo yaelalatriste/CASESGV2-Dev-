@@ -25,7 +25,7 @@
                     <tr>
 
                         <td>@i</td>
-                        @if (item.Estatus.Equals("Enviado a DAS"))
+                        @if (item.Estatus.Equals("Enviado a DAS") || item.Estatus.Equals("Revisión CAE"))
                         {
                             <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                         }
@@ -37,7 +37,7 @@
                         {
                             <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                         }
-                        else if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite") || item.Estatus.Equals("Trámite de Pago"))
+                        else if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("Autorizado CAE") || item.Estatus.Equals("Trámite de Pago"))
                         {
                             <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                         }

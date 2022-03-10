@@ -9,8 +9,7 @@ namespace CedulasEvaluacion.Entities.Vistas
         public int Id { get; set; }
         public string Abreviacion { get; set; }
         public string Nombre { get; set; }
-        public string Origen { get; set; }
-        public string Destino { get; set; }
+        public string OrigenDestino { get; set; }
         public string Area { get; set; }
         public string Folio { get; set; }
         public string Mes { get; set; }

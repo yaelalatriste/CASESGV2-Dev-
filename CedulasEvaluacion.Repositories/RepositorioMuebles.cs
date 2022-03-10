@@ -337,8 +337,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 Id = (int)reader["Id"],
                 Folio = reader["Folio"].ToString(),
-                Origen = reader["Origen"].ToString(),
-                Destino = reader["Destino"].ToString(),
+                OrigenDestino = reader["OrigenDestino"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Anio = (int)reader["Anio"],
                 Servicio = reader["Servicio"].ToString(),

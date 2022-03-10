@@ -277,6 +277,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 Id = (int)reader["Id"],
                 Folio = reader["Folio"].ToString(),
+                Abreviacion = reader["Abreviacion"].ToString(),
                 Nombre = reader["Nombre"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Anio = (int)reader["Anio"],
