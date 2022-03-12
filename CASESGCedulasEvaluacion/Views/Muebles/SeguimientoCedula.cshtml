@@ -344,6 +344,46 @@
                                                 <td class="text-center text-info font-weight-bold">En Revisión</td>
                                             }
                                         }
+                                        else if ((@User.Claims.ElementAt(2).Value).Contains("Administrador"))
+                                        {
+                                            @if (entre.Estatus.Equals(""))
+                                            {
+                                                <td class="text-center">
+                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
+                                                        <i class="fas fa-check ml-1"></i>
+                                                    </a>
+                                                    <a href="#" class='btn-xs btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                       data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
+                                                        <i class="fas fa-times ml-1 mr-1"></i>
+                                                    </a>
+                                                </td>
+                                            }
+                                            else if (@entre.Estatus.Equals("Autorizado"))
+                                            {
+                                                <td class="row col-lg-12 justify-content-center">
+                                                    <div class="icon text-success font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Autorizado">
+                                                        <i class="fas fa-check-circle"></i> Autorizado
+                                                    </div>
+                                                    <a href="#" class='btn btn-sm btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                       data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
+                                                        <i class="far fa-times"></i>
+                                                    </a>
+                                                </td>
+                                            }
+                                            else if (@entre.Estatus.Equals("Rechazado"))
+                                            {
+                                                <td class="row col-lg-12 justify-content-center">
+                                                    <div class="icon text-danger font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Rechazado">
+                                                        <i class="fas fa-check-circle"></i> Rechazado
+                                                    </div>
+                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
+                                                        <i class="fas fa-check ml-1"></i>
+                                                    </a>
+                                                </td>
+                                            }
+                                        }
                                         <td class="text-center">
                                             <a href='#' class='text-center mr-2 view_file' data-id="@entre.Id" data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo"
                                                data-toggle="tooltip" title="Vista Previa de(la) @tipo" data-placement="top">
@@ -374,7 +414,7 @@
                                                     </a>
                                                 }
                                             }
-                                            else if ((@User.Claims.ElementAt(2).Value).Contains("Administrador") && entre.Estatus.Equals("Rechazado"))
+                                            else if ((@User.Claims.ElementAt(2).Value).Contains("Administrador"))
                                             {
                                                 <a href='#' class="text-center mr-2 update_files" data-id="@entre.Id" data-coments="@entre.Comentarios"
                                                    data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo" data-toggle="tooltip" title="Actualizar @entre.Tipo"

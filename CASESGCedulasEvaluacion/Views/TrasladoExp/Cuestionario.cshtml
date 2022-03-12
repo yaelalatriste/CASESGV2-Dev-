@@ -56,15 +56,6 @@
                             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_3" role="tab" aria-controls="contact" aria-selected="false">Pregunta 3</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_4" role="tab" aria-controls="contact" aria-selected="false">Pregunta 4</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_5" role="tab" aria-controls="contact" aria-selected="false">Pregunta 5</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#pregunta_6" role="tab" aria-controls="contact" aria-selected="false">Pregunta 6</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
                             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#entregables" role="tab" aria-controls="contact" aria-selected="false">Entregables</a>
                         </li>
                     </ul>
@@ -80,8 +71,17 @@
                                 <input type="radio" name="pregunta1" value="false" id="radioSuccess2" class="pregunta1">
                                 <label for="radioSuccess2">No</label>
                             </div>
-                            <div class="row col-lg-2 mt-3" id="detalles1">
-                                <button class="btn btn-primary mt-2 btn_addDias" data-pregunta="1">Registro de Incumplimiento</button>
+                            <div class="form-row col-lg-12 mt-3" id="diviPregunta1">
+                                <div class="form-row">
+                                    <div class="col col-lg-1">
+                                        <label for="peronsalSol" class="h6">Personal Solicitado</label>
+                                        <input type="number" id="personalSolicitado" class="form-control">
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <label for="personalBrin" class="h6">Personal Brindado</label>
+                                        <input type="number" id="personalBrindado" class="form-control">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         @* Fin de la Pregunta 1 *@
@@ -96,8 +96,13 @@
                                 <input type="radio" name="pregunta2" value="false" id="radioSuccess4" class="pregunta2">
                                 <label for="radioSuccess4">No</label>
                             </div>
-                            <div class="row col-lg-2 mt-3" id="detalles2">
-                                <button class="btn btn-primary mt-2 btn_addDias" data-pregunta="2">Registro de Incumplimiento</button>
+                            <div class="form-row col-lg-12 mt-3" id="diviPregunta2">
+                                <div class="form-row">
+                                    <div class="col col-lg-6">
+                                        <label for="peronsalSol" class="h6">Comentarios: </label>
+                                        <textarea type="number" id="comentarios" class="form-control" style="resize:none"></textarea>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         @* Fin de la Pregunta 2 *@
@@ -112,8 +117,9 @@
                                 <input type="radio" name="pregunta3" value="false" id="radioSuccess6" class="pregunta3">
                                 <label for="radioSuccess6">No</label>
                             </div>
-                            <div class="row col-lg-2 mt-3" id="detalles3">
-                                <button class="btn btn-primary mt-2 btn_addDias" data-pregunta="3">Registro de Incumplimiento</button>
+                            <div class="row col-lg-12 mt-3" id="diviPregunta3">
+                                <button class="btn btn-primary mt-2 mr-1 btn_addInci" data-pregunta="3">Registro de Incidencias</button>
+                                <button class="btn btn-primary mt-2 btn_viewInci" data-pregunta="3">Consultar Incidencias</button>
                             </div>
                         </div>
                         @* Fin de la Pregunta 3 *@
@@ -273,10 +279,9 @@
                         <div class="form-row">
                             <input type="hidden" id="id_incidencia" />
                             <input type="hidden" id="pregunta_incidencia" />
-                            <div class="form-inline col-md-6" id="inputFechas">
+                            <div class="form-row col-md-3">
                                 <label class="mr-3" for="fechaIncumplimiento">Fecha Incumplimiento: </label>
                                 <input type="date" class="form-control mr-3" id="fecha_incumplimiento" name="fechaIncumplimiento">
-                                <button type="button" class="btn btn-primary float-right" id="guardaIncidencia"><i class="fas fa-plus"></i></button>
                             </div>
                             <div class="col-sm-12" id="error_fechaIncumplimiento">
                                 <small id="dateHelp" class="text-danger">
@@ -285,20 +290,37 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row col-lg-12 mt-4">
+                        <p class="h6"><strong>Por favor seleccione la opción donde se presentó el incumplimiento:</strong></p>
+                    </div>
+                    <div class="row col-lg-12">
+                        <div style="text-align: justify">
+                            <div class="form-check-inline i-checks mt-3">
+                                <strong class="text-black mr-3">Patines</strong>
+                                <input class="iPregunta3" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
+                                       data-onstyle="success" data-offstyle="danger" data-style="ios" value="Patines" name="iTraslado[]">
+                            </div>
+                            <div class="form-check-inline i-checks mt-3">
+                                <strong class="text-black mr-3">Diablos</strong>
+                                <input class="iPregunta3" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
+                                       data-onstyle="success" data-offstyle="danger" data-style="ios" value="Diablos" name="iTraslado[]">
+                            </div>
+                            <div class="form-check-inline i-checks mt-3">
+                                <strong class="text-black mr-3">Hule de Emplayo</strong>
+                                <input class="iPregunta3" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
+                                       data-onstyle="success" data-offstyle="danger" data-style="ios" value="Hule de Emplayo" name="iTraslado[]">
+                            </div>
+                            <div class="form-check-inline i-checks mt-3">
+                                <strong class="text-black mr-3">Equipo de Seguridad</strong>
+                                <input class="iPregunta3" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
+                                       data-onstyle="success" data-offstyle="danger" data-style="ios" value="Equipo de Seguridad" name="iTraslado[]">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="row mt-4">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Pregunta</th>
-                                <th>Fecha de Incumplimiento</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbl_incumplimiento"></tbody>
-                    </table>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary float-right" id="guardaIncidencia">Guardar Incidencia</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -328,8 +350,6 @@
                             <option value="Factura">Factura</option>
                             <option value="SAT">Validación del SAT</option>
                             <option value="NotaCredito">Nota de Crédito</option>
-                            <option value="Reporte(s)">Reporte(s) de Guías</option>
-                            <option value="Escritos">Escrito(s) ante Estafeta</option>
                         </select>
                         <div class="col-sm-12" id="error_tipoEntre">
                             <small id="dateHelp" class="text-danger">
@@ -419,12 +439,9 @@
 
 
             /********************************** Ocuultamos los detalles de cada pregunta*************************************/
-                $('#detalles1').css('display', 'none');
-                $('#detalles2').css('display', 'none');
-                $('#detalles3').css('display', 'none');
-                $('#detalles4').css('display', 'none');
-                $('#detalles5').css('display', 'none');
-                $('#detalles6').css('display', 'none');
+                $('#diviPregunta1').css('display', 'none');
+                $('#diviPregunta2').css('display', 'none');
+                $('#diviPregunta3').css('display', 'none');
 
                 /*Errores*/
                 $('#error_fechaIncumplimiento').css('display', 'none');
@@ -653,29 +670,20 @@
                 /*Si existen Respuestas dentro de la Cedula*/
                 for (var i = 0; i < respuestas.length; i++) {
                     $('input:radio[name="pregunta' + respuestas[i].pregunta + '"][value="' + respuestas[i].respuesta + '"]').prop('checked', true);
-                    if (respuestas[i].respuesta == false) {
-                        $('#detalles' + (i + 1)).css('display', 'block');
-                        $('.detalles' + (i + 1)).val(respuestas[i].detalles);
+                    if (respuestas[i].pregunta == 3 && respuestas[i].respuesta == false) {
+                        $('#diviPregunta' + respuestas[i].pregunta).css('display', 'block');
                     }
                 }
             /************************************** Fin Editar Cuestionario de la Cédula ***************************************/
 
             /************************************** Incidencias de la Cédula ***************************************/
                 /*Mostrar Modal*/
-                    $('.btn_addDias').click(function () {
-                        $("#guardaIncidencia i").removeClass('fas fa-refresh');
-                        $("#guardaIncidencia").removeClass('btn-success');
-                        $("#guardaIncidencia").addClass('btn-primary');
-                        $("#guardaIncidencia i").addClass('fas fa-plus');
+                    $('.btn_addInci').click(function () {
                         $('#id_incidencia').val('');
                         $('#pregunta_incidencia').val('');
                         $('#fecha_incumplimiento').val('');
-                        $('#title_modal').text('Pregunta ' + $(this).data('pregunta') + ' - Días de Incumplimiento');
+                        $('#title_modal').text('Capturar Incidencia');
                         $('#pregunta_incidencia').val($(this).data('pregunta'));
-                        axios.get('/trasladoExp/getIncidenciasTable/' + model.id+'/'+$(this).data('pregunta')).then(res => {
-                            res = res.data; 
-                            $("#tbl_incumplimiento").html(res);
-                        });
                         $('#modal-diasIncumplidos').modal('show');
                     });
                 /*Fin Mostrar Modal*/
@@ -977,14 +985,14 @@
                             'showCancelButton': true
                         }).then(response => {
                             if (response.isConfirmed) {
-                                axios.post("/mensajeria/eliminaArchivo", { Id: id }).then(response => {
+                                axios.post("/trasladoExp/eliminaArchivo", { Id: id }).then(response => {
                                     if (response.status == 200) {
                                         Swal.fire(
                                             'Archivo Borrado',
                                             'Tu archivo fue eliminado con éxito.',
                                             'success'
                                         );
-                                        axios.get("/mensajeria/getEntregables/" + model.id).then(response => {
+                                        axios.get("/trasladoExp/getEntregables/" + model.id).then(response => {
                                             if (response.data == null || response.data == "") {
                                                 $('#tEntregables').html(response.data);
                                             }
@@ -1067,11 +1075,12 @@
             /******************************* Mostrar/Ocultar Campos de Días**********************************/
                 $('.pregunta1').change(function () {
                     let pr = $(this).val();
-                    let fol = '@Model.Folio';
                     if (pr == "false") {
-                        $('#detalles1').css('display', 'block');
+                        $('#diviPregunta1').css('display', 'block');
                     } else {
-                        $('#detalles1').css('display', 'none');
+                        $('#diviPregunta1').css('display', 'none');
+                        $('#personalSolicitado').val('');
+                        $('#personalBrindado').val('');
                     }
                 });
 
@@ -1079,9 +1088,10 @@
                     let pr = $(this).val();
                     let fol = '@Model.Folio';
                     if (pr == "false") {
-                        $('#detalles2').css('display', 'block');
+                        $('#diviPregunta2').css('display', 'block');
                     } else {
-                        $('#detalles2').css('display', 'none');
+                        $('#diviPregunta2').css('display', 'none');
+                        $('#comentarios').val('');
                     }
                 });
 
@@ -1089,39 +1099,9 @@
                     let pr = $(this).val();
                     let fol = '@Model.Folio';
                     if (pr == "false") {
-                        $('#detalles3').css('display', 'block');
+                        $('#diviPregunta3').css('display', 'block');
                     } else {
-                        $('#detalles3').css('display', 'none');
-                    }
-                });
-
-                $('.pregunta4').change(function () {
-                    let pr = $(this).val();
-                    let fol = '@Model.Folio';
-                    if (pr == "false") {
-                        $('#detalles4').css('display', 'block');
-                    } else {
-                        $('#detalles4').css('display', 'none');
-                    }
-                });
-
-                $('.pregunta5').change(function () {
-                    let pr = $(this).val();
-                    let fol = '@Model.Folio';
-                    if (pr == "false") {
-                        $('#detalles5').css('display', 'block');
-                    } else {
-                        $('#detalles5').css('display', 'none');
-                    }
-                });
-
-                $('.pregunta6').change(function () {
-                    let pr = $(this).val();
-                    let fol = '@Model.Folio';
-                    if (pr == "false") {
-                        $('#detalles6').css('display', 'block');
-                    } else {
-                        $('#detalles6').css('display', 'none');
+                        $('#diviPregunta3').css('display', 'none');
                     }
                 });
             /**************************** FIN Mostrar/Ocultar Campos de Días *******************************/
@@ -1144,14 +1124,17 @@
                 /*Guardar la Cedula*/
                     $('.btn_guardar').click(function () {
                         var respuestas = new Array();
-                        for (let i = 0; i < 6; i++) {
+                        for (let i = 0; i < 3; i++) {
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta != null) {
-                                if (respuesta == "true") {
+                                if (i == 0) {
+                                    respuestas.push({
+                                        CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),Detalles: ($('#personalSolicitado').val() + "|" + $('#personalBrindado').val(''))
+                                    });
+                                } else if (i == 1) {
+                                    respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("comentarios").val() });
+                                } else {
                                     respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
-                                }else {
-                                    let detalles = $('.detalles'+(i+1)).val();
-                                    respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
                                 }
                             }
                         }
@@ -1270,7 +1253,7 @@
 
                         guardaCedula();
 
-                        for (let i = 0; i < 6; i++) {
+                        for (let i = 0; i < 3; i++) {
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta == null || respuesta == "") {
                                 Swal.fire({

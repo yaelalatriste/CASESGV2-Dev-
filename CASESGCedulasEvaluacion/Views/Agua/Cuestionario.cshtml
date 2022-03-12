@@ -5,6 +5,12 @@
 
 <div class="container-fluid" id="limpieza">
     <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Facturas" data-placement="top"><i class="fal fa-file-invoice"></i></a>
+    @if (@Model.facturas.Count != 0)
+    {
+        <a href="/documents/actaAgua/@Model.Id" class='btn-sm btn-primary float-right mr-2 mb-3' data-toggle="tooltip" title="Generar Acta ER" data-placement="top">
+            <i class="fal fa-calendar-alt"></i>
+        </a>
+    }
     <a href="/agua/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Agua para Beber" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
@@ -79,7 +85,7 @@
                             </div>
                             <div class="row col-lg-12 mt-3" id="diviPregunta2">
                                 <button type='button' class='btn btn-primary mr-2 addIncidencias' data-pregunta="2">Capturar Incidencia</button>
-                                <button type='button' class='btn btn-primary viewIncidencias' data-pregunta="2">Consultar Insidencias</button>
+                                <button type='button' class='btn btn-primary viewIncidencias' data-pregunta="2">Consultar Incidencias</button>
                             </div>
                         </div>
                         @* Fin de la Pregunta 2 *@
@@ -96,7 +102,7 @@
                             </div>
                             <div class="row col-lg-12 mt-3" id="diviPregunta3">
                                 <button type='button' class='btn btn-primary mr-2 addIncidencias' data-pregunta="3">Capturar Incidencia</button>
-                                <button type='button' class='btn btn-primary viewIncidencias' data-pregunta="3">Consultar Insidencias</button>
+                                <button type='button' class='btn btn-primary viewIncidencias' data-pregunta="3">Consultar Incidencias</button>
                             </div>
                         </div>
                         @* Fin de la Pregunta 3 *@
@@ -113,7 +119,7 @@
                             </div>
                             <div class="row col-lg-12 mt-3" id="diviPregunta4">
                                 <button type='button' class='btn btn-primary mr-2 addIncidencias' data-pregunta="4">Capturar Incidencia</button>
-                                <button type='button' class='btn btn-primary viewIncidencias' data-pregunta="4">Consultar Insidencias</button>
+                                <button type='button' class='btn btn-primary viewIncidencias' data-pregunta="4">Consultar Incidencias</button>
                             </div>
                         </div>
                         @* Fin de la Pregunta 4 *@
@@ -312,7 +318,7 @@
                             <option value="">Seleccione una opción</option>
                             <option value="Fechas">Fechas</option>
                             <option value="Horas">Horas</option>
-                            <option value="Fauna Nociva">Fauna Nociva</option>
+                            <option value="Garrafones">Garrafones</option>
                         </select>
                     </div>
                 </div>
@@ -367,7 +373,7 @@
                         </select>
                         <div class="col-sm-12" id="error_caracGarrafones">
                             <small id="dateHelp" class="text-danger">
-                                Por favor capture la Fauna Nociva
+                                Por favor capture la Caract. del Garrafón(es)
                             </small>
                         </div>
                     </div>
@@ -439,9 +445,6 @@
                             <option value="ActaER">Acta Entrega - Recepción</option>
                             <option value="Factura">Factura</option>
                             <option value="SAT">Validación del SAT</option>
-                            <option value="NotaCredito">Nota de Crédito</option>
-                            <option value="Reporte(s)">Reporte(s) de Guías</option>
-                            <option value="Escritos">Escrito(s) ante Estafeta</option>
                         </select>
                         <div class="col-sm-12" id="error_tipoEntre">
                             <small id="dateHelp" class="text-danger">
@@ -1032,7 +1035,7 @@
                         $('#divHoraRealizada').css('display', 'block');
                         $('#divInciComentarios').css('display', 'block');
                     } else if (pregunta == 4) {
-                        $("#categoria").val('Fauna Nociva');
+                        $("#categoria").val('Garrafones');
                         $('#divFechaProgramada').css('display', 'block');
                         $('#divFechaProgramada label').text('Fecha de Entrega');
                         $('#divFechaRealizada').css('display', 'block');
@@ -1047,6 +1050,7 @@
                     muestraInputs(pregunta);
                     $("#pregunta").val(pregunta+"");
                     $("#id_incidencia").val("");
+                    $("#caracGarrafones").val("");
                     $("#modal-incidencias").modal('show');
                 });
 
@@ -1101,7 +1105,7 @@
                         if (fechaProgramada != '' && horaProgramada != '' && horaRealizada != '') {
                             return true;
                         }
-                    } else if (tipo == "") {
+                    } else if (tipo == "Garrafones") {
                         if (fechaProgramada == '') {
                             $('#fechaProgramada').addClass('is-invalid');
                             $('#error_fechaProgramada').css('display', 'block');
@@ -1117,7 +1121,7 @@
                             $('#error_caracGarrafones').css('display', 'block');
                         }
 
-                        if (fechaProgramada != '' && fechaRealizada != '' && faunaNociva != '') {
+                        if (fechaProgramada != '' && fechaRealizada != '' && caracGarrafones != '') {
                             return true;
                         }
                     }
@@ -1140,7 +1144,7 @@
                         id = 0;
                     }
 
-                    if (tipo == "") {
+                    if (tipo == "Garrafones") {
                         comentarios = faunaNociva+"|"+ comentarios;
                     }
                     if (validaIncidencias()) {
@@ -1217,11 +1221,11 @@
                         $('#divHoraProgramada').css('display', 'block');
                         $('#divHoraRealizada').css('display', 'block');
                         $('#divInciComentarios').css('display', 'block');
-                    } else if (tipo == "caracGarrafones") {
+                    } else if (tipo == "Garrafones") {
                         let comentarios = $(this).data('coment').split("|");
                         $('#fechaProgramada').val($(this).data('fechaprog'));
                         $('#fechaRealizada').val($(this).data('fechareal'));
-                        $('#faunaNociva').val(comentarios[0]);
+                        $('#caracGarrafones').val(comentarios[0]);
                         $('#inciComentarios').val(comentarios[1]);
                         $('#divFechaProgramada').css('display', 'block');
                         $('#divFechaProgramada label').text('Fecha de Entrega');
@@ -1229,6 +1233,7 @@
                         $('#divFechaRealizada label').text('Fecha Recibido');
                         $('#divFaunaNociva').css('display', 'block');
                         $('#divInciComentarios').css('display', 'block');
+                        $('#error_caracGarrafones').css('display', 'none');
                     }
                     $("#modal-incidencias").modal('show');
                 });
