@@ -329,6 +329,44 @@
 </div>
 @*Fin Modal para la captura de Incidencias *@
 
+@* Modal para mostrar las Incidencias *@
+<div class="modal fade" id="modal-viewIncidencias">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white">Lista de Incumplimientos</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table table-responsive-xl">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha Incumplimiento</th>
+                                    <th>Comentarios</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_incumplimiento"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="cerrar_modal">Cerrar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@*Fin Modal para mostrar las Incidencias *@
+
 @* Modal para la captura de Adjuntos *@
 <div class="modal fade" id="modal_evidencias">
     <div class="modal-dialog modal-xl">
@@ -670,7 +708,17 @@
                 /*Si existen Respuestas dentro de la Cedula*/
                 for (var i = 0; i < respuestas.length; i++) {
                     $('input:radio[name="pregunta' + respuestas[i].pregunta + '"][value="' + respuestas[i].respuesta + '"]').prop('checked', true);
-                    if (respuestas[i].pregunta == 3 && respuestas[i].respuesta == false) {
+                    if (respuestas[i].pregunta == 1 && respuestas[i].respuesta == false)
+                    {
+                        $('#personalSolicitado').val(respuestas[i].detalles.split("|")[0]);
+                        $('#personalBrindado').val(respuestas[i].detalles.split("|")[1])
+                    }
+                    else if (respuestas[i].pregunta == 2)
+                    {
+                        $('#comentarios').val(respuestas[i].detalles);
+                    }
+
+                    if (respuestas[i].respuesta == false) {
                         $('#diviPregunta' + respuestas[i].pregunta).css('display', 'block');
                     }
                 }
@@ -685,6 +733,15 @@
                         $('#title_modal').text('Capturar Incidencia');
                         $('#pregunta_incidencia').val($(this).data('pregunta'));
                         $('#modal-diasIncumplidos').modal('show');
+                    });
+                /*Fin Mostrar Modal*/
+                /*Ver Incidencias*/
+                    $('.btn_viewInci').click(function () {
+                        axios.get('/trasladoExp/getIncidenciasTable/' + model.id).then(res => {
+                            res = res.data;
+                            $("#tbl_incumplimiento").html(res);
+                        });
+                        $('#modal-viewIncidencias').modal('show');
                     });
                 /*Fin Mostrar Modal*/
 
@@ -733,7 +790,7 @@
                         var id = $('#id_incidencia').val();
                         var fecha = $('#fecha_incumplimiento').val();
                         var pregunta = $('#pregunta_incidencia').val();
-                        var table = "";
+                        var coments = "";
 
                         if (id == '') {
                             id = 0;
@@ -741,30 +798,32 @@
                             id = parseInt(id);
                         }
 
-                        axios.post("/trasladoExp/incidencia", { Id: id, FechaIncumplida: fecha, CedulaTrasladoId: parseInt(model.id), Pregunta: parseInt(pregunta) }).then(response => {
-                            if (response.status == 200 && id == 0) {
-                                Swal.fire({
-                                    'icon': "success",
-                                    'title': "Se guardó la fecha de incidencia correctamente."
-                                });
-                                var fecha = $('#fecha_incumplimiento').val("");
-                            }else if (response.status == 200 && id != 0) {
-                                Swal.fire({
-                                    'icon': "success",
-                                    'title': "Se actualizó la fecha de incidencia correctamente."
-                                });
-                                var fecha = $('#fecha_incumplimiento').val("");
-                            } else {
-                                Swal.fire({
-                                    'icon': "error",
-                                    'title': "Hubo un error al guardar las respuestas de la cédula. Contacte al Administrador del Sistema"
-                                });
-                            }
-                            axios.get('/trasladoExp/getIncidenciasTable/' + model.id + '/' + pregunta).then(res => {
-                                res = res.data;
-                                $("#tbl_incumplimiento").html(res);
-                            });
+                        $("[name='iTraslado[]']:checked").each(function () {
+                            coments += $(this).val() + "|";
                         });
+
+                        if (id != "")
+                        {
+                            axios.post("/trasladoExp/actualiza/incidencia", { Id: parseInt(id), FechaIncumplida: fecha, Comentarios: coments, CedulaTrasladoId: parseInt(model.id), 
+                                                                    Pregunta: parseInt(pregunta) }).then(response => {
+                                Swal.fire({
+                                    'icon': "success",
+                                    'title': "Servicio Traslado de Expedientes",
+                                    'html': "La incidencia se actualizó correctamente."
+                                });
+                            });
+                        }
+                        else
+                        {
+                            axios.post("/trasladoExp/inserta/incidencia", { FechaIncumplida: fecha, Comentarios: coments, CedulaTrasladoId: parseInt(model.id), 
+                                                                    Pregunta: parseInt(pregunta) }).then(response => {
+                                Swal.fire({
+                                    'icon': "success",
+                                    'title': "Servicio Traslado de Expedientes",
+                                    'html': "La incidencia se capturo correctamente."
+                                });
+                            });
+                        }
                     });
                 /*Fin Guardar Día*/
             /********************************** Fin de Incidencias de la Cédula ************************************/
@@ -1127,12 +1186,12 @@
                         for (let i = 0; i < 3; i++) {
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta != null) {
-                                if (i == 0) {
+                                if (i == 0 && respuesta == "false") {
                                     respuestas.push({
-                                        CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),Detalles: ($('#personalSolicitado').val() + "|" + $('#personalBrindado').val(''))
+                                        CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),Detalles: ($('#personalSolicitado').val() + "|" + $('#personalBrindado').val())
                                     });
-                                } else if (i == 1) {
-                                    respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("comentarios").val() });
+                                } else if (i == 1 && respuesta == "false") {
+                                    respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("# comentarios").val() });
                                 } else {
                                     respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 }
@@ -1241,7 +1300,7 @@
 
                 /*Enviar la Cedula*/
                     $('.btn_enviar').click(function () {
-                        
+
                         if (model.facturas.length == 0) {
                             Swal.fire({
                                 'icon': 'error',

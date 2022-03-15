@@ -115,35 +115,21 @@
                                             <h5 class="text-info lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
                                         }
                                         <p class="text-sm">
-                                            @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                  @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
-                                            }
-                                            @if (total > 0)
+                                            @{ decimal totalPena = 0; }
+                                            @foreach (var penas in @Model.RespuestasEncuesta)
                                             {
-                                                <h5 class="text-danger">
-                                                    <b>Total Penalizable:</b> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total)
-                                                </h5>
+                                                totalPena += penas.MontoPenalizacion;
                                             }
-                                            else
-                                            {
-                                                <h5 class="text-danger">
-                                                    @*<b>No hay Monto Penalizable</b>*@
-                                                    <b>** Penalizaciones en Construcción **</b>
-                                                </h5>
-                                            }
+                                            <h5 class="text-danger">
+                                                <b>Total Penalizable:</b> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalPena)
+                                            </h5>
+                                            <ul class="ml-4 mb-0 fa-ul">
+                                                <li class="small mt-3">
+                                                    <span class="fa-li"><i class="fas fa-tools"></i></span>
+                                                    <b>Penalización en Requerimientos: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalPena)
+                                                </li>
+                                            </ul>
                                         </p>
-                                        @*<ul class="ml-4 mb-0 fa-ul">
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Recolección: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Entrega: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Acuses: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Mal Estado: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Extraviadas: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[4].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Material: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Penalización en Calidad y Eficiencia: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
-                                            </ul>*@
-                                        <div>
-                                            <img src="~/img/web1.jpg" alt="Alternate Text" width="40%" />
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -178,6 +164,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -194,18 +181,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Alta/Equipo</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 24) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 24)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -219,20 +208,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
-                                    <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.altaEntrega.Count
+                                    <h6 class="text-danger ml-2">
+                                        <strong>Total de Requerimientos: </strong> @Model.altaEntrega.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -256,7 +245,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -283,6 +272,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -299,18 +289,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Alta sin Equipo</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 6) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 6)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -324,20 +316,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
-                                    <h6 class="text-danger ml-4">
+                                    <h6 class="text-danger ml-2">
                                         <strong>Total de Entregas: </strong> @Model.altasentrega.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -361,7 +353,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -374,7 +366,7 @@
             <div class="tab-pane fade mt-2 ml-3" id="baja" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="row">
                     <h4 class="mt-2 mb-2">Baja de Servicios</h4>
-                   <div class="col-lg-12">
+                    <div class="col-lg-12">
                         @if (@Model.bajaServicio.Count > 0)
                         {
                             <div class="row mt-2">
@@ -388,6 +380,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -404,18 +397,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Baja</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 6) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 6)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -429,7 +424,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -439,10 +434,10 @@
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -466,7 +461,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -479,7 +474,7 @@
             <div class="tab-pane fade mt-2 ml-3" id="reactivacion" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="row">
                     <h4 class="mt-2 mb-2">Reactivación por Robo/Extravío</h4>
-                   <div class="col-lg-12">
+                    <div class="col-lg-12">
                         @if (@Model.reactivacion.Count > 0)
                         {
                             <div class="row mt-2">
@@ -493,6 +488,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -509,18 +505,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Reactivación Robo/Extravío</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 24) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 24)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -534,7 +532,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -544,10 +542,10 @@
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -571,7 +569,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -598,6 +596,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -614,18 +613,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Suspensión Robo/Extravío</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 24) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 24)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -639,7 +640,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -649,10 +650,10 @@
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -676,7 +677,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -703,6 +704,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -719,18 +721,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Cambio de Perfil</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 48) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 48)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -744,7 +748,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -754,10 +758,10 @@
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -781,7 +785,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -808,6 +812,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -824,18 +829,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Switcheo de SIM</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 24) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 24)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -849,7 +856,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -859,10 +866,10 @@
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -886,7 +893,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -913,6 +920,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -929,18 +937,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Cambio de Número o Región</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 24) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 24)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -954,7 +964,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -964,10 +974,10 @@
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -991,7 +1001,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -1018,6 +1028,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -1034,18 +1045,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Servicio de Voz/Datos</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 24) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 24)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -1059,7 +1072,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -1069,10 +1082,10 @@
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -1096,7 +1109,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -1109,7 +1122,7 @@
             <div class="tab-pane fade mt-2 ml-3" id="diagnostico" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="row">
                     <h4 class="mt-2 mb-2">Diagnóstico de Equipo</h4>
-                   <div class="col-lg-12">
+                    <div class="col-lg-12">
                         @if (@Model.diagnostico.Count > 0)
                         {
                             <div class="row mt-2">
@@ -1123,6 +1136,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -1139,18 +1153,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Diagnóstico de Equipo</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 24) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 24)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -1164,7 +1180,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -1174,10 +1190,10 @@
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -1201,7 +1217,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -1228,6 +1244,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
+                                                    <th>Línea</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Fecha y Hora de la Solicitud</th>
                                                     <th>Horas de Atención</th>
@@ -1244,18 +1261,20 @@
                                                     <tr>
                                                         <td>@i</td>
                                                         <td>Reparación de Equipo</td>
+                                                        <td>@p1.Linea</td>
                                                         <td>@p1.FechaSolicitud</td>
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
-                                                        @if (@p1.HorasAtencion <= 80) 
-                                                        { 
+                                                        @if (@p1.HorasAtencion <= 80)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -1269,7 +1288,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -1279,10 +1298,10 @@
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                <h5 class="text-danger ml-4">
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                </h5>
+                            </div>*@
                             </div>
                         }
                         else
@@ -1306,7 +1325,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -1371,6 +1390,10 @@
                                                     else if (entre.Tipo.Equals("Reporte(s)"))
                                                     {
                                                         <td>Reporte(s)</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@entre.Tipo</td>
                                                     }
                                                     <td>@entre.NombreArchivo</td>
                                                     <td>@entre.FechaCreacion.ToString("dd/MM/yyyy")</td>

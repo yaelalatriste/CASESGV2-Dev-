@@ -9,6 +9,7 @@ namespace CedulasEvaluacion.Entities.TrasladoExp
         public int Id { get; set; }
         public int CedulaTrasladoId { get; set; }
         public int Pregunta { get; set; }
+        public string Comentarios { get; set; }
         public DateTime FechaIncumplida { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaActualizacion { get; set; }

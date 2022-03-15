@@ -237,6 +237,8 @@ namespace CedulasEvaluacion.Repositories
                 Linea = reader["Linea"] != DBNull.Value ? reader["Linea"].ToString() : "",
                 HorasAtencion = reader["HorasAtencion"] != DBNull.Value ? (int)reader["HorasAtencion"] : 0,
                 HorasRetraso = reader["HorasRetraso"] != DBNull.Value ? (int)reader["HorasRetraso"] : 0,
+                DiasAtencion = reader["DiasAtencion"] != DBNull.Value ? (int)reader["DiasAtencion"] : 0,
+                DiasRetraso = reader["DiasRetraso"] != DBNull.Value ? (int)reader["DiasRetraso"] : 0,
                 FechaSolicitud = reader["FechaSolicitud"] != DBNull.Value ? Convert.ToDateTime(reader["FechaSolicitud"]) : DateTime.Now,
                 FechaAtencion = reader["FechaAtencion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaAtencion"]) : DateTime.Now,
                 MontoPenalizacion = reader["MontoPenalizacion"] != DBNull.Value ? Convert.ToDecimal(reader["MontoPenalizacion"]) : 0,

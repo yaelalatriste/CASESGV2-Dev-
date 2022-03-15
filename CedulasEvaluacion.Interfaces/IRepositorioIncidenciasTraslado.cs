@@ -8,8 +8,9 @@ namespace CedulasEvaluacion.Interfaces
 {
     public interface IRepositorioIncidenciasTraslado
     {
-        Task<int> IncidenciasTraslado(IncidenciasTraslado incidenciasTraslado);
-        Task<List<IncidenciasTraslado>> getIncidencias(int id,int pregunta);
+        Task<int> InsertaIncidencia(IncidenciasTraslado incidenciasTraslado);
+        Task<int> ActualizaIncidencia(IncidenciasTraslado incidenciasTraslado);
+        Task<List<IncidenciasTraslado>> getIncidencias(int id);
         Task<int> EliminaIncumplimiento(int id);
     }
 }

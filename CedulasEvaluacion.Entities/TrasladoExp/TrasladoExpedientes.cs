@@ -29,12 +29,7 @@ namespace CedulasEvaluacion.Entities.TrasladoExp
         public virtual Inmueble inmuebles { get; set; }
         public virtual Usuarios usuarios { get; set; }
         public List<RespuestasEncuesta> RespuestasEncuesta { get; set; }
-        public List<IncidenciasTraslado> incidenciasP1 { get; set; }
-        public List<IncidenciasTraslado> incidenciasP2 { get; set; }
-        public List<IncidenciasTraslado> incidenciasP3 { get; set; }
-        public List<IncidenciasTraslado> incidenciasP4 { get; set; }
-        public List<IncidenciasTraslado> incidenciasP5 { get; set; }
-        public List<IncidenciasTraslado> incidenciasP6 { get; set; }
+        public List<IncidenciasTraslado> incidencias { get; set; }
         public virtual List<Entregables> iEntregables { get; set; }
         public List<HistorialCedulas> historialCedulas { get; set; }
         public List<HistorialEntregables> historialEntregables { get; set; }

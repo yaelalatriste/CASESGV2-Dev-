@@ -62,6 +62,7 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Línea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Horas de Atención</th>
@@ -80,13 +81,14 @@
                                                     <td>@i</td>
                                                     <td>Alta/Equipo</td>
                                                     <td>@p1.perfilesCelular.Nombre</td>
+                                                    <td>@p1.Linea</td>
                                                     <td>@p1.FechaSolicitud</td>
                                                     <td>@p1.FechaAtencion</td>
                                                     <td>@p1.HorasAtencion</td>
                                                     <td>@p1.HorasRetraso</td>
                                                     <td>
-                                                        <a href="#" class="update_incidencia" data-fechas="@p1.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm")" data-fechaa="@p1.FechaAtencion.ToString("yyyy-MM-ddTHH:mm")" data-id="@p1.Id" 
-                                                            data-cate="@p1.Tipo" data-linea="@p1.Linea" data-perfil="@p1.PerfilCelularId">
+                                                        <a href="#" class="update_incidencia" data-fechas="@p1.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm")" data-fechaa="@p1.FechaAtencion.ToString("yyyy-MM-ddTHH:mm")" data-id="@p1.Id"
+                                                           data-cate="@p1.Tipo" data-linea="@p1.Linea" data-perfil="@p1.PerfilCelularId">
                                                             <i class="fas fa-pencil text-primary mr-2"></i>
                                                         </a>
                                                         <a href="#" class="delete_incidencia" data-id="@p1.Id" data-cate="@p1.Tipo"><i class="fas fa-times text-danger"></i></a>
@@ -111,6 +113,7 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Línea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Horas de Atención</th>
@@ -129,12 +132,13 @@
                                                     <td>@i</td>
                                                     <td>@p2.Tipo</td>
                                                     <td>@p2.perfilesCelular.Nombre</td>
+                                                    <td>@p2.Linea</td>
                                                     <td>@p2.FechaSolicitud</td>
                                                     <td>@p2.FechaAtencion</td>
                                                     <td>@p2.HorasAtencion</td>
                                                     <td>@p2.HorasRetraso</td>
                                                     <td>
-                                                        <a href="#" class="update_incidencia" data-fechas="@p2.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm")" data-fechaa="@p2.FechaAtencion.ToString("yyyy-MM-ddTHH:mm")" 
+                                                        <a href="#" class="update_incidencia" data-fechas="@p2.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm")" data-fechaa="@p2.FechaAtencion.ToString("yyyy-MM-ddTHH:mm")"
                                                            data-id="@p2.Id" data-cate="@p2.Tipo" data-linea="@p2.Linea" data-perfil="@p2.PerfilCelularId">
                                                             <i class="fas fa-pencil text-primary mr-2"></i>
                                                         </a>
@@ -160,6 +164,7 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Línea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Horas de Atención</th>
@@ -178,6 +183,7 @@
                                                     <td>@i</td>
                                                     <td>Baja de Servicios</td>
                                                     <td>@p2.perfilesCelular.Nombre</td>
+                                                    <td>@p2.Linea</td>
                                                     <td>@p2.FechaSolicitud</td>
                                                     <td>@p2.FechaAtencion</td>
                                                     <td>@p2.HorasAtencion</td>
@@ -209,6 +215,7 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Línea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Horas de Atención</th>
@@ -227,6 +234,7 @@
                                                     <td>@i</td>
                                                     <td>Reactivación por Robo/Extravío</td>
                                                     <td>@p2.perfilesCelular.Nombre</td>
+                                                    <td>@p2.Linea</td>
                                                     <td>@p2.FechaSolicitud</td>
                                                     <td>@p2.FechaAtencion</td>
                                                     <td>@p2.HorasAtencion</td>
@@ -258,6 +266,7 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Línea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Horas de Atención</th>
@@ -276,6 +285,7 @@
                                                     <td>@i</td>
                                                     <td>Suspensión por Robo/Extravío</td>
                                                     <td>@p2.perfilesCelular.Nombre</td>
+                                                    <td>@p2.Linea</td>
                                                     <td>@p2.FechaSolicitud</td>
                                                     <td>@p2.FechaAtencion</td>
                                                     <td>@p2.HorasAtencion</td>
@@ -307,6 +317,7 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Línea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Horas de Atención</th>
@@ -325,6 +336,7 @@
                                                     <td>@i</td>
                                                     <td>Cambio de Perfil</td>
                                                     <td>@p2.perfilesCelular.Nombre</td>
+                                                    <td>@p2.Linea</td>
                                                     <td>@p2.FechaSolicitud</td>
                                                     <td>@p2.FechaAtencion</td>
                                                     <td>@p2.HorasAtencion</td>
@@ -356,6 +368,7 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Línea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Horas de Atención</th>
@@ -374,6 +387,7 @@
                                                     <td>@i</td>
                                                     <td>Switcheo de SIM Card</td>
                                                     <td>@p2.perfilesCelular.Nombre</td>
+                                                    <td>@p2.Linea</td>
                                                     <td>@p2.FechaSolicitud</td>
                                                     <td>@p2.FechaAtencion</td>
                                                     <td>@p2.HorasAtencion</td>
@@ -405,6 +419,7 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Línea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Horas de Atención</th>
@@ -423,6 +438,7 @@
                                                     <td>@i</td>
                                                     <td>Cambio de Número o Región</td>
                                                     <td>@p2.perfilesCelular.Nombre</td>
+                                                    <td>@p2.Linea</td>
                                                     <td>@p2.FechaSolicitud</td>
                                                     <td>@p2.FechaAtencion</td>
                                                     <td>@p2.HorasAtencion</td>
@@ -454,6 +470,7 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Línea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Horas de Atención</th>
@@ -472,6 +489,7 @@
                                                     <td>@i</td>
                                                     <td>Solicitud de Servicios de Voz/Datos</td>
                                                     <td>@p2.perfilesCelular.Nombre</td>
+                                                    <td>@p2.Linea</td>
                                                     <td>@p2.FechaSolicitud</td>
                                                     <td>@p2.FechaAtencion</td>
                                                     <td>@p2.HorasAtencion</td>
@@ -503,10 +521,11 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Linea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
-                                            <th>Horas de Atención</th>
-                                            <th>Horas de Retraso</th>
+                                            <th>Días de Atención</th>
+                                            <th>Dias de Retraso</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -521,10 +540,11 @@
                                                     <td>@i</td>
                                                     <td>Diagnóstico de Equipo</td>
                                                     <td>@p2.perfilesCelular.Nombre</td>
+                                                    <td>@p2.Linea</td>
                                                     <td>@p2.FechaSolicitud</td>
                                                     <td>@p2.FechaAtencion</td>
-                                                    <td>@p2.HorasAtencion</td>
-                                                    <td>@p2.HorasRetraso</td>
+                                                    <td>@p2.DiasAtencion</td>
+                                                    <td>@p2.DiasRetraso</td>
                                                     <td>
                                                         <a href="#" class="update_incidencia" data-fechas="@p2.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm")" data-fechaa="@p2.FechaAtencion.ToString("yyyy-MM-ddTHH:mm")"
                                                            data-id="@p2.Id" data-cate="@p2.Tipo" data-linea="@p2.Linea" data-perfil="@p2.PerfilCelularId">
@@ -541,7 +561,7 @@
                         </div>
                     </div>
                     @* Fin de Diagnostico *@
-                    @* Diagnostico *@
+                    @* Reparación *@
                     <div class="tab-pane fade mt-2 ml-3" id="reparacion" role="tabpanel" aria-labelledby="contact-tab">
                         <div class="row">
                             <h4 class="mt-2 mb-2">Reparación de Equipo</h4>
@@ -552,10 +572,11 @@
                                             <th>ID</th>
                                             <th>Tipo</th>
                                             <th>Perfil</th>
+                                            <th>Línea</th>
                                             <th>Fecha y Hora de la Solicitud</th>
                                             <th>Fecha y Hora de la Solicitud</th>
-                                            <th>Horas de Atención</th>
-                                            <th>Horas de Retraso</th>
+                                            <th>Días de Atención</th>
+                                            <th>Días de Retraso</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -570,10 +591,11 @@
                                                     <td>@i</td>
                                                     <td>Reparación de Equipo</td>
                                                     <td>@p2.perfilesCelular.Nombre</td>
+                                                    <td>@p2.Linea</td>
                                                     <td>@p2.FechaSolicitud</td>
                                                     <td>@p2.FechaAtencion</td>
-                                                    <td>@p2.HorasAtencion</td>
-                                                    <td>@p2.HorasRetraso</td>
+                                                    <td>@p2.DiasAtencion</td>
+                                                    <td>@p2.DiasRetraso</td>
                                                     <td>
                                                         <a href="#" class="update_incidencia" data-fechas="@p2.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm")" data-fechaa="@p2.FechaAtencion.ToString("yyyy-MM-ddTHH:mm")"
                                                            data-id="@p2.Id" data-cate="@p2.Tipo" data-linea="@p2.Linea" data-perfil="@p2.PerfilCelularId">
@@ -589,7 +611,7 @@
                             </div>
                         </div>
                     </div>
-                    @* Fin de Diagnostico *@
+                    @* Fin de Reparación *@
                 </div>
             </div>
         </div>

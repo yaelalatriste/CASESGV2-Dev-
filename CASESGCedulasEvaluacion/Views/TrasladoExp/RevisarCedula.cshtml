@@ -166,27 +166,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-9 mt-3 ml-4">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Fecha de la Incidencia</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{ var i = 0;}
-                                        @foreach (var inci in @Model.incidenciasP1)
-                                        {
-                                            i = i + 1;
-                                            <tr>
-                                                <td>@i</td>
-                                                <td>@inci.FechaIncumplida.ToString("dd/MM/yyyy")</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -240,27 +219,6 @@
                                             <i class="fas fa-times-circle text-danger"></i>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Fecha de la Incidencia</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @{ var i = 0;}
-                                            @foreach (var inci in @Model.incidenciasP2)
-                                            {
-                                                i = i + 1;
-                                                <tr>
-                                                    <td>@i</td>
-                                                    <td>@inci.FechaIncumplida.ToString("dd/MM/yyyy")</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -326,12 +284,13 @@
                                         </thead>
                                         <tbody>
                                             @{ var i = 0;}
-                                            @foreach (var inci in @Model.incidenciasP3)
+                                            @foreach (var inci in @Model.incidencias)
                                             {
                                                 i = i + 1;
                                                 <tr>
                                                     <td>@i</td>
                                                     <td>@inci.FechaIncumplida.ToString("dd/MM/yyyy")</td>
+                                                    <td>@inci.Comentarios</td>
                                                 </tr>
                                             }
                                         </tbody>
@@ -372,231 +331,6 @@
                             </div>
                         </div>
                     }
-            </div>
-            <div class="tab-pane fade" id="emplayamiento" role="tabpanel" aria-labelledby="contact-tab">
-                <div class="col-lg-12 h3 mt-4">
-                    Emplayamiento
-                </div>
-                @if (@Model.RespuestasEncuesta[3].Respuesta == false)
-                {
-                        <div class="row mt-4">
-                            <div class="row col-lg-12 mt-3">
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <p class="h3 text-justify text-danger">El personal del prestador de servicios no entregó suficiente material para emplayar, siendo acreedor a una penalización.</p>
-                                </div>
-                                <div class="col-lg-2" style="margin-top: -18px;">
-                                    <div class="small-box bg-warning">
-                                        <div class="icon">
-                                            <i class="fas fa-times-circle text-danger"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Fecha de la Incidencia</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @{ var i = 0;}
-                                            @foreach (var inci in @Model.incidenciasP4)
-                                            {
-                                                i = i + 1;
-                                                <tr>
-                                                    <td>@i</td>
-                                                    <td>@inci.FechaIncumplida.ToString("dd/MM/yyyy")</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Días sin cumplír con el servicio: </strong> @Model.RespuestasEncuesta[3].Detalles <br /><br />
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)
-                                </h5>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="row mt-4">
-                            <div class="row col-lg-12 mt-3">
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <p class="h3 text-justify text-success">El personal del prestador de servicios entregó suficiente material para emplayar, evitando una penalización.</p>
-                                </div>
-                                <div class="col-lg-2" style="margin-top: -18px;">
-                                    <div class="small-box bg-warning">
-                                        <div class="icon">
-                                            <i class="fas fa-check-circle text-success"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12">
-                                <h5 class="text-success ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)
-                                </h5>
-                            </div>
-                        </div>
-                    }
-            </div>
-            <div class="tab-pane fade" id="actividades" role="tabpanel" aria-labelledby="contact-tab">
-                <div class="col-lg-12 h3 mt-4">
-                    Actividades
-                </div>
-                @if (@Model.RespuestasEncuesta[4].Respuesta == false)
-                {
-                        <div class="row mt-4">
-                            <div class="row col-lg-12 mt-3">
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <p class="h3 text-justify text-danger">El personal del prestador de servicios no entregó los diablos de carga para realizar las actividades, siendo acreedor a una penalización.</p>
-                                </div>
-                                <div class="col-lg-2" style="margin-top: -18px;">
-                                    <div class="small-box bg-warning">
-                                        <div class="icon">
-                                            <i class="fas fa-times-circle text-danger"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Fecha de la Incidencia</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @{ var i = 0;}
-                                            @foreach (var inci in @Model.incidenciasP5)
-                                            {
-                                                i = i + 1;
-                                                <tr>
-                                                    <td>@i</td>
-                                                    <td>@inci.FechaIncumplida.ToString("dd/MM/yyyy")</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Días sin cumplír con el servicio: </strong> @Model.RespuestasEncuesta[4].Detalles <br /><br />
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[4].MontoPenalizacion)
-                                </h5>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="row mt-4">
-                            <div class="row col-lg-12 mt-3">
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <p class="h3 text-justify text-success">El personal del prestador de servicios no entregó los diablos de carga para realizar las actividades, evitando una penalización.</p>
-                                </div>
-                                <div class="col-lg-2" style="margin-top: -18px;">
-                                    <div class="small-box bg-warning">
-                                        <div class="icon">
-                                            <i class="fas fa-check-circle text-success"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12">
-                                <h5 class="text-success ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)
-                                </h5>
-                            </div>
-                        </div>
-                    }
-            </div>
-            <div class="tab-pane fade" id="patin" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="col-lg-12 h3 mt-4">
-                    Patín Hidráulico
-                </div>
-                @if (@Model.RespuestasEncuesta[5].Respuesta == false)
-                {
-                    <div class="row mt-4">
-                        <div class="row col-lg-12 mt-3">
-                            <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-danger">El prestador de servicios no proporciono el patín hidráulico para efectuar el servicio pedido, siendo acreedor a una penalización.</p>
-                            </div>
-                            <div class="col-lg-2" style="margin-top: -18px;">
-                                <div class="small-box bg-warning">
-                                    <div class="icon">
-                                        <i class="fas fa-times-circle text-danger"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-9 mt-3 ml-4">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Fecha de la Incidencia</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{ var i = 0;}
-                                        @foreach (var inci in @Model.incidenciasP5)
-                                        {
-                                            i = i + 1;
-                                            <tr>
-                                                <td>@i</td>
-                                                <td>@inci.FechaIncumplida.ToString("dd/MM/yyyy")</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-lg-12">
-                            <h5 class="text-danger ml-4">
-                                <strong>Días sin cumplír con el servicio: </strong> @Model.RespuestasEncuesta[5].Detalles <br /><br />
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)
-                            </h5>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="row mt-4">
-                        <div class="row col-lg-12 mt-3">
-                            <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">El prestador de servicios si proporciono el patín hidráulico para efectuar el servicio pedido, evitando una penalización en el mes correspondiente.</p>
-                            </div>
-                            <div class="col-lg-2" style="margin-top: -18px;">
-                                <div class="small-box bg-warning">
-                                    <div class="icon">
-                                        <i class="fas fa-check-circle text-success"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-lg-12">
-                            <h5 class="text-success ml-4">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)
-                            </h5>
-                        </div>
-                    </div>
-                }
             </div>
             <div class="tab-pane fade" id="entregables" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="col-lg-12 mt-3">

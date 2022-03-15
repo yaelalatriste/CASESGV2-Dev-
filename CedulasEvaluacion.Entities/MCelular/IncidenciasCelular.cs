@@ -15,6 +15,8 @@ namespace CedulasEvaluacion.Entities.MCelular
         public string Linea { get; set; }
         public int HorasAtencion { get; set; }
         public int HorasRetraso { get; set; }
+        public int DiasAtencion { get; set; }
+        public int DiasRetraso { get; set; }
         public string Archivo { get; set; }
         public string Folio { get; set; }
         public bool Penalizable { get; set; }

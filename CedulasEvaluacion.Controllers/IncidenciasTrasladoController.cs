@@ -19,10 +19,10 @@ namespace CedulasEvaluacion.Controllers
             this.iTraslado = ivTraslado ?? throw new ArgumentNullException(nameof(ivTraslado));
         }
 
-        [Route("/trasladoExp/incidencia")]
+        [Route("/trasladoExp/inserta/incidencia")]
         public async Task<IActionResult> IncidenciasTraslado([FromBody] IncidenciasTraslado incidenciasTraslado)
         {
-            int success = await iTraslado.IncidenciasTraslado(incidenciasTraslado);
+            int success = await iTraslado.InsertaIncidencia(incidenciasTraslado);
             if (success != -1)
             {
                 return Ok(success);
@@ -30,10 +30,21 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/trasladoExp/getIncidencias/{id?}/{pregunta?}")]
-        public async Task<IActionResult> getIncidencias(int id,int pregunta)
+        [Route("/trasladoExp/actualiza/incidencia")]
+        public async Task<IActionResult> ActualizaIncidencia([FromBody] IncidenciasTraslado incidenciasTraslado)
         {
-            List<IncidenciasTraslado> incidencias = await iTraslado.getIncidencias(id,pregunta);
+            int success = await iTraslado.ActualizaIncidencia(incidenciasTraslado);
+            if (success != -1)
+            {
+                return Ok(success);
+            }
+            return BadRequest();
+        }
+
+        [Route("/trasladoExp/getIncidencias")]
+        public async Task<IActionResult> getIncidencias(int id)
+        {
+            List<IncidenciasTraslado> incidencias = await iTraslado.getIncidencias(id);
             if (incidencias != null)
             {
                 return Ok(incidencias);
@@ -41,14 +52,22 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/trasladoExp/getIncidenciasTable/{id?}/{pregunta?}")]
-        public async Task<IActionResult> getIncidenciasTable(int id,int pregunta)
+        [Route("/trasladoExp/getIncidenciasTable/{id?}")]
+        public async Task<IActionResult> getIncidenciasTable(int id)
         {
-            List<IncidenciasTraslado> incidencias = await iTraslado.getIncidencias(id,pregunta);
+            List<IncidenciasTraslado> incidencias = await iTraslado.getIncidencias(id);
             string table = "";
+            string coments = "";
             int i = 0;
             if (incidencias != null)
             {
+                var com = incidencias[0].Comentarios.Split("|");
+                for (var m = 0; m < com.Length; m++)
+                {
+                    coments += com + "<br />";
+                    break;
+                }
+
                 foreach (var res in incidencias)
                 {
                     i++;
@@ -57,6 +76,7 @@ namespace CedulasEvaluacion.Controllers
                             "<td>" + i + "</td>" +
                             "<td>" + res.Pregunta + "</td>" +
                             "<td>" + res.FechaIncumplida.ToString("dd/MM/yyyy") + "</td>" +
+                            "<td>" + coments + "</td>" +
                             "<td>" +
                                 "<a href='#' class='text-primary mr-3 update_incumplimiento' data-fecha='"+res.FechaIncumplida.ToString("yyyy-MM-dd") + "' " +
                                     "data-id='"+res.Id+ "' data-pregunta='" + res.Pregunta + "'><i class='fas fa-pencil'></i></a>" +

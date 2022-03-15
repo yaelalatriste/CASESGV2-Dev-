@@ -19,7 +19,7 @@ namespace CedulasEvaluacion.Repositories
             _connectionString = configuration.GetConnectionString("DatabaseConnection");
         }
 
-        public async Task<int> IncidenciasTraslado(IncidenciasTraslado incidenciasTraslado)
+        public async Task<int> InsertaIncidencia(IncidenciasTraslado incidenciasTraslado)
         {
             try
             {
@@ -35,6 +35,7 @@ namespace CedulasEvaluacion.Repositories
 
                         cmd.Parameters.Add(new SqlParameter("@cedulaId", incidenciasTraslado.CedulaTrasladoId));
                         cmd.Parameters.Add(new SqlParameter("@pregunta", incidenciasTraslado.Pregunta));
+                        cmd.Parameters.Add(new SqlParameter("@comentarios", incidenciasTraslado.Comentarios));
                         cmd.Parameters.Add(new SqlParameter("@fechaIncumplida", incidenciasTraslado.FechaIncumplida.Date));
 
                         await sql.OpenAsync();
@@ -50,8 +51,33 @@ namespace CedulasEvaluacion.Repositories
                 return -1;
             }
         }
+        public async Task<int> ActualizaIncidencia(IncidenciasTraslado incidenciasTraslado)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_actualizaIncidenciaTraslado", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", incidenciasTraslado.Id));
+                        cmd.Parameters.Add(new SqlParameter("@comentarios", incidenciasTraslado.Comentarios));
+                        cmd.Parameters.Add(new SqlParameter("@fechaIncumplida", incidenciasTraslado.FechaIncumplida.Date));
 
-        public async Task<List<IncidenciasTraslado>> getIncidencias(int cedulaId,int pregunta)
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return -1;
+            }
+        }
+        public async Task<List<IncidenciasTraslado>> getIncidencias(int cedulaId)
         {
             try
             {
@@ -61,7 +87,6 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@cedulaId", cedulaId));
-                        cmd.Parameters.Add(new SqlParameter("@pregunta", pregunta));
                         var response = new List<IncidenciasTraslado>();
                         await sql.OpenAsync();
 
@@ -82,7 +107,6 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
         public async Task<int> EliminaIncumplimiento(int id)
         {
             try
@@ -106,15 +130,14 @@ namespace CedulasEvaluacion.Repositories
                 return -1;
             }
         }
-
-
         private IncidenciasTraslado MapToValue(SqlDataReader reader)
         {
-            return new IncidenciasTraslado { 
+            return new IncidenciasTraslado {
                 Id = (int)reader["Id"],
                 CedulaTrasladoId = (int)reader["CedulaTrasladoId"],
                 Pregunta = (int)reader["Pregunta"],
-                FechaIncumplida = Convert.ToDateTime(reader["FechaIncumplida"])
+                FechaIncumplida = Convert.ToDateTime(reader["FechaIncumplida"]),
+                Comentarios = reader["Comentarios"] != DBNull.Value ? reader["Comentarios"].ToString() : ""
             };
         }
     }

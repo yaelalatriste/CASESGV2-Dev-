@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace CedulasEvaluacion.Controllers
 {
     [Authorize]
-    public class MensajeriaController:Controller
+    public class MensajeriaController : Controller
     {
         private readonly IRepositorioMensajeria vMensajeria;
         private readonly IRepositorioIncidenciasMensajeria viMensajeria;
@@ -52,7 +52,7 @@ namespace CedulasEvaluacion.Controllers
                 resultado = await vMensajeria.GetCedulasMensajeria(UserId());
                 return View(resultado);
             }
-            return Redirect("/error/denied"); 
+            return Redirect("/error/denied");
         }
 
         //Metodo para abrir la vista y generar la nueva Cedula
@@ -97,13 +97,13 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> Cuestionario(int id)
         {
             CedulaMensajeria cedulaMensajeria = await vMensajeria.CedulaById(id);
-            if (cedulaMensajeria.Estatus.Equals("Enviado a DAS"))
+            if (cedulaMensajeria.Estatus.Equals("Enviado a DAS") && isEvaluate() == true)
             {
                 return Redirect("/error/cedSend");
             }
             cedulaMensajeria.inmuebles = await vInmuebles.inmuebleById(cedulaMensajeria.InmuebleId);
             cedulaMensajeria.RespuestasEncuesta = await vMensajeria.obtieneRespuestas(id);
-            cedulaMensajeria.facturas = await vFacturas.getFacturas(id,cedulaMensajeria.ServicioId);
+            cedulaMensajeria.facturas = await vFacturas.getFacturas(id, cedulaMensajeria.ServicioId);
             cedulaMensajeria.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedulaMensajeria.facturas);
             return View(cedulaMensajeria);
         }
@@ -156,18 +156,18 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-            CedulaMensajeria cedMen = null;
-            cedMen = await vMensajeria.CedulaById(id);
-            cedMen.facturas = await vFacturas.getFacturas(id, cedMen.ServicioId);//
+                CedulaMensajeria cedMen = null;
+                cedMen = await vMensajeria.CedulaById(id);
+                cedMen.facturas = await vFacturas.getFacturas(id, cedMen.ServicioId);//
                 cedMen.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedMen.facturas);
                 cedMen.inmuebles = await vInmuebles.inmuebleById(cedMen.InmuebleId);
                 cedMen.usuarios = await vUsuarios.getUserById(cedMen.UsuarioId);
-                cedMen.recoleccion = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id,"Recoleccion");
-                cedMen.entrega = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id,"Entrega");
-                cedMen.acuses = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id,"Acuses");
-                cedMen.malEstado = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id,"Mal Estado");
-                cedMen.extraviadas = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id,"Extraviadas");
-                cedMen.robadas = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id,"Robadas");
+                cedMen.recoleccion = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Recoleccion");
+                cedMen.entrega = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Entrega");
+                cedMen.acuses = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Acuses");
+                cedMen.malEstado = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Mal Estado");
+                cedMen.extraviadas = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Extraviadas");
+                cedMen.robadas = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Robadas");
                 cedMen.iEntregables = await veMensajeria.getEntregables(cedMen.Id);
                 cedMen.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedMen.RespuestasEncuesta = await vMensajeria.obtieneRespuestas(cedMen.Id);
@@ -186,6 +186,23 @@ namespace CedulasEvaluacion.Controllers
         [Route("/mensajeria/seguimiento/{id}")]
         public async Task<IActionResult> SeguimientoCedula(int id)
         {
+            CedulaMensajeria cedMen = null;
+            cedMen = await vMensajeria.CedulaById(id);
+            cedMen.inmuebles = await vInmuebles.inmuebleById(cedMen.InmuebleId);
+            if (cedMen.inmuebles.Tipo == 1)
+            {
+                return Redirect("/mensajeria/seguimiento/local/" + id);
+            }
+            else
+            {
+                return Redirect("/mensajeria/seguimiento/foraneo/" + id);
+            }
+        }
+
+        [HttpGet]
+        [Route("/mensajeria/seguimiento/local/{id}")]
+        public async Task<IActionResult> SeguimientoCedulaCAE(int id)
+        {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
@@ -195,11 +212,39 @@ namespace CedulasEvaluacion.Controllers
                 cedMen.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedMen.facturas);
                 cedMen.inmuebles = await vInmuebles.inmuebleById(cedMen.InmuebleId);
                 cedMen.usuarios = await vUsuarios.getUserById(cedMen.UsuarioId);
-                /*cedMen.recoleccion = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Recoleccion");
-                cedMen.entrega = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Entrega");
-                cedMen.acuses = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Acuses");
-                cedMen.malEstado = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Mal Estado");
-                cedMen.extraviadas = await viMensajeria.getIncidenciasByTipoMensajeria(cedMen.Id, "Extraviadas");*/
+                cedMen.iEntregables = await veMensajeria.getEntregables(cedMen.Id);
+                cedMen.RespuestasEncuesta = new List<RespuestasEncuesta>();
+                cedMen.RespuestasEncuesta = await vMensajeria.obtieneRespuestas(cedMen.Id);
+                cedMen.historialCedulas = new List<HistorialCedulas>();
+                cedMen.historialCedulas = await vMensajeria.getHistorialMensajeria(cedMen.Id);
+                foreach (var user in cedMen.historialCedulas)
+                {
+                    user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
+                }
+                cedMen.historialEntregables = new List<HistorialEntregables>();
+                cedMen.historialEntregables = await veMensajeria.getHistorialEntregables(cedMen.Id);
+                foreach (var user in cedMen.historialEntregables)
+                {
+                    user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
+                }
+                return View(cedMen);
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpGet]
+        [Route("/mensajeria/seguimiento/foraneo/{id}")]
+        public async Task<IActionResult> SeguimientoCedulaCAR(int id)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
+            if (success == 1)
+            {
+                CedulaMensajeria cedMen = null;
+                cedMen = await vMensajeria.CedulaById(id);
+                cedMen.facturas = await vFacturas.getFacturas(id, cedMen.ServicioId);//
+                cedMen.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedMen.facturas);
+                cedMen.inmuebles = await vInmuebles.inmuebleById(cedMen.InmuebleId);
+                cedMen.usuarios = await vUsuarios.getUserById(cedMen.UsuarioId);
                 cedMen.iEntregables = await veMensajeria.getEntregables(cedMen.Id);
                 cedMen.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedMen.RespuestasEncuesta = await vMensajeria.obtieneRespuestas(cedMen.Id);
@@ -259,6 +304,15 @@ namespace CedulasEvaluacion.Controllers
         private string modulo()
         {
             return "Mensajeria";
+        }
+
+        private bool isEvaluate()
+        {
+            if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+            {
+                return true;
+            }
+            return false;
         }
 
     }

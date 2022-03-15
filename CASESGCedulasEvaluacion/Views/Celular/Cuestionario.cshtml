@@ -1741,6 +1741,22 @@
 
             /************************************ FIN CARGA/EDICION ARCHIVOS ************************************/
 
+            /********************************** Funciones Adicionales *********************************/
+                function cuentaRequerimientosCelular(tipo) {
+                    var isContinue = true;
+                    $.ajax({
+                        url: '/telCelular/totalIncidencia/' + model.id + '/' + tipo,
+                        type: 'GET',
+                        async: false,
+                        success: function (json) {
+                            json == 0 ? isContinue = false : true;
+                        },
+                    });
+                    return isContinue;
+                }
+
+                /********************************** FIN Funciones Asincronas*********************************/
+
             /************************************ GUARDAR/ENVIAR Cédula ************************************/
                 /*Guardar la Cedula*/
                     $('.btn_guardar').click(function () {
@@ -1846,6 +1862,9 @@
 
                 /*Enviar la Cedula*/
                     $('.btn_enviar').click(function () {
+                        var cuentaReq = false;
+                        let respuesta = "";
+                        let i = 0;
                         if (model.facturas.length == 0) {
                             Swal.fire({
                                 'icon': 'error',
@@ -1856,31 +1875,37 @@
                         }
                         guardaCedula();
 
-                        for (let i = 0; i < 11; i++) {
-                            let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
+                        for (i = 0; i < 11; i++) {
+                            respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta == null || respuesta == "") {
-                                Swal.fire({
-                                    'icon': 'error',
-                                    'title': 'Servicio de Telefonía Celular',
-                                    'html': 'No ha respondido la <strong>Pregunta ' + (i + 1) + '</strong>'
-                                });
-                                return false;
-                            }else if (respuesta == 'true') {
-                                axios.get('/telCelular/totalIncidencia/' + model.id + '/' + tiposIncidencias[i]).then(response => {
-                                    response = response.data;
-                                    if (parseInt(response) == 0) {
-                                        Swal.fire({
-                                            'icon': 'error',
-                                            'title': 'Servicio de Telefonía Celular',
-                                            'html': 'No has registrado ninguna incidencias en la <strong>Pregunta ' + (i + 1) + '</strong>.'
-                                        });
-                                        return false;
-                                    }
-                                });
+                                break;
+                            } else if (respuesta == 'true') {
+                                cuentaReq = cuentaRequerimientosCelular(tiposIncidencias[i]);
+                                if (cuentaReq == false) {
+                                    break;
+                                }
                             }
+                            cuentaReq = true;
                         }
+
+                    if (respuesta == null || respuesta == "") {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Telefonía Celular',
+                            'html': 'No ha respondido la <strong>Pregunta ' + (i + 1) + '</strong>'
+                        });
+                        return false;
+                    } else if (cuentaReq == false && i < 11) {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Telefonía Celular',
+                            'html': 'No ha capturado los requerimientos en la <strong>Pregunta ' + (i + 1) + '</strong>'
+                        });
+                        return false;
+                    }else{
                         validaEntregables();
-                    });
+                    }
+                });
                 /*Enviar de guardar la cedula*/
 
             /********************************** FIN GUARDAR/ENVIAR CÉDULA **********************************/

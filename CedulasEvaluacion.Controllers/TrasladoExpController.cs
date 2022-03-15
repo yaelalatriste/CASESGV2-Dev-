@@ -144,12 +144,7 @@ namespace CedulasEvaluacion.Controllers
                 cedMen.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedMen.facturas);
                 cedMen.usuarios = await vUsuarios.getUserById(cedMen.UsuarioId);
                 cedMen.iEntregables = await vEntregables.getEntregables(cedMen.Id);
-                cedMen.incidenciasP1 = await iTraslado.getIncidencias(cedMen.Id,1);
-                cedMen.incidenciasP2 = await iTraslado.getIncidencias(cedMen.Id,2);
-                cedMen.incidenciasP3 = await iTraslado.getIncidencias(cedMen.Id,3);
-                cedMen.incidenciasP4 = await iTraslado.getIncidencias(cedMen.Id,4);
-                cedMen.incidenciasP5 = await iTraslado.getIncidencias(cedMen.Id,5);
-                cedMen.incidenciasP6 = await iTraslado.getIncidencias(cedMen.Id,6);
+                cedMen.incidencias = await iTraslado.getIncidencias(cedMen.Id);
                 cedMen.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedMen.RespuestasEncuesta = await vTraslado.obtieneRespuestas(cedMen.Id);
                 cedMen.historialCedulas = new List<HistorialCedulas>();
