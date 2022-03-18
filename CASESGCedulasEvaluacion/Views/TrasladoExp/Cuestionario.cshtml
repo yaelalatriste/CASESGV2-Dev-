@@ -1,7 +1,7 @@
 ﻿@* Cuestionario Traslado Expedientes *@
 @model CedulasEvaluacion.Entities.TrasladoExp.TrasladoExpedientes
 @{
-    ViewData["Title"] = "Cédula de Traslado y Maniobra de Documentos - Folio: " + Model.Folio;
+    ViewData["Title"] = "Cédula de Traslado y Maniobra de Expedientes - Folio: " + Model.Folio;
 }
 
 <div class="container-fluid" id="limpieza">
@@ -22,15 +22,7 @@
                 <td id="monto_facturas" data-toggle="tooltip" title="Monto total de las facturas capturadas en este folio" data-placement="top">
                     <strong>Monto Total IVA Incluido: </strong>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.TotalMontoFactura)
                 </td>
-                @if (@Model.Levantamiento == 1 && @Model.Maniobras == 1)
-                {
-                    <td data-toggle="tooltip" title="Se requirio Levantamiento y Maniobras" data-placement="top"><strong>Servicio Requerido: </strong>Levantamiento de Inventario y Maniobras</td>
-                }
-                else if (@Model.Levantamiento == 1 && @Model.Maniobras == 0)
-                {
-                    <td data-toggle="tooltip" title="Se requirio Levantamiento de Inventario" data-placement="top"><strong>Servicio Requerido: </strong>Levantamiento de Inventario</td>
-                }
-                else if (@Model.Levantamiento == 0 && @Model.Maniobras == 1)
+                @if (@Model.Maniobras == 1)
                 {
                     <td data-toggle="tooltip" title="Se requirio Maniobras" data-placement="top"><strong>Servicio Requerido: </strong>Maniobras</td>
                 }
@@ -62,7 +54,7 @@
                     <div class="tab-content" id="myTabContent">
                         @* Pregunta 1 *@
                         <div class="tab-pane fade mt-2 ml-3 show active" id="pregunta_1" role="tabpanel" aria-labelledby="home-tab">
-                            <p class="text-black h5">1. ¿El servicio se prestó con el número de personal requerido?</p>
+                            <p class="text-black h5">1. ¿Se presentó el número total de personal solicitado para realizar el servicio?</p>
                             <div class="icheck-success d-inline">
                                 <input type="radio" name="pregunta1" value="true" id="radioSuccess1" class="pregunta1">
                                 <label for="radioSuccess1">Si</label>
@@ -71,17 +63,9 @@
                                 <input type="radio" name="pregunta1" value="false" id="radioSuccess2" class="pregunta1">
                                 <label for="radioSuccess2">No</label>
                             </div>
-                            <div class="form-row col-lg-12 mt-3" id="diviPregunta1">
-                                <div class="form-row">
-                                    <div class="col col-lg-1">
-                                        <label for="peronsalSol" class="h6">Personal Solicitado</label>
-                                        <input type="number" id="personalSolicitado" class="form-control">
-                                    </div>
-                                    <div class="col-lg-1">
-                                        <label for="personalBrin" class="h6">Personal Brindado</label>
-                                        <input type="number" id="personalBrindado" class="form-control">
-                                    </div>
-                                </div>
+                            <div class="row col-lg-12 mt-3" id="diviPregunta1">
+                                <button class="btn btn-primary mt-2 mr-1 btn_addInci" data-pregunta="1">Registro de Incidencias</button>
+                                <button class="btn btn-primary mt-2 btn_viewInci" data-pregunta="1">Consultar Incidencias</button>
                             </div>
                         </div>
                         @* Fin de la Pregunta 1 *@
@@ -108,7 +92,7 @@
                         @* Fin de la Pregunta 2 *@
                         @* Pregunta 3 *@
                         <div class="tab-pane fade mt-2 ml-3" id="pregunta_3" role="tabpanel" aria-labelledby="contact-tab">
-                            <p class="text-black h5">3. ¿El personal se presentó con el equipo, maquinaría y herramientas necesarias para prestar el servicio?</p>
+                            <p class="text-black h5">3. ¿El personal presentó el equipo, maquinaria y herramientas necesarias para prestar el servicio durante el mes?</p>
                             <div class="icheck-success d-inline">
                                 <input type="radio" name="pregunta3" value="true" id="radioSuccess5" class="pregunta3">
                                 <label for="radioSuccess5">Si</label>
@@ -290,19 +274,35 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row col-lg-12 mt-4">
-                        <p class="h6"><strong>Por favor seleccione la opción donde se presentó el incumplimiento:</strong></p>
+                    <div class="col-lg-12 mt-2" id="inciPregunta1">
+                        <p class="h6 mt-3"><strong>Por favor indique el número de personas que se presentaron a la prestación del servicio:</strong></p>
+                        <div class="form-row">
+                            <div class="col-lg-3">
+                                <label for="personalBrin" class="h6">Personal Solicitado</label>
+                                <input type="number" id="personalSolicitado" value="4" class="form-control" disabled>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="personalBrin" class="h6">Personal Brindado</label>
+                                <input type="number" id="personalBrindado" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-12" id="error_inciPersonal">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor capture el personal brindado
+                            </small>
+                        </div>
                     </div>
-                    <div class="row col-lg-12">
+                    <div class="row col-lg-12" id="inciPregunta3">
+                        <p class="h6 mt-3"><strong>Por favor seleccione la opción donde se presentó el incumplimiento:</strong></p>
                         <div style="text-align: justify">
                             <div class="form-check-inline i-checks mt-3">
                                 <strong class="text-black mr-3">Patines</strong>
-                                <input class="iPregunta3" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
+                                <input class="iPregunta1" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                        data-onstyle="success" data-offstyle="danger" data-style="ios" value="Patines" name="iTraslado[]">
                             </div>
                             <div class="form-check-inline i-checks mt-3">
                                 <strong class="text-black mr-3">Diablos</strong>
-                                <input class="iPregunta3" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
+                                <input class="iPregunta2" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                        data-onstyle="success" data-offstyle="danger" data-style="ios" value="Diablos" name="iTraslado[]">
                             </div>
                             <div class="form-check-inline i-checks mt-3">
@@ -310,10 +310,21 @@
                                 <input class="iPregunta3" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                        data-onstyle="success" data-offstyle="danger" data-style="ios" value="Hule de Emplayo" name="iTraslado[]">
                             </div>
-                            <div class="form-check-inline i-checks mt-3">
-                                <strong class="text-black mr-3">Equipo de Seguridad</strong>
-                                <input class="iPregunta3" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
-                                       data-onstyle="success" data-offstyle="danger" data-style="ios" value="Equipo de Seguridad" name="iTraslado[]">
+                        </div>
+                        <div class="col-sm-12" id="error_iTraslado">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione las incidencias correspondientes
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row col-lg-12">
+                        <div class="form-group col-lg-12">
+                            <label for="fechaSolicitud">Comentarios: </label>
+                            <textarea id="inciComentarios" class="form-control" style="resize:none;"></textarea>
+                            <div class="col-sm-12" id="error_inciComentarios">
+                                <small id="dateHelp" class="text-danger">
+                                    Por favor capture la Comentarios
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -342,18 +353,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-responsive-xl">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tipo</th>
-                                    <th>Fecha Incumplimiento</th>
-                                    <th>Comentarios</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbl_incumplimiento"></tbody>
-                        </table>
+                        <table class="table table-responsive-xl" id="tbl_incumplimiento"></table>
                     </div>
                 </div>
             </div>
@@ -384,9 +384,9 @@
                         <label for="tipoIncidencia">Tipo de Entregable:</label>
                         <select class="form-control" id="tipo_entregable">
                             <option value="">Seleccione un Entregable</option>
-                            <option value="ActaER">Acta Entrega - Recepción</option>
                             <option value="Factura">Factura</option>
                             <option value="SAT">Validación del SAT</option>
+                            <option value="HojaEvidencia">Hoja de Evidencia</option>
                             <option value="NotaCredito">Nota de Crédito</option>
                         </select>
                         <div class="col-sm-12" id="error_tipoEntre">
@@ -480,6 +480,9 @@
                 $('#diviPregunta1').css('display', 'none');
                 $('#diviPregunta2').css('display', 'none');
                 $('#diviPregunta3').css('display', 'none');
+
+                $('#inciPregunta1').css('display', 'none');
+                $('#inciPregunta3').css('display', 'none');
 
                 /*Errores*/
                 $('#error_fechaIncumplimiento').css('display', 'none');
@@ -595,7 +598,7 @@
                         } else {
                             Swal.fire({
                                 'icon': 'error',
-                                'title': 'Formato Incorrecto',
+                                'title': 'Servicio de Traslado de Expedientes',
                                 'text': 'El archivo que intentas adjuntar no es válido. Favor de solo seleccionar archivos "Xml"'
                             });
                             $(".custom-file-label").text("Seleccionar Archivo");
@@ -640,7 +643,7 @@
                                  axios.post('/limpieza/insertaFactura', formData).then(fact => {
                                      Swal.fire({
                                          'icon': "success",
-                                         'title': "Facturas Mensajería Instantánea",
+                                         'title': 'Servicio de Traslado de Expedientes',
                                          'html': 'La factura fue agregada a la cédula de forma correcta.'
                                      }).then(function () {
                                          window.location.reload();
@@ -650,7 +653,7 @@
                                  axios.post('/limpieza/updateFactura', formData).then(fact => {
                                      Swal.fire({
                                          'icon': "success",
-                                         'title': "Facturas Mensajería Instantánea",
+                                         'title': 'Servicio de Traslado de Expedientes',
                                          'html': 'La factura fue actualizada de forma correcta.'
                                      }).then(function () {
                                         window.location.reload();
@@ -732,12 +735,23 @@
                         $('#fecha_incumplimiento').val('');
                         $('#title_modal').text('Capturar Incidencia');
                         $('#pregunta_incidencia').val($(this).data('pregunta'));
+                        $("#personalSolicitado").val(4);
+                        $("#personalBrindado").val('');
+                        $("#inciComentarios").val('');
+                        if ($(this).data('pregunta') == 1) {
+                            $('#inciPregunta1').css('display', 'block');
+                            $('#inciPregunta3').css('display', 'none');
+                        } else {
+                            $('#inciPregunta1').css('display', 'none');
+                            $('#inciPregunta3').css('display', 'block');
+                        }
                         $('#modal-diasIncumplidos').modal('show');
                     });
                 /*Fin Mostrar Modal*/
                 /*Ver Incidencias*/
                     $('.btn_viewInci').click(function () {
-                        axios.get('/trasladoExp/getIncidenciasTable/' + model.id).then(res => {
+                    $("#tbl_incumplimiento tbody").remove();
+                    axios.get('/trasladoExp/getIncidenciasTable/' + model.id + '/' + $(this).data('pregunta')).then(res => {
                             res = res.data;
                             $("#tbl_incumplimiento").html(res);
                         });
@@ -747,13 +761,36 @@
 
                 /*Actualizar Incumplimiento*/
                 $(document).on('click', '.update_incumplimiento', function () {
-                    $("#guardaIncidencia i").removeClass('fas fa-plus');
-                    $("#guardaIncidencia").removeClass('btn-primary');
-                    $("#guardaIncidencia").addClass('btn-success');
-                    $("#guardaIncidencia i").addClass('fas fa-refresh');
                     $('#id_incidencia').val($(this).data('id'));
                     $('#pregunta_incidencia').val($(this).data('pregunta'));
                     $('#fecha_incumplimiento').val($(this).data('fecha'));
+                    if ($(this).data('pregunta') == 1) {
+                        $('#inciPregunta1').css('display', 'block');
+                        $('#inciPregunta3').css('display', 'none');
+                        $("#personalSolicitado").val($(this).data('psolicitado'));
+                        $("#personalBrindado").val($(this).data('pbrindado'));
+                        $("#inciComentarios").val($(this).data('coments'));
+                    } else {
+                        $('#inciPregunta1').css('display', 'none');
+                        $('#inciPregunta3').css('display', 'block');
+                        var incidencias = $(this).data('incidencias');
+                        for (var j = 0; j < 4; j++) {
+                            $('.iPregunta' + (j + 1)).parent().removeClass('btn-green btn-success');
+                            $('.iPregunta' + (j + 1)).parent().addClass('btn-danger off');
+                            $('.iPregunta' + (j + 1)).prop('checked', false)
+                        }
+                        var res = incidencias.split("|");
+                        for (var i = 0; i < res.length; i++) {
+                            for (var j = 0; j < 4; j++) {
+                                if ($('.iPregunta' + (j + 1)).val() == res[i]) {
+                                    $('.iPregunta' + (j + 1)).parent().removeClass('btn-danger off');
+                                    $('.iPregunta' + (j + 1)).parent().addClass('btn-green btn-success');
+                                    $('.iPregunta' + (j + 1)).prop('checked', true)
+                                }
+                            }
+                        }
+                    }
+                    $('#modal-viewIncidencias').modal('hide');
                     $('#modal-diasIncumplidos').modal('show');
                 });
                 /*Fin Actualizar Incumplimiento*/
@@ -766,7 +803,7 @@
                         .then(res => {
                             Swal.fire({
                                 'icon': 'success',
-                                'title': 'Levantamiento y Maniobras para el Traslado de Expedientes',
+                                'title': 'Servicio de Traslado de Expedientes',
                                 'html': 'Se eliminó el incumplimiento con éxito.'
                             });
 
@@ -778,7 +815,7 @@
                         .catch(error => {
                             Swal.fire({
                                 'icon': 'error',
-                                'title': 'Levantamiento y Maniobras para el Traslado de Expedientes',
+                                'title': 'Servicio de Traslado de Expedientes',
                                 'html':'No se eliminó el incumplimiento con éxito.'
                             });
                     });
@@ -790,7 +827,10 @@
                         var id = $('#id_incidencia').val();
                         var fecha = $('#fecha_incumplimiento').val();
                         var pregunta = $('#pregunta_incidencia').val();
-                        var coments = "";
+                        var incidencias = "";
+                        var personalSol = pregunta == 1 ? $("#personalSolicitado").val():0;
+                        var personalBrin = pregunta == 1 ? $("#personalBrindado").val():0;
+                        var comentarios = $("#inciComentarios").val();
 
                         if (id == '') {
                             id = 0;
@@ -799,28 +839,66 @@
                         }
 
                         $("[name='iTraslado[]']:checked").each(function () {
-                            coments += $(this).val() + "|";
+                            incidencias += $(this).val() + "|";
                         });
 
                         if (id != "")
                         {
-                            axios.post("/trasladoExp/actualiza/incidencia", { Id: parseInt(id), FechaIncumplida: fecha, Comentarios: coments, CedulaTrasladoId: parseInt(model.id), 
-                                                                    Pregunta: parseInt(pregunta) }).then(response => {
+                            axios.post("/trasladoExp/actualiza/incidencia", {
+                                Id: parseInt(id), FechaIncumplida: fecha, PersonalSolicitado: parseInt(personalSol), IncidenciasEquipo: incidencias,
+                                PersonalBrindado: parseInt(personalBrin), Comentarios: comentarios, CedulaTrasladoId: parseInt(model.id) }).then(response => {
                                 Swal.fire({
                                     'icon': "success",
-                                    'title': "Servicio Traslado de Expedientes",
+                                    'title': 'Servicio de Traslado de Expedientes',
                                     'html': "La incidencia se actualizó correctamente."
+                                }).then(function () {
+                                    axios.get('/trasladoExp/getIncidenciasTable/' + model.id + '/'+pregunta).then(res => {
+                                        res = res.data;
+                                        $("#tbl_incumplimiento").html(res);
+                                    });
+                                    $('#modal-diasIncumplidos').modal('hide');
+                                    $('#modal-viewIncidencias').modal('show');
+                                    $('#id_incidencia').val('');
+                                    $('#pregunta_incidencia').val('');
+                                    $('#fecha_incumplimiento').val('');
+                                    $("#personalSolicitado").val('');
+                                    $("#personalBrindado").val('');
+                                    $("#inciComentarios").val('');
+                                    for (var j = 0; j < 4; j++) {
+                                        $('.iPregunta' + (j + 1)).parent().removeClass('btn-green btn-success');
+                                        $('.iPregunta' + (j + 1)).parent().addClass('btn-danger off');
+                                        $('.iPregunta' + (j + 1)).prop('checked', false)
+                                    }
                                 });
                             });
                         }
                         else
                         {
-                            axios.post("/trasladoExp/inserta/incidencia", { FechaIncumplida: fecha, Comentarios: coments, CedulaTrasladoId: parseInt(model.id), 
-                                                                    Pregunta: parseInt(pregunta) }).then(response => {
+                            axios.post("/trasladoExp/inserta/incidencia", {
+                                FechaIncumplida: fecha, PersonalSolicitado: parseInt(personalSol), IncidenciasEquipo: incidencias,
+                                PersonalBrindado: parseInt(personalBrin), Comentarios: comentarios, CedulaTrasladoId: parseInt(model.id), Pregunta: parseInt(pregunta) }).then(response => {
                                 Swal.fire({
                                     'icon': "success",
-                                    'title': "Servicio Traslado de Expedientes",
-                                    'html': "La incidencia se capturo correctamente."
+                                    'title': 'Servicio de Traslado de Expedientes',
+                                    'html': "La incidencia se capturó correctamente."
+                                }).then(function () {
+                                    axios.get('/trasladoExp/getIncidenciasTable/' + model.id + '/' + pregunta).then(res => {
+                                        res = res.data;
+                                        $("#tbl_incumplimiento").html(res);
+                                    });
+                                    $('#modal-diasIncumplidos').modal('hide');
+                                    $('#modal-viewIncidencias').modal('show');
+                                    $('#id_incidencia').val('');
+                                    $('#pregunta_incidencia').val('');
+                                    $("#personalSolicitado").val('');
+                                    $("#personalBrindado").val('');
+                                    $('#fecha_incumplimiento').val('');
+                                    $("#inciComentarios").val('');
+                                    for (var j = 0; j < 4; j++) {
+                                        $('.iPregunta' + (j + 1)).parent().removeClass('btn-green btn-success');
+                                        $('.iPregunta' + (j + 1)).parent().addClass('btn-danger off');
+                                        $('.iPregunta' + (j + 1)).prop('checked', false)
+                                    }
                                 });
                             });
                         }
@@ -1130,7 +1208,6 @@
             /************************************ FIN CARGA/EDICION ARCHIVOS ************************************/
 
 
-
             /******************************* Mostrar/Ocultar Campos de Días**********************************/
                 $('.pregunta1').change(function () {
                     let pr = $(this).val();
@@ -1191,7 +1268,7 @@
                                         CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),Detalles: ($('#personalSolicitado').val() + "|" + $('#personalBrindado').val())
                                     });
                                 } else if (i == 1 && respuesta == "false") {
-                                    respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("# comentarios").val() });
+                                    respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#comentarios").val() });
                                 } else {
                                     respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 }
@@ -1202,13 +1279,13 @@
                             if (response.status == 200) {
                                 Swal.fire({
                                     'icon': "success",
-                                    'title': 'Levantamiento y Traslado de Expedientes',
-                                    'html': "Se guardaron las respuesta de la cédula correctamente."
+                                    'title': 'Servicio de Traslado de Expedientes',
+                                    'html': "Se guardaron las respuestas de la cédula correctamente."
                                 });
                             } else {
                                 Swal.fire({
                                     'icon': "error",
-                                    'title': 'Levantamiento y Traslado de Expedientes',
+                                    'title': 'Servicio de Traslado de Expedientes',
                                     'html': "Hubo un error al guardar las respuestas de la cédula. Contacte al Administrador del Sistema"
                                 });
                             }
@@ -1237,7 +1314,7 @@
                             } else {
                                 Swal.fire({
                                     'icon': "error",
-                                    'title': 'Levantamiento y Traslado de Expedientes',
+                                    'title': 'Servicio de Traslado de Expedientes',
                                     'html': "Hubo un error al guardar las respuestas de la cédula. Contacte al Administrador del Sistema"
                                 });
                             }
@@ -1247,8 +1324,8 @@
 
                 /*Validamos que ya fueron adjuntados todos los entregables*/
                     function validaEntregables() {
-                        var msgEntregables = ["Acta Entrega - Recepción", "Factura", "Validación del SAT"];
-                        var entregables = ["ActaER", "Factura", "SAT"];
+                        var msgEntregables = ["Factura", "Validación del SAT", "Hoja de Evidencia"];
+                        var entregables = ["Factura", "SAT", "HojaEvidencia"];
                         var msg = "";
                         var nota = false;
                         var found = false;
@@ -1270,7 +1347,7 @@
                             if (msg != "") {
                                 Swal.fire({
                                     'icon': 'error',
-                                    'title': 'Levantamiento y Traslado de Expedientes',
+                                    'title': 'Servicio de Traslado de Expedientes',
                                     'html': 'Para envíar la cédula a evaluación, es necesario adjuntar los siguientes entregables: <br/><br/>' + msg
                                 });
                                 return false;
@@ -1279,7 +1356,7 @@
                                     if (response.status == 200) {
                                         Swal.fire({
                                             'icon': "success",
-                                            'title': 'Levantamiento y Traslado de Expedientes',
+                                            'title': 'Servicio de Traslado de Expedientes',
                                             'html': "Se envíó la cédula para su revisión correctamente."
                                         }).then(function () {
                                             window.location.href = "/trasladoExp/index";
@@ -1287,7 +1364,7 @@
                                     } else {
                                         Swal.fire({
                                             'icon': "error",
-                                            'title': 'Levantamiento y Traslado de Expedientes',
+                                            'title': 'Servicio de Traslado de Expedientes',
                                             'html': "Hubo un error al guardar las respuestas de la cédula. Contacte al Administrador del Sistema"
                                         });
                                     }
@@ -1304,7 +1381,7 @@
                         if (model.facturas.length == 0) {
                             Swal.fire({
                                 'icon': 'error',
-                                'title': 'Levantamiento y Traslado de Expedientes',
+                                'title': 'Servicio de Traslado de Expedientes',
                                 'html': 'No has registrado ninguna factura en la cédula'
                             });
                             return false;
@@ -1317,7 +1394,7 @@
                             if (respuesta == null || respuesta == "") {
                                 Swal.fire({
                                     'icon': 'error',
-                                    'title': 'Levantamiento y Traslado de Expedientes',
+                                    'title': 'Servicio de Traslado de Expedientes',
                                     'html': 'No ha respondido la <strong>Pregunta ' + (i + 1) + '</strong>'
                                 });
                                 return false;
@@ -1327,7 +1404,7 @@
                                     if (res == 0) {
                                         Swal.fire({
                                             'icon': 'error',
-                                            'title': 'Levantamiento y Traslado de Expedientes',
+                                            'title': 'Servicio de Traslado de Expedientes',
                                             'html': 'No has capturado incidencias en la <strong>Pregunta ' + (i + 1) + '</strong>'
                                         });
                                         return false;

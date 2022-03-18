@@ -1,0 +1,36 @@
+﻿@model IEnumerable<CedulasEvaluacion.Entities.Models.Dashboard>
+@{
+    ViewData["Title"] = "Detalle del Servicio";
+    int totalCedulas = 0;
+    var meses = new List<string>();
+    int i = 0;
+}
+
+<div class="container-fluid">
+    <div class="row col-lg-12">
+        <table class="table" id="tbl_detalles">
+            <thead>
+                <tr>
+                    <th></th>
+                    @foreach (var dt in @Model)
+                    {
+                        totalCedulas += dt.Total;
+                        meses.Add(dt.Mes);
+                        <th>@dt.Estatus</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{ meses.Distinct().ToArray(); }
+                @foreach(var dt in @Model)
+                { 
+                    <tr>
+                        <td>@meses[i]</td>
+                        <td>@totalCedulas</td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

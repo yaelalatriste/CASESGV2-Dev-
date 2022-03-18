@@ -1,7 +1,7 @@
 ﻿@* Principal de Traslado de Expedientes*@
 @model IEnumerable<CedulasEvaluacion.Entities.Vistas.VCedulas>
 @{
-    ViewData["Title"] = "Traslado y Maniobras para el Levantamiento de Expedientes";
+    ViewData["Title"] = "Listado de Cédulas del Servicio Maniobras para el Traslado de Expedientes";
 }
 <div class="row" id="Prrueba">
     <div class="col-lg-12">
@@ -35,7 +35,7 @@
                         {
                             <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                         }
-                        else if (item.Estatus.Equals("Aceptada"))
+                        else if (item.Estatus.Equals("Autorizada"))
                         {
                             <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                         }
@@ -56,10 +56,10 @@
                                     <i class="fad fa-pencil text-primary"></i>
                                 </a>
                             }
-                            @if (item.Estatus.Equals("Enviado a DAS") || item.Estatus.Equals("Aceptada") || item.Estatus.Equals("Rechazada"))
+                            @if (item.Estatus.Equals("Enviado a DAS") || item.Estatus.Equals("Autorizada") || item.Estatus.Equals("Rechazada"))
                             {
-                                <a href="/reporteMensajeria/@item.Id" class="text-center pdf ml-2">
-                                    @if (item.Estatus.Equals("Aceptada"))
+                                <a href="/reporte/trasladoExp/@item.Id" class="text-center pdf ml-2">
+                                    @if (item.Estatus.Equals("Autorizada"))
                                     {
                                         <i class="fal fa-file-pdf text-success"></i>
                                     }

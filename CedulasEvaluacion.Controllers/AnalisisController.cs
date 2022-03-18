@@ -1,5 +1,5 @@
-﻿using CedulasEvaluacion.Entities.Models;
-using CedulasEvaluacion.Entities.MTransporte;
+﻿using CedulasEvaluacion.Entities.MAnalisis;
+using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -14,24 +14,24 @@ using System.Threading.Tasks;
 namespace CedulasEvaluacion.Controllers
 {
     [Authorize]
-    public class TransporteController : Controller
+    public class AnalisisController : Controller
     {
-        private readonly IRepositorioTransporte vTransporte;
-        private readonly IRepositorioIncidenciasTransporte iTransporte;
-        private readonly IRepositorioEntregablesTransporte eTransporte;
+        private readonly IRepositorioAnalisis vAnalisis;
+        private readonly IRepositorioIncidenciasAnalisis iAnalisis;
+        private readonly IRepositorioEntregablesAnalisis eAnalisis;
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IHostingEnvironment environment;
 
-        public TransporteController(IRepositorioTransporte iVTransporte, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
-                                    IRepositorioIncidenciasTransporte iiTransporte, IRepositorioEntregablesTransporte eeTransporte,
+        public AnalisisController(IRepositorioAnalisis iVAnalisis, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
+                                    IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioEntregablesAnalisis eeAnalisis,
                                     IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas, IHostingEnvironment environment)
         {
-            this.vTransporte = iVTransporte ?? throw new ArgumentNullException(nameof(iVTransporte));
-            this.iTransporte = iiTransporte ?? throw new ArgumentNullException(nameof(iiTransporte));
-            this.eTransporte = eeTransporte ?? throw new ArgumentNullException(nameof(eeTransporte));
+            this.vAnalisis = iVAnalisis ?? throw new ArgumentNullException(nameof(iVAnalisis));
+            this.iAnalisis = iiAnalisis ?? throw new ArgumentNullException(nameof(iiAnalisis));
+            this.eAnalisis = eeAnalisis ?? throw new ArgumentNullException(nameof(eeAnalisis));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));
@@ -39,35 +39,35 @@ namespace CedulasEvaluacion.Controllers
             this.environment = environment;
         }
 
-        [Route("/transporte/index")]
+        [Route("/analisis/index")]
         public async Task<IActionResult> Index()
         {
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
                 List<VCedulas> resultado = new List<VCedulas>();
-                resultado = await vTransporte.GetCedulasTransporte(UserId());
+                resultado = await vAnalisis.GetCedulasAnalisis(UserId());
                 return View(resultado);
             }
             return Redirect("/error/denied");
         }
 
-        [Route("/transporte/nuevaCedula")]
-        public async Task<IActionResult> NuevaCedula(CedulaTransporte cedulaTransporte)
+        [Route("/analisis/nuevaCedula")]
+        public async Task<IActionResult> NuevaCedula(CedulaAnalisis cedulaAnalisis)
         {
-            cedulaTransporte = new CedulaTransporte();
+            cedulaAnalisis = new CedulaAnalisis();
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
-                return View(cedulaTransporte);
+                return View(cedulaAnalisis);
             }
             return Redirect("/error/denied");
         }
 
-        [Route("/transporte/validaPeriodo/{anio?}/{mes?}/{inmueble?}")]
+        [Route("/analisis/validaPeriodo/{anio?}/{mes?}/{inmueble?}")]
         public async Task<IActionResult> validaPeriodo(int anio, string mes, int inmueble)
         {
-            int valida = await vTransporte.VerificaCedula(anio, mes, inmueble);
+            int valida = await vAnalisis.VerificaCedula(anio, mes, inmueble);
             if (valida != -1)
             {
                 return Ok(valida);
@@ -75,11 +75,11 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/transporte/new")]
-        public async Task<IActionResult> insertaCedula([FromBody] CedulaTransporte cedulaTransporte)
+        [Route("/analisis/new")]
+        public async Task<IActionResult> insertaCedula([FromBody] CedulaAnalisis cedulaAnalisis)
         {
-            cedulaTransporte.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
-            int insert = await vTransporte.insertaCedula(cedulaTransporte);
+            cedulaAnalisis.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
+            int insert = await vAnalisis.insertaCedula(cedulaAnalisis);
             if (insert != -1)
             {
                 return Ok(insert);
@@ -87,31 +87,31 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/transporte/evaluacion/{id?}")]
+        [Route("/analisis/evaluacion/{id?}")]
         public async Task<IActionResult> Cuestionario(int id)
         {
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                CedulaTransporte cedulaTransporte = await vTransporte.CedulaById(id);
-                if (cedulaTransporte.Estatus.Equals("Enviado a DAS"))
+                CedulaAnalisis cedulaAnalisis = await vAnalisis.CedulaById(id);
+                if (cedulaAnalisis.Estatus.Equals("Enviado a DAS"))
                 {
                     return Redirect("/error/cedSend");
                 }
-                cedulaTransporte.inmuebles = await vInmuebles.inmuebleById(cedulaTransporte.InmuebleId);
-                cedulaTransporte.RespuestasEncuesta = await vTransporte.obtieneRespuestas(id);
-                cedulaTransporte.facturas = await vFacturas.getFacturas(id, cedulaTransporte.ServicioId);
-                cedulaTransporte.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedulaTransporte.facturas);
-                return View(cedulaTransporte);
+                cedulaAnalisis.inmuebles = await vInmuebles.inmuebleById(cedulaAnalisis.InmuebleId);
+                cedulaAnalisis.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(id);
+                cedulaAnalisis.facturas = await vFacturas.getFacturas(id, cedulaAnalisis.ServicioId);
+                cedulaAnalisis.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedulaAnalisis.facturas);
+                return View(cedulaAnalisis);
             }
             return Redirect("/error/denied");
         }
 
         [HttpPost]
-        [Route("/transporte/evaluation")]
+        [Route("/analisis/evaluation")]
         public async Task<IActionResult> guardaRespuestas([FromBody] List<RespuestasEncuesta> respuestas)
         {
-            int success = await vTransporte.GuardaRespuestas(respuestas);
+            int success = await vAnalisis.GuardaRespuestas(respuestas);
             if (success != 0)
             {
                 return Ok(success);
@@ -124,11 +124,11 @@ namespace CedulasEvaluacion.Controllers
 
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
-        [Route("/transporte/sendCedula/{cedula?}")]
+        [Route("/analisis/sendCedula/{cedula?}")]
         public async Task<IActionResult> enviaCedula(int cedula)
         {
             int success = 0;
-            success = await vTransporte.enviaRespuestas(cedula);
+            success = await vAnalisis.enviaRespuestas(cedula);
             if (success != -1)
             {
                 return Ok();
@@ -140,24 +140,24 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpGet]
-        [Route("/transporte/revision/{id}")]
+        [Route("/analisis/revision/{id}")]
         public async Task<IActionResult> RevisarCedula(int id)
         {
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                CedulaTransporte cedTran = null;
-                cedTran = await vTransporte.CedulaById(id);
+                CedulaAnalisis cedTran = null;
+                cedTran = await vAnalisis.CedulaById(id);
                 cedTran.facturas = await vFacturas.getFacturas(id, cedTran.ServicioId);//
                 cedTran.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedTran.facturas);
                 cedTran.inmuebles = await vInmuebles.inmuebleById(cedTran.InmuebleId);
                 cedTran.usuarios = await vUsuarios.getUserById(cedTran.UsuarioId);
-                cedTran.iEntregables = await eTransporte.getEntregables(cedTran.Id);
-                cedTran.incidencias = await iTransporte.GetIncidencias(cedTran.Id);
+                /*cedTran.iEntregables = await eAnalisis.getEntregables(cedTran.Id);
+                cedTran.incidencias = await iAnalisis.GetIncidencias(cedTran.Id);*/
                 cedTran.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedTran.RespuestasEncuesta = await vTransporte.obtieneRespuestas(cedTran.Id);
+                cedTran.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(cedTran.Id);
                 cedTran.historialCedulas = new List<HistorialCedulas>();
-                cedTran.historialCedulas = await vTransporte.getHistorialTransporte(cedTran.Id);
+                cedTran.historialCedulas = await vAnalisis.getHistorialAnalisis(cedTran.Id);
                 foreach (var user in cedTran.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -168,29 +168,29 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpGet]
-        [Route("/transporte/seguimiento/{id}")]
+        [Route("/analisis/seguimiento/{id}")]
         public async Task<IActionResult> SeguimientoCedula(int id)
         {
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
-                CedulaTransporte cedFum = null;
-                cedFum = await vTransporte.CedulaById(id);
+                CedulaAnalisis cedFum = null;
+                cedFum = await vAnalisis.CedulaById(id);
                 cedFum.facturas = await vFacturas.getFacturas(id, cedFum.ServicioId);//
                 cedFum.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedFum.facturas);
                 cedFum.inmuebles = await vInmuebles.inmuebleById(cedFum.InmuebleId);
                 cedFum.usuarios = await vUsuarios.getUserById(cedFum.UsuarioId);
-                cedFum.iEntregables = await eTransporte.getEntregables(cedFum.Id);
+                //cedFum.iEntregables = await eAnalisis.getEntregables(cedFum.Id);
                 cedFum.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedFum.RespuestasEncuesta = await vTransporte.obtieneRespuestas(cedFum.Id);
+                cedFum.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(cedFum.Id);
                 cedFum.historialCedulas = new List<HistorialCedulas>();
-                cedFum.historialCedulas = await vTransporte.getHistorialTransporte(cedFum.Id);
+                cedFum.historialCedulas = await vAnalisis.getHistorialAnalisis(cedFum.Id);
                 foreach (var user in cedFum.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
                 cedFum.historialEntregables = new List<HistorialEntregables>();
-                cedFum.historialEntregables = await eTransporte.getHistorialEntregables(cedFum.Id);
+                //cedFum.historialEntregables = await eAnalisis.getHistorialEntregables(cedFum.Id);
                 foreach (var user in cedFum.historialEntregables)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -201,10 +201,10 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpPost]
-        [Route("/transporte/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaTransporte cedulaTransporte)
+        [Route("/analisis/aprovRechCed")]
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaAnalisis cedulaAnalisis)
         {
-            int success = await vTransporte.apruebaRechazaCedula(cedulaTransporte);
+            int success = await vAnalisis.apruebaRechazaCedula(cedulaAnalisis);
             if (success != 0)
             {
                 return Ok();
@@ -216,11 +216,11 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpPost]
-        [Route("/transporte/historialTransporte")]
-        public async Task<IActionResult> historialTransporte([FromBody] HistorialCedulas historialCedulas)
+        [Route("/analisis/historialAnalisis")]
+        public async Task<IActionResult> historialAnalisis([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vTransporte.capturaHistorial(historialCedulas);
+            success = await vAnalisis.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();
@@ -239,7 +239,7 @@ namespace CedulasEvaluacion.Controllers
 
         private string modulo()
         {
-            return "Transporte_de_Personal";
+            return "Análisis_Microbiológicos";
         }
     }
 }

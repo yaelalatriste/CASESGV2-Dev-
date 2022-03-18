@@ -21,22 +21,13 @@
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#uniforme" role="tab" aria-controls="contact" aria-selected="false">Uniforme</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#equipo" role="tab" aria-controls="contact" aria-selected="false">Equipo de Seguridad</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#emplayamiento" role="tab" aria-controls="contact" aria-selected="false">Emplayamiento</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#actividades" role="tab" aria-controls="contact" aria-selected="false">Actividades</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#patin" role="tab" aria-controls="contact" aria-selected="false">Patín Hidráulico</a>
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#equipo" role="tab" aria-controls="contact" aria-selected="false">Maquinaria, Equipo y Material</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#entregables" role="tab" aria-controls="contact" aria-selected="false">Entregables</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#historial_cedula" role="tab" aria-controls="contact" aria-selected="false">Historial de Cambios</a>
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#historial_cedula" role="tab" aria-controls="contact" aria-selected="false">Seguimiento a Cédula</a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -49,9 +40,9 @@
                 <div class="row">
                     <div class="col-lg-12 mt-3">
                         <div class="card bg-light d-flex flex-fill">
-                            @*<div class="card-header border-bottom-0">
-                                <h2 class="lead"><b>Inmueble Evaluado: </b> @Model.inmuebles.Nombre</h2>
-                            </div>*@
+                            <div class="card-header border-bottom-0">
+                                <h2 class="lead"><b>Área Evaluada: </b> @Model.AreaEvaluada</h2>
+                            </div>
                             <div class="card-body pt-0 mt-4">
                                 <div class="row">
                                     <div class="col-7">
@@ -86,7 +77,7 @@
                                         </ul>
                                     </div>
                                     <div class="col-5">
-                                        @if (@Model.Estatus.Equals("Revisión"))
+                                        @if (@Model.Estatus.Equals("Enviado a DAS"))
                                         {
                                             <h5 class="text-primary lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
@@ -104,7 +95,7 @@
                                         }
                                         <p class="text-sm">
                                             @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                  @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
+                                                                                @Model.RespuestasEncuesta[2].MontoPenalizacion);
                                             }
                                             @if (total > 0)
                                             {
@@ -115,27 +106,18 @@
                                             else
                                             {
                                                 <h5 class="text-danger">
-                                                    @*<b>No hay Monto Penalizable</b>*@
-                                                    <b>** Penalizaciones en Construcción **</b>
+                                                    <b>No hay Monto Penalizable</b>
                                                 </h5>
                                             }
                                         </p>
-                                        @*<ul class="ml-4 mb-0 fa-ul">
-                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Recolección: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)</li>
-                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Entrega: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
-                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Acuses: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
-                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Mal Estado: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
-                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Extraviadas: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[4].MontoPenalizacion)</li>
-                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Material: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)</li>
-                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Penalización en Calidad y Eficiencia: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
-                                        </ul>*@
-                                        <div>
-                                            <img src="~/img/web1.jpg" alt="Alternate Text" width="40%"/>
-                                        </div>
+                                        <ul class="ml-4 mb-0 fa-ul">
+                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Personal Requerido: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)</li>
+                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Material, Maquinaria y Equipo: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
-                            @if (!Model.Estatus.Equals("Autorizada"))
+                            @if (Model.Estatus.Equals("Enviado a DAS"))
                             {
                                 <div class="card-footer">
                                     <div class="text-right">
@@ -150,7 +132,7 @@
             </div>
             <div class="tab-pane fade" id="personal" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="col-lg-12 h3 mt-4">
-                    Personal Uniformado
+                    Personal Requerido
                 </div>
                 @if (@Model.RespuestasEncuesta[0].Respuesta == false)
                 {
@@ -196,7 +178,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-success ml-4">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>
@@ -225,12 +207,11 @@
                         <div class="row mt-4">
                             <div class="col-lg-12">
                                 <h5 class="text-danger ml-4">
-                                    <strong>Días sin cumplír con el servicio: </strong> @Model.RespuestasEncuesta[1].Detalles <br /><br />
                                     <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                 </h5>
                             </div>
                         </div>
-                    }
+                }
                 else
                 {
                         <div class="row mt-4">
@@ -250,15 +231,15 @@
                         <div class="row mt-4">
                             <div class="col-lg-12">
                                 <h5 class="text-success ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                                 </h5>
                             </div>
                         </div>
-                    }
+                }
             </div>
             <div class="tab-pane fade" id="equipo" role="tabpanel" aria-labelledby="profile-tab">
                 <div class="col-lg-12 h3 mt-4">
-                    Equipo de Seguridad
+                    Maquinaria, Equipo y Material
                 </div>
                 @if (@Model.RespuestasEncuesta[2].Respuesta == false)
                 {
@@ -290,7 +271,7 @@
                                                 <tr>
                                                     <td>@i</td>
                                                     <td>@inci.FechaIncumplida.ToString("dd/MM/yyyy")</td>
-                                                    <td>@inci.Comentarios</td>
+                                                    <td>@inci.Comentarios.Replace("|", " ")</td>
                                                 </tr>
                                             }
                                         </tbody>
@@ -306,9 +287,9 @@
                                 </h5>
                             </div>
                         </div>
-                    }
-                    else
-                    {
+                                                }
+                                                else
+                                                {
                         <div class="row mt-4">
                             <div class="row col-lg-12 mt-3">
                                 <div class="col-lg-9 mt-3 ml-4">
@@ -326,11 +307,11 @@
                         <div class="row mt-4">
                             <div class="col-lg-12">
                                 <h5 class="text-success ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)
+                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
                                 </h5>
                             </div>
                         </div>
-                    }
+                                                }
             </div>
             <div class="tab-pane fade" id="entregables" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="col-lg-12 mt-3">
@@ -366,29 +347,31 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @{ string tipo = "";}
                                             @foreach (var entre in @Model.iEntregables)
                                             {
                                                 <tr>
-                                                    @if (entre.Tipo.Equals("ActaER"))
+                                                    @if (entre.Tipo.Equals("CartaPorte"))
                                                     {
-                                                        <td>Acta Entrega - Recepción</td>
-                                                    }
-                                                    else if (entre.Tipo.Equals("Factura"))
-                                                    {
-                                                        <td>Factura</td>
+                                                        tipo = "Carta Porte";
                                                     }
                                                     else if (entre.Tipo.Equals("SAT"))
                                                     {
-                                                        <td>Validación del SAT</td>
+                                                        tipo = "Validación del SAT";
                                                     }
                                                     else if (entre.Tipo.Equals("NotaCredito"))
                                                     {
-                                                        <td>Nota de Crédito</td>
+                                                        tipo = "Nota de Crédito";
                                                     }
-                                                    else if (entre.Tipo.Equals("Reporte(s)"))
+                                                    else if (entre.Tipo.Trim().Equals("HojaEvidencia"))
                                                     {
-                                                        <td>Reporte(s)</td>
+                                                        tipo = "Hoja de Evidencia";
                                                     }
+                                                    else
+                                                    {
+                                                        tipo = entre.Tipo;
+                                                    }
+                                                    <td>@tipo</td>
                                                     <td>@entre.NombreArchivo</td>
                                                     <td>@entre.FechaCreacion.ToString("dd/MM/yyyy")</td>
                                                     <td>
@@ -694,7 +677,7 @@
                                         Estatus: "Autorizada", Comentarios: send.value
                                     }).then(hist => {
                                         if (hist.status == 200) {
-                                            axios.post('/trasladoExp/aprovRechCed', { Id: model.id, Estatus: "Aceptada" }).then(response => {
+                                            axios.post('/trasladoExp/aprovRechCed', { Id: model.id, Estatus: "Autorizada" }).then(response => {
                                                 if (response.status == 200) {
                                                     Swal.fire({
                                                         'icon': 'success',

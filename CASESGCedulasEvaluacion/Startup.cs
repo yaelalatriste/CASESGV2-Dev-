@@ -54,6 +54,7 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioIncidenciasResiduos, RepositorioIncidenciasResiduos>();
             services.AddScoped<IRepositorioIncidenciasTransporte, RepositorioIncidenciasTransporte>();
             services.AddScoped<IRepositorioIncidenciasAgua, RepositorioIncidenciasAgua>();
+            services.AddScoped<IRepositorioIncidenciasAnalisis, RepositorioIncidenciasAnalisis>();
             services.AddScoped<IRepositorioUsuarios, RepositorioUsuarios>();
             services.AddScoped<IRepositorioPerfiles, RepositorioPerfiles>();
             services.AddScoped<IRepositorioAreas, RepositorioAreas>();
@@ -66,14 +67,17 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioEntregablesFumigacion, RepositorioEntregablesFumigacion>();
             services.AddScoped<IRepositorioEntregablesAgua, RepositorioEntregablesAgua>();
             services.AddScoped<IRepositorioEntregablesTransporte, RepositorioEntregablesTransporte>();
+            services.AddScoped<IRepositorioEntregablesAnalisis, RepositorioEntregablesAnalisis>();
             services.AddScoped<IRepositorioEntregablesMuebles, RepositorioEntregablesMuebles>();
             services.AddScoped<IRepositorioCelular, RepositorioCelular>();
             services.AddScoped<IRepositorioAgua, RepositorioAgua>();
+            services.AddScoped<IRepositorioAnalisis, RepositorioAnalisis>();
             services.AddScoped<IRepositorioResiduos, RepositorioResiduos>();
             services.AddScoped<IRepositorioFacturas, RepositorioFacturas>();
             services.AddScoped<IRepositorioDocuments, RepositorioDocuments>();
             services.AddScoped<IRepositorioMuebles, RepositorioMuebles>();
             services.AddScoped<IRepositorioPerfilCelular, RepositorioPerfilCelular>();
+            services.AddScoped<IRepositorioFinancieros, RepositorioFinancieros>();
 
             services.AddScoped<IRepositorioModulos, RepositorioModulos>();
             services.AddScoped<IRepositorioOperaciones, RepositorioOperaciones>();

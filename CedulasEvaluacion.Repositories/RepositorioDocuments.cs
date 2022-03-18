@@ -93,6 +93,28 @@ namespace CedulasEvaluacion.Repositories
                 Folio = reader["Folio"].ToString(),
                 Anio = (int)reader["Anio"],
                 Contrato = reader["Contrato"].ToString(),
+                Servicio = reader["Servicio"].ToString(),
+                Inmueble = reader["Inmueble"].ToString(),
+                InmuebleC = reader["InmuebleC"].ToString(),
+                Direccion = reader["Direccion"].ToString(),
+                Estado = reader["Estado"].ToString(),
+                Administrador = reader["Administrador"].ToString(),
+                Elaboro = reader["Elaboro"].ToString(),
+                Reviso = reader["Reviso"].ToString(),
+                FechaInicio = Convert.ToDateTime(reader["FechaInicio"]),
+                FechaFin = Convert.ToDateTime(reader["FechaFin"]),
+            };
+        }
+
+        private ActaEntregaRecepcion MapToValueMensajeria(SqlDataReader reader)
+        {
+            return new ActaEntregaRecepcion
+            {
+                Id = (int)reader["Id"],
+                Mes = reader["Mes"].ToString(),
+                Folio = reader["Folio"].ToString(),
+                Anio = (int)reader["Anio"],
+                Contrato = reader["Contrato"].ToString(),
                 TipoInmueble = reader["TipoInmueble"].ToString(),
                 Servicio = reader["Servicio"].ToString(),
                 Inmueble = reader["Inmueble"].ToString(),

@@ -53,9 +53,9 @@ namespace CedulasEvaluacion.Controllers
             {
                 foreach (var entregable in entregables)
                 {
-                    if (entregable.Tipo.Equals("ActaER"))
+                    if (entregable.Tipo.Equals("CartaPorte"))
                     {
-                        tipo = "Acta Entrega - Recepción";
+                        tipo = "Carta Porte";
                     }
                     else if (entregable.Tipo.Equals("SAT"))
                     {
@@ -64,6 +64,10 @@ namespace CedulasEvaluacion.Controllers
                     else if (entregable.Tipo.Equals("NotaCredito"))
                     {
                         tipo = "Nota de Crédito";
+                    }
+                    else if (entregable.Tipo.Trim().Equals("HojaEvidencia"))
+                    {
+                        tipo = "Hoja de Evidencia";
                     }
                     else
                     {

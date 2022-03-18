@@ -24,6 +24,7 @@ using CedulasEvaluacion.Entities.MAgua;
 using CedulasEvaluacion.Entities.MResiduos;
 using CedulasEvaluacion.Entities.MTransporte;
 using CedulasEvaluacion.Entities.MMuebles;
+using CedulasEvaluacion.Entities.TrasladoExp;
 
 namespace CedulasEvaluacion.Controllers
 {
@@ -43,7 +44,10 @@ namespace CedulasEvaluacion.Controllers
 
         private readonly IRepositorioCelular vCelular;
         private readonly IRepositorioIncidenciasCelular iCelular;
-        
+
+        private readonly IRepositorioTrasladoExp vTraslado;
+        private readonly IRepositorioIncidenciasTraslado iTraslado;
+
         private readonly IRepositorioFumigacion vFumigacion;
         private readonly IRepositorioIncidenciasFumigacion iFumigacion;
 
@@ -69,8 +73,8 @@ namespace CedulasEvaluacion.Controllers
 
         public DocumentsController(IRepositorioLimpieza iVLimpieza, IRepositorioFumigacion iVFumigacion, IRepositorioAgua iVAgua, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario, 
                                     IRepositorioIncidencias iIncidencias, IRepositorioIncidenciasFumigacion iIncidenciasFumigacion, IRepositorioIncidenciasAgua iIncidenciasAgua, IRepositorioIncidenciasResiduos iiResiduos,
-                                    IRepositorioResiduos ivResiduos, IRepositorioTransporte ivTransporte, IRepositorioIncidenciasTransporte iiTransporte,
-                                   IRepositorioEntregables iVEntregables, IHostingEnvironment environment, IRepositorioPerfiles iRepositorioPerfiles,
+                                    IRepositorioResiduos ivResiduos, IRepositorioTransporte ivTransporte, IRepositorioIncidenciasTransporte iiTransporte, IRepositorioIncidenciasTraslado iiTraslado,
+                                   IRepositorioEntregables iVEntregables, IHostingEnvironment environment, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioTrasladoExp ivTraslado,
                                     IRepositorioFacturas iFacturas, IRepositorioMensajeria iMensajeria, IRepositorioIncidenciasMensajeria iiMensajeria, IRepositorioEntregablesMensajeria ivMensajeria, IRepositorioCelular iCelular, 
                                     IRepositorioIncidenciasCelular ivCelular, IRepositorioConvencional iConvencional, IRepositorioIncidenciasConvencional ivConvencional, 
                                     IRepositorioEntregablesConvencional ieConvencional, IRepositorioDocuments ivDocuments, IRepositorioIncidenciasMuebles iiMuebles, IRepositorioMuebles iVMuebles)
@@ -94,6 +98,9 @@ namespace CedulasEvaluacion.Controllers
 
             this.vTransporte= ivTransporte ?? throw new ArgumentNullException(nameof(ivTransporte));
             this.iTransporte= iiTransporte ?? throw new ArgumentNullException(nameof(ivTransporte));
+
+            this.vTraslado = ivTraslado ?? throw new ArgumentNullException(nameof(ivTraslado));
+            this.iTraslado = iiTraslado ?? throw new ArgumentNullException(nameof(iiTraslado));
 
             this.vAgua= iVAgua?? throw new ArgumentNullException(nameof(iVAgua));
             this.iAgua = iIncidenciasAgua ?? throw new ArgumentNullException(nameof(iIncidenciasAgua));
@@ -337,7 +344,7 @@ namespace CedulasEvaluacion.Controllers
                     string diaSua = Convert.ToDateTime(entregaSua).DayOfWeek + "";
                     string diaEntrega = Convert.ToDateTime(fecha).Day + "";
                     string dia = fecha.Split("-")[2];
-                    document.Replace("||FechaIMSS||", "El prestador de servicio el SUA de su personal, la fecha de entrega fue el " +
+                    document.Replace("||FechaIMSS||", "El prestador de servicio entrego el SUA de su personal en tiempo y forma, la fecha de entrega fue el " +
                                          Convert.ToDateTime(fecha).Day + " de " +
                                          Convert.ToDateTime(fecha).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " +
                                          Convert.ToDateTime(fecha).Year + " correspondiente al mes de " +
@@ -737,7 +744,7 @@ namespace CedulasEvaluacion.Controllers
                     string diaSua = Convert.ToDateTime(entregaSua).DayOfWeek + "";
                     string diaEntrega = Convert.ToDateTime(fecha).Day + "";
                     string dia = fecha.Split("-")[2];
-                    document.Replace("||SUA||", "El prestador de servicio el SUA de su personal, la fecha de entrega fue el " +
+                    document.Replace("||SUA||", "El prestador de servicio entrego el SUA de su personal en tiempo y forma, la fecha de entrega fue el " +
                                          Convert.ToDateTime(fecha).Day + " de " +
                                          Convert.ToDateTime(fecha).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " +
                                          Convert.ToDateTime(fecha).Year + " correspondiente al mes de " +
@@ -1755,6 +1762,194 @@ namespace CedulasEvaluacion.Controllers
                     toArray = ms1.ToArray();
                 }
                 return File(toArray, "application/pdf", "CedulaTransporte_" + cedula.Mes + ".pdf");
+            }
+            return Redirect("/error/denied");
+        }
+
+        [Route("/reporte/trasladoExp/{id}")]
+        public async Task<IActionResult> CedulaTraslado(int id)
+        {
+            int success = await vRepositorioPerfiles.getPermiso(UserId(), moduloTraslado(), "cédula");
+            if (success == 1)
+            {
+                string strFacturas = "";
+                decimal totalFacturas = 0;
+
+                TrasladoExpedientes cedula = new TrasladoExpedientes();
+                cedula = await vTraslado.CedulaById(id);
+                cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
+                cedula.incidencias = await iTraslado.getIncidencias(id);
+                cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
+                cedula.RespuestasEncuesta = await vTraslado.obtieneRespuestas(id);
+                cedula.facturas = new List<Facturas>();
+                cedula.facturas = await vFacturas.getFacturas(id, 4);
+
+                Document document = new Document();
+                var path = @"E:\Plantillas CASESGV2\DocsV2\ReporteTraslado.docx";
+                document.LoadFromFile(path);
+
+                //Creamos la Tabla
+                Section tablas = document.AddSection();
+
+                if (cedula.RespuestasEncuesta[0].Respuesta == false)
+                {
+                    document.Replace("||Personal||", "El prestador de servicio no cumplió con el personal requerido, ya que fue menor al solicitado, se solicitaron "+ cedula.RespuestasEncuesta[0].Detalles.Split("|")[0] + " personas" +
+                        " y se brindaron" + cedula.RespuestasEncuesta[0].Detalles.Split("|")[1] + " personas.", false, true);
+                }
+                else
+                {
+                    document.Replace("||Personal||", "El prestador de servicio cumplió con el personal requerido.", false, true);
+                }
+
+                //obtenemos el documento con marcas
+                if (cedula.incidencias.Count > 0)
+                {
+                    Table tablaActividades = tablas.AddTable(true);
+
+                    String[] cabeceraFechas = { "Fecha de la Incidencia", "Material o Equipo Faltante" };
+
+                    tablaActividades.ResetCells(cedula.incidencias.Count + 1, cabeceraFechas.Length);
+
+                    TableRow recRow = tablaActividades.Rows[0];
+                    recRow.IsHeader = true;
+                    recRow.Height = 10;
+
+                    recRow.RowFormat.BackColor = Color.FromArgb(81, 25, 162);
+                    recRow.RowFormat.Borders.BorderType = BorderStyle.Single;
+
+
+                    for (int i = 0; i < cabeceraFechas.Length; i++)
+                    {
+                        //Alineacion de celdas
+                        Paragraph p = recRow.Cells[i].AddParagraph();
+                        tablaActividades.Rows[0].Cells[i].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                        p.Format.HorizontalAlignment = HorizontalAlignment.Center;
+
+                        //Formato de datos
+                        TextRange TR = p.AppendText(cabeceraFechas[i]);
+                        TR.CharacterFormat.FontName = "Arial";
+                        TR.CharacterFormat.FontSize = 9;
+                        TR.CharacterFormat.Bold = true;
+                        TR.CharacterFormat.TextColor = Color.White;
+                    }
+
+                    for (int r = 0; r < cedula.incidencias.Count; r++)
+                    {
+                        TableRow DataRow = tablaActividades.Rows[r + 1];
+                        //Fila Height
+                        DataRow.Height = 5;
+                        for (int c = 0; c < cabeceraFechas.Length; c++)
+                        {
+                            TextRange TR2 = null;
+                            //Alineacion de Celdas
+                            DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                            //Llenar datos en filas
+                            Paragraph p2 = DataRow.Cells[c].AddParagraph();
+                            if (c == 0)
+                            {
+                                TR2 = p2.AppendText(cedula.incidencias[r].FechaIncumplida.ToString("dd/MM/yyyy"));
+                            }
+                            if (c == 1)
+                            {
+                                string coments = "";
+                                string [] comentarios = cedula.incidencias[r].Comentarios.Split("|");
+                                for (var m = 0;m< comentarios.Length-1;m++)
+                                {
+                                    if((m+1) == comentarios.Length - 1)
+                                    {
+                                        coments += comentarios[m];
+                                    }
+                                    else
+                                    {
+                                        coments += comentarios[m] + ",";
+                                    }
+                                    
+                                }
+                                TR2 = p2.AppendText(coments);
+                            }
+                            //Formato de celdas
+                            p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                            TR2.CharacterFormat.FontName = "Arial";
+                            TR2.CharacterFormat.FontSize = 9;
+                        }
+                    }
+
+                    BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
+                    marcaActividades.MoveToBookmark("Equipo", true, true);
+                    marcaActividades.InsertTable(tablaActividades);
+                    document.Replace("||Equipo||", "El personal de servicio no cumplió con la maquinaria, equipo o  herramientas necesarias para prestar el servicio.", false, true);
+                }
+                else
+                {
+                    document.Replace("||Equipo||", "El personal de servicio cumplió con la maquinaria, equipo o  herramientas necesarias para prestar el servicio.", false, true);
+                }
+
+                if (cedula.RespuestasEncuesta[1].Respuesta == true)
+                {
+                    document.Replace("||Uniforme||", "El personal se presentó debidamente uniformado e identificado al prestar el servicio.", false, true);
+                }
+                else
+                {
+                    document.Replace("||Uniforme||", "El personal no se presentó debidamente uniformado e identificado al prestar el servicio.", false, true);
+                }
+
+                document.Replace("||Folio||", cedula.Folio, false, true);
+
+                document.Replace("||Mes||", cedula.Mes, false, true);
+                if (cedula.Estatus.Equals("Autorizada"))
+                {
+                    document.Replace("||C||", cedula.Calificacion.ToString(), false, true);
+                }
+                else
+                {
+                    document.Replace("||C||", "Pendiente", false, true);
+                }
+
+                document.Replace("||dia||", cedula.FechaCreacion.GetValueOrDefault().Day + "", false, true);
+                document.Replace("||MesE||", Convert.ToDateTime(cedula.FechaCreacion).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")), false, true);
+                document.Replace("||Anio||", Convert.ToDateTime(cedula.FechaCreacion.GetValueOrDefault()).Year + "", false, true);
+
+
+                for (int i = 0; i < cedula.facturas.Count; i++)
+                {
+                    if ((cedula.facturas.Count - 1) != i)
+                    {
+                        strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "/";
+                    }
+                    else
+                    {
+                        strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio;
+                    }
+                }
+
+                if (cedula.Estatus.Equals("Enviado a DAS") || cedula.Estatus.Equals("Rechazada"))
+                {
+                    BookmarksNavigator marcaNota = new BookmarksNavigator(document);
+                    marcaNota.MoveToBookmark("Nota", true, true);
+                    marcaNota.InsertText("NOTA: Esta cédula no cuenta con ningún valor ya que aún no está AUTORIZADA por parte de la Dirección de Administración de Servicios.");
+                }
+
+                document.Replace("||Factura||", strFacturas, false, true);
+
+                document.Replace("||Total||", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", vFacturas.obtieneTotalFacturas(cedula.facturas)) + "", false, true);
+
+                if (cedula.Estatus.Equals("Enviado a DAS") || cedula.Estatus.Equals("Rechazada"))
+                {
+                    BookmarksNavigator marcaNota = new BookmarksNavigator(document);
+                    marcaNota.MoveToBookmark("Nota", true, true);
+                    marcaNota.InsertText("NOTA: Esta cédula no cuenta con ningún valor ya que aún no está AUTORIZADA por parte de la Dirección de Administración de Servicios.");
+                }
+
+
+                //Salvar y Lanzar
+
+                byte[] toArray = null;
+                using (MemoryStream ms1 = new MemoryStream())
+                {
+                    document.SaveToStream(ms1, Spire.Doc.FileFormat.PDF);
+                    toArray = ms1.ToArray();
+                }
+                return File(toArray, "application/pdf", "CedulaTraslado_" + cedula.Mes + ".pdf");
             }
             return Redirect("/error/denied");
         }
@@ -5237,6 +5432,11 @@ namespace CedulasEvaluacion.Controllers
         private string moduloTransporte()
         {
             return "Transporte_de_Personal";
+        }
+        
+        private string moduloTraslado()
+        {
+            return "Traslado_de_Expedientes";
         }
 
         private string moduloMuebles()

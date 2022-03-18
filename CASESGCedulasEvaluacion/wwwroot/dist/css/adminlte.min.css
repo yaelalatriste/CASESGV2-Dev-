@@ -6836,10 +6836,65 @@ a.bg-warning:focus, a.bg-warning:hover, button.bg-warning:focus, button.bg-warni
     background-color: #dc3545 !important
 }
 
-.bg-dangerTramite {
-    background-color: #E61C07 !important;
-    color:white;
+/*fondos para los Servicios*/
+.bg-agua {
+    background-color: #0090D3 !important;
+    color: white;
 }
+
+.bg-limpieza {
+    background-color: #20A440 !important;
+    color: white;
+}
+
+.bg-fumigacion {
+    background-color: #AC813E !important;
+    color: white;
+}
+
+.bg-mensajeria {
+    background-color: #B93131 !important;
+    color: white;
+}
+
+.bg-transporte {
+    background-color: #D4AC0D !important;
+    color: white;
+}
+
+.bg-analisis {
+    background-color: #A446BE !important;
+    color: white;
+}
+
+.bg-rpbi {
+    background-color: #686868 !important;
+    color: white;
+}
+
+.bg-celular {
+    background-color: #3103EE !important;
+    color: white;
+}
+
+.bg-convencional {
+    background-color: #7961A4 !important;
+    color: white;
+}
+
+.bg-traslado {
+    background-color: #9F3E88 !important;
+    color: white;
+}
+
+.bg-muebles {
+    background-color: #119B6D !important;
+    color: white;
+}
+
+
+
+/*Fin del fondo para los servicios*/
 
 a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:hover {
     background-color: #bd2130 !important
@@ -18601,7 +18656,7 @@ html.maximized-card {
         font-size: 90px;
         position: absolute;
         right: 15px;
-        top: 15px;
+        top: 0px;
         transition: all .3s linear
     }
 

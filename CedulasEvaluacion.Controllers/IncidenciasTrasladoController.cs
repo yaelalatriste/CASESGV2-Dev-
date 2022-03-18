@@ -52,39 +52,85 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/trasladoExp/getIncidenciasTable/{id?}")]
-        public async Task<IActionResult> getIncidenciasTable(int id)
+        [Route("/trasladoExp/getIncidenciasTable/{id?}/{pregunta?}")]
+        public async Task<IActionResult> getIncidenciasTable(int id, int pregunta)
         {
-            List<IncidenciasTraslado> incidencias = await iTraslado.getIncidencias(id);
+            List<IncidenciasTraslado> incidencias = await iTraslado.getIncidenciasByPregunta(id,pregunta);
             string table = "";
-            string coments = "";
+            if (pregunta == 1)
+            {
+                table = "<thead>" +
+                                  "<tr>" +
+                                      "<th>ID</th>" +
+                                      "<th>Fecha Incumplimiento</th>" +
+                                      "<th>Personal Solicitado</th>" +
+                                      "<th>Personal Brindado</th>" +
+                                      "<th>Comentarios</th>" +
+                                      "<th>Acciones</th>" +
+                                  "</tr>" +
+                              "</thead>" +
+                              "<tbody></tbody>";
+            } else {
+                table = "<thead>" +
+                                "<tr>" +
+                                    "<th>ID</th>" +
+                                    "<th>Fecha Incumplimiento</th>" +
+                                    "<th>Incumplimiento</th>" +
+                                    "<th>Comentarios</th>" +
+                                    "<th>Acciones</th>" +
+                                "</tr>" +
+                            "</thead>" +
+                            "<tbody></tbody>";
+            }
+            string body = "";
+            string coments = "El prestador incumplió con lo siguiente: <br/>";
             int i = 0;
             if (incidencias != null)
             {
-                var com = incidencias[0].Comentarios.Split("|");
-                for (var m = 0; m < com.Length; m++)
-                {
-                    coments += com + "<br />";
-                    break;
-                }
-
                 foreach (var res in incidencias)
                 {
-                    i++;
-                    table += 
-                        "<tr>" +
-                            "<td>" + i + "</td>" +
-                            "<td>" + res.Pregunta + "</td>" +
-                            "<td>" + res.FechaIncumplida.ToString("dd/MM/yyyy") + "</td>" +
-                            "<td>" + coments + "</td>" +
-                            "<td>" +
-                                "<a href='#' class='text-primary mr-3 update_incumplimiento' data-fecha='"+res.FechaIncumplida.ToString("yyyy-MM-dd") + "' " +
-                                    "data-id='"+res.Id+ "' data-pregunta='" + res.Pregunta + "'><i class='fas fa-pencil'></i></a>" +
-                                "<a href='#' class='text-danger delete_incumplimiento' data-id='" + res.Id + "' data-pregunta='" + res.Pregunta + "'><i class='fas fa-times'></i></a>" +
-                            "</td>" +
-                        "</tr>";
+                    if (pregunta == 3) {
+                        var com = res.IncidenciasEquipo.Split("|");
+                        for (var m = 0; m < com.Length-1; m++)
+                        {
+                            coments += "<li>"+com[m] + "</li>";
+                        }
+
+                        i++;
+                        body +=
+                            "<tr>" +
+                                "<td>" + i + "</td>" +
+                                "<td>" + res.FechaIncumplida.ToString("dd/MM/yyyy") + "</td>" +
+                                "<td>" + coments + "</td>" +
+                                "<td>" + res.Comentarios + "</td>" +
+                                "<td>" +
+                                    "<a href='#' class='text-primary mr-3 update_incumplimiento' data-fecha='" + res.FechaIncumplida.ToString("yyyy-MM-dd") + "' " +
+                                        "data-id='" + res.Id + "' data-coments='" + res.Comentarios + "' data-incidencias='" + res.IncidenciasEquipo + "'><i class='fas fa-pencil'></i></a>" +
+                                    "<a href='#' class='text-danger delete_incumplimiento' data-id='" + res.Id + "' data-pregunta='" + res.Pregunta + "'><i class='fas fa-times'></i></a>" +
+                                "</td>" +
+                            "</tr>";
+                        coments = "";
+                    }
+                    else
+                    {
+                        i++;
+                        body +=
+                            "<tr>" +
+                                "<td>" + i + "</td>" +
+                                "<td>" + res.FechaIncumplida.ToString("dd/MM/yyyy") + "</td>" +
+                                "<td>" + res.PersonalSolicitado + " persona(s)</td>" +
+                                "<td>" + res.PersonalBrindado + " persona(s)</td>" +
+                                "<td>" + res.Comentarios + "</td>" +
+                                "<td>" +
+                                    "<a href='#' class='text-primary mr-3 update_incumplimiento' data-fecha='" + res.FechaIncumplida.ToString("yyyy-MM-dd") + "' " +
+                                    " data-pbrindado ='" + res.PersonalBrindado + "' data-psolicitado ='" + res.PersonalSolicitado + "' data-pregunta='" + res.Pregunta + "' " +
+                                        "data-id='" + res.Id + "' data-coments='" + res.Comentarios + "'><i class='fas fa-pencil'></i></a>" +
+                                    "<a href='#' class='text-danger delete_incumplimiento' data-id='" + res.Id + "' data-pregunta='" + res.Pregunta + "'><i class='fas fa-times'></i></a>" +
+                                "</td>" +
+                            "</tr>";
+                    }
                 }
-                return Ok(table);
+                return Ok(table += body);
             }
             return BadRequest();
         }

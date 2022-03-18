@@ -135,7 +135,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/trasladoExp/revision/{id}")]
         public async Task<IActionResult> RevisarCedula(int id)
         {
-            int success = await vPerfiles.getPermiso(UserId(), modulo(), "revision");
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
                 TrasladoExpedientes cedMen = null;

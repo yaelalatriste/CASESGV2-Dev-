@@ -70,7 +70,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/perfiles/edit/{id?}")]
         public async Task<IActionResult> EditarPerfil(int id)
         {
-            int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "crear");
+            int success = 1;// await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
                 Perfiles perfiles = new Perfiles();
