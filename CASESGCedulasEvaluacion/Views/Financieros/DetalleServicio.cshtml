@@ -1,22 +1,21 @@
-﻿@model IEnumerable<CedulasEvaluacion.Entities.Models.Dashboard>
+﻿
+@model IEnumerable<CedulasEvaluacion.Entities.Models.Dashboard>
 @{
     ViewData["Title"] = "Detalle del Servicio";
-    var meses = new List<string>();
     var estatus = new List<string>();
-
-    int i = 0;
+    var meses = new List<string>();
 
     @foreach (var dt in @Model)
     {
-        meses.Add(dt.Mes);
         estatus.Add(dt.Estatus);
+        meses.Add(dt.Mes);
     }
-
-    HashSet<string> quitaMeses = new HashSet<string>(meses);
-    List<string> lmeses = quitaMeses.ToList();
 
     HashSet<string> quitaEstatus = new HashSet<string>(estatus);
     List<string> lestatus = quitaEstatus.ToList();
+    
+    HashSet<string> quitaMeses= new HashSet<string>(meses);
+    List<string> lmeses = quitaMeses.ToList();
 }
 
 <div class="container-fluid">
@@ -43,66 +42,21 @@
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
-            var meses = @Html.Raw(Json.Serialize(@lmeses));
-            var estatus = @Html.Raw(Json.Serialize(estatus));
+            var meses = @Html.Raw(Json.Serialize(lmeses));
             var model = @Html.Raw(Json.Serialize(@Model));
             var tbody = "";
-            var totales = new Array();
-            var columnas = new Array();
-            for (let f = 0; f < meses.length; f++) {
-                var total = 0;
-                for (let c = 0; c < model.length; c++) {
-                    if (model[c].mes == meses[f]) {
-                        total += model[c].total;
+            
+            axios.get('/financieros/generaTabla/' + model[0].servicio).then(table => {
+                table = table.data;
+                for (let i = 0; i < meses.length; i++) {
+                    tbody += "<tr><td class='font-weight-bold'>" + meses[i] + "</td>";
+                    for (let c = 0; c < table[i].length; c++) {
+                        tbody += table[i][c];
                     }
+                    tbody += "</tr>";
                 }
-                totales.push(total);
-            }
-
-            for (let cl = 0; cl < estatus.length; cl++) {
-                columnas.push("<td></td>");
-            }
-
-           console.log(columnas);
-            console.log(estatus);
-
-            for (let f = 0; f < meses.length; f++) {
-                tbody += "<tr><td class='font-weight-bold'>" + meses[f] + "</td>";
-                for (let c = 0; c < model.length; c++) {
-                    if (model[c].mes == meses[f]) {
-                        console.log($.inArray(model[c].estatus, estatus));
-                        columnas[$.inArray(model[c].estatus, estatus)] = "<td>" +
-                            "<div class='row col-lg-12'>" +
-                            "<div class='col-lg-8 mt-2'>" +
-                            "<div class='progress progress-md'>" +
-                            "<div class='progress-bar " + model[c].fondo + "' style = 'width:" + ((model[c].total * 100) / totales[f]) + "%'></div>" +
-                            "</div>" +
-                            "</div>" +
-                            "<div class='col-lg-3'>" +
-                            "<span class='badge " + model[c].fondo + "'>(" + model[c].total + ") " + ((model[c].total * 100) / totales[f]).toFixed(2) + "%</span>"
-                        "</div>" +
-                            "</div>" +
-                            "<div class='row col-lg-12'>" +
-                            "Total de Cédulas en " + model[c].total +
-                            "</div>" +
-                            "</td>";
-                    }
-                }
-                for (let b = 0; b < columnas.length; b++) {
-                    tbody += columnas[b];
-                }
-                tbody += "</tr>";
-                console.log(columnas);
-                limpiaColumnas();
-            }            
-
-            function limpiaColumnas() {
-                for (let cl = 0; cl < columnas.length; cl++) {
-                    columnas[cl] = "<td></td>";
-                }
-            }
-            $("#tbl_body").html(tbody);
-
+                $("#tbl_body").html(tbody);
+            });           
         });
     </script>
 }
