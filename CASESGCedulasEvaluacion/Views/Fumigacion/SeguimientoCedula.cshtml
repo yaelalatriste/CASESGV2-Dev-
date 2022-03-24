@@ -427,7 +427,7 @@
                     </div>
                 </div>
                 <div class="row col-lg-12 justify-content-end mb-3">
-                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
                     {
                         @if (cedula == true && @Model.Estatus.Equals("Autorizada"))
                         {
@@ -449,7 +449,7 @@
                             }
                         }
                     }
-                    else if (@User.Claims.ElementAt(2).Value.Equals("CAE"))
+                    else if (@User.Claims.ElementAt(2).Value.Equals("CAE") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
                     {
                         @if (rechazat == true && @Model.Estatus.Equals("Revisión CAE"))
                         {
@@ -461,7 +461,7 @@
                             <button href="" class="btn btn-success float-right mr-3 autorizar_cae"><i class="fas fa-check mr-2"></i>Autorizar Documentación</button>
                         }
                     }
-                    else if (@User.Claims.ElementAt(2).Value.Equals("Financieros"))
+                    else if (@User.Claims.ElementAt(2).Value.Equals("Financieros") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
                     {
                         @if (rechazat == false && estatus == false && @Model.Estatus.Equals("En Trámite"))
                         {

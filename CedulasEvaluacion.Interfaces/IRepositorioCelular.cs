@@ -10,7 +10,7 @@ namespace CedulasEvaluacion.Interfaces
 {
     public interface IRepositorioCelular
     {
-        Task<List<VCedulas>> GetCedulasCelular();
+        Task<List<VCedulas>> GetCedulasCelular(int user);
         Task<int> insertaCedula(TelefoniaCelular telefoniaCelular);
         Task<int> VerificaCedula(int anio, string mes);
         Task<TelefoniaCelular> CedulaById(int id);

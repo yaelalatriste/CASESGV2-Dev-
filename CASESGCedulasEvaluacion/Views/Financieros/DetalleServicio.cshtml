@@ -1,11 +1,11 @@
-﻿
-@model IEnumerable<CedulasEvaluacion.Entities.Models.Dashboard>
+﻿@model CedulasEvaluacion.Entities.MFinancieros.ModelsFinancieros;
 @{
-    ViewData["Title"] = "Detalle del Servicio";
+    ViewData["Title"] = "Detalle de Cédulas y Oficios en el Servicio de \""+Model.dashboard.ElementAt(0).Servicio+ "\"";
     var estatus = new List<string>();
     var meses = new List<string>();
+    var anio = 2023;
 
-    @foreach (var dt in @Model)
+    @foreach (var dt in @Model.dashboard)
     {
         estatus.Add(dt.Estatus);
         meses.Add(dt.Mes);
@@ -13,50 +13,338 @@
 
     HashSet<string> quitaEstatus = new HashSet<string>(estatus);
     List<string> lestatus = quitaEstatus.ToList();
-    
+
     HashSet<string> quitaMeses= new HashSet<string>(meses);
     List<string> lmeses = quitaMeses.ToList();
+
+    var j = 0;
 }
 
 <div class="container-fluid">
     <div class="row col-lg-12">
-        <table class="table" id="tbl_detalles">
-            <thead>
-                <tr>
-                    <th></th>
-                    @foreach (var est in lestatus)
+        <a href="#" class="btn btn-primary" id="newOficio">Nuevo Oficio</a>
+    </div>
+    <div class="row mt-4 mb-4">
+        <div class="col-lg-12">
+            <table class="table dataTables" id="tableOficios" width="100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Servicio</th>
+                        <th>Año</th>
+                        <th>Numero de Oficio</th>
+                        <th>Estatus</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var of in Model.oficio)
                     {
-                        <th>@est</th>
+                        j++;
+                        <tr>
+                            <td>@j</td>
+                            <td>@of.Servicio</td>
+                            <td>@of.Anio</td>
+                            <td>@of.Anio/@of.NumeroOficio</td>
+                            <td>@of.Estatus</td>
+                            <td>
+                                <a href="/financieros/oficio/@Model.dashboard.ElementAt(0).Servicio/@of.Id"><i class="fas fa-pencil text-primary"></i></a>
+                            </td>
+                        </tr>
                     }
-                </tr>
-            </thead>
-            @{
-                
-            }
-            <tbody id="tbl_body"></tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row col-lg-12 mt-3">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-gray text-white">
+                    <h4>Cédulas en Flujo de Operación</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row col-lg-12">
+                        <table class="table table-striped table-bordered table-hover dataTables" id="tbl_detalles">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    @foreach (var est in lestatus)
+                                    {
+                                        if (est.Equals("En Proceso") || est.Equals("Enviado a DAS") || est.Equals("Autorizada") || est.Equals("Rechazada"))
+                                        {
+                                            <th>@est</th>
+                                        }
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_op"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row col-lg-12">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-gray text-white">
+                    <h4>Cédulas en Flujo de CAE</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row col-lg-12">
+                        <table class="table table-striped table-bordered table-hover dataTables" id="tbl_detalles">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    @foreach (var est in lestatus)
+                                    {
+                                        if (est.Equals("Revisión CAE") || est.Equals("Autorizado CAE") || est.Equals("Trámite Rechazado"))
+                                        {
+                                            <th>@est</th>
+                                        }
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_cae"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-gray text-white">
+                    <h4>Cédulas en Flujo de Financieros</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row col-lg-12">
+                        <table class="table table-striped table-bordered table-hover dataTables" id="tbl_detalles">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    @foreach (var est in lestatus)
+                                    {
+                                        if (est.Equals("Trámite de Pago") || est.Equals("Enviado a DGPPT") || est.Equals("Pagado"))
+                                        {
+                                            <th>@est</th>
+                                        }
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_financieros"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+@*Modal para Capturar Oficios*@
+<div class="modal fade" id="modal-oficio">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white">Nuevo Oficio</h4>
+                <button type="button" class="close close-incidencias text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-row col-md-3" id="divCategoria">
+                        <label for="">Servicios:</label>
+                        <select class="form-control" id="selectServicio"></select>
+                        <div class="col-sm-12" id="error_servicio">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor capture el servicio para el oficio
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row col-md-3" id="divCategoria">
+                        <label for="Anio">Año del Oficio: </label>
+                        <select id="selectAnio" class="form-control">
+                            <option value="">Seleccione una opción</option>
+                            @for (var i = 2021; i < anio; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                        <div class="col-sm-12" id="error_anio">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor capture el año del oficio
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row col-md-3" id="divCategoria">
+                        <label for="">Número de Oficio:</label>
+                        <input class="form-control" id="numeroOficio" type="number" required />
+                        <div class="col-sm-12" id="error_numero">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor capture el número del oficio
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button type="button" class="btn btn-primary" id="crearOficio">Crear Oficio</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@*Fin del Modal para Capturar Oficios*@
 
 @section Scripts{
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
             var meses = @Html.Raw(Json.Serialize(lmeses));
-            var model = @Html.Raw(Json.Serialize(@Model));
+            var dashboard = @Html.Raw(Json.Serialize(@Model.dashboard));
+            var oficios = @Html.Raw(Json.Serialize(@Model.oficio));
             var tbody = "";
-            
-            axios.get('/financieros/generaTabla/' + model[0].servicio).then(table => {
-                table = table.data;
-                for (let i = 0; i < meses.length; i++) {
-                    tbody += "<tr><td class='font-weight-bold'>" + meses[i] + "</td>";
-                    for (let c = 0; c < table[i].length; c++) {
-                        tbody += table[i][c];
+
+            $("#tableOficios").DataTable({
+                paging: true,
+                bLengthChange: false,
+                pageLength: 10,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+                },
+            });
+
+            /*Errores de Captura de Oficio*/
+            $('#error_servicio').css('display', 'none');
+            $('#error_anio').css('display', 'none');
+            $('#error_numero').css('display', 'none');
+            /*Fin Errores de Captura de Oficio*/
+
+            /*Llenado de la Tabla de Porcentajes*/
+                axios.get('/financieros/generaTabla/' + dashboard[0].servicio+'/'+'Operacion').then(table => {
+                    table = table.data;
+                    for (let i = 0; i < meses.length; i++) {
+                        tbody += "<tr><td class='font-weight-bold'>" + meses[i] + "</td>";
+                        for (let c = 0; c < table[i].length; c++) {
+                            tbody += table[i][c];
+                        }
+                        tbody += "</tr>";
                     }
-                    tbody += "</tr>";
+                    $("#tbl_op").html(tbody);
+                });
+            /*Llenado de la Tabla de Porcentajes*/
+
+            /*Llenado de la Tabla de Porcentajes*/
+                axios.get('/financieros/generaTabla/' + dashboard[0].servicio + '/' + 'CAE').then(table => {
+                    table = table.data;
+                    tbody = "";
+                    for (let i = 0; i < meses.length; i++) {
+                        tbody += "<tr><td class='font-weight-bold'>" + meses[i] + "</td>";
+                        for (let c = 0; c < table[i].length; c++) {
+                            tbody += table[i][c];
+                        }
+                        tbody += "</tr>";
+                    }
+                    $("#tbl_cae").html(tbody);
+                });
+            /*Llenado de la Tabla de Porcentajes*/
+
+            /*Llenado de la Tabla de Porcentajes*/
+                axios.get('/financieros/generaTabla/' + dashboard[0].servicio + '/' + 'Financieros').then(table => {
+                    table = table.data;
+                    tbody = "";
+                    for (let i = 0; i < meses.length; i++) {
+                        tbody += "<tr><td class='font-weight-bold'>" + meses[i] + "</td>";
+                        for (let c = 0; c < table[i].length; c++) {
+                        tbody += table[i][c];
+                        }
+                        tbody += "</tr>";
+                    }
+                    $("#tbl_financieros").html(tbody);
+                });
+            /*Llenado de la Tabla de Porcentajes*/
+
+            $("#newOficio").click(function () {
+                var servicios = '<option value="">Seleccione un Servicio</option>';
+                /*Llenado de la Lista de Servicios*/
+                axios.get('/catalogo/servicios').then(options => {
+                    options = options.data;
+                    for (let i = 0; i < options.length; i++) {
+                        servicios += '<option value="'+options[i].nombre+'" data-id="'+options[i].id+'">'+options[i].nombre+'</option>';
+                    }
+                    $("#selectServicio").html(servicios);
+                    $("#selectServicio").val(dashboard[0].servicio).change();
+                    $("#selectServicio").prop('disabled',true);
+                });
+                /*Llenado de la Lista de Servicios*/
+                $("#modal-oficio").modal('show');
+            });
+
+            function validaCamposOficio() {
+                if ($("#selectServicio").val() != "" && $("#selectAnio").val() != "" && $("#numeroOficio").val() != "") {
+                    return true;
                 }
-                $("#tbl_body").html(tbody);
-            });           
+
+                if ($('#selectServicio').val() == "") {
+                    $('#selectServicio').addClass('is-invalid');
+                    $('#error_servicio').css('display', 'block');
+                }
+
+                if ($('#selectAnio').val() == "") {
+                    $('#selectAnio').addClass('is-invalid');
+                    $('#error_anio').css('display', 'block');
+                }
+
+                if ($('#numeroOficio').val() == "") {
+                    $('#numeroOficio').addClass('is-invalid');
+                    $('#error_numero').css('display', 'block');
+                }
+                return false;
+            }
+
+            $('#selectServicio').change(function () {
+                if ($(this).val() != "") {
+                    $('#selectServicio').removeClass('is-invalid');
+                    $('#error_servicio').css('display', 'none');
+                }
+            });
+
+            $('#selectAnio').change(function () {
+                if ($(this).val() != "") {
+                    $('#selectAnio').removeClass('is-invalid');
+                    $('#selectAnio').addClass('is-valid');
+                    $('#error_anio').css('display', 'none');
+                }
+            });
+
+            $('#numeroOficio').change(function () {
+                if ($(this).val() != "") {
+                    $('#numeroOficio').removeClass('is-invalid');
+                    $('#numeroOficio').addClass('is-valid');
+                    $('#error_numero').css('display', 'none');
+                }
+            });
+
+            $("#crearOficio").click(function () {
+                var option = $("#selectServicio").find('option:selected');
+                var servicio = option.data('id');
+                var anio = $("#selectAnio").val();
+                var oficio = $("#numeroOficio").val();
+
+                if (validaCamposOficio()) {
+                    axios.post('/financieros/inserta/oficio', { ServicioId: parseInt(servicio), Anio: parseInt(anio), NumeroOficio: parseInt(oficio)}).then(response => {
+                        if (response.status == 200) {
+                            Swal.fire({
+                                'icon': 'success',
+                                'title': 'Oficio para Trámite de Pago',
+                                'html': 'Se generó el oficio correctamente.'
+                            });
+                        }
+                    });
+                }
+            });
+
         });
     </script>
 }

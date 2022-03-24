@@ -5414,8 +5414,7 @@ namespace CedulasEvaluacion.Controllers
             return File(toArray, "application/ms-word", "ActaER_Mensajeria_" + cedula.Mes + ".docx");
         }
 
-
-        private int UserId()
+       private int UserId()
         {
             return Convert.ToInt32(User.Claims.ElementAt(0).Value);
         }

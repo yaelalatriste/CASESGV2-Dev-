@@ -421,50 +421,50 @@
                     </div>
                 </div>
                 <div class="row col-lg-12 justify-content-end mb-3">
-                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
                     {
-                    @if (cedula == true && @Model.Estatus.Equals("Autorizada"))
-                    {
-                    <button href="" class="btn btn-primary float-right mr-3 revisar_cae" data-memo="@memo"><i class="fas fa-check mr-2"></i>Enviar a Revisión CAE</button>
+                        @if (cedula == true && @Model.Estatus.Equals("Autorizada"))
+                        {
+                            <button href="" class="btn btn-primary float-right mr-3 revisar_cae" data-memo="@memo"><i class="fas fa-check mr-2"></i>Enviar a Revisión CAE</button>
+                        }
+                        else if (memo == true && @Model.Estatus.Equals("Autorizado CAE"))
+                        {
+                            <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
+                        }
+                        else if (@Model.Estatus.Equals("Trámite Rechazado"))
+                        {
+                            @if ((estatus == true && memo == false) || (omemo == true && estatus == true))
+                            {
+                                <button href="" class="btn btn-primary float-right mr-3 revisar_cae" data-memo="@memo"><i class="fas fa-check mr-2"></i>Enviar a Revisión CAE</button>
+                            }
+                            else if (omemo == false && memo == true)
+                            {
+                                <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
+                            }
+                        }
                     }
-                    else if (memo == true && @Model.Estatus.Equals("Autorizado CAE"))
+                    else if (@User.Claims.ElementAt(2).Value.Equals("CAE") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
                     {
-                    <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
+                        @if (rechazat == true && @Model.Estatus.Equals("Revisión CAE"))
+                        {
+                            <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-check mr-2"></i>Rechazar Trámite</button>
+                        }
+                        else if (rechazat == false && estatus == false && @Model.Estatus.Equals("Revisión CAE"))
+                        {
+                            <!--Enviar a Revision por la CAE-->
+                            <button href="" class="btn btn-success float-right mr-3 autorizar_cae"><i class="fas fa-check mr-2"></i>Autorizar Documentación</button>
+                        }
                     }
-                    else if (@Model.Estatus.Equals("Trámite Rechazado"))
+                    else if (@User.Claims.ElementAt(2).Value.Equals("Financieros") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
                     {
-                    @if ((estatus == true && memo == false) || (omemo == true && estatus == true))
-                    {
-                    <button href="" class="btn btn-primary float-right mr-3 revisar_cae" data-memo="@memo"><i class="fas fa-check mr-2"></i>Enviar a Revisión CAE</button>
-                    }
-                    else if (omemo == false && memo == true)
-                    {
-                    <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
-                    }
-                    }
-                    }
-                    else if (@User.Claims.ElementAt(2).Value.Equals("CAE"))
-                    {
-                    @if (rechazat == true && @Model.Estatus.Equals("Revisión CAE"))
-                    {
-                    <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-check mr-2"></i>Rechazar Trámite</button>
-                    }
-                    else if (rechazat == false && estatus == false && @Model.Estatus.Equals("Revisión CAE"))
-                    {
-                    <!--Enviar a Revision por la CAE-->
-                    <button href="" class="btn btn-success float-right mr-3 autorizar_cae"><i class="fas fa-check mr-2"></i>Autorizar Documentación</button>
-                    }
-                    }
-                    else if (@User.Claims.ElementAt(2).Value.Equals("Financieros"))
-                    {
-                    @if (rechazat == false && estatus == false && @Model.Estatus.Equals("En Trámite"))
-                    {
-                    <button href="" class="btn btn-success float-right mr-3 tramitar_pago"><i class="fas fa-check mr-2"></i>Tramitar Pago</button>
-                    }
-                    else if (rechazat == true && !@Model.Estatus.Equals("Trámite Rechazado"))
-                    {
-                    <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-times mr-2"></i>Rechazar Trámite</button>
-                    }
+                        @if (rechazat == false && estatus == false && @Model.Estatus.Equals("En Trámite"))
+                        {
+                            <button href="" class="btn btn-success float-right mr-3 tramitar_pago"><i class="fas fa-check mr-2"></i>Tramitar Pago</button>
+                        }
+                        else if (rechazat == true && !@Model.Estatus.Equals("Trámite Rechazado"))
+                        {
+                            <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-times mr-2"></i>Rechazar Trámite</button>
+                        }
                     }
                 </div>
             </div>

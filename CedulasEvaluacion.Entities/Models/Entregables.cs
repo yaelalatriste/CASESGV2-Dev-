@@ -11,6 +11,7 @@ namespace CedulasEvaluacion.Entities.Models
         public int CedulaLimpiezaId { get; set; }
         public int CedulaFumigacionId { get; set; }
         public int CedulaTransporteId { get; set; }
+        public int CedulaAnalisisId { get; set; }
         public int CedulaAguaId { get; set; }
         public int CedulaMensajeriaId { get; set; }
         public int CedulaTrasladoId { get; set; }

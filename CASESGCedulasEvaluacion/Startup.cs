@@ -36,6 +36,23 @@ namespace CASESGCedulasEvaluacion
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddScoped<IRepositorioLogin, RepositorioLogin>();
+            services.AddScoped<IRepositorioUsuarios, RepositorioUsuarios>();
+            services.AddScoped<IRepositorioPerfiles, RepositorioPerfiles>();
+            services.AddScoped<IRepositorioAreas, RepositorioAreas>();
+            services.AddScoped<IRepositorioCelular, RepositorioCelular>();
+            services.AddScoped<IRepositorioAgua, RepositorioAgua>();
+            services.AddScoped<IRepositorioAnalisis, RepositorioAnalisis>();
+            services.AddScoped<IRepositorioResiduos, RepositorioResiduos>();
+            services.AddScoped<IRepositorioFacturas, RepositorioFacturas>();
+            services.AddScoped<IRepositorioDocuments, RepositorioDocuments>();
+            services.AddScoped<IRepositorioMuebles, RepositorioMuebles>();
+            services.AddScoped<IRepositorioPerfilCelular, RepositorioPerfilCelular>();
+            services.AddScoped<IRepositorioFinancieros, RepositorioFinancieros>();
+            services.AddScoped<IRepositorioOperacionesPerfil, RepositorioOperacionesPerfil>();
+            services.AddScoped<IRepositorioModulos, RepositorioModulos>();
+            services.AddScoped<IRepositorioOperaciones, RepositorioOperaciones>();
+            services.AddScoped<IRepositorioCatalogoServicios, RepositorioCatalogoServicios>();
+
             services.AddScoped<IRepositorioInmuebles, RepositorioInmuebles>();
             services.AddScoped<IRepositorioLimpieza, RepositorioLimpieza>();
             services.AddScoped<IRepositorioFumigacion, RepositorioFumigacion>();
@@ -45,7 +62,9 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioIncidencias, RepositorioIncidencias>();
             services.AddScoped<IRepositorioTrasladoExp, RepositorioTrasladoExp>();
             services.AddScoped<IRepositorioTransporte, RepositorioTransporte>();
+
             services.AddScoped<IRepositorioIncidenciasMensajeria, RepositorioIncidenciasMensajeria>();
+            services.AddScoped<IRepositorioIncidenciasAnalisis, RepositorioIncidenciasAnalisis>();
             services.AddScoped<IRepositorioIncidenciasMuebles, RepositorioIncidenciasMuebles>();
             services.AddScoped<IRepositorioIncidenciasTraslado, RepositorioIncidenciasTraslado>();
             services.AddScoped<IRepositorioIncidenciasCelular, RepositorioIncidenciasCelular>();
@@ -55,10 +74,9 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioIncidenciasTransporte, RepositorioIncidenciasTransporte>();
             services.AddScoped<IRepositorioIncidenciasAgua, RepositorioIncidenciasAgua>();
             services.AddScoped<IRepositorioIncidenciasAnalisis, RepositorioIncidenciasAnalisis>();
-            services.AddScoped<IRepositorioUsuarios, RepositorioUsuarios>();
-            services.AddScoped<IRepositorioPerfiles, RepositorioPerfiles>();
-            services.AddScoped<IRepositorioAreas, RepositorioAreas>();
+            
             services.AddScoped<IRepositorioEntregables, RepositorioEntregablesLimpieza>();
+            services.AddScoped<IRepositorioEntregablesAnalisis, RepositorioEntregablesAnalisis>();
             services.AddScoped<IRepositorioEntregablesTrasladoExp, RepositorioEntregablesTrasladoExp>();
             services.AddScoped<IRepositorioEntregablesMensajeria, RepositorioEntregablesMensajeria>();
             services.AddScoped<IRepositorioEntregablesCelular, RepositorioEntregablesCelular>();
@@ -69,19 +87,7 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioEntregablesTransporte, RepositorioEntregablesTransporte>();
             services.AddScoped<IRepositorioEntregablesAnalisis, RepositorioEntregablesAnalisis>();
             services.AddScoped<IRepositorioEntregablesMuebles, RepositorioEntregablesMuebles>();
-            services.AddScoped<IRepositorioCelular, RepositorioCelular>();
-            services.AddScoped<IRepositorioAgua, RepositorioAgua>();
-            services.AddScoped<IRepositorioAnalisis, RepositorioAnalisis>();
-            services.AddScoped<IRepositorioResiduos, RepositorioResiduos>();
-            services.AddScoped<IRepositorioFacturas, RepositorioFacturas>();
-            services.AddScoped<IRepositorioDocuments, RepositorioDocuments>();
-            services.AddScoped<IRepositorioMuebles, RepositorioMuebles>();
-            services.AddScoped<IRepositorioPerfilCelular, RepositorioPerfilCelular>();
-            services.AddScoped<IRepositorioFinancieros, RepositorioFinancieros>();
-
-            services.AddScoped<IRepositorioModulos, RepositorioModulos>();
-            services.AddScoped<IRepositorioOperaciones, RepositorioOperaciones>();
-            services.AddScoped<IRepositorioOperacionesPerfil, RepositorioOperacionesPerfil>();
+            
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
                 options.LoginPath = "/login";

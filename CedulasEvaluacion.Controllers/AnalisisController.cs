@@ -146,23 +146,23 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                CedulaAnalisis cedTran = null;
-                cedTran = await vAnalisis.CedulaById(id);
-                cedTran.facturas = await vFacturas.getFacturas(id, cedTran.ServicioId);//
-                cedTran.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedTran.facturas);
-                cedTran.inmuebles = await vInmuebles.inmuebleById(cedTran.InmuebleId);
-                cedTran.usuarios = await vUsuarios.getUserById(cedTran.UsuarioId);
-                /*cedTran.iEntregables = await eAnalisis.getEntregables(cedTran.Id);
-                cedTran.incidencias = await iAnalisis.GetIncidencias(cedTran.Id);*/
-                cedTran.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedTran.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(cedTran.Id);
-                cedTran.historialCedulas = new List<HistorialCedulas>();
-                cedTran.historialCedulas = await vAnalisis.getHistorialAnalisis(cedTran.Id);
-                foreach (var user in cedTran.historialCedulas)
+                CedulaAnalisis cedAna = null;
+                cedAna = await vAnalisis.CedulaById(id);
+                cedAna.facturas = await vFacturas.getFacturas(id, cedAna.ServicioId);//
+                cedAna.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedAna.facturas);
+                cedAna.inmuebles = await vInmuebles.inmuebleById(cedAna.InmuebleId);
+                cedAna.usuarios = await vUsuarios.getUserById(cedAna.UsuarioId);
+                cedAna.iEntregables = await eAnalisis.getEntregables(cedAna.Id);
+                cedAna.incidencias = await iAnalisis.GetIncidencias(cedAna.Id);
+                cedAna.RespuestasEncuesta = new List<RespuestasEncuesta>();
+                cedAna.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(cedAna.Id);
+                cedAna.historialCedulas = new List<HistorialCedulas>();
+                cedAna.historialCedulas = await vAnalisis.getHistorialAnalisis(cedAna.Id);
+                foreach (var user in cedAna.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
-                return View(cedTran);
+                return View(cedAna);
             }
             return Redirect("/error/denied");
         }

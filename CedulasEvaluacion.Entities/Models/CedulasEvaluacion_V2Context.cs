@@ -1,4 +1,6 @@
 ﻿using System;
+using CedulasEvaluacion.Entities.MCatalogoServicios;
+using CedulasEvaluacion.Entities.MFinancieros;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

@@ -401,7 +401,7 @@
                     </div>
                 </div>
                 <div class="row col-lg-12 justify-content-end mb-3">
-                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
                     {
                         @if (cedula == true && memo == true && @Model.Estatus.Equals("Autorizada"))
                         {
@@ -412,7 +412,7 @@
                             <button href="" class="btn btn-info float-right mr-3 tramitar_cedula" data-memo="@memo" data-rechazado="@rechazat" data-omemo="@omemo"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
                         }
                     }
-                    else if (@User.Claims.ElementAt(2).Value.Equals("Financieros"))
+                    else if (@User.Claims.ElementAt(2).Value.Equals("Financieros") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
                     {
                         @if (rechazat == false && estatus == false && @Model.Estatus.Equals("En Trámite"))
                         {

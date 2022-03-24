@@ -44,7 +44,7 @@ namespace CedulasEvaluacion.Controllers
             if (success == 1)
             {
                 List<VCedulas> resultado = new List<VCedulas>();
-                resultado = await vConvencional.GetCedulasConvencional();
+                resultado = await vConvencional.GetCedulasConvencional(UserId());
                 return View(resultado);
             }
             return Redirect("/error/denied");

@@ -22,7 +22,7 @@ namespace CedulasEvaluacion.Repositories
             _connectionString = configuration.GetConnectionString("DatabaseConnection");
         }
 
-        public async Task<List<VCedulas>> GetCedulasConvencional()
+        public async Task<List<VCedulas>> GetCedulasConvencional(int user)
         {
             try
             {
@@ -31,6 +31,7 @@ namespace CedulasEvaluacion.Repositories
                     using (SqlCommand cmd = new SqlCommand("sp_getCedulasConvencional", sql))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@user", user));
                         var response = new List<VCedulas>();
                         await sql.OpenAsync();
 

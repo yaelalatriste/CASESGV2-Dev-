@@ -43,6 +43,15 @@ namespace CASESGCedulasEvaluacion.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("/home/download/casesg2")]
+        public IActionResult getPlantilla()
+        {
+            string fileName = @"e:\Plantillas CASESGV2\DocsV2\Guia\Guia rápida del sistema CASESG_2.0.pdf";
+            byte[] fileBytes = System.IO.File.ReadAllBytes(fileName);
+            return File(fileBytes, "application/pdf", "Guia_CASESGV2.pdf");
+        }
+
         [Authorize]
         [Route("/home/listado/{estatus?}")]
         public async Task<IActionResult> Concentrado(string estatus)

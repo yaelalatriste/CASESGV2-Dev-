@@ -1,4 +1,7 @@
-﻿using CedulasEvaluacion.Entities.Models;
+﻿using CASESGCedulasEvaluacion.Entities.Vistas;
+using CedulasEvaluacion.Entities.MCatalogoServicios;
+using CedulasEvaluacion.Entities.MFinancieros;
+using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -13,52 +16,86 @@ namespace CedulasEvaluacion.Controllers
     public class FinancierosController : Controller
     {
         private readonly IRepositorioFinancieros vFinancieros;
+        private readonly IRepositorioCatalogoServicios vCatalogo;
         private readonly IRepositorioPerfiles vPerfiles;
 
-        public FinancierosController(IRepositorioFinancieros ivFinancieros, IRepositorioPerfiles ivPerfiles)
+        public FinancierosController(IRepositorioFinancieros ivFinancieros, IRepositorioCatalogoServicios ivCatalogo, IRepositorioPerfiles ivPerfiles)
         {
             this.vFinancieros = ivFinancieros ?? throw new ArgumentNullException(nameof(ivFinancieros));
+            this.vCatalogo = ivCatalogo ?? throw new ArgumentNullException(nameof(ivCatalogo));
             this.vPerfiles = ivPerfiles ?? throw new ArgumentNullException(nameof(ivPerfiles));
         }
 
-        [Route("/financieros/index")]
         [HttpGet]
+        [Route("/financieros/index")]
         public async Task<IActionResult> Index()
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
-                List<Dashboard> resultado = new List<Dashboard>();
+                List<DashboardFinancieros> resultado = new List<DashboardFinancieros>();
                 resultado = await vFinancieros.GetCedulasFinancieros();
                 return View(resultado);
             }
             return Redirect("/error/denied");
         }
 
-        [Route("/financieros/detalle/{servicio}")]
         [HttpGet]
+        [Route("/financieros/detalle/{servicio}")]
         public async Task<IActionResult> DetalleServicio(string servicio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                List<Dashboard> resultado = new List<Dashboard>();
-                resultado = await vFinancieros.GetDetalleServicio(servicio);
-                return View(resultado);
+                ModelsFinancieros models = new ModelsFinancieros();
+                models.dashboard = new List<DashboardFinancieros>();
+                models.dashboard = await vFinancieros.GetDetalleServicio(servicio);
+                models.oficio = new List<Oficio>();
+                models.oficio = await vFinancieros.GetOficiosFinancieros(servicio);
+                return View(models);
             }
             return Redirect("/error/denied");
         }
 
-        [Route("/financieros/generaTabla/{servicio}")]
         [HttpGet]
-        public async Task<IActionResult> generaFilas(string servicio)
+        [Route("/financieros/oficio/{servicio}/{id}")]
+        public async Task<IActionResult> NuevoOficio(int id, string servicio)
         {
-            List<Dashboard> resultado = new List<Dashboard>();
-            resultado = await vFinancieros.GetDetalleServicio(servicio);
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
+            if (success == 1)
+            {
+                Oficio oficio = await vFinancieros.GetOficioById(id);
+                oficio.detalleCedulas = new List<DetalleCedula>();
+                oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id,servicio);
+                oficio.cedulasOficio= new List<DetalleCedula>();
+                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id);
+                return View(oficio);
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpPost]
+        [Route("/financieros/inserta/oficio")]
+        public async Task<IActionResult> InsertarOficio([FromBody]Oficio oficio)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
+            if (success == 1)
+            {
+                int insert = await vFinancieros.insertarNuevoOficio(oficio);
+                return Ok(insert);
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpGet]
+        [Route("/financieros/generaTabla/{servicio}/{flujo}")]
+        public async Task<IActionResult> generaFilas(string servicio,string flujo)
+        {
+            List<DashboardFinancieros> resultado = await vFinancieros.GetDetalleServicio(servicio); 
 
             var meses = obtieneMeses(resultado);
             var totales = obtieneTotales(resultado,meses);
-            var estatus = obtieneEstatus(resultado);
+            var estatus = obtieneEstatus(resultado,flujo);
             var columnas = new List<string>();
             var filas = new List<List<string>>();
             double total = 0;
@@ -71,22 +108,22 @@ namespace CedulasEvaluacion.Controllers
                     if (meses[i] == resultado[j].Mes)
                     {
                         total = (resultado[j].Total * 100.0)/totales[i];
-                        columnas[obtienePosicion(estatus, resultado[j].Estatus)] = 
-                            "<td>"+
-                                "<div class='row col-lg-12'>" +
-                                    "<div class='col-lg-8 mt-2'>" +
-                                        "<div class='progress progress-md'>" +
-                                            "<div class='progress-bar " + resultado[j].Fondo + "' style = 'width:" + ((resultado[j].Total * 100) / totales[i]) + "%'></div>" +
+                        if (obtienePosicion(estatus, resultado[j].Estatus) != -1)
+                        {
+                            columnas[obtienePosicion(estatus, resultado[j].Estatus)] =
+                                "<td>" +
+                                    "<div class='row col-lg-12'>" +
+                                        "<div class='col-lg-8 mt-2'>" +
+                                            "<div class='progress progress-md'>" +
+                                                "<div class='progress-bar " + resultado[j].Fondo + "' style = 'width:" + ((resultado[j].Total * 100) / totales[i]) + "%'></div>" +
+                                            "</div>" +
+                                        "</div>" +
+                                        "<div class='col-lg-3'>" +
+                                            "<span class='badge " + resultado[j].Fondo + "'>(" + resultado[j].Total + ") " + total.ToString("n2") + "%</span>" +
                                         "</div>" +
                                     "</div>" +
-                                    "<div class='col-lg-3'>" +
-                                        "<span class='badge " + resultado[j].Fondo + "'>(" + resultado[j].Total + ") " + total.ToString("n2") + "%</span>"+
-                                    "</div>" +
-                                "</div>" +
-                                /*"<div class='row col-lg-12 font-weight-bold'>" +
-                                    "Total de Cédulas: " + resultado[j].Total +
-                                "</div>" +*/
-                            "</td>";
+                                "</td>";
+                        }
                     }
                 }
                 filas.Add(columnas);
@@ -109,7 +146,7 @@ namespace CedulasEvaluacion.Controllers
             return p;
         }
 
-        public List<string> obtieneMeses(List<Dashboard> dashboards)
+        public List<string> obtieneMeses(List<DashboardFinancieros> dashboards)
         {
             var meses = new List<string>();
             foreach (var dt in dashboards)
@@ -122,7 +159,7 @@ namespace CedulasEvaluacion.Controllers
             return lmeses;
         }
 
-        public List<int> obtieneTotales(List<Dashboard> dashboards, List<string> meses)
+        public List<int> obtieneTotales(List<DashboardFinancieros> dashboards, List<string> meses)
         {
             var totales = new List<int>();
             for (var f = 0; f < meses.Count; f++)
@@ -152,12 +189,38 @@ namespace CedulasEvaluacion.Controllers
             return columnas;
         }
 
-        public List<string> obtieneEstatus(List<Dashboard> dashboards)
+        public List<string> obtieneEstatus(List<DashboardFinancieros> dashboards,string flujo)
         {
             var estatus = new List<string>();
-            foreach (var dt in dashboards)
+            if (flujo == "Operacion")
             {
-                estatus.Add(dt.Estatus);
+                foreach (var dt in dashboards)
+                {
+                    if (dt.Estatus.Equals("En Proceso") || dt.Estatus.Equals("Enviado a DAS") || dt.Estatus.Equals("Autorizada") || dt.Estatus.Equals("Rechazada"))
+                    {
+                        estatus.Add(dt.Estatus);
+                    }
+                }
+            }
+            else if (flujo == "CAE")
+            {
+                foreach (var dt in dashboards)
+                {
+                    if (dt.Estatus.Equals("Revisión CAE") || dt.Estatus.Equals("Autorizado CAE") || dt.Estatus.Equals("Trámite Rechazado"))
+                    {
+                        estatus.Add(dt.Estatus);
+                    }
+                }
+            }
+            else if (flujo == "Financieros")
+            {
+                foreach (var dt in dashboards)
+                {
+                    if (dt.Estatus.Equals("En Trámite") || dt.Estatus.Equals("Trámite Rechazado"))
+                    {
+                        estatus.Add(dt.Estatus);
+                    }
+                }
             }
             HashSet<string> quitaEstatus = new HashSet<string>(estatus);
             List<string> lestatus = quitaEstatus.ToList();

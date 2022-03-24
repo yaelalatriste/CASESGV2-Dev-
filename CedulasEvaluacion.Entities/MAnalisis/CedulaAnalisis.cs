@@ -24,8 +24,9 @@ namespace CedulasEvaluacion.Entities.MAnalisis
         public DateTime? FechaEliminacion { get; set; }
         public virtual Inmueble inmuebles { get; set; }
         public virtual Usuarios usuarios { get; set; }
-        public virtual List<Entregables> rEntregables { get; set; }
+        public virtual List<Entregables> iEntregables { get; set; }
         public virtual List<Facturas> facturas { get; set; }
+        public virtual List<IncidenciasAnalisis> incidencias{ get; set; }
         public List<RespuestasEncuesta> RespuestasEncuesta { get; set; }
         public List<HistorialCedulas> historialCedulas { get; set; }
         public List<HistorialEntregables> historialEntregables { get; set; }

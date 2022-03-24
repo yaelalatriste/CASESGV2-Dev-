@@ -10,7 +10,7 @@ namespace CedulasEvaluacion.Interfaces
 {
     public interface IRepositorioConvencional
     {
-        Task<List<VCedulas>> GetCedulasConvencional();
+        Task<List<VCedulas>> GetCedulasConvencional(int user);
         Task<int> insertaCedula(TelefoniaConvencional telefoniaConvencional);
         Task<int> VerificaCedula(int anio, string mes);
         Task<List<RespuestasEncuesta>> obtieneRespuestas(int id);

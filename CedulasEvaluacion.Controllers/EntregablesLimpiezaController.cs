@@ -145,12 +145,18 @@ namespace CedulasEvaluacion.Controllers
             string webRootPath = environment.ContentRootPath;
             string newPath = Path.Combine(webRootPath, folderName);
             string pathArchivo = Path.Combine(newPath, nombre);
+            if (nombre.Contains(".pdf")) {
+                if (System.IO.File.Exists(pathArchivo))
+                {
+                    Stream stream = System.IO.File.Open(pathArchivo, FileMode.Open);
 
-            if (System.IO.File.Exists(pathArchivo))
+                    return File(stream, "application/pdf");
+                }
+            }
+            else
             {
-                Stream stream = System.IO.File.Open(pathArchivo, FileMode.Open);
-
-                return File(stream, "application/pdf");
+                byte[] fileBytes = System.IO.File.ReadAllBytes(pathArchivo);
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, nombre);
             }
             return NotFound();
         }
