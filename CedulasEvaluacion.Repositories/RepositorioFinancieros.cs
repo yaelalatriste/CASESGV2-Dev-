@@ -242,25 +242,36 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
-        public async Task<int> insertarCedulasOficio(Oficio oficio)
+        public async Task<int> insertarCedulasOficio(List<CedulasOficio> cedulas)
         {
+            int id = 0;
             try
             {
-                using (SqlConnection sql = new SqlConnection(_connectionString))
+                foreach (var ced in cedulas)
                 {
-                    using (SqlCommand cmd = new SqlCommand("sp_nuevaCedulaAnalisis", sql))
+                    using (SqlConnection sql = new SqlConnection(_connectionString))
                     {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@id", oficio.Id)).Direction = ParameterDirection.Output;
-                        cmd.Parameters.Add(new SqlParameter("@anio", oficio.Anio));
-                        cmd.Parameters.Add(new SqlParameter("@numero", oficio.NumeroOficio));
+                        using (SqlCommand cmd = new SqlCommand("sp_insertaCedulaOficio", sql))
+                        {
+                            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@oficio", ced.OficioId));
+                            cmd.Parameters.Add(new SqlParameter("@cedula", ced.CedulaId));
+                            cmd.Parameters.Add(new SqlParameter("@servicio", ced.ServicioId));
 
-                        await sql.OpenAsync();
-                        await cmd.ExecuteNonQueryAsync();
-                        int id = Convert.ToInt32(cmd.Parameters["@id"].Value);
-                        return id;
+                            await sql.OpenAsync();
+                            int i = await cmd.ExecuteNonQueryAsync();
+                            if (i > 0)
+                            {
+                                id = 1;
+                            }
+                            else
+                            {
+                                id = -1;
+                            }
+                        }
                     }
                 }
+                return id;
             }
             catch (Exception ex)
             {
@@ -319,6 +330,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 Id = (int)reader["Id"],
                 Anio = (int) reader["Anio"],
+                ServicioId = (int) reader["ServicioId"],
                 NumeroOficio = (int) reader["NumeroOficio"],
                 Servicio = reader["Nombre"].ToString(),
                 Estatus = reader["Estatus"].ToString(),

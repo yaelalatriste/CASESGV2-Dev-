@@ -18,5 +18,6 @@ namespace CedulasEvaluacion.Interfaces
         Task<int> insertarNuevoOficio(Oficio oficio);//captura nuevo oficio
         Task<List<DetalleCedula>> GetCedulasTramitePago(int id, string servicio); // Obtiene el Total de Cédulas que están en Trámite de Pago
         Task<List<DetalleCedula>> GetCedulasOficio(int id); // Obtiene las cédulas que ya están dentro de un oficio
+        Task<int> insertarCedulasOficio(List<CedulasOficio> cedulas);
     }
 }

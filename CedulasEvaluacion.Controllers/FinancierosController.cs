@@ -87,6 +87,19 @@ namespace CedulasEvaluacion.Controllers
             return Redirect("/error/denied");
         }
 
+        [HttpPost]
+        [Route("/financieros/inserta/cedulasOficio")]
+        public async Task<IActionResult> InsertarCedulasOficio([FromBody] List<CedulasOficio> cedulas)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
+            if (success == 1)
+            {
+                int insert = await vFinancieros.insertarCedulasOficio(cedulas);
+                return Ok(insert);
+            }
+            return Redirect("/error/denied");
+        }
+
         [HttpGet]
         [Route("/financieros/generaTabla/{servicio}/{flujo}")]
         public async Task<IActionResult> generaFilas(string servicio,string flujo)

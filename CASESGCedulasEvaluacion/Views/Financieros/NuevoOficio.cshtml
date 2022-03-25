@@ -125,8 +125,8 @@
         </div>
         <div class="card-footer">
             <div class=" col-lg-12">
-                <button type="button" class="btn btn-primary float-right ml-3 btn_enviar">Trámitar Oficio</button>
-                <button type="button" class="btn btn-success float-right btn_guardar">Guardar Oficio</button>
+                <button type="button" class="btn btn-primary float-right ml-3 btnTramitar">Trámitar Oficio</button>
+                <button type="button" class="btn btn-success float-right btnGuardar">Guardar Oficio</button>
             </div>
         </div>
     </div>
@@ -135,7 +135,10 @@
 @section Scripts{
     <script>
         $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
+            var model = @Html.Raw(Json.Serialize(@Model));
+
+            console.log(model);
+                        
 
             $("#tblPendientes").DataTable({
                 paging: true,
@@ -153,6 +156,25 @@
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
                 },
+            });
+
+            $(".btnGuardar").click(function () {
+                var cedulas = new Array();
+                
+                $("[name='tramitar[]']:checked").each(function () {
+                    cedulas.push({ OficioId: model.id, CedulaId: $(this).val(), ServicioId: model.servicioId });
+                });
+
+                axios.post("/financieros/inserta/cedulasOficio", cedulas).then(response => {
+                   Swal.fire({
+                       'icon': "success",
+                       'title': 'Trámite de Oficio',
+                        'html': "Se tramitó el oficio para pago correctamente."
+                   }).then(function () {
+                       window.location.reload();
+                   });
+                });
+                
             });
         });
     </script>
