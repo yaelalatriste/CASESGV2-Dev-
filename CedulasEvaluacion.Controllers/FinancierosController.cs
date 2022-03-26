@@ -74,6 +74,92 @@ namespace CedulasEvaluacion.Controllers
             return Redirect("/error/denied");
         }
 
+        [HttpGet]
+        [Route("/financieros/revisar/{servicio}/{id}")]
+        public async Task<IActionResult> RevisarOficio(int id, string servicio)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
+            if (success == 1)
+            {
+                Oficio oficio = await vFinancieros.GetOficioById(id);
+                oficio.detalleCedulas = new List<DetalleCedula>();
+                oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id, servicio);
+                oficio.cedulasOficio = new List<DetalleCedula>();
+                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id);
+                return View(oficio);
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpGet]
+        [Route("/financieros/envia/oficio/{id}")]
+        public async Task<IActionResult> TramitarOficio(int id)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
+            if (success == 1)
+            {
+                int tramitado = await vFinancieros.GetTramiteOficio(id);
+                if (tramitado != -1)
+                {
+                    return Ok(tramitado);
+                }
+                return BadRequest();
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpGet]
+        [Route("/financieros/cancela/oficio/{id}")]
+        public async Task<IActionResult> CancelarOficio(int id)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
+            if (success == 1)
+            {
+                int cancelado = await vFinancieros.CancelarOficio(id);
+                if (cancelado != -1)
+                {
+                    return Ok(cancelado);
+                }
+                return BadRequest();
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpGet]
+        [Route("/financieros/pagar/oficio/{id}")]
+        public async Task<IActionResult> PagarOficio(int id)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
+            if (success == 1)
+            {
+                int cancelado = await vFinancieros.PagarOficio(id);
+                if (cancelado != -1)
+                {
+                    return Ok(cancelado);
+                }
+                return BadRequest();
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpGet]
+        [Route("/financieros/elimina/cedulasOficio/{oficio}/{servicio}/{cedula}")]
+        public async Task<IActionResult> EliminaCedulasOficio(int oficio,int servicio, int cedula)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
+            if (success == 1)
+            {
+                int elimina = await vFinancieros.EliminaCedulasOficio(oficio, servicio,cedula);
+                if (elimina != -1)
+                {
+                    return Ok(elimina);
+                }
+                return BadRequest();
+            }
+            return Redirect("/error/denied");
+        }
+
+
         [HttpPost]
         [Route("/financieros/inserta/oficio")]
         public async Task<IActionResult> InsertarOficio([FromBody]Oficio oficio)
@@ -229,7 +315,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 foreach (var dt in dashboards)
                 {
-                    if (dt.Estatus.Equals("En Trámite") || dt.Estatus.Equals("Trámite Rechazado"))
+                    if (dt.Estatus.Equals("En Trámite") || dt.Estatus.Equals("Trámite de Pago") || dt.Estatus.Equals("Enviada a DGPPT") || dt.Estatus.Equals("Pagado"))
                     {
                         estatus.Add(dt.Estatus);
                     }

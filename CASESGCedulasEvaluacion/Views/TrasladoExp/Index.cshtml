@@ -23,11 +23,15 @@
                     <tr>
 
                         <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                        @if (item.Estatus.Equals("Enviado a DAS"))
+                       @if (item.Estatus.Equals("Enviado a DAS"))
+                        {
+                            <td class="text-enviadoDAS" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Revisión CAE"))
                         {
                             <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                         }
-                        else if (item.Estatus.Equals("En Proceso"))
+                        else if (item.Estatus.Equals("En Trámite"))
                         {
                             <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                         }
@@ -35,9 +39,33 @@
                         {
                             <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                         }
+                        else if (item.Estatus.Equals("Trámite Rechazado"))
+                        {
+                            <td class="text-tramiteRechazado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
                         else if (item.Estatus.Equals("Autorizada"))
                         {
                             <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Autorizado CAE"))
+                        {
+                            <td class="text-autorizadoCAE" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Trámite de Pago"))
+                        {
+                            <td class="text-tramitePAgo" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Enviada a DGPPT"))
+                        {
+                            <td class="text-dgppt" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Pagada"))
+                        {
+                            <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else 
+                        {
+                            <td class="text-warning" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                         }
                         <td>@Html.DisplayFor(modelItem => item.Servicio)</td>
                         <td>@Html.DisplayFor(modelItem => item.Folio)</td>

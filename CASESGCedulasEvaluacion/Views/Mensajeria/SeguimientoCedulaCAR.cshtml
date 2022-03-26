@@ -5,6 +5,12 @@
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
+        @if (@Model.facturas.Count != 0)
+        {
+            <a href="/documents/actaMensajeria/@Model.Id" class='btn-sm btn-primary float-right mr-2 mb-3' data-toggle="tooltip" title="Generar Acta ER" data-placement="top">
+                <i class="fal fa-calendar-alt"></i>
+            </a>
+        }
         <a href="/mensajeria/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
@@ -57,15 +63,6 @@
                                         <p class="text-sm">Evaluación correspondiente al mes <b>@Model.Mes</b> del año <b>@Model.Anio</b></p>
                                         <ul class="ml-4 mb-0 fa-ul">
                                             <li class="small mt-3"><span class="fa-li"><i class="fas fa-lg fa-dollar-sign"></i></span> <b>Facturación Total: </b>: @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.TotalMontoFactura)</li>
-                                            @if (Model.RespuestasEncuesta[4].Respuesta == true)
-                                            {
-                                                <li class="small mt-3"><span class="fa-li"><i class="fad fa-user"></i></span> <b>Inasistencias: </b> @Model.RespuestasEncuesta[4].Detalles</li>
-                                            }
-                                            else
-                                            {
-                                                <li class="small mt-3"><span class="fa-li"><i class="fad fa-user"></i></span> <b>Sin Inasistencias </b></li>
-                                            }
-                                            </li>
                                             <li class="small mt-3"><span class="fa-li"><i class="fad fa-star"></i></span> <b>Calificación: </b> @Model.Calificacion</li>
                                             <li class="small mt-3"><span class="fa-li"><i class="fas fa-lg fa-user"></i></span> <b>Elaboró: </b> @Model.usuarios.nombre_emp @Model.usuarios.paterno_emp @Model.usuarios.materno_emp</li>
                                             <li class="small mt-3">
@@ -86,50 +83,92 @@
                                         </ul>
                                     </div>
                                     <div class="col-5">
-                                        @if (@Model.Estatus.Equals("Enviado a DAS") || @Model.Estatus.Equals("Revisión CAE"))
+                                        @if (@Model.Estatus.Equals("Enviado a DAS"))
+                                        {
+                                            <h5 class="text-enviadoDAS lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Revisión CAE"))
                                         {
                                             <h5 class="text-primary lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
-                                            <div class="col-lg-4" style="margin-top: -18px;">
-                                                <div class="small-box">
-                                                    <div class="icon">
-                                                        <i class="fa-regular fa-ballot-check text-primary text-primary"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         }
-                                        else if (@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite de Pago") || @Model.Estatus.Equals("Autorizado CAE"))
+                                        else if (@Model.Estatus.Equals("En Trámite"))
                                         {
-                                            <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
-                                            <div class="col-lg-4" style="margin-top: -18px;">
-                                                <div class="small-box bg-success">
-                                                    <div class="icon">
-                                                        <i class="fa-solid fa-circle-check text-success"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <h5 class="text-info lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else if (@Model.Estatus.Equals("Rechazada") || @Model.Estatus.Equals("Trámite Rechazado"))
+                                        else if (@Model.Estatus.Equals("Rechazada"))
                                         {
-                                            <h5 class="text-danger lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
-                                            <div class="col-lg-4" style="margin-top: -18px;">
-                                                <div class="small-box">
-                                                    <div class="icon">
-                                                        <i class="fa-solid fa-circle-xmark text-danger"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <h5 class="text-danger lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else
+                                        else if (@Model.Estatus.Equals("Trámite Rechazado"))
                                         {
-                                            <h5 class="text-info lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
-                                            <div class="col-lg-4" style="margin-top: -18px;">
-                                                <div class="small-box bg-info">
-                                                    <div class="icon">
-                                                        <i class="fa-solid fa-list-check text-info"></i>
-                                                    </div>
+                                            <h5 class="text-tramiteRechazado lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Autorizada"))
+                                        {
+                                            <h5 class="text-autorizado lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Autorizado CAE"))
+                                        {
+                                            <h5 class="text-autorizadoCAE lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Trámite de Pago"))
+                                        {
+                                            <h5 class="text-tramitePago lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Enviada a DGPPT"))
+                                        {
+                                            <h5 class="text-dgppt lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Pagada"))
+                                        {
+                                            <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        <div class="col-lg-4" style="margin-top: -18px;">
+                                            <div class="small-box">
+                                                <div class="icon">
+                                                    @if (@Model.Estatus.Equals("Enviado a DAS"))
+                                                    {
+                                                        <i class="fa-regular fa-ballot-check text-enviadoDAS"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Revisión CAE"))
+                                                    {
+                                                        <i class="fa-regular fa-ballot-check text-primary"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("En Trámite"))
+                                                    {
+                                                        <i class="fas fa-tasks text-info"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Rechazada"))
+                                                    {
+                                                        <i class="fas fa-times text-danger"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Trámite Rechazado"))
+                                                    {
+                                                        <i class="fal fa-window-close text-tramiteRechazado"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Autorizada"))
+                                                    {
+                                                        <i class="fas fa-check text-autorizado"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Autorizado CAE"))
+                                                    {
+                                                        <i class="fas fa-check text-autorizadoCAE"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Trámite de Pago"))
+                                                    {
+                                                        <i class="fal fa-money-check-edit-alt text-tramitePago"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Enviada a DGPPT"))
+                                                    {
+                                                        <i class="fa-light fa-cash-register text-dgppt"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Pagada"))
+                                                    {
+                                                        <i class="fa-light fa-sack-dollar text-success"></i>
+                                                    }
                                                 </div>
                                             </div>
-                                        }
+                                        </div>
                                     </div>
                                 </div>
                             </div>

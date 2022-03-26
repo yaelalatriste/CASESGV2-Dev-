@@ -24,61 +24,76 @@
             <div class="row ">
                 <div class="col-lg-12">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#pregunta_1" role="tab" aria-controls="profile" aria-selected="false">Cédulas en Trámite de Pago</a>
-                        </li>
+                        @if (@Model.Estatus.Equals("En Proceso")) {
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#pregunta_1" role="tab" aria-controls="profile" aria-selected="false">Cédulas en Trámite de Pago</a>
+                            </li>
+                         }
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#pregunta_2" role="tab" aria-controls="profile" aria-selected="false">Cédulas para Enviar a DGPPT</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        @* Pregunta 1 *@
-                        <div class="tab-pane fade mt-2 ml-3 show active" id="pregunta_1" role="tabpanel" aria-labelledby="profile-tab">
-                            <p class="text-black h5">Cédulas pendientes de enviar a "DGPPT"</p>
-                            <div class="col-lg-12 mt-3">
-                                <table class="table" width="100%" id="tblPendientes">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>#</th>
-                                            <th>Servicio</th>
-                                            <th>Folio</th>
-                                            <th>Subtotal</th>
-                                            <th>IVA</th>
-                                            <th>Total</th>
-                                            <th>Estatus</th>
-                                            <th>¿ Enviar a DGPPT ?</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tblTrmaite">
-                                        @foreach(var ced in @Model.detalleCedulas)
-                                        {
-                                            i++;
+                        @if (@Model.Estatus.Equals("En Proceso"))
+                        {
+                            @* Pregunta 1 *@
+                            <div class="tab-pane fade mt-2 ml-3 show active" id="pregunta_1" role="tabpanel" aria-labelledby="profile-tab">
+                                <p class="text-black h5">Cédulas pendientes de enviar a "DGPPT"</p>
+                                <div class="col-lg-12 mt-3">
+                                    <table class="table" width="100%" id="tblPendientes">
+                                        <thead>
                                             <tr class="text-center">
-                                                <td>@i</td>
-                                                <td>@ced.Servicio</td>
-                                                <td>@ced.Folio</td>
-                                                <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.Subtotal)</td>
-                                                <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.IVA)</td>
-                                                <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.Total)</td>
-                                                <td>@ced.Estatus</td>
-                                                <td>
-                                                    <div class="form-check-inline i-checks mt-3">
-                                                        <input class="enviarDGPPT" type="checkbox" data-size="small" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
-                                                               data-onstyle="success" data-offstyle="danger" data-style="ios" value="@ced.Id" name="tramitar[]" checked>
-                                                    </div>
-                                                </td>
+                                                <th>#</th>
+                                                <th>Servicio</th>
+                                                <th>Folio</th>
+                                                <th>Subtotal</th>
+                                                <th>IVA</th>
+                                                <th>Total</th>
+                                                <th>Estatus</th>
+                                                <th>¿ Enviar a DGPPT ?</th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody id="tblTrmaite">
+                                            @foreach (var ced in @Model.detalleCedulas)
+                                            {
+                                                i++;
+                                                <tr class="text-center">
+                                                    <td>@i</td>
+                                                    <td>@ced.Servicio</td>
+                                                    <td>@ced.Folio</td>
+                                                    <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.Subtotal)</td>
+                                                    <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.IVA)</td>
+                                                    <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.Total)</td>
+                                                    <td>@ced.Estatus</td>
+                                                    <td>
+                                                        @if (@Model.cedulasOficio.Count == 0)
+                                                        {
+                                                            <div class="form-check-inline i-checks mt-3 enviarDGPPT2" data-id="@ced.Id">
+                                                                <input class="enviarDGPPT" id="chk_@ced.Id" type="checkbox" data-size="small" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
+                                                                       data-onstyle="success" data-offstyle="danger" data-style="ios" value="@ced.Id" name="tramitar[]" checked>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="form-check-inline i-checks mt-3 enviarDGPPT2" data-id="@ced.Id">
+                                                                <input class="enviarDGPPT" id="chk_@ced.Id" type="checkbox" data-size="small" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
+                                                                       data-onstyle="success" data-offstyle="danger" data-style="ios" value="@ced.Id" name="tramitar[]">
+                                                            </div>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        @* Fin de la Pregunta 1 *@
+                            @* Fin de la Pregunta 1 *@
+                        }
                         @* Pregunta 2 *@
                         <div class="tab-pane fade mt-2 ml-3" id="pregunta_2" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="text-black h5">Cédulas asignadas en el oficio para pago</p>
                             <div class="col-lg-12 mt-3">
-                                @{ i=0;}
+                                @{ i = 0;}
                                 <table class="table" width="100%" id="tblOficio">
                                     <thead>
                                         <tr class="text-center">
@@ -89,13 +104,14 @@
                                             <th>IVA</th>
                                             <th>Total</th>
                                             <th>Estatus</th>
-                                            @if (@Model.Estatus.Equals("En Proceso")) {
+                                            @if (@Model.Estatus.Equals("En Proceso"))
+                                            {
                                                 <th>Acciones</th>
                                             }
                                         </tr>
                                     </thead>
                                     <tbody id="tblTrmaite">
-                                        @foreach(var ced in @Model.cedulasOficio)
+                                        @foreach (var ced in @Model.cedulasOficio)
                                         {
                                             i++;
                                             <tr class="text-center">
@@ -106,10 +122,10 @@
                                                 <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.IVA)</td>
                                                 <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.Total)</td>
                                                 <td>@ced.Estatus</td>
-                                                @if (@Model.Estatus.Equals("En Proceso")) 
+                                                @if (@Model.Estatus.Equals("En Proceso"))
                                                 {
                                                     <td>
-                                                        <button class="btn btn-sm btn-danger" data-toggle="tooltip" title="Eliminar Cédula del Oficio"><i class="fas fa-times"></i></button>
+                                                        <button class="btn btn-sm btn-danger eliminaCedula" data-toggle="tooltip" title="Eliminar Cédula del Oficio"><i class="fas fa-times"></i></button>
                                                     </td>
                                                 }
                                             </tr>
@@ -138,7 +154,6 @@
             var model = @Html.Raw(Json.Serialize(@Model));
 
             console.log(model);
-                        
 
             $("#tblPendientes").DataTable({
                 paging: true,
@@ -160,7 +175,7 @@
 
             $(".btnGuardar").click(function () {
                 var cedulas = new Array();
-                
+
                 $("[name='tramitar[]']:checked").each(function () {
                     cedulas.push({ OficioId: model.id, CedulaId: $(this).val(), ServicioId: model.servicioId });
                 });
@@ -169,12 +184,60 @@
                    Swal.fire({
                        'icon': "success",
                        'title': 'Trámite de Oficio',
-                        'html': "Se tramitó el oficio para pago correctamente."
+                        'html': "Se guardó el oficio para pago correctamente."
                    }).then(function () {
                        window.location.reload();
                    });
                 });
-                
+            });
+
+            $(".eliminaCedula").click(function () {
+                var cedula = $(this).data('cedula');
+                axios.get('/financieros/elimina/cedulasOficio/'+model.id+'/'+1+'/'+cedula).then(response => {
+                    Swal.fire({
+                        'icon': "success",
+                        'title': 'Trámite de Oficio',
+                        'html': "Se envió el oficio a DGPPT correctamente."
+                    }).then(function () {
+                        window.location.href = "/financieros/detalle/" + model.servicio;
+                    });
+                });
+            });
+
+            function guardarEnviar() {
+                var cedulas = new Array();
+
+                $("[name='tramitar[]']:checked").each(function () {
+                    cedulas.push({ OficioId: model.id, CedulaId: $(this).val(), ServicioId: model.servicioId });
+                });
+
+                axios.post("/financieros/inserta/cedulasOficio", cedulas);
+            }
+
+            $(".btnTramitar").click(function () {
+                guardarEnviar();
+                Swal.fire({
+                    'icon': 'warning',
+                    'title': 'Trámite de Oficio',
+                    'html': '¿Está seguro que desea <b>tramitar el oficio con el número: ' + model.numeroOficio + '/' + model.anio + '?',
+                    'confirmButtonColor': '#3085d6',
+                    'cancelButtonColor': '#d33',
+                    'confirmButtonText': 'Si, tramitar',
+                    'cancelButtonText': 'Cancelar',
+                    'showCancelButton': true
+                }).then(confirm => {
+                    if (confirm.isConfirmed) {
+                        axios.get("/financieros/envia/oficio/" + model.id).then(response => {
+                            Swal.fire({
+                                'icon': "success",
+                                'title': 'Trámite de Oficio',
+                                'html': "Se envió el oficio a DGPPT correctamente."
+                            }).then(function () {
+                                window.location.href = "/financieros/detalle/" + model.servicio;
+                            });
+                        });
+                    }
+                });
             });
         });
     </script>

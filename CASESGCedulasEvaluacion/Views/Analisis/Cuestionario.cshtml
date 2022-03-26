@@ -71,7 +71,7 @@
                         @* Fin de la Pregunta 1 *@
                         @* Pregunta 2 *@
                         <div class="tab-pane fade mt-2 ml-3" id="pregunta_2" role="tabpanel" aria-labelledby="profile-tab">
-                            <p class="text-black h5">2. ¿El servicio se llevó a cabo en la fecha programadas?</p>
+                            <p class="text-black h5">2. ¿El servicio se llevó a cabo en la fecha programada?</p>
                             <div class="icheck-success d-inline">
                                 <input type="radio" name="pregunta2" value="true" id="radioSuccess1" class="pregunta2">
                                 <label for="radioSuccess1">Si</label>
@@ -96,7 +96,7 @@
                         @* Fin de la Pregunta 2 *@
                         @* Pregunta 3 *@
                         <div class="tab-pane fade mt-2 ml-3" id="pregunta_3" role="tabpanel" aria-labelledby="contact-tab">
-                            <p class="text-black h5">3. ¿El prestador de servicios se presentoó con la maquinaria, instrumentos y equipo necesario para la realización del servicio?</p>
+                            <p class="text-black h5">3. ¿El prestador de servicios se presentó con la maquinaria, instrumentos y equipo necesario para la realización del servicio?</p>
                             <div class="icheck-success d-inline">
                                 <input type="radio" name="pregunta3" value="true" id="radioSuccess3" class="pregunta3" data-pregunta="3">
                                 <label for="radioSuccess3">Si</label>
@@ -1602,7 +1602,7 @@
                 /********************************** FIN Funciones Asincronas*********************************/
 
                 /*Enviar la Cedula*/
-                    $('.btn_enviar').click(function () {
+            $('.btn_enviar').click(function () {
                         var isContinue = true;
                         let i = 0;
                         var respuesta = null;
@@ -1629,7 +1629,7 @@
                                     if (isContinue == false) {
                                         break;
                                     }
-                                } else if (i == 4 && $(".dPregunta" + (i + 1)).val() == "") {
+                                } else if (i == 4 && $(".dPregunta" + (i + 1)).val() == "" && respuesta == "false") {
                                     isContinue = false;
                                     break;
                                 } else if (i == 5 && ($("#fechaRecoleccion").val() == "" || $("#fechaEntrega").val() == "")) {
@@ -1644,7 +1644,7 @@
                                 break;
                             }
                         }
-
+                
                         if (i == 0 && $(".pregunta" + (i + 1)).val() == '' && isContinue == false) {
                             Swal.fire({
                                 'icon': 'error',

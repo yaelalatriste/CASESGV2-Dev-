@@ -1,6 +1,6 @@
 ﻿@model CedulasEvaluacion.Entities.MFinancieros.ModelsFinancieros;
 @{
-    ViewData["Title"] = "Detalle de Cédulas y Oficios en el Servicio de \""+Model.dashboard.ElementAt(0).Servicio+ "\"";
+    ViewData["Title"] = "Detalle de Cédulas y Oficios en el Servicio de \"" + Model.dashboard.ElementAt(0).Servicio + "\"";
     var estatus = new List<string>();
     var meses = new List<string>();
     var anio = 2023;
@@ -14,15 +14,18 @@
     HashSet<string> quitaEstatus = new HashSet<string>(estatus);
     List<string> lestatus = quitaEstatus.ToList();
 
-    HashSet<string> quitaMeses= new HashSet<string>(meses);
+    HashSet<string> quitaMeses = new HashSet<string>(meses);
     List<string> lmeses = quitaMeses.ToList();
 
     var j = 0;
 }
 
 <div class="container-fluid">
-    <div class="row col-lg-12">
-        <a href="#" class="btn btn-primary" id="newOficio">Nuevo Oficio</a>
+    <div class="row">
+        <div class="col-lg-12">
+            <a href="/financieros/index" type='button' class="btn btn-sm btn-warning ml-2 float-right" data-toggle="tooltip" title="Regresar al Listado de Servicios" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+            <a href="#" class="btn btn-sm btn-primary float-right" id="newOficio" data-toggle="tooltip" title='Generar un nuevo "Oficio"'><i class="fas fa-plus"></i></a>
+        </div>
     </div>
     <div class="row mt-4 mb-4">
         <div class="col-lg-12">
@@ -48,7 +51,31 @@
                             <td>@of.Anio/@of.NumeroOficio</td>
                             <td>@of.Estatus</td>
                             <td>
-                                <a href="/financieros/oficio/@Model.dashboard.ElementAt(0).Servicio/@of.Id"><i class="fas fa-pencil text-primary"></i></a>
+                                @if (@of.Estatus.Equals("En Proceso"))
+                                {
+                                    <a href="/financieros/oficio/@Model.dashboard.ElementAt(0).Servicio/@of.Id" data-toggle="tooltip" title='Editar el Oficio "@of.Anio/@of.NumeroOficio"'>
+                                        <i class="fas fa-pencil text-primary mr-2"></i>
+                                    </a>
+                                }
+                                @if (@of.Estatus.Equals("Cancelado") || @of.Estatus.Equals("Enviado a DGPPT") || @of.Estatus.Equals("Pagado"))
+                                {
+                                    <a href="/financieros/revisar/oficio/@of.Id" data-toggle="tooltip" title='Ver detalles del Oficio "@of.Anio/@of.NumeroOficio"'>
+                                        <i class="fas fa-eye text-primary mr-2"></i>
+                                    </a>
+                                }
+                                @if (@of.Estatus.Equals("Enviado a DGPPT"))
+                                {
+                                    <a class="cancelarOficio" href="#" data-id="@of.Id" data-toggle="tooltip" title='Cancelar el Oficio "@of.Anio/@of.NumeroOficio"'>
+                                        <i class="fa-solid fa-ban text-danger mr-2"></i>
+                                    </a>
+                                }
+
+                                @if (@of.Estatus.Equals("Enviado a DGPPT"))
+                                {
+                                    <a class="pagarOficio" href="#" data-id="@of.Id" data-toggle="tooltip" title='Pagar el Oficio "@of.Anio/@of.NumeroOficio"'>
+                                        <i class="fa-duotone fa-money-bill-1-wave text-success"></i>
+                                    </a>
+                                }
                             </td>
                         </tr>
                     }
@@ -60,7 +87,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header bg-gray text-white">
-                    <h4>Cédulas en Flujo de Operación</h4>
+                    <h4>Cédulas en Proceso de Operación</h4>
                 </div>
                 <div class="card-body">
                     <div class="row col-lg-12">
@@ -88,7 +115,7 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-header bg-gray text-white">
-                    <h4>Cédulas en Flujo de CAE</h4>
+                    <h4>Cédulas en Proceso de CAE</h4>
                 </div>
                 <div class="card-body">
                     <div class="row col-lg-12">
@@ -114,7 +141,7 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-header bg-gray text-white">
-                    <h4>Cédulas en Flujo de Financieros</h4>
+                    <h4>Cédulas en Proceso de Financieros</h4>
                 </div>
                 <div class="card-body">
                     <div class="row col-lg-12">
@@ -124,7 +151,7 @@
                                     <th></th>
                                     @foreach (var est in lestatus)
                                     {
-                                        if (est.Equals("Trámite de Pago") || est.Equals("Enviado a DGPPT") || est.Equals("Pagado"))
+                                        if (est.Equals("En Trámite") || est.Equals("Trámite de Pago") || est.Equals("Enviada a DGPPT") || est.Equals("Pagado"))
                                         {
                                             <th>@est</th>
                                         }
@@ -205,6 +232,8 @@
             var dashboard = @Html.Raw(Json.Serialize(@Model.dashboard));
             var oficios = @Html.Raw(Json.Serialize(@Model.oficio));
             var tbody = "";
+            var tbodyC = "";
+            var tbodyF = "";
 
             $("#tableOficios").DataTable({
                 paging: true,
@@ -214,6 +243,32 @@
                     url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
                 },
             });
+
+            /*Flujo de Oficio*/
+                $(".cancelarOficio").click(function () {
+                    axios.get("/financieros/cancela/oficio/"+$(this).data('id')).then(response => {
+                        if (response.status == 200) {
+                            Swal.fire({
+                                'icon': 'success',
+                                'title': 'Oficios para Trámite de Pago',
+                                'html': 'Se canceló el oficio correctamente.'
+                            });
+                        }
+                    });
+                });
+
+                $(".pagarOficio").click(function () {
+                    axios.get("/financieros/pagar/oficio/" + $(this).data('id')).then(response => {
+                        if (response.status == 200) {
+                            Swal.fire({
+                                'icon': 'success',
+                                'title': 'Oficios para Trámite de Pago',
+                                'html': 'Se pagó el oficio correctamente.'
+                            });
+                        }
+                    });
+                });
+            /*Fin Flujo de Oficio*/
 
             /*Errores de Captura de Oficio*/
             $('#error_servicio').css('display', 'none');
@@ -238,30 +293,28 @@
             /*Llenado de la Tabla de Porcentajes*/
                 axios.get('/financieros/generaTabla/' + dashboard[0].servicio + '/' + 'CAE').then(table => {
                     table = table.data;
-                    tbody = "";
                     for (let i = 0; i < meses.length; i++) {
-                        tbody += "<tr><td class='font-weight-bold'>" + meses[i] + "</td>";
+                        tbodyC += "<tr><td class='font-weight-bold'>" + meses[i] + "</td>";
                         for (let c = 0; c < table[i].length; c++) {
-                            tbody += table[i][c];
+                            tbodyC += table[i][c];
                         }
-                        tbody += "</tr>";
+                        tbodyC += "</tr>";
                     }
-                    $("#tbl_cae").html(tbody);
+                    $("#tbl_cae").html(tbodyC);
                 });
             /*Llenado de la Tabla de Porcentajes*/
 
             /*Llenado de la Tabla de Porcentajes*/
                 axios.get('/financieros/generaTabla/' + dashboard[0].servicio + '/' + 'Financieros').then(table => {
                     table = table.data;
-                    tbody = "";
                     for (let i = 0; i < meses.length; i++) {
-                        tbody += "<tr><td class='font-weight-bold'>" + meses[i] + "</td>";
+                        tbodyF += "<tr><td class='font-weight-bold'>" + meses[i] + "</td>";
                         for (let c = 0; c < table[i].length; c++) {
-                        tbody += table[i][c];
+                        tbodyF += table[i][c];
                         }
-                        tbody += "</tr>";
+                        tbodyF += "</tr>";
                     }
-                    $("#tbl_financieros").html(tbody);
+                    $("#tbl_financieros").html(tbodyF);
                 });
             /*Llenado de la Tabla de Porcentajes*/
 
@@ -337,8 +390,10 @@
                         if (response.status == 200) {
                             Swal.fire({
                                 'icon': 'success',
-                                'title': 'Oficio para Trámite de Pago',
+                                'title': 'Oficios para Trámite de Pago',
                                 'html': 'Se generó el oficio correctamente.'
+                            }).then(function () {
+                                window.location.href = '/financieros/oficio/' + dashboard[0].servicio+'/'+response.data;
                             });
                         }
                     });

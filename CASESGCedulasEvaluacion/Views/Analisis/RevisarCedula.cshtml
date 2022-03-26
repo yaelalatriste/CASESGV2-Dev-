@@ -16,25 +16,28 @@
                 <a class="nav-link active" id="home-tab" data-toggle="tab" href="#informacion_general" role="tab" aria-controls="home" aria-selected="true">Información General</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#horario" role="tab" aria-controls="contact" aria-selected="false">Horiario Programado</a>
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#horario" role="tab" aria-controls="contact" aria-selected="false">Fecha Programada</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#uniforme" role="tab" aria-controls="contact" aria-selected="false">Uniforme</a>
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#uniforme" role="tab" aria-controls="contact" aria-selected="false">Maquinaria, Instrumentos y Equipo</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#condicionesTecnicas" role="tab" aria-controls="contact" aria-selected="false">Condiciones Técnicas</a>
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#condicionesTecnicas" role="tab" aria-controls="contact" aria-selected="false">Uniforme e Identificación</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#manifiesto" role="tab" aria-controls="contact" aria-selected="false">Manifiesto de Entrega</a>
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#manifiesto" role="tab" aria-controls="contact" aria-selected="false">Muestras Recolectadas</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#equipo" role="tab" aria-controls="contact" aria-selected="false">Equipo de Protección</a>
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#equipo" role="tab" aria-controls="contact" aria-selected="false">Fecha de Entrega de Muestras</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#reporte" role="tab" aria-controls="contact" aria-selected="false">Reporte de Servicio</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#entregables_cedula" role="tab" aria-controls="contact" aria-selected="false">Entregables</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#historial_cedula" role="tab" aria-controls="contact" aria-selected="false">Historial de Cambios</a>
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#historial_cedula" role="tab" aria-controls="contact" aria-selected="false">Seguimiento a Cédula</a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -64,15 +67,6 @@
                                         <p class="text-sm">Evaluación correspondiente al mes <b>@Model.Mes</b> del año <b>@Model.Anio</b></p>
                                         <ul class="ml-4 mb-0 fa-ul">
                                             <li class="small mt-3"><span class="fa-li"><i class="fas fa-lg fa-dollar-sign"></i></span> <b>Facturación Total: </b>: @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.TotalMontoFactura)</li>
-                                            @if (Model.RespuestasEncuesta[4].Respuesta == true)
-                                            {
-                                                <li class="small mt-3"><span class="fa-li"><i class="fad fa-user"></i></span> <b>Inasistencias: </b> @Model.RespuestasEncuesta[4].Detalles</li>
-                                            }
-                                            else
-                                            {
-                                                <li class="small mt-3"><span class="fa-li"><i class="fad fa-user"></i></span> <b>Sin Inasistencias </b></li>
-                                            }
-                                            </li>
                                             <li class="small mt-3"><span class="fa-li"><i class="fad fa-star"></i></span> <b>Calificación: </b> @Model.Calificacion</li>
                                             <li class="small mt-3"><span class="fa-li"><i class="fas fa-lg fa-user"></i></span> <b>Elaboró: </b> @Model.usuarios.nombre_emp @Model.usuarios.paterno_emp @Model.usuarios.materno_emp</li>
                                             <li class="small mt-3">
@@ -93,25 +87,49 @@
                                         </ul>
                                     </div>
                                     <div class="col-5">
-                                        @if (@Model.Estatus.Equals("Revisión"))
+                                        @if (@Model.Estatus.Equals("Enviado a DAS"))
+                                        {
+                                            <h5 class="text-enviadoDAS lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Revisión CAE"))
                                         {
                                             <h5 class="text-primary lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else if (@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite de Pago"))
+                                        else if (@Model.Estatus.Equals("En Trámite"))
                                         {
-                                            <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <h5 class="text-info lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else if (@Model.Estatus.Equals("Rechazada") || @Model.Estatus.Equals("Trámite Rechazado"))
+                                        else if (@Model.Estatus.Equals("Rechazada"))
                                         {
-                                            <h5 class="text-danger lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <h5 class="text-danger lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else
+                                        else if (@Model.Estatus.Equals("Trámite Rechazado"))
                                         {
-                                            <h5 class="text-info lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <h5 class="text-tramiteRechazado lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Autorizada"))
+                                        {
+                                            <h5 class="text-autorizado lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Autorizado CAE"))
+                                        {
+                                            <h5 class="text-autorizadoCAE lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Trámite de Pago"))
+                                        {
+                                            <h5 class="text-tramitePago lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Enviada a DGPPT"))
+                                        {
+                                            <h5 class="text-dgppt lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Pagada"))
+                                        {
+                                            <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
                                         <p class="text-sm">
                                             @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                        @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
+                                                            @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
                                             }
                                             @if (total > 0)
                                             {
@@ -148,18 +166,18 @@
             </div>
             <div class="tab-pane fade" id="horario" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="col-lg-12 h3 mt-4">
-                    Horario Programado
+                    Fecha Programada
                 </div>
-                @if (@Model.RespuestasEncuesta[0].Respuesta == false)
+                @if (@Model.RespuestasEncuesta[1].Respuesta == false)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
                                 <p class="h3 text-justify text-danger">El prestador de servicios no cumplió on el horario acordado siendo acreedor a una penalización.</p>
-                                @{ string[] fechas = @Model.RespuestasEncuesta[0].Detalles.Split("|"); }
+                                @{ string[] fechas = @Model.RespuestasEncuesta[1].Detalles.Split("|"); }
                                 <br />
-                                <p class="h4">Horario Programado: @fechas[0]</p>
-                                <p class="h4">Horario Realizado: @fechas[1]</p>
+                                <p class="h4">Fecha Programada: @fechas[0]</p>
+                                <p class="h4">Fecha Realizada: @fechas[1]</p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -183,7 +201,7 @@
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">El prestador de servicios cumplió con el horario acordado evitando una penalización en el mes correspondiente.</p>
+                                <p class="h3 text-justify text-success">El prestador de servicios cumplió con la fecha programada, evitando una penalización en el mes correspondiente.</p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -197,7 +215,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-success ml-4">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>
@@ -205,14 +223,39 @@
             </div>
             <div class="tab-pane fade" id="uniforme" role="tabpanel" aria-labelledby="profile-tab">
                 <div class="col-lg-12 h3 mt-4">
-                    Uniforme y Gafete
+                    Maquinaria, Instrumentos y Equipo
                 </div>
-                @if (@Model.RespuestasEncuesta[1].Penalizable == true)
+                @if (@Model.RespuestasEncuesta[2].Penalizable == true)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-danger">El prestador de servicios no portó el uniforme y gafete correspondientes siendo acreedor a una penalización.</p>
+                                <p class="h3 text-justify text-danger">El prestador de servicios no cumplió con la maquinaria, instrumentos y equipo necesario, siendo acreedor a una penalización.</p>
+                            </div>
+                            <div class="row col-lg-7 ml-3 mt-2">
+                                <table class="table table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tipo</th>
+                                            <th>Fecha de la Incidencia</th>
+                                            <th>Comentarios</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ int j = 0;}
+                                        @foreach (var inc in @Model.incidencias)
+                                        {
+                                            { j++; }
+                                            <tr>
+                                                <td>@j</td>
+                                                <td>@inc.Tipo</td>
+                                                <td>@inc.FechaIncidencia.ToString("dd/MM/yyyy")</td>
+                                                <td>@inc.Comentarios</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -226,7 +269,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>
@@ -236,7 +279,7 @@
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">El prestador de servicios portó el uniforme y gafete correspondientes evitando una penalización en el mes correspondiente.</p>
+                                <p class="h3 text-justify text-success">El prestador de servicios cumplió con la maquinaria, instrumentos y equipo necesarios, evitando una penalización en el mes correspondiente.</p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -250,7 +293,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-success ml-4">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>
@@ -258,13 +301,13 @@
             </div>
             <div class="tab-pane fade" id="condicionesTecnicas" role="tabpanel" aria-labelledby="profile-tab">
                 <div class="col-lg-12 h3 mt-4">
-                    Condiciones Técnicas
+                    Uniforme e Identificación
                 </div>
-                @if (@Model.RespuestasEncuesta[2].Respuesta == false)
+                @if (@Model.RespuestasEncuesta[3].Respuesta == false)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
-                            <p class="h5 text-justify text-danger ml-3">El prestador de servicios no cumplió con la maquinaria, herramientas y material necesarios, siendo acreedor a una penalización.</p>
+                            <p class="h5 text-justify text-danger ml-3">El prestador de servicios no cumplió con el uniforme e identificación en todo momento, evitando la penalización correspondiente.</p>
 
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -315,7 +358,7 @@
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">El prestador de servicios cumplió con las condiciones técnicas evitando la penalización correspondiente.</p>
+                                <p class="h3 text-justify text-success">El prestador de servicios cumplió con el uniforme e identificación en todo momento, evitando la penalización correspondiente.</p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -337,13 +380,14 @@
             </div>
             <div class="tab-pane fade" id="manifiesto" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="col-lg-12 h3 mt-4">
-                    Manifiesto de Entrega
+                    Muestras Recolectadas
                 </div>
-                @if (@Model.RespuestasEncuesta[3].Respuesta == false)
+                @if (@Model.RespuestasEncuesta[4].Respuesta == false)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
-                            <p class="h5 text-justify text-danger ml-3">El prestador de servicios no entrego el manifiesto de entrega con los datos necesarios, siendo acreedor a una penalización.</p>
+                            <p class="h5 text-justify text-danger ml-3">El prestador de servicios no cumplió con el número de muestras registradad, siendo acreedor a una penalización.</p>
+                            <p class="h4">Muestras Recolectadas: @Model.RespuestasEncuesta[4].Detalles muestras</p>
                             <div class="col-lg-2" style="margin-top: -50px;">
                                 <div class="small-box bg-warning">
                                     <div class="icon">
@@ -359,7 +403,7 @@
                                 @*  *@
                             </h5>
                             <h5 class="text-danger ml-2">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[4].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>
@@ -369,7 +413,7 @@
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">El prestador de servicios entregó el manifiesto de entrega con los datos necesarios, evitando la penalización correspondiente.</p>
+                                <p class="h3 text-justify text-success">El prestador de servicios cumplió con el número de muestras registradad, siendo acreedor a una penalización.</p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -383,7 +427,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-success ml-4">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[4].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>
@@ -391,14 +435,20 @@
             </div>
             <div class="tab-pane fade" id="equipo" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="col-lg-12 h3 mt-4">
-                    Equipo de Protección
+                    Fecha de Entrega de Muestras
                 </div>
-                @if (@Model.RespuestasEncuesta[4].Respuesta == false)
+                @if (@Model.RespuestasEncuesta[5].Respuesta == false)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
-                            <p class="h5 text-justify text-danger ml-3">El prestador de servicios no utilizó el equipo de proteccion correctamente, siendo acreedor a una penalización.</p>
-                            <div class="col-lg-2" style="margin-top: -50px;">
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <p class="h3 text-justify text-danger">El prestador de servicios no cumplió la entrega de resultados en la fecha acordada siendo acreedor a una penalización.</p>
+                                @{ string[] fechas = @Model.RespuestasEncuesta[5].Detalles.Split("|"); }
+                                <br />
+                                <p class="h4">Fecha Recolección: @fechas[0]</p>
+                                <p class="h4">Fecha Entrega: @fechas[1]</p>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
                                     <div class="icon">
                                         <i class="fas fa-times-circle text-danger"></i>
@@ -410,10 +460,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                @*  *@
-                            </h5>
-                            <h5 class="text-danger ml-2">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>
@@ -423,7 +470,11 @@
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">El prestador de servicios utilizó el equipo de protección necesario, evitando la penalización correspondiente.</p>
+                                <p class="h3 text-justify text-success">El prestador de servicios cumplió la entrega de resultados en la fecha acordada siendo acreedor a una penalización.</p>
+                                @{ string[] fechas = @Model.RespuestasEncuesta[5].Detalles.Split("|"); }
+                                <br />
+                                <p class="h4">Fecha Recolección: @fechas[0]</p>
+                                <p class="h4">Fecha Entrega: @fechas[1]</p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -437,7 +488,62 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-success ml-4">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
+                            </h5>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="tab-pane fade" id="reporte" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="col-lg-12 h3 mt-4">
+                    Reporte de Servicio
+                </div>
+                @if (@Model.RespuestasEncuesta[6].Respuesta == false)
+                {
+                    <div class="row mt-4">
+                        <div class="row col-lg-12">
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <p class="h3 text-justify text-danger">El prestador de servicios no entregó el reporte de servicio correspondiente, siendo acreedor a una penalización.</p>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: -18px;">
+                                <div class="small-box bg-warning">
+                                    <div class="icon">
+                                        <i class="fas fa-times-circle text-danger"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5 class="text-danger ml-4">
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[6].MontoPenalizacion)
+                            </h5>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row mt-4">
+                        <div class="row col-lg-12">
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <p class="h3 text-justify text-success">
+                                    El prestador de servicios entrego el reporte de servicio correspondiente, evitando la penalización correspondiente.
+                                </p>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: -18px;">
+                                <div class="small-box bg-warning">
+                                    <div class="icon">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5 class="text-success ml-4">
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[6].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>

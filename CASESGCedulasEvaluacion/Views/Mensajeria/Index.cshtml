@@ -25,22 +25,50 @@
                     <tr>
                         @{i++;}
                     <td>@i</td>
-                    @if (item.Estatus.Equals("Enviado a DAS"))
-                    {
-                        <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                    }
-                    else if (item.Estatus.Equals("En Proceso") || item.Estatus.Equals("En Trámite"))
-                    {
-                        <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                    }
-                    else if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("Trámite Rechazado"))
-                    {
-                        <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                    }
-                    else if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite") || item.Estatus.Equals("Trámite de Pago"))
-                    {
-                    <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                    }
+                         @if (item.Estatus.Equals("Enviado a DAS"))
+                        {
+                            <td class="text-enviadoDAS" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Revisión CAE"))
+                        {
+                            <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("En Trámite"))
+                        {
+                            <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Rechazada"))
+                        {
+                            <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Trámite Rechazado"))
+                        {
+                            <td class="text-tramiteRechazado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Autorizada"))
+                        {
+                            <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Autorizado CAE"))
+                        {
+                            <td class="text-autorizadoCAE" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Trámite de Pago"))
+                        {
+                            <td class="text-tramitePago" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Enviada a DGPPT"))
+                        {
+                            <td class="text-dgppt" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else if (item.Estatus.Equals("Pagada"))
+                        {
+                            <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
+                        else 
+                        {
+                            <td class="text-warning" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                        }
                     <td>@Html.DisplayFor(modelItem => item.Servicio)</td>
                     <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                     <td>@Html.DisplayFor(modelItem => item.Folio)</td>

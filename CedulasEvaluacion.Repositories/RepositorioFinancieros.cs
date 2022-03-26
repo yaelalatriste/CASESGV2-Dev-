@@ -213,7 +213,6 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
         public async Task<int> insertarNuevoOficio(Oficio oficio)
         {
             try
@@ -241,7 +240,66 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
+        public async Task<int> CancelarOficio(int id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_cancelarOficioDGPPT", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@oficio", id));
 
+                        await sql.OpenAsync();
+                        int i = await cmd.ExecuteNonQueryAsync();
+                        if (i > 0)
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return -1;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return 0;
+            }
+        }
+        public async Task<int> PagarOficio(int id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_pagarOficio", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@oficio", id));
+
+                        await sql.OpenAsync();
+                        int i = await cmd.ExecuteNonQueryAsync();
+                        if (i > 0)
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return -1;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return 0;
+            }
+        }
         public async Task<int> insertarCedulasOficio(List<CedulasOficio> cedulas)
         {
             int id = 0;
@@ -279,7 +337,72 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
+        public async Task<int> EliminaCedulasOficio(int oficio,int servicio,int cedula)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_eliminarCedulaOficio", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@oficio", oficio));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        cmd.Parameters.Add(new SqlParameter("@cedula", cedula));
 
+                        await sql.OpenAsync();
+                        int i = await cmd.ExecuteNonQueryAsync();
+                        if (i > 0)
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return -1;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return 0;
+            }
+        }
+        public async Task<int> GetTramiteOficio(int id)
+       {
+            int success = -1;
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_tramitarOficioDGPPT", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@oficio", id));
+
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+                        int i = await cmd.ExecuteNonQueryAsync();
+                        if (i > 0)
+                        {
+                            success = 1;
+                        }
+                        else
+                        {
+                            success = -1;
+                        }
+
+                        return success;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return 0;
+            }
+        }
         //DashBoard de Financieros
         private DashboardFinancieros MapToValue(SqlDataReader reader)
         {

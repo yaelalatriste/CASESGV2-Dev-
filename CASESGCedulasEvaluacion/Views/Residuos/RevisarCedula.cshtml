@@ -64,15 +64,6 @@
                                         <p class="text-sm">Evaluación correspondiente al mes <b>@Model.Mes</b> del año <b>@Model.Anio</b></p>
                                         <ul class="ml-4 mb-0 fa-ul">
                                             <li class="small mt-3"><span class="fa-li"><i class="fas fa-lg fa-dollar-sign"></i></span> <b>Facturación Total: </b>: @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.TotalMontoFactura)</li>
-                                            @if (Model.RespuestasEncuesta[4].Respuesta == true)
-                                            {
-                                                <li class="small mt-3"><span class="fa-li"><i class="fad fa-user"></i></span> <b>Inasistencias: </b> @Model.RespuestasEncuesta[4].Detalles</li>
-                                            }
-                                            else
-                                            {
-                                                <li class="small mt-3"><span class="fa-li"><i class="fad fa-user"></i></span> <b>Sin Inasistencias </b></li>
-                                            }
-                                            </li>
                                             <li class="small mt-3"><span class="fa-li"><i class="fad fa-star"></i></span> <b>Calificación: </b> @Model.Calificacion</li>
                                             <li class="small mt-3"><span class="fa-li"><i class="fas fa-lg fa-user"></i></span> <b>Elaboró: </b> @Model.usuarios.nombre_emp @Model.usuarios.paterno_emp @Model.usuarios.materno_emp</li>
                                             <li class="small mt-3">
@@ -93,25 +84,49 @@
                                         </ul>
                                     </div>
                                     <div class="col-5">
-                                        @if (@Model.Estatus.Equals("Revisión"))
+                                        @if (@Model.Estatus.Equals("Enviado a DAS"))
+                                        {
+                                            <h5 class="text-enviadoDAS lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Revisión CAE"))
                                         {
                                             <h5 class="text-primary lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else if (@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite de Pago"))
+                                        else if (@Model.Estatus.Equals("En Trámite"))
                                         {
-                                            <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <h5 class="text-info lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else if (@Model.Estatus.Equals("Rechazada") || @Model.Estatus.Equals("Trámite Rechazado"))
+                                        else if (@Model.Estatus.Equals("Rechazada"))
                                         {
-                                            <h5 class="text-danger lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <h5 class="text-danger lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else
+                                        else if (@Model.Estatus.Equals("Trámite Rechazado"))
                                         {
-                                            <h5 class="text-info lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <h5 class="text-tramiteRechazado lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Autorizada"))
+                                        {
+                                            <h5 class="text-autorizado lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Autorizado CAE"))
+                                        {
+                                            <h5 class="text-autorizadoCAE lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Trámite de Pago"))
+                                        {
+                                            <h5 class="text-tramitePago lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Enviada a DGPPT"))
+                                        {
+                                            <h5 class="text-dgppt lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Pagada"))
+                                        {
+                                            <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
                                         <p class="text-sm">
                                             @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                      @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
+                                                        @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
                                             }
                                             @if (total > 0)
                                             {
@@ -519,7 +534,12 @@
                                         else if (entre.Tipo.Equals("Cedula_Firmada"))
                                         {
                                             <td>Cédula Firmada</td>
-                                        }else 
+                                        }
+                                        else if (entre.Tipo.Equals("Memorandum"))
+                                        {
+                                            <td>Memorándum</td>
+                                        }
+                                        else 
                                         {
                                             <td>@entre.Tipo</td>
                                         }
