@@ -361,6 +361,13 @@
                             </small>
                         </div>
                     </div>
+                    <div class="row col-lg-12" id="divArFirmada">
+                        <div class="form-check-inline i-checks mt-3">
+                            <strong class="text-black mr-3">Firmada por el PS(Prestador del Servicio)</strong>
+                            <input class="arFirmada" id="arFirmada" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
+                                   data-onstyle="success" data-offstyle="danger" data-style="ios" name="aFirmada">
+                        </div>
+                    </div>
                     <div class="form-row col-lg-12 mt-2" id="comentariosEntregable">
                         <div class="form-group mt-2 col-md-12">
                             <label for="fechaCierre">Comentarios:</label><br>
@@ -430,6 +437,8 @@
             /*Ocultamos los Divs que contienen los botones para incidencias y para adjuntar archivos*/
                 $('#detalles').css('display', 'none');
                 $('#divdetalles').css('display', 'none');
+                $('#divArFirmada').css('display', 'none');
+
             /*FIN Ocultamos los Divs que contienen los botones para incidencias y para adjuntar archivos*/
 
             /*Errores en Adjuntar Archivos*/
@@ -1013,7 +1022,8 @@
 
             /************************************** CARGA/EDICION ARCHIVOS **************************************/
                 /*Modal para Adjuntar Archivos*/
-                    $('.btn_addFile').click(function () {
+                 $('.btn_addFile').click(function () {
+                        $("#divArFirmada").css('display', 'none');
                         $('#modal_evidencias').modal('show');
                     });
                 /*FIN del modal para adjuntar archivos*/
@@ -1074,11 +1084,12 @@
                     $('#adjuntarArchivo').click(function () {
                         var formData = new FormData();
                         var folio = model.folio;
+                        var firmado = $("#arFirmada").prop('checked');
                         var file = document.getElementById('customFile').files[0];
                         var id = $('#file_id').val();
                         var tipo = $('#tipo_entregable').val();
                         var comentarios = $('#comentarios_entregable').val();
-
+                        
                         if (id.length > 0) {
                             id = parseInt(id);
                         } else {
@@ -1087,6 +1098,7 @@
 
                         formData.append("Id", id);
                         formData.append("CedulaMensajeriaId", model.id);
+                        formData.append("Firmado", firmado);
                         formData.append("Archivo", file);
                         formData.append("Folio", folio);
                         formData.append("Tipo", tipo);
@@ -1266,6 +1278,19 @@
 
                 /*Validaciones Entregables*/
                     $('#tipo_entregable').change(function () {
+                        if ($(this).val() == "ActaER") {
+                            Swal.fire({
+                                'icon': 'info',
+                                'title': 'Servicio de Mensajería Acelerada',
+                                'html': '<p style="text-align: justify;"><b>NOTA: </b> Si el acta entrega - recepción que esta por adjuntar a la evaluación del servicio' +
+                                    ' se encuentra firmada por el prestador del servicio, favor de indicarlo marcando la opción <b>"Firmada por el PS"</b>, en caso contrario favor de dejar' +
+                                    ' la <b>opción desmarcada</b></p>.'
+                            });
+                            $("#divArFirmada").css('display', 'block');
+                        } else {
+                            $("#divArFirmada").css('display', 'none');
+                        }
+
                         if ($('#tipo_entregable').val() == "") {
                             $('#tipo_entregable').addClass('is-invalid');
                             $('#error_tipoEntre').css('display', 'block');

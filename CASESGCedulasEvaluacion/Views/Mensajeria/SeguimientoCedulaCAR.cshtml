@@ -198,6 +198,10 @@
                             {
                                 <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
                             }
+                            else if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("En Trámite")) && @User.Claims.ElementAt(2).Value.Contains("Mensajería"))
+                            {
+                                <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
+                            }
                         </div>
                         <h6 class="mt-4"><strong>Entregables Adjuntos</strong></h6>
                         <table class="table" id="tableEntregables">
@@ -217,7 +221,14 @@
                                     <tr>
                                         @if (entre.Tipo.Equals("ActaER"))
                                         {
-                                            tipo = "Acta Entrega - Recepción";
+                                            @if (@entre.Firmado == false)
+                                            {
+                                                tipo = "Acta Entrega - Recepción";
+                                            }
+                                            else
+                                            {
+                                                tipo = "Acta Entrega - Recepción(Firmada)";
+                                            }
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
                                         else if (entre.Tipo.Equals("Factura"))
@@ -695,6 +706,7 @@
     <script>
         $(function () {
             var model = @Html.Raw(Json.Serialize(@Model));
+            var usuario = @Html.Raw(Json.Serialize(@User.Claims.ElementAt(2).Value));
             $('[data-toggle="tooltip"]').tooltip();
 
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -1103,6 +1115,11 @@
                                 if (response[i].tipo == "Cedula_Firmada") {
                                     cedFirmada = true;
                                 }
+                                if (response[i].tipo == "ActaER" && response[i].firmado == false) {
+                                    if (usuario == "Administrador" || usuario == "Mensajería") {
+                                        options += '<option value="ActaER">Acta Entrega-Recepción (Firmada)</option>';
+                                    }
+                                }
                             }
 
                             if (memo == false && (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado")) {
@@ -1177,6 +1194,7 @@
                         var id = $('#file_id').val();
                         var tipo = $('#tipo_entregable').val();
                         var comentarios = $('#comentarios_entregable').val();
+                        var firmado = false;
 
                         if (id.length > 0) {
                             id = parseInt(id);
@@ -1184,8 +1202,13 @@
                             id = 0;
                         }
 
+                        if (tipo == "ActaER" && id == "") {
+                            firmado = true;
+                        }
+
                         formData.append("Id", id);
                         formData.append("CedulaMensajeriaId", model.id);
+                        formData.append("Firmado", firmado);
                         formData.append("Archivo", file);
                         formData.append("Folio", folio);
                         formData.append("Tipo", tipo);

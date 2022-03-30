@@ -55,7 +55,13 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (entregable.Tipo.Equals("ActaER"))
                     {
-                        tipo = "Acta Entrega - Recepción";
+                        if (entregable.Firmado == false) {
+                            tipo = "Acta Entrega - Recepción";
+                        }
+                        else
+                        {
+                            tipo = "Acta Entrega - Recepción (Firmada)";
+                        }
                     }
                     else if (entregable.Tipo.Equals("SAT"))
                     {

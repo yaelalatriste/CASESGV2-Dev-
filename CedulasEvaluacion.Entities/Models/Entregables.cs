@@ -27,6 +27,7 @@ namespace CedulasEvaluacion.Entities.Models
         public int Tamanio { get; set; }
         public int DiasAtraso { get; set; }
         public string Comentarios{ get; set; }
+        public bool Firmado { get; set; }
         public DateTime FechaCompromiso { get; set; }
         public DateTime FechaPresentacion { get; set; }
         public DateTime FechaCreacion { get; set; }

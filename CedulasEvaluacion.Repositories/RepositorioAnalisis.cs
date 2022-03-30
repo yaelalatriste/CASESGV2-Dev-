@@ -252,7 +252,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@id", cedulaAnalisis.Id));
                         cmd.Parameters.Add(new SqlParameter("@estatus", cedulaAnalisis.Estatus));
-                        cmd.Parameters.Add(new SqlParameter("@servicio", 10));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", 8));
 
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
@@ -277,7 +277,7 @@ namespace CedulasEvaluacion.Repositories
                     using (SqlCommand cmd = new SqlCommand("sp_insertaHistorialCedulas", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@servicio", "Analisis de Personal"));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", "Analisis Microbiologicos"));
                         cmd.Parameters.Add(new SqlParameter("@cedula", historialCedulas.CedulaId));
                         cmd.Parameters.Add(new SqlParameter("@usuario", historialCedulas.UsuarioId));
                         cmd.Parameters.Add(new SqlParameter("@estatus", historialCedulas.Estatus));
@@ -306,7 +306,7 @@ namespace CedulasEvaluacion.Repositories
                     using (SqlCommand cmd = new SqlCommand("sp_getHistorialCedulaEvaluacion", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@servicio", "Analisis de Personal"));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", "Analisis Microbiologicos"));
                         cmd.Parameters.Add(new SqlParameter("@cedula", id));
                         var response = new List<HistorialCedulas>();
                         await sql.OpenAsync();

@@ -25,6 +25,7 @@ using CedulasEvaluacion.Entities.MResiduos;
 using CedulasEvaluacion.Entities.MTransporte;
 using CedulasEvaluacion.Entities.MMuebles;
 using CedulasEvaluacion.Entities.TrasladoExp;
+using CedulasEvaluacion.Entities.MAnalisis;
 
 namespace CedulasEvaluacion.Controllers
 {
@@ -50,6 +51,9 @@ namespace CedulasEvaluacion.Controllers
 
         private readonly IRepositorioFumigacion vFumigacion;
         private readonly IRepositorioIncidenciasFumigacion iFumigacion;
+
+        private readonly IRepositorioAnalisis vAnalisis;
+        private readonly IRepositorioIncidenciasAnalisis iAnalisis;
 
         private readonly IRepositorioMuebles vMuebles;
         private readonly IRepositorioIncidenciasMuebles iMuebles;
@@ -77,7 +81,8 @@ namespace CedulasEvaluacion.Controllers
                                    IRepositorioEntregables iVEntregables, IHostingEnvironment environment, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioTrasladoExp ivTraslado,
                                     IRepositorioFacturas iFacturas, IRepositorioMensajeria iMensajeria, IRepositorioIncidenciasMensajeria iiMensajeria, IRepositorioEntregablesMensajeria ivMensajeria, IRepositorioCelular iCelular, 
                                     IRepositorioIncidenciasCelular ivCelular, IRepositorioConvencional iConvencional, IRepositorioIncidenciasConvencional ivConvencional, 
-                                    IRepositorioEntregablesConvencional ieConvencional, IRepositorioDocuments ivDocuments, IRepositorioIncidenciasMuebles iiMuebles, IRepositorioMuebles iVMuebles)
+                                    IRepositorioEntregablesConvencional ieConvencional, IRepositorioDocuments ivDocuments, IRepositorioIncidenciasMuebles iiMuebles, 
+                                    IRepositorioMuebles iVMuebles, IRepositorioAnalisis ivAnalisis, IRepositorioIncidenciasAnalisis iiAnalisis)
         {
             this.vDocuments = ivDocuments ?? throw new ArgumentNullException(nameof(ivDocuments));
 
@@ -104,6 +109,9 @@ namespace CedulasEvaluacion.Controllers
 
             this.vAgua= iVAgua?? throw new ArgumentNullException(nameof(iVAgua));
             this.iAgua = iIncidenciasAgua ?? throw new ArgumentNullException(nameof(iIncidenciasAgua));
+            
+            this.vAnalisis= ivAnalisis?? throw new ArgumentNullException(nameof(ivAnalisis));
+            this.iAnalisis = iiAnalisis ?? throw new ArgumentNullException(nameof(iiAnalisis));
 
             this.vFumigacion = iVFumigacion ?? throw new ArgumentNullException(nameof(iVFumigacion));
             this.iFumigacion = iIncidenciasFumigacion ?? throw new ArgumentNullException(nameof(iIncidenciasFumigacion));
@@ -777,7 +785,7 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("||Factura||", strFacturas, false, true);
 
                 document.Replace("||Total||", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", vFacturas.obtieneTotalFacturas(cedula.facturas)) + "", false, true);
-                if (!cedula.Estatus.Equals("Enviado a DAS") && !cedula.Estatus.Equals("Rechazada"))
+                if (!cedula.Estatus.Equals("Enviada a DAS") && !cedula.Estatus.Equals("Rechazada"))
                 {
                     document.Replace("||C||", cedula.Calificacion.ToString(), false, true);
                 }
@@ -1107,7 +1115,7 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("||Folio||", cedula.Folio, false, true);
 
                 document.Replace("||Mes||", cedula.Mes, false, true);
-                if (cedula.Estatus.Equals("Autorizada"))
+                if (!cedula.Estatus.Equals("Enviada a DAS") && !cedula.Estatus.Equals("Rechazada"))
                 {
                     document.Replace("||C||", cedula.Calificacion.ToString(), false, true);
                 }
@@ -1174,7 +1182,7 @@ namespace CedulasEvaluacion.Controllers
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
                 cedula.incidenciasResiduos = await iResiduos.getIncidencias(id);
-                cedula.incidenciasManifiesto= await iResiduos.getIncidenciasTipo(id,"Manifiesto");
+                cedula.incidenciasManifiesto= await iResiduos.getIncidenciasTipo(id, "ManifiestoEntrega");
                 cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedula.RespuestasEncuesta = await vResiduos.obtieneRespuestas(id);
                 cedula.facturas = new List<Facturas>();
@@ -1198,7 +1206,7 @@ namespace CedulasEvaluacion.Controllers
                     document.Replace("||Servicio||", "El servicio no se llevó a cabo en el día programado, la fecha programada era el "+
                         Convert.ToDateTime(fechaProgramada).ToString("dd") + " de " +
                         Convert.ToDateTime(fechaProgramada).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " +
-                        Convert.ToDateTime(fechaProgramada).ToString("yyyy") +" y él servicio se efectuó el " + Convert.ToDateTime(fechaRealizada).ToString("dd") + " de " +
+                        Convert.ToDateTime(fechaProgramada).ToString("yyyy") +" y\n el servicio se efectuó el " + Convert.ToDateTime(fechaRealizada).ToString("dd") + " de " +
                         Convert.ToDateTime(fechaRealizada).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " +
                         Convert.ToDateTime(fechaRealizada).ToString("yyyy") + ".", false, true);
                 }
@@ -1265,21 +1273,25 @@ namespace CedulasEvaluacion.Controllers
                     BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
                     marcaActividades.MoveToBookmark("Equipo", true, true);
                     marcaActividades.InsertTable(tablaActividades);
-                    document.Replace("||Equipo||", "El personal del servicio no portó el equipo de protección en todo momento, se presentarón las siguientes incidencias: ", false, true);
+                    document.Replace("||Equipo||", "El personal del servicio no portó el equipo de protección en todo momento, se presentaron las siguientes incidencias: ", false, true);
                 }
                 else
                 {
-                    document.Replace("||Equipo||", "El personal de servicio portó el equipo de protección en todo momento, se presentarón las siguientes incidencias: ", false, true);
+                    document.Replace("||Equipo||", "El personal de servicio portó el equipo de protección en todo momento, se presentaron las siguientes incidencias: ", false, true);
                 }
 
                 //obtenemos el documento con marcas
                 if (cedula.incidenciasManifiesto.Count > 0)
                 {
                     Table tablaHoras = tablas.AddTable(true);
+                    string coment = "";
+                    String[] cabeceraHoras = { "Tipo", "Datos Faltantes" };
 
-                    String[] cabeceraHoras = { "Tipo", "Comentarios" };
+                    int filas = cedula.incidenciasManifiesto.ElementAt(0).Comentarios.Split("|").Length-1;
 
-                    tablaHoras.ResetCells(cedula.incidenciasManifiesto.Count + 1, cabeceraHoras.Length);
+                    string[] comentarios = cedula.incidenciasManifiesto.ElementAt(0).Comentarios.Split("|");
+
+                    tablaHoras.ResetCells(filas+1, cabeceraHoras.Length);
 
                     TableRow recRow = tablaHoras.Rows[0];
                     recRow.IsHeader = true;
@@ -1304,7 +1316,7 @@ namespace CedulasEvaluacion.Controllers
                         TR.CharacterFormat.TextColor = Color.White;
                     }
 
-                    for (int r = 0; r < cedula.incidenciasManifiesto.Count; r++)
+                    for (int r = 0; r < filas; r++)
                     {
                         TableRow DataRow = tablaHoras.Rows[r + 1];
                         //Fila Height
@@ -1318,11 +1330,55 @@ namespace CedulasEvaluacion.Controllers
                             Paragraph p2 = DataRow.Cells[c].AddParagraph();
                             if (c == 0)
                             {
-                                TR2 = p2.AppendText(cedula.incidenciasManifiesto[r].Tipo);
+                                TR2 = p2.AppendText("Manifiesto Entrega");
                             }
                             if (c == 1)
                             {
-                                TR2 = p2.AppendText(cedula.incidenciasManifiesto[r].Comentarios);
+                                if (comentarios[r].Equals("DatosTitularMedico"))
+                                {
+                                    coment = "Nombre, Sello y Firma del titular del servicio médico";
+ }
+                                else if (comentarios[r].Equals("ConsultorioBrindaServicio"))
+                                {
+                                    coment = "Domicilio del Consultorio que brinda el servicio";
+                                }
+                                else if (comentarios[r].Equals("DescripcionResiduo"))
+                                {
+                                    coment = "Descripción e identificación del Tipo de Residuo";
+                                }
+                                else if (comentarios[r].Equals("DatosRecoleccion"))
+                                {
+                                    coment = "Nombre y firma del responsable de la recolección";
+                                }
+                                else if (comentarios[r].Equals("DetallesResiduo"))
+                                {
+                                    coment = "Cantidad y Unidad de medida del Residuo";
+                                }
+                                else if (comentarios[r].Equals("EnvaseUtilizado"))
+                                {
+                                    coment = "Envase o contenedor utilizado";
+                                }
+                                else if (comentarios[r].Equals("ManejoSeguro"))
+                                {
+                                    coment = "Instrucciones especiales e información para su manejo seguro";
+                                }
+                                else if (comentarios[r].Equals("CentroDestinatario"))
+                                {
+                                    coment = "Descripción General de la Transportación y del Centro de Acopio o Destinatario";
+                                }
+                                else if (comentarios[r].Equals("RegistroAmbiental"))
+                                {
+                                    coment = "Número de Registro Ambiental";
+                                }
+                                else if (comentarios[r].Equals("NumeroManifiesto"))
+                                {
+                                    coment = "Número de Manifiesto";
+                                }
+                                else if (comentarios[r].Equals("Clasificacion"))
+                                {
+                                    coment = "Clasificación";
+                                }
+                                TR2 = p2.AppendText(coment);
                             }
                             //Formato de celdas
                             p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
@@ -1334,20 +1390,11 @@ namespace CedulasEvaluacion.Controllers
                     BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
                     marcaActividades.MoveToBookmark("Manifiesto", true, true);
                     marcaActividades.InsertTable(tablaHoras);
-                    document.Replace("||Manifiesto||", "El personal no cumplió con todos los datos necesariós en el manifiesto de entrega, faltarón los siguientes datos: ", false, true);
+                    document.Replace("||Manifiesto||", "El personal no cumplió con todos los datos necesariós en el manifiesto de entrega, faltaron los siguientes datos: ", false, true);
                 }
                 else
                 {
                     document.Replace("||Manifiesto||", "El personal cumplió con todos los datos en el manifiesto de entrega.", false, true);
-                }
-
-                if (cedula.RespuestasEncuesta[4].Respuesta == true)
-                {
-                    document.Replace("||Productos||", "El prestador cumplió con la regulación vigente de los garrafones.", false, true);
-                }
-                else
-                {
-                    document.Replace("||Productos||", "El prestador no cumplió con la regulación vigente de los garrafones.", false, true);
                 }
 
                 if (cedula.RespuestasEncuesta[1].Respuesta == true)
@@ -1371,7 +1418,7 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("||Folio||", cedula.Folio, false, true);
 
                 document.Replace("||Mes||", cedula.Mes, false, true);
-                if (cedula.Estatus.Equals("Autorizada"))
+                if (!cedula.Estatus.Equals("Enviada a DAS") && !cedula.Estatus.Equals("Rechazada"))
                 {
                     document.Replace("||C||", cedula.Calificacion.ToString(), false, true);
                 }
@@ -1706,7 +1753,7 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("||Folio||", cedula.Folio, false, true);
 
                 document.Replace("||Mes||", cedula.Mes, false, true);
-                if (cedula.Estatus.Equals("Autorizada"))
+                if (!cedula.Estatus.Equals("Enviada a DAS") && !cedula.Estatus.Equals("Rechazada"))
                 {
                     document.Replace("||C||", cedula.Calificacion.ToString(), false, true);
                 }
@@ -1896,7 +1943,7 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("||Folio||", cedula.Folio, false, true);
 
                 document.Replace("||Mes||", cedula.Mes, false, true);
-                if (cedula.Estatus.Equals("Autorizada"))
+                if (!cedula.Estatus.Equals("Enviada a DAS") && !cedula.Estatus.Equals("Rechazada"))
                 {
                     document.Replace("||C||", cedula.Calificacion.ToString(), false, true);
                 }
@@ -1958,122 +2005,123 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> MensajeriaPorValidar(int id)
         {
             int success = await vRepositorioPerfiles.getPermiso(UserId(), moduloLimpieza(), "preliminar");
-            
-                string strFacturas = "";
-                decimal totalFacturas = 0;
 
-                CedulaMensajeria cedulaMensajeria = new CedulaMensajeria();
-                cedulaMensajeria = await vMensajeria.CedulaById(id);
-                cedulaMensajeria.inmuebles = await vInmuebles.inmuebleById(cedulaMensajeria.InmuebleId);
-                cedulaMensajeria.usuarios = await vUsuarios.getUserById(cedulaMensajeria.UsuarioId);
-                cedulaMensajeria.recoleccion = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id,"Recoleccion");
-                cedulaMensajeria.entrega = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id,"Entrega");
-                cedulaMensajeria.acuses = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id,"Acuses");
-                cedulaMensajeria.malEstado = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id,"Mal Estado");
-                cedulaMensajeria.extraviadas = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id,"Extraviadas");
-                cedulaMensajeria.iEntregables = await veMensajeria.getEntregables(id);
-                cedulaMensajeria.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedulaMensajeria.RespuestasEncuesta = await vMensajeria.obtieneRespuestas(id);
-                cedulaMensajeria.facturas = new List<Facturas>();
-                cedulaMensajeria.facturas = await vFacturas.getFacturas(id, 3);
+            string strFacturas = "";
+            decimal totalFacturas = 0;
 
-                Document document = new Document();
-                var path = @"E:\Plantillas CASESGV2\DocsV2\RepMensaValid.docx";
-                document.LoadFromFile(path);
+            CedulaMensajeria cedulaMensajeria = new CedulaMensajeria();
+            cedulaMensajeria = await vMensajeria.CedulaById(id);
+            cedulaMensajeria.inmuebles = await vInmuebles.inmuebleById(cedulaMensajeria.InmuebleId);
+            cedulaMensajeria.usuarios = await vUsuarios.getUserById(cedulaMensajeria.UsuarioId);
+            cedulaMensajeria.recoleccion = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id, "Recoleccion");
+            cedulaMensajeria.entrega = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id, "Entrega");
+            cedulaMensajeria.acuses = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id, "Acuses");
+            cedulaMensajeria.malEstado = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id, "Mal Estado");
+            cedulaMensajeria.extraviadas = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id, "Extraviadas");
+            cedulaMensajeria.robadas = await viMensajeria.getIncidenciasByTipoMensajeria(cedulaMensajeria.Id, "Robadas");
+            cedulaMensajeria.iEntregables = await veMensajeria.getEntregables(id);
+            cedulaMensajeria.RespuestasEncuesta = new List<RespuestasEncuesta>();
+            cedulaMensajeria.RespuestasEncuesta = await vMensajeria.obtieneRespuestas(id);
+            cedulaMensajeria.facturas = new List<Facturas>();
+            cedulaMensajeria.facturas = await vFacturas.getFacturas(id, 3);
 
-                //Creamos la Tabla
-                Section tablas = document.AddSection();
+            Document document = new Document();
+            var path = @"E:\Plantillas CASESGV2\DocsV2\RepMensaValid.docx";
+            document.LoadFromFile(path);
 
-               //obtenemos el documento con marcas
-                if (cedulaMensajeria.recoleccion.Count > 0)
+            //Creamos la Tabla
+            Section tablas = document.AddSection();
+
+            //obtenemos el documento con marcas
+            if (cedulaMensajeria.recoleccion.Count > 0)
+            {
+
+                Table tablaActividades = tablas.AddTable(true);
+
+                String[] cabeceraActividades = { "Tipo", "Guia", "Codigo Rastreo", "Fecha Programada", "Fecha Efectiva", "Tipo de Servicio" };
+
+                tablaActividades.ResetCells(cedulaMensajeria.recoleccion.Count + 1, cabeceraActividades.Length);
+
+                TableRow recRow = tablaActividades.Rows[0];
+                recRow.IsHeader = true;
+                recRow.Height = 10;
+
+                recRow.RowFormat.BackColor = Color.FromArgb(81, 25, 162);
+                recRow.RowFormat.Borders.BorderType = BorderStyle.Single;
+
+
+                for (int i = 0; i < cabeceraActividades.Length; i++)
                 {
+                    //Alineacion de celdas
+                    Paragraph p = recRow.Cells[i].AddParagraph();
+                    tablaActividades.Rows[i].Cells[i].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                    p.Format.HorizontalAlignment = HorizontalAlignment.Center;
 
-                    Table tablaActividades = tablas.AddTable(true);
+                    //Formato de datos
+                    TextRange TR = p.AppendText(cabeceraActividades[i]);
+                    TR.CharacterFormat.FontName = "Arial";
+                    TR.CharacterFormat.FontSize = 9;
+                    TR.CharacterFormat.Bold = true;
+                    TR.CharacterFormat.TextColor = Color.White;
+                }
 
-                    String[] cabeceraActividades = { "Tipo", "Guia", "Codigo Rastreo", "Fecha Programada", "Fecha Efectiva", "Tipo de Servicio"};
-
-                    tablaActividades.ResetCells(cedulaMensajeria.recoleccion.Count + 1, cabeceraActividades.Length);
-
-                    TableRow recRow = tablaActividades.Rows[0];
-                    recRow.IsHeader = true;
-                    recRow.Height = 10;
-
-                    recRow.RowFormat.BackColor = Color.FromArgb(81, 25, 162);
-                    recRow.RowFormat.Borders.BorderType = BorderStyle.Single;
-
-
-                    for (int i = 0; i < cabeceraActividades.Length; i++)
+                for (int r = 0; r < cedulaMensajeria.recoleccion.Count; r++)
+                {
+                    TableRow DataRow = tablaActividades.Rows[r + 1];
+                    //Fila Height
+                    DataRow.Height = 5;
+                    for (int c = 0; c < cabeceraActividades.Length; c++)
                     {
-                        //Alineacion de celdas
-                        Paragraph p = recRow.Cells[i].AddParagraph();
-                        tablaActividades.Rows[i].Cells[i].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
-                        p.Format.HorizontalAlignment = HorizontalAlignment.Center;
-
-                        //Formato de datos
-                        TextRange TR = p.AppendText(cabeceraActividades[i]);
-                        TR.CharacterFormat.FontName = "Arial";
-                        TR.CharacterFormat.FontSize = 9;
-                        TR.CharacterFormat.Bold = true;
-                        TR.CharacterFormat.TextColor = Color.White;
-                    }
-
-                    for (int r = 0; r < cedulaMensajeria.recoleccion.Count; r++)
-                    {
-                        TableRow DataRow = tablaActividades.Rows[r + 1];
-                        //Fila Height
-                        DataRow.Height = 5;
-                        for (int c = 0; c < cabeceraActividades.Length; c++)
+                        TextRange TR2 = null;
+                        //Alineacion de Celdas
+                        DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                        //Llenar datos en filas
+                        Paragraph p2 = DataRow.Cells[c].AddParagraph();
+                        if (c == 0)
                         {
-                            TextRange TR2 = null;
-                            //Alineacion de Celdas
-                            DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
-                            //Llenar datos en filas
-                            Paragraph p2 = DataRow.Cells[c].AddParagraph();
-                            if (c == 0)
-                            {
-                                TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].Tipo);
-                            }
-                            
-                            if (c == 1)
-                            {
-                                TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].NumeroGuia);
-                            }
-
-                            if (c == 2)
-                            {
-                                TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].CodigoRastreo+"");
-                            }
-
-                            if (c == 3)
-                            {
-                                TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].FechaProgramada.ToString("dd/MM/yyyy"));
-                            }
-
-                            if (c == 4)
-                            {
-                                TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].FechaEfectiva.ToString("dd/MM/yyyy"));
-                            }
-
-                            if (c == 5)
-                            {
-                                TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].TipoServicio);
-                            }
-                            
-                            //Formato de celdas
-                            p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
-                            TR2.CharacterFormat.FontName = "Arial";
-                            TR2.CharacterFormat.FontSize = 9;
+                            TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].Tipo);
                         }
+
+                        if (c == 1)
+                        {
+                            TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].NumeroGuia);
+                        }
+
+                        if (c == 2)
+                        {
+                            TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].CodigoRastreo + "");
+                        }
+
+                        if (c == 3)
+                        {
+                            TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].FechaProgramada.ToString("dd/MM/yyyy"));
+                        }
+
+                        if (c == 4)
+                        {
+                            TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].FechaEfectiva.ToString("dd/MM/yyyy"));
+                        }
+
+                        if (c == 5)
+                        {
+                            TR2 = p2.AppendText(cedulaMensajeria.recoleccion[r].TipoServicio);
+                        }
+
+                        //Formato de celdas
+                        p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                        TR2.CharacterFormat.FontName = "Arial";
+                        TR2.CharacterFormat.FontSize = 9;
                     }
-                    BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
-                    document.Replace("||Recoleccion||", "El prestador de servicios presentó varias incidencias, las cuales se describen a continuación: ", false, true);
-                    marcaActividades.MoveToBookmark("Recoleccion", true, true);
-                    marcaActividades.InsertTable(tablaActividades);
                 }
-                else
-                {
-                    document.Replace("||Recoleccion||", "El prestador de servicios cumplió con la recolección de guías en tiempo y forma, no presentando incidencias en el mes.", false, true);
-                }
+                BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
+                document.Replace("||Recoleccion||", "El prestador de servicios no recolectó las guías en tiempo y forma, las cuales se describen a continuación: ", false, true);
+                marcaActividades.MoveToBookmark("Recoleccion", true, true);
+                marcaActividades.InsertTable(tablaActividades);
+            }
+            else
+            {
+                document.Replace("||Recoleccion||", "El prestador de servicios cumplió con la recolección de guías en tiempo y forma, no presentó incidencias en el mes.", false, true);
+            }
 
             if (cedulaMensajeria.entrega.Count > 0)
             {
@@ -2156,13 +2204,13 @@ namespace CedulasEvaluacion.Controllers
                     }
                 }
                 BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
-                document.Replace("||Entrega||", "El prestador de servicios presentó varias incidencias, las cuales se describen a continuación: ", false, true);
+                document.Replace("||Entrega||", "El prestador de servicios no entregó las guías en tiempo y forma, las cuales se describen a continuación: ", false, true);
                 marcaActividades.MoveToBookmark("Entrega", true, true);
                 marcaActividades.InsertTable(tablaEntrega);
             }
             else
             {
-                document.Replace("||Entrega||", "El prestador de servicios cumplió con la entrega de guías en tiempo y forma, no presentando incidencias en el mes.", false, true);
+                document.Replace("||Entrega||", "El prestador de servicios entregó las guías en tiempo y forma, no presentó incidencias en el mes.", false, true);
             }
 
             if (cedulaMensajeria.acuses.Count > 0)
@@ -2236,13 +2284,13 @@ namespace CedulasEvaluacion.Controllers
                     }
                 }
                 BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
-                document.Replace("||Acuses||", "El prestador de servicios presentó varias incidencias, las cuales se describen a continuación: ", false, true);
+                document.Replace("||Acuses||", "El prestador de servicios no entregó los acuses de entrega en tiempo y forma, los cuales se describen a continuación: ", false, true);
                 marcaActividades.MoveToBookmark("Acuses", true, true);
                 marcaActividades.InsertTable(tablaEntrega);
             }
             else
             {
-                document.Replace("||Acuses||", "El prestador de servicios cumplió con la entrega de guías en tiempo y forma, no presentando incidencias en el mes.", false, true);
+                document.Replace("||Acuses||", "El prestador de servicios cumplió con la entrega de acuses en tiempo y forma, no presentó incidencias en el mes.", false, true);
             }
 
             if (cedulaMensajeria.malEstado.Count > 0)
@@ -2315,14 +2363,14 @@ namespace CedulasEvaluacion.Controllers
                         TR2.CharacterFormat.FontSize = 9;
                     }
                 }
-                document.Replace("||MalEstado||", "El prestador de servicios entregó guías en mal estado, presentando incidencias en el mes.", false, true);
+                document.Replace("||MalEstado||", "El prestador de servicios entregó guías en mal estado, las cuales se describen a continuación:", false, true);
                 BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
                 marcaActividades.MoveToBookmark("MalEstado", true, true);
                 marcaActividades.InsertTable(tablaEntrega);
             }
             else
             {
-                document.Replace("||MalEstado||", "El prestador de servicios no entregó guías en mal estado, no presentando incidencias en el mes.", false, true);
+                document.Replace("||MalEstado||", "El prestador de servicios entregó guías en buen estado, no presentó incidencias en el mes.", false, true);
             }
 
             if (cedulaMensajeria.extraviadas.Count > 0)
@@ -2395,23 +2443,103 @@ namespace CedulasEvaluacion.Controllers
                         TR2.CharacterFormat.FontSize = 9;
                     }
                 }
-                document.Replace("||Extravio||", "El prestador de servicios extravió paquetes, presentando incidencias en el mes.", false, true);
+                document.Replace("||Extravio||", "El prestador de servicios extravió guías, las cuales se describen a continuación:", false, true);
                 BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
                 marcaActividades.MoveToBookmark("Extravio", true, true);
                 marcaActividades.InsertTable(tablaEntrega);
             }
             else
             {
-                document.Replace("||Extravio||", "El prestador de servicios no extravió guías en mal estado, no presentando incidencias en el mes.", false, true);
+                document.Replace("||Extravio||", "El prestador de servicios no extravió guías, no presentó incidencias en el mes.", false, true);
             }
 
-            if(cedulaMensajeria.RespuestasEncuesta[5].Detalles.Equals(null))
+            if (cedulaMensajeria.RespuestasEncuesta[5].Detalles.Equals(null))
             {
-                document.Replace("||Material||", "El prestador de servicios no entrego material suficiente para embalaje, así que se hizo acreedor a una penalización", false, true);
+                document.Replace("||Material||", "El prestador de servicios no entrego material suficiente para embalaje, presentando una incidencia en el mes.", false, true);
             }
             else
             {
-                document.Replace("||Material||", "El prestador de servicios entrego material suficiente para embalaje, evitando una penalización", false, true);
+                document.Replace("||Material||", "El prestador de servicios entrego material suficiente para embalaje, no presentó incidencia en el mes.", false, true);
+            }
+
+            if (cedulaMensajeria.robadas.Count > 0)
+            {
+
+                Table tablaEntrega = tablas.AddTable(true);
+
+                String[] cabeceraActividades = { "Tipo", "Guia", "Codigo Rastreo", "Tipo de Servicio" };
+
+                tablaEntrega.ResetCells(cedulaMensajeria.robadas.Count + 1, cabeceraActividades.Length);
+
+                TableRow recRow = tablaEntrega.Rows[0];
+                recRow.IsHeader = true;
+                recRow.Height = 10;
+
+                recRow.RowFormat.BackColor = Color.FromArgb(81, 25, 162);
+                recRow.RowFormat.Borders.BorderType = BorderStyle.Single;
+
+
+                for (int i = 0; i < cabeceraActividades.Length; i++)
+                {
+                    //Alineacion de celdas
+                    Paragraph p = recRow.Cells[i].AddParagraph();
+                    tablaEntrega.Rows[0].Cells[i].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                    p.Format.HorizontalAlignment = HorizontalAlignment.Center;
+
+                    //Formato de datos
+                    TextRange TR = p.AppendText(cabeceraActividades[i]);
+                    TR.CharacterFormat.FontName = "Arial";
+                    TR.CharacterFormat.FontSize = 9;
+                    TR.CharacterFormat.Bold = true;
+                    TR.CharacterFormat.TextColor = Color.White;
+                }
+
+                for (int r = 0; r < cedulaMensajeria.robadas.Count; r++)
+                {
+                    TableRow DataRow = tablaEntrega.Rows[r + 1];
+                    //Fila Height
+                    DataRow.Height = 5;
+                    for (int c = 0; c < cabeceraActividades.Length; c++)
+                    {
+                        TextRange TR2 = null;
+                        //Alineacion de Celdas
+                        DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                        //Llenar datos en filas
+                        Paragraph p2 = DataRow.Cells[c].AddParagraph();
+                        if (c == 0)
+                        {
+                            TR2 = p2.AppendText(cedulaMensajeria.robadas[r].Tipo);
+                        }
+
+                        if (c == 1)
+                        {
+                            TR2 = p2.AppendText(cedulaMensajeria.robadas[r].NumeroGuia);
+                        }
+
+                        if (c == 2)
+                        {
+                            TR2 = p2.AppendText(cedulaMensajeria.robadas[r].CodigoRastreo + "");
+                        }
+
+                        if (c == 3)
+                        {
+                            TR2 = p2.AppendText(cedulaMensajeria.robadas[r].TipoServicio);
+                        }
+
+                        //Formato de celdas
+                        p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                        TR2.CharacterFormat.FontName = "Arial";
+                        TR2.CharacterFormat.FontSize = 9;
+                    }
+                }
+                document.Replace("||Robadas||", "El prestador de servicios reportó guías robadas, las cuales se describen a continuación:", false, true);
+                BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
+                marcaActividades.MoveToBookmark("Robadas", true, true);
+                marcaActividades.InsertTable(tablaEntrega);
+            }
+            else
+            {
+                document.Replace("||Robadas||", "El prestador de servicios no reportó guías robadas, no presentó incidencias en el mes.", false, true);
             }
 
             if (cedulaMensajeria.Estatus.Equals("Enviado a DAS") || cedulaMensajeria.Estatus.Equals("Rechazada"))
@@ -2436,44 +2564,44 @@ namespace CedulasEvaluacion.Controllers
 
             document.Replace("||Administracion||", cedulaMensajeria.inmuebles.Nombre, false, true);
 
-                document.Replace("||dia||", cedulaMensajeria.FechaCreacion.GetValueOrDefault().Day + "", false, true);
-                document.Replace("||MesE||", Convert.ToDateTime(cedulaMensajeria.FechaCreacion).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")), false, true);
-                document.Replace("||Anio||", Convert.ToDateTime(cedulaMensajeria.FechaCreacion.GetValueOrDefault()).Year + "", false, true);
+            document.Replace("||dia||", cedulaMensajeria.FechaCreacion.GetValueOrDefault().Day + "", false, true);
+            document.Replace("||MesE||", Convert.ToDateTime(cedulaMensajeria.FechaCreacion).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")), false, true);
+            document.Replace("||Anio||", Convert.ToDateTime(cedulaMensajeria.FechaCreacion.GetValueOrDefault()).Year + "", false, true);
 
 
-                for (int i = 0; i < cedulaMensajeria.facturas.Count; i++)
+            for (int i = 0; i < cedulaMensajeria.facturas.Count; i++)
+            {
+                if ((cedulaMensajeria.facturas.Count - 1) != i)
                 {
-                    if ((cedulaMensajeria.facturas.Count - 1) != i)
-                    {
-                        strFacturas += cedulaMensajeria.facturas[i].comprobante.Serie + cedulaMensajeria.facturas[i].comprobante.Folio + "/";
-                    }
-                    else
-                    {
-                        strFacturas += cedulaMensajeria.facturas[i].comprobante.Serie + cedulaMensajeria.facturas[i].comprobante.Folio;
-                    }
+                    strFacturas += cedulaMensajeria.facturas[i].comprobante.Serie + cedulaMensajeria.facturas[i].comprobante.Folio + "/";
                 }
-
-                document.Replace("||Factura||", strFacturas, false, true);
-
-                document.Replace("||Total||", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", vFacturas.obtieneTotalFacturas(cedulaMensajeria.facturas)) + "", false, true);
-
-                if (!cedulaMensajeria.Estatus.Equals("Aceptada"))
+                else
                 {
-                    BookmarksNavigator marcaNota = new BookmarksNavigator(document);
-                    marcaNota.MoveToBookmark("Nota", true, true);
-                    marcaNota.InsertText("NOTA: Esta cédula no cuenta con ningún valor ya que aún no se AUTORIZA o se RECHAZAZA por parte de la Dirección de Servicios.");
+                    strFacturas += cedulaMensajeria.facturas[i].comprobante.Serie + cedulaMensajeria.facturas[i].comprobante.Folio;
                 }
+            }
+
+            document.Replace("||Factura||", strFacturas, false, true);
+
+            document.Replace("||Total||", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", vFacturas.obtieneTotalFacturas(cedulaMensajeria.facturas)) + "", false, true);
+
+            if (cedulaMensajeria.Estatus.Equals("Rechazada") || cedulaMensajeria.Estatus.Equals("Enviado a DAS"))
+            {
+                BookmarksNavigator marcaNota = new BookmarksNavigator(document);
+                marcaNota.MoveToBookmark("Nota", true, true);
+                marcaNota.InsertText("NOTA: Esta cédula no cuenta con ningún valor ya que aún no se AUTORIZA o se RECHAZAZA por parte de la Dirección de Servicios.");
+            }
 
 
-                //Salvar y Lanzar
+            //Salvar y Lanzar
 
-                byte[] toArray = null;
-                using (MemoryStream ms1 = new MemoryStream())
-                {
-                    document.SaveToStream(ms1, Spire.Doc.FileFormat.PDF);
-                    toArray = ms1.ToArray();
-                }
-                return File(toArray, "application/pdf", "ReporteLimpieza_" + cedulaMensajeria.Mes + ".pdf");
+            byte[] toArray = null;
+            using (MemoryStream ms1 = new MemoryStream())
+            {
+                document.SaveToStream(ms1, Spire.Doc.FileFormat.PDF);
+                toArray = ms1.ToArray();
+            }
+            return File(toArray, "application/pdf", "ReporteMensajeria_" + cedulaMensajeria.Mes + ".pdf");
         }
         /*Datos del Modulo*/
 
@@ -4822,6 +4950,223 @@ namespace CedulasEvaluacion.Controllers
             return Redirect("/error/denied");
         }
 
+        [Route("/reporte/analisis/{id}")]
+        public async Task<IActionResult> CedulaAnalisis(int id)
+        {
+            int success = await vRepositorioPerfiles.getPermiso(UserId(), moduloAnalisis(), "cédula");
+            if (success == 1)
+            {
+                string strFacturas = "";
+                decimal totalFacturas = 0;
+
+                CedulaAnalisis cedula = new CedulaAnalisis();
+                cedula = await vAnalisis.CedulaById(id);
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
+                cedula.incidencias = await iAnalisis.GetIncidencias(id);
+                cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
+                cedula.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(id);
+                cedula.facturas = new List<Facturas>();
+                cedula.facturas = await vFacturas.getFacturas(id, 8);
+
+                Document document = new Document();
+                var path = @"E:\Plantillas CASESGV2\DocsV2\ReporteAnalisis.docx";
+                document.LoadFromFile(path);
+
+                //Creamos la Tabla
+                Section tablas = document.AddSection();
+
+                document.Replace("||Administracion||", cedula.inmuebles.Nombre, false, true);
+                //P1
+                document.Replace("||Cierre||", "El cierre de mes se realizó el día: "+Convert.ToDateTime(cedula.RespuestasEncuesta[0].Detalles).ToString("dd/MM/yyyy")+".", false, true);
+
+                //P2
+                if (cedula.RespuestasEncuesta[1].Respuesta == true)
+                {
+                    document.Replace("||FechaProgramada||", "El prestador llevó a cabo el servicio en la fecha programada.", false, true);
+                }
+                else
+                {
+                    document.Replace("||FechaProgramada||", "El prestador no llevó a cabo el servicio en la fecha programada, ya que el servicio se programo para el día: "+
+                        cedula.RespuestasEncuesta[1].Detalles.Split("|")[0]+" y se llevó a cabo el día: "+ cedula.RespuestasEncuesta[1].Detalles.Split("|")[1]+".", false, true);
+                }
+
+                //P3
+                if (cedula.incidencias.Count > 0)
+                {
+                    Table tablaActividades = tablas.AddTable(true);
+
+                    String[] cabeceraFechas = { "Fecha de la Incidencia", "Tipo", "Comentarios" };
+
+                    tablaActividades.ResetCells(cedula.incidencias.Count + 1, cabeceraFechas.Length);
+
+                    TableRow recRow = tablaActividades.Rows[0];
+                    recRow.IsHeader = true;
+                    recRow.Height = 10;
+
+                    recRow.RowFormat.BackColor = Color.FromArgb(81, 25, 162);
+                    recRow.RowFormat.Borders.BorderType = BorderStyle.Single;
+
+
+                    for (int i = 0; i < cabeceraFechas.Length; i++)
+                    {
+                        //Alineacion de celdas
+                        Paragraph p = recRow.Cells[i].AddParagraph();
+                        tablaActividades.Rows[0].Cells[i].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                        p.Format.HorizontalAlignment = HorizontalAlignment.Center;
+
+                        //Formato de datos
+                        TextRange TR = p.AppendText(cabeceraFechas[i]);
+                        TR.CharacterFormat.FontName = "Arial";
+                        TR.CharacterFormat.FontSize = 9;
+                        TR.CharacterFormat.Bold = true;
+                        TR.CharacterFormat.TextColor = Color.White;
+                    }
+
+                    for (int r = 0; r < cedula.incidencias.Count; r++)
+                    {
+                        TableRow DataRow = tablaActividades.Rows[r + 1];
+                        //Fila Height
+                        DataRow.Height = 5;
+                        for (int c = 0; c < cabeceraFechas.Length; c++)
+                        {
+                            TextRange TR2 = null;
+                            //Alineacion de Celdas
+                            DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                            //Llenar datos en filas
+                            Paragraph p2 = DataRow.Cells[c].AddParagraph();
+                            if (c == 0)
+                            {
+                                TR2 = p2.AppendText(cedula.incidencias[r].FechaIncidencia.ToString("dd/MM/yyyy"));
+                            }
+                            if (c == 1)
+                            {
+                                TR2 = p2.AppendText(cedula.incidencias[r].Tipo);
+                            }
+                            if (c == 2)
+                            {
+                                TR2 = p2.AppendText(cedula.incidencias[r].Comentarios);
+                            }
+                            //Formato de celdas
+                            p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                            TR2.CharacterFormat.FontName = "Arial";
+                            TR2.CharacterFormat.FontSize = 9;
+                        }
+                    }
+
+                    BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
+                    marcaActividades.MoveToBookmark("Equipo", true, true);
+                    marcaActividades.InsertTable(tablaActividades);
+                    document.Replace("||Equipo||", "El personal de servicio no cumplió con la maquinaria, equipo o  herramientas necesarias para prestar el servicio.", false, true);
+                }
+                else
+                {
+                    document.Replace("||Equipo||", "El personal de servicio cumplió con la maquinaria, equipo o  herramientas necesarias para prestar el servicio.", false, true);
+                }
+
+                //P4
+                if (cedula.RespuestasEncuesta[3].Respuesta == true)
+                {
+                    document.Replace("||Uniforme||", "El prestador del servicio portó uniforme e identificación en todo momento.", false, true);
+                }
+                else
+                {
+                    document.Replace("||Uniforme||", "El prestador del servicio no portó uniforme e identificación en todo momento.", false, true);
+                }
+
+                //P5
+                if (cedula.RespuestasEncuesta[4].Respuesta == true)
+                {
+                    document.Replace("||Recolección||", "El prestador del servicio si recolectó el número total de muestras solicitadas.", false, true);
+                }
+                else
+                {
+                    document.Replace("||Recolección||", "El prestador del servicio recolectó un total de "+cedula.RespuestasEncuesta[4].Detalles+" muestras, no cumpliendo "+
+                        " con el número de muestras minimas de 7.", false, true);
+                }
+
+                if (cedula.RespuestasEncuesta[5].Respuesta == true)
+                {
+                    document.Replace("||Resultados||", "El prestador llevó a cabo el servicio en la fecha programada.", false, true);
+                }
+                else
+                {
+                    document.Replace("||Resultados||", "El prestador no llevó a cabo el servicio en la fecha programada, ya que el servicio se programo para el día: " +
+                        cedula.RespuestasEncuesta[5].Detalles.Split("|")[0] + " y se llevó a cabo el día: " + cedula.RespuestasEncuesta[5].Detalles.Split("|")[1] + ".", false, true);
+                }
+
+                if (cedula.RespuestasEncuesta[6].Respuesta == true)
+                {
+                    document.Replace("||Reporte||", "El prestador del servicio entregó el reporte del servicio el día: "+
+                        Convert.ToDateTime(cedula.RespuestasEncuesta[6].Detalles).ToString("dd/MM/yyyy") +".", false, true);
+                }
+                else
+                {
+                    document.Replace("||Reporte||", "El prestador no entregó el reporte del servicio.", false, true);
+                }
+
+
+                document.Replace("||Folio||", cedula.Folio, false, true);
+
+                document.Replace("||Mes||", cedula.Mes, false, true);
+                if (cedula.Estatus.Equals("Autorizada"))
+                {
+                    document.Replace("||C||", cedula.Calificacion.ToString(), false, true);
+                }
+                else
+                {
+                    document.Replace("||C||", "Pendiente", false, true);
+                }
+
+                document.Replace("||dia||", cedula.FechaCreacion.GetValueOrDefault().Day + "", false, true);
+                document.Replace("||MesE||", Convert.ToDateTime(cedula.FechaCreacion).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")), false, true);
+                document.Replace("||Anio||", Convert.ToDateTime(cedula.FechaCreacion.GetValueOrDefault()).Year + "", false, true);
+
+
+                for (int i = 0; i < cedula.facturas.Count; i++)
+                {
+                    if ((cedula.facturas.Count - 1) != i)
+                    {
+                        strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "/";
+                    }
+                    else
+                    {
+                        strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio;
+                    }
+                }
+
+                if (cedula.Estatus.Equals("Enviado a DAS") || cedula.Estatus.Equals("Rechazada"))
+                {
+                    BookmarksNavigator marcaNota = new BookmarksNavigator(document);
+                    marcaNota.MoveToBookmark("Nota", true, true);
+                    marcaNota.InsertText("NOTA: Esta cédula no cuenta con ningún valor ya que aún no está AUTORIZADA por parte de la Dirección de Administración de Servicios.");
+                }
+
+                document.Replace("||Factura||", strFacturas, false, true);
+
+                document.Replace("||Total||", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", vFacturas.obtieneTotalFacturas(cedula.facturas)) + "", false, true);
+
+                if (cedula.Estatus.Equals("Enviado a DAS") || cedula.Estatus.Equals("Rechazada"))
+                {
+                    BookmarksNavigator marcaNota = new BookmarksNavigator(document);
+                    marcaNota.MoveToBookmark("Nota", true, true);
+                    marcaNota.InsertText("NOTA: Esta cédula no cuenta con ningún valor ya que aún no está AUTORIZADA por parte de la Dirección de Administración de Servicios.");
+                }
+
+
+                //Salvar y Lanzar
+
+                byte[] toArray = null;
+                using (MemoryStream ms1 = new MemoryStream())
+                {
+                    document.SaveToStream(ms1, Spire.Doc.FileFormat.PDF);
+                    toArray = ms1.ToArray();
+                }
+                return File(toArray, "application/pdf", "CedulaAnalisis_" + cedula.Mes + ".pdf");
+            }
+            return Redirect("/error/denied");
+        }
+
         [Route("/documents/actaLimpieza/{id?}")]
         public async Task<IActionResult> getActaEntregaRecepcionLimpieza(int id)
         {
@@ -5640,6 +5985,11 @@ namespace CedulasEvaluacion.Controllers
         private string moduloMuebles()
         {
             return "Bienes_Muebles";
+        }
+
+        private string moduloAnalisis()
+        {
+            return "Análisis_Microbiológicos";
         }
 
         private string moduloFumigacion()

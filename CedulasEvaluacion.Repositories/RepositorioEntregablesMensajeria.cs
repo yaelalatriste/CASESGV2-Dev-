@@ -84,6 +84,7 @@ namespace CedulasEvaluacion.Repositories
                             cmd.Parameters.Add(new SqlParameter("@tipo", entregables.Tipo));
                             cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + entregables.Archivo.FileName)));
                             cmd.Parameters.Add(new SqlParameter("@tamanio", entregables.Archivo.Length));
+                            cmd.Parameters.Add(new SqlParameter("@firmado", entregables.Firmado));
                             cmd.Parameters.Add(new SqlParameter("@comentarios", entregables.Comentarios));
 
                             await sql.OpenAsync();
@@ -288,7 +289,8 @@ namespace CedulasEvaluacion.Repositories
                 Estatus = reader["Estatus"] != DBNull.Value ? reader["Estatus"].ToString() : "",
                 NombreArchivo = reader["Archivo"].ToString(),
                 FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"].ToString()),
-                Comentarios = reader["Comentarios"].ToString()
+                Comentarios = reader["Comentarios"].ToString(),
+                Firmado = reader["Firmado"] != DBNull.Value ? (bool)reader["Firmado"]:false,
             };
         }
         private HistorialEntregables MapToValueHistorial(SqlDataReader reader)

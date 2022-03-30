@@ -173,8 +173,13 @@
                                 <p class="h3 text-justify text-danger">El prestador de servicios no cumplió on el horario acordado siendo acreedor a una penalización.</p>
                                 @{ string[] fechas = @Model.RespuestasEncuesta[0].Detalles.Split("|"); }
                                 <br />
-                                <p class="h4">Horario Programado: @fechas[0]</p>
-                                <p class="h4">Horario Realizado: @fechas[1]</p>
+                                <p class="h4 text-danger">Horario Programado: @fechas[0]</p>
+                                <p class="h4 text-danger">Horario Realizado: @fechas[1]</p>
+                                @{ 
+                                    double f = ((DateTime.Parse(fechas[1]) - DateTime.Parse(fechas[0])).TotalSeconds/3600)/24;
+                                }
+                                <p class="h4 text-danger">Días de Retraso: @f día(s)</p>
+                                
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -279,8 +284,7 @@
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
-                            <p class="h5 text-justify text-danger ml-3">El prestador de servicios no cumplió con las condiciones técnicas siendo acreedor a una penalización.</p>
-
+                            <p class="h5 text-justify text-danger ml-3">El prestador de servicios no cumplió con las condiciones técnicas siendo acreedor a una penalización.<br /></p>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
                                     <div class="icon">
@@ -290,12 +294,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row col-lg-12 mt-2">
+                        <div class="col-lg-12">
+                            <p class="text-danger h5"><b>Comentarios: </b>@Model.RespuestasEncuesta[2].Detalles</p>
+                        </div>
+                    </div>
                     <div class="row mt-4">
                         <div class="col-lg-12">
-                            <h5 class="text-danger ml-4">
-                                @*  *@
+                            <h5 class="text-danger">
                             </h5>
-                            <h5 class="text-danger ml-4">
+                            <h5 class="text-danger ml-2">
                                 <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)
                             </h5>
                         </div>
@@ -363,7 +371,49 @@
                                                 { j++; }
                                                  <tr>
                                                     <td>@j</td>
-                                                    <td>@m</td>
+                                                     @if (@m.Equals("DatosTitularMedico")) {
+                                                        <td>Nombre, Sello y Firma del titular del servicio médico</td>
+                                                     }
+                                                     else if (@m.Equals("ConsultorioBrindaServicio"))
+                                                     { 
+                                                         <td>Domicilio del Consultorio que brinda el servicio</td>
+                                                     }
+                                                     else if (@m.Equals("DescripcionResiduo"))
+                                                     { 
+                                                         <td>Descripción e identificación del Tipo de Residuo</td>
+                                                     }
+                                                     else if (@m.Equals("DatosRecoleccion"))
+                                                     { 
+                                                         <td>Nombre y firma del responsable de la recolección</td>
+                                                     }
+                                                     else if (@m.Equals("DetallesResiduo"))
+                                                     { 
+                                                         <td>Cantidad y Unidad de medida del Residuo</td>
+                                                     }
+                                                     else if (@m.Equals("EnvaseUtilizado"))
+                                                     { 
+                                                         <td>Envase o contenedor utilizado</td>
+                                                     }
+                                                     else if (@m.Equals("ManejoSeguro"))
+                                                     { 
+                                                         <td>Instrucciones especiales e información para su manejo seguro</td>
+                                                     }
+                                                     else if (@m.Equals("CentroDestinatario"))
+                                                     { 
+                                                         <td>Descripción General de la Transportación y del Centro de Acopio o Destinatario</td>
+                                                     }
+                                                     else if (@m.Equals("RegistroAmbiental"))
+                                                     { 
+                                                         <td>Número de Registro Ambiental</td>
+                                                     }
+                                                     else if (@m.Equals("NumeroManifiesto"))
+                                                     { 
+                                                         <td>Número de Manifiesto</td>
+                                                     }
+                                                     else if (@m.Equals("Clasificacion"))
+                                                     { 
+                                                         <td>Clasificación</td>
+                                                     }
                                                 </tr>
                                             }
                                         }

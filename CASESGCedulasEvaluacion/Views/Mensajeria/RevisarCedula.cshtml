@@ -760,7 +760,13 @@
                                                 <tr>
                                                     @if (entre.Tipo.Equals("ActaER"))
                                                     {
-                                                        <td>Acta Entrega - Recepción</td>
+                                                        @if(@entre.Firmado == false){
+                                                            <td>Acta Entrega - Recepción</td>
+                                                        }
+                                                        else 
+                                                        { 
+                                                            <td>Acta Entrega - Recepción (Firmada)</td>
+                                                        }
                                                     }
                                                     else if (entre.Tipo.Equals("Factura"))
                                                     {

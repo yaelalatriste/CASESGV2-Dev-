@@ -89,7 +89,6 @@
             var modulo = @Html.Raw(Json.Serialize(@User.Claims.ToList()));
             var admin = modulo[3].value
             modulo = $.parseJSON(modulo[5].value);
-            console.log(modulo);
 
             /*Validar Esta Linea en Base a los Modulos*/
             $("#li_Mensajeria").hide();
@@ -105,10 +104,7 @@
             $("#li_Agua_Para_Beber").hide();
             $("#li_Transporte_de_Personal").hide();
             $("#li_Bienes_Muebles").hide();
-
-            if (admin == "234495") {
-                $("#li_residuosMicro").show();
-            }
+            $("#li_Financieros").hide();
 
             for (var i = 0; i < modulo.length;i++) {
                 $("#li_"+modulo[i].Modulo).show();

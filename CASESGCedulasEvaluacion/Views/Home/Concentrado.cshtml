@@ -50,13 +50,13 @@
                         <td>
                             @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
                             {
-                                <a href="/@System.Text.Encoding.UTF8.GetString(System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(@item.Abreviacion.ToLower()))/evaluacion/@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                <a href="/@item.Abreviacion/evaluacion/@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
                                     <i class="fad fa-pencil text-primary"></i>
                                 </a>
                             }
                             @if (@User.Claims.ElementAt(2).Value.Equals(1 + "") || (!item.Estatus.Equals("En Proceso") || !item.Estatus.Equals("Enviado a DAS")))
                             {
-                                <a href="/@System.Text.Encoding.UTF8.GetString(System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(@item.Abreviacion.ToLower()))/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top"><i class="fas fa-file-import text-primary"></i></a>
+                                <a href="/@item.Abreviacion/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top"><i class="fas fa-file-import text-primary"></i></a>
                             }
                         </td>
                     </tr>

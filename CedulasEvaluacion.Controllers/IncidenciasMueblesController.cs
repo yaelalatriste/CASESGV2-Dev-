@@ -19,7 +19,7 @@ namespace CedulasEvaluacion.Controllers
             this.iMuebles = ivMuebles?? throw new ArgumentNullException(nameof(ivMuebles));
         }
 
-        [Route("/residuos/getIncidencias/{id?}")]
+        [Route("/muebles/getIncidencias/{id?}")]
         public async Task<IActionResult> getIncidencias(int id)
         {
             List<IncidenciasMuebles> incidencias = await iMuebles.GetIncidencias(id);
@@ -61,7 +61,7 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/residuos/getIncidencias/{id?}/{pregunta}")]
+        [Route("/muebles/getIncidencias/{id?}/{pregunta}")]
         public async Task<IActionResult> getIncidenciasPregunta(int id, int pregunta)
         {
             List<IncidenciasMuebles> incidencias = await iMuebles.GetIncidenciasPregunta(id,pregunta);
