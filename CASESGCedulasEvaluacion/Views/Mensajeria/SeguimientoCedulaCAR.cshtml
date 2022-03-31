@@ -76,9 +76,6 @@
                                                 {
                                                     @Model.usuarios.correo_electronico
                                                 }
-                                                <a href="#" id="btn_correo" class='btn-xs btn-primary ml-2' data-toggle="tooltip" title="Actualizar Correo Electrónico" data-placement="top">
-                                                    <i class="fal fa-edit"></i>
-                                                </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -198,10 +195,6 @@
                             {
                                 <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
                             }
-                            else if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("En Trámite")) && @User.Claims.ElementAt(2).Value.Contains("Mensajería"))
-                            {
-                                <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
-                            }
                         </div>
                         <h6 class="mt-4"><strong>Entregables Adjuntos</strong></h6>
                         <table class="table" id="tableEntregables">
@@ -305,7 +298,7 @@
                                                 </td>
                                             }
                                         }
-                                        else if ((@User.Claims.ElementAt(2).Value).Contains("Financieros"))
+                                        else if ((@User.Claims.ElementAt(2).Value).Contains("Financieros") || (@User.Claims.ElementAt(2).Value).Equals("Mensajeria"))
                                         {
                                             <!--Financieros-->
                                             if (@entre.Estatus.Equals("Autorizado"))
@@ -357,6 +350,7 @@
                                         {
                                             @if (entre.Estatus.Equals(""))
                                             {
+                                                estatus = true;
                                                 <td class="text-center">
                                                     <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
                                                        data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
@@ -382,6 +376,7 @@
                                             }
                                             else if (@entre.Estatus.Equals("Rechazado"))
                                             {
+                                                rechazat=true;
                                                 <td class="row col-lg-12 justify-content-center">
                                                     <div class="icon text-danger font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Rechazado">
                                                         <i class="fas fa-check-circle"></i> Rechazado
@@ -451,13 +446,13 @@
                     </div>
                 </div>
                 <div class="row col-lg-12 justify-content-end mb-3">
-                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
+                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || @User.Claims.ElementAt(2).Value.Equals("Mensajeria"))
                     {
                         @if (cedula == true && memo == true && @Model.Estatus.Equals("Autorizada"))
                         {
                             <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
                         }
-                        else if (@Model.Estatus.Equals("Trámite Rechazado"))
+                        else if (@Model.Estatus.Equals("Trámite Rechazado") && rechazat == false)
                         {
                             <button href="" class="btn btn-info float-right mr-3 tramitar_cedula" data-memo="@memo" data-rechazado="@rechazat" data-omemo="@omemo"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
                         }
@@ -471,6 +466,10 @@
                         else if (rechazat == true && !@Model.Estatus.Equals("Trámite Rechazado"))
                         {
                             <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-times mr-2"></i>Rechazar Trámite</button>
+                        }
+                        else if (rechazat == false && estatus == true && !@Model.Estatus.Equals("En Trámite"))
+                        {
+                <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
                         }
                     }
                 </div>

@@ -1,3 +1,170 @@
-﻿@{
-    ViewData["Title"] = "Detalle del Contrato - ";
+﻿@model CedulasEvaluacion.Entities.MCatalogoServicios.ModelsCatalogo;
+@{
+    ViewData["Title"] = "Obligaciones del Prestador de Servicios";
 }
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3 text-center mt-3">
+                            <img src="~/img/servicios/@String.Concat(@Model.servicio.Id, ".png")" alt="" class="img-fluid" width="100" height="100">
+                        </div>
+                        <div class="col-7 ml-3">
+                            <h2 class="lead"><b>Servicio de @Model.servicio.Nombre</b></h2>
+                            <p class="text-muted text-sm"><b>Contrato actual: </b> @Model.contrato.NumeroContrato </p>
+                            <p class="text-muted text-sm">
+                                <b>Vigencia: </b> Del @Model.contrato.FechaInicio.ToString("dd") de @Model.contrato.FechaInicio.ToString("MMMM", @System.Globalization.CultureInfo.CreateSpecificCulture("es"))
+                                @Model.contrato.FechaInicio.ToString("yyyy") al @Model.contrato.FechaFin.ToString("dd") de @Model.contrato.FechaFin.ToString("MMMM", @System.Globalization.CultureInfo.CreateSpecificCulture("es"))
+                                @Model.contrato.FechaFin.ToString("yyyy")
+                            </p>
+                            <p class="text-muted text-sm"><b>Prestador de Servicio: </b> @Model.contrato.Empresa </p>
+                            @{ string rep = !@Model.contrato.Representante.Equals("") ? @Model.contrato.Representante : "Por Capturar"; }
+                            <p class="text-muted text-sm"><b>Representante Legal: </b>@rep</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="col-lg-12">
+                <a href="/catalogo/detalleServicio/@Model.servicio.Id" type='button' class="btn btn-sm btn-warning float-right"
+                   data-toggle="tooltip" title="Regresar al Listado de Servicios" data-placement="top">Regresar</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-joke text-white">
+                    <h5>Obligaciones Entregadas</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#entregables" role="tab" aria-controls="contact" aria-selected="false">Entregables</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        @* Entregables *@
+                        <div class="tab-pane fade show active mt-2 ml-3" id="entregables" role="tabpanel" aria-labelledby="contact-tab">
+                            <div class="col-lg-12 mt-3">
+                                <h3>Obligaciones PS</h3>
+                                Listado de obligaciones del prestador de servicios.
+                                <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile'><i class="fas fa-plus"></i></a>
+                            </div>
+                            <div class="row col-lg-12 mt-3">
+                                <table class="table" id="tblEntregables">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo de Obligación</th>
+                                            <th>Tipo de Contrato</th>
+                                            <th>Periodo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tEntregables"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        @* Fin de Entregables *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Modal para la captura de Adjuntos *@
+<div class="modal fade" id="modal_evidencias">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white">Adjuntar Entregables</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" id="file_id" />
+                    <div class="form-group col-lg-4">
+                        <label for="tipoIncidencia">Tipo de Entregable:</label>
+                        <select class="form-control" id="tipo_entregable">
+                            <option value="">Seleccione un Entregable</option>
+                            <option value="ActaER">Acta Entrega - Recepción</option>
+                            <option value="Factura">Factura</option>
+                            <option value="SAT">Validación del SAT</option>
+                        </select>
+                        <div class="col-sm-12" id="error_tipoEntre">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione el tipo de entregable
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label for="elegirArchivo">Seleccionar Archivo: </label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" accept=".pdf">
+                            <label class="custom-file-label" for="customFile">Seleccionar Archivo</label>
+                        </div>
+                        <div class="col-sm-12" id="error_customFile">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione él archivo correspondiente
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row col-lg-12 mt-2" id="comentariosEntregable">
+                        <div class="form-group mt-2 col-md-12">
+                            <label for="fechaCierre">Comentarios:</label><br>
+                            <textarea id="comentarios_entregable" class="form-control float-left"></textarea>
+                            <div class="col-sm-12" id="error_comentariosEntre">
+                                <small id="comentariosHelp" class="text-danger">
+                                    Por favor capture los comentarios correspondientes
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button type="button" class="btn btn-primary" id="adjuntarArchivo">Adjuntar Entregable</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@*Fin Modal para la captura de Incidencias *@
+
+@* Modal para la ver Adjuntos *@
+<div class="modal fade" id="modal_pdf">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white" id="titlePDF"></h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr>
+                        <td><strong>Folio: </strong> @Model.Folio</td>
+                        <td><strong>Año: </strong>@Model.Anio</td>
+                        <td><strong>Mes: </strong>@Model.Mes</td>
+                        <td><strong>Inmueble: </strong>@Model.inmuebles.Nombre</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><strong>Estatus: </strong>@Model.Estatus </td>
+                    </tr>
+                </table>
+                <div class="row" id="entregablePDF"></div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@*Fin Modal para ver Adjuntos*@

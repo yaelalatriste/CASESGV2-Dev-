@@ -10,6 +10,7 @@ namespace CedulasEvaluacion.Interfaces
     {
         Task<List<ContratosServicio>> GetContratosServicios(int servicio);
         Task<ContratosServicio> GetContratoServicioActivo(int servicio);
+        Task<ContratosServicio> GetContratoServicioById(int id);
         Task<int> InsertaContrato(ContratosServicio contratosServicio);
     }
 }

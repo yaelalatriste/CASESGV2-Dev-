@@ -155,6 +155,95 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
+        public async Task<List<HistorialEntregables>> getHistorialEntregables(object id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getHistorialEntregables", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@servicio", "Telefonía Convencional"));
+                        cmd.Parameters.Add(new SqlParameter("@cedula", id));
+                        var response = new List<HistorialEntregables>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValueHistorial(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+        public async Task<int> apruebaRechazaEntregable(Entregables entregables)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_autorizarRechazarEntregable", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", entregables.Id));
+                        cmd.Parameters.Add(new SqlParameter("@cedulaId", entregables.CedulaConvencionalId));
+                        cmd.Parameters.Add(new SqlParameter("@estatus", entregables.Estatus));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", "Telefonía Convencional"));
+
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return -1;
+            }
+        }
+        public async Task<int> capturaHistorial(HistorialEntregables historialEntregables)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_insertaHistorialEntregables", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@servicio", "Telefonía Convencional"));
+                        cmd.Parameters.Add(new SqlParameter("@tipo", historialEntregables.Tipo));
+                        cmd.Parameters.Add(new SqlParameter("@cedula", historialEntregables.CedulaId));
+                        cmd.Parameters.Add(new SqlParameter("@usuario", historialEntregables.UsuarioId));
+                        cmd.Parameters.Add(new SqlParameter("@estatus", historialEntregables.Estatus));
+                        cmd.Parameters.Add(new SqlParameter("@comentarios", historialEntregables.Comentarios));
+
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return -1;
+            }
+        }
+
         public async Task<int> buscaEntregable(int id, string tipo)
         {
             try
@@ -196,6 +285,19 @@ namespace CedulasEvaluacion.Repositories
                 NombreArchivo = reader["Archivo"].ToString(),
                 FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"].ToString()),
                 Comentarios = reader["Comentarios"].ToString()
+            };
+        }
+        private HistorialEntregables MapToValueHistorial(SqlDataReader reader)
+        {
+            return new HistorialEntregables
+            {
+                Servicio = reader["Servicio"].ToString(),
+                Tipo = reader["Tipo"].ToString(),
+                CedulaId = (int)reader["CedulaId"],
+                UsuarioId = (int)reader["UsuarioId"],
+                Estatus = reader["Estatus"].ToString(),
+                Comentarios = reader["Comentarios"].ToString(),
+                FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"])
             };
         }
     }

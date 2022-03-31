@@ -388,7 +388,7 @@ namespace CedulasEvaluacion.Repositories
 
         private string generaFolio(string mes)
         {
-            string servicio = "TCON";
+            string servicio = "TCSA";
             string date = DateTime.Now.ToString("yyyy");
             return servicio + "-" + date + "0" + convertirMes(mes);
         }

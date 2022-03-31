@@ -160,7 +160,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if (Model.Estatus.Equals("Enviado a DAS"))
+                            @if (Model.Estatus.Equals("Enviado a DAS") || (@User.Claims.ElementAt(2).Value).Contains("Administrador"))
                             {
                                 <div class="card-footer">
                                     <div class="text-right">

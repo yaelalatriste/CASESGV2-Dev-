@@ -179,6 +179,38 @@ namespace CedulasEvaluacion.Controllers
             return Redirect("/error/denied");
         }
 
+        [HttpGet]
+        [Route("/telConvencional/seguimiento/{id}")]
+        public async Task<IActionResult> SeguimientoCedula(int id)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
+            if (success == 1)
+            {
+                TelefoniaConvencional telCel = null;
+                telCel = await vConvencional.CedulaById(id);
+                telCel.facturas = await vFacturas.getFacturas(id, telCel.ServicioId);//
+                telCel.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telCel.facturas);
+                telCel.usuarios = await vUsuarios.getUserById(telCel.UsuarioId);
+                telCel.iEntregables = await eConvencional.getEntregables(telCel.Id);
+                telCel.RespuestasEncuesta = new List<RespuestasEncuesta>();
+                telCel.RespuestasEncuesta = await vConvencional.obtieneRespuestas(telCel.Id);
+                telCel.historialCedulas = new List<HistorialCedulas>();
+                telCel.historialCedulas = await vConvencional.getHistorialConvencional(telCel.Id);
+                foreach (var user in telCel.historialCedulas)
+                {
+                    user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
+                }
+                telCel.historialEntregables = new List<HistorialEntregables>();
+                telCel.historialEntregables = await eConvencional.getHistorialEntregables(telCel.Id);
+                foreach (var user in telCel.historialEntregables)
+                {
+                    user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
+                }
+                return View(telCel);
+            }
+            return Redirect("/error/denied");
+        }
+
         [HttpPost]
         [Route("/telConvencional/aprovRechCed")]
         public async Task<IActionResult> aprovacionRechazoCedula([FromBody] TelefoniaConvencional telefoniaConvencional)

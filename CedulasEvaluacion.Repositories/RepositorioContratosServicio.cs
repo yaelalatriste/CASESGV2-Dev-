@@ -80,6 +80,37 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
+        public async Task<ContratosServicio> GetContratoServicioById(int id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getContratoServicioById", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        var response = new ContratosServicio();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response = MapToValueContratos(reader);
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
         public async Task<int> InsertaContrato(ContratosServicio contratosServicio)
         {
             try
@@ -118,8 +149,8 @@ namespace CedulasEvaluacion.Repositories
             return new ContratosServicio
             {
                 Id = (int)reader["Id"],
-                ServicioId = (int)reader["Id"],
-                NumeroContrato = reader["NoContrato"].ToString(),
+                ServicioId = (int)reader["ServicioId"],
+                NumeroContrato = reader["NoContrato"] != DBNull.Value ? reader["NoContrato"].ToString() : "",
                 Empresa = reader["Empresa"] != DBNull.Value ? reader["Empresa"].ToString() : "",
                 Representante = reader["Representante"] != DBNull.Value ? reader["Representante"].ToString() : "",
                 FechaInicio = reader["FechaInicio"] != DBNull.Value ? Convert.ToDateTime(reader["FechaInicio"]) : DateTime.Now,

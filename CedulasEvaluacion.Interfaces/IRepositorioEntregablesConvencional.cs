@@ -12,5 +12,8 @@ namespace CedulasEvaluacion.Interfaces
         Task<List<Entregables>> getEntregables(int id);
         Task<int> eliminaArchivo(Entregables entregable);
         Task<int> buscaEntregable(int id, string tipo);
+        Task<List<HistorialEntregables>> getHistorialEntregables(object id);
+        Task<int> apruebaRechazaEntregable(Entregables entregables);
+        Task<int> capturaHistorial(HistorialEntregables historialEntregables);
     }
 }

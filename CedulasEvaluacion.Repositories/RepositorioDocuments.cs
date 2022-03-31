@@ -37,7 +37,14 @@ namespace CedulasEvaluacion.Repositories
                         {
                             while (await reader.ReadAsync())
                             {
-                                response.Add(MapToValue(reader));
+                                if (servicio == 3)
+                                {
+                                    response.Add(MapToValueMensajeria(reader));
+                                }
+                                else
+                                {
+                                    response.Add(MapToValue(reader));
+                                }
                             }
                         }
                         return response;
@@ -69,7 +76,14 @@ namespace CedulasEvaluacion.Repositories
                         {
                             while (await reader.ReadAsync())
                             {
-                                response = MapToValue(reader);
+                                if (servicio == 3)
+                                {
+                                    response = MapToValueMensajeria(reader);
+                                }
+                                else
+                                {
+                                    response = MapToValue(reader);
+                                }
                             }
                         }
 

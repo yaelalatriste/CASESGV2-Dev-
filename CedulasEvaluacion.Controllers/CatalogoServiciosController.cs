@@ -67,15 +67,14 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                /*ModelsCatalogo models = new ModelsCatalogo();
-                models.servicio = await vCatalogo.GetServicioById(servicio);
-                models.contratos = await vContrato.GetContratosServicios(servicio);
-                models.contrato = await vContrato.GetContratoServicioActivo(servicio);
+                ModelsCatalogo models = new ModelsCatalogo();
+                models.contrato = await vContrato.GetContratoServicioById(id);
+                models.servicio = await vCatalogo.GetServicioById(models.contrato.ServicioId);
                 if (models != null)
-                {*/
-                    return View();
-                //}
-                //return NotFound();
+                {
+                    return View(models);
+                }
+                return NotFound();
             }
             return Redirect("/error/denied");
         }
