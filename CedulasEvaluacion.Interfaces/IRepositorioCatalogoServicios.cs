@@ -9,6 +9,8 @@ namespace CedulasEvaluacion.Interfaces
     public interface IRepositorioCatalogoServicios
     {
         //Catalogo de Servicios
+        Task<List<DashboardCS>> GetDashBoard();
         Task<List<CatalogoServicios>> GetCatalogoServicios();
+        Task<CatalogoServicios> GetServicioById(int servicio);
     }
 }

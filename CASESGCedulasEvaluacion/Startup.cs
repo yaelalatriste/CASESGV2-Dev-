@@ -52,6 +52,7 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioModulos, RepositorioModulos>();
             services.AddScoped<IRepositorioOperaciones, RepositorioOperaciones>();
             services.AddScoped<IRepositorioCatalogoServicios, RepositorioCatalogoServicios>();
+            services.AddScoped<IRepositorioContratosServicio, RepositorioContratosServicio>();
 
             services.AddScoped<IRepositorioInmuebles, RepositorioInmuebles>();
             services.AddScoped<IRepositorioLimpieza, RepositorioLimpieza>();

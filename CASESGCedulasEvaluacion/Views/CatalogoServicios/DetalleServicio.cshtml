@@ -1,0 +1,258 @@
+﻿@model CedulasEvaluacion.Entities.MCatalogoServicios.ModelsCatalogo;
+@{
+    ViewData["Title"] = "Detalle de Contratos del Servicio de " + @Model.servicio.Nombre;
+    var i = 0;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3 text-center mt-3">
+                            <img src="~/img/servicios/@String.Concat(@Model.servicio.Id, ".png")" alt="" class="img-fluid" width="100" height="100">
+                        </div>
+                        <div class="col-7 ml-3">
+                            <h2 class="lead"><b>Servicio de @Model.servicio.Nombre</b></h2>
+                            <p class="text-muted text-sm"><b>Contrato actual: </b> @Model.contrato.NumeroContrato </p>
+                            <p class="text-muted text-sm">
+                                <b>Vigencia: </b> Del @Model.contrato.FechaInicio.ToString("dd") de @Model.contrato.FechaInicio.ToString("MMMM", @System.Globalization.CultureInfo.CreateSpecificCulture("es"))
+                                @Model.contrato.FechaInicio.ToString("yyyy") al @Model.contrato.FechaFin.ToString("dd") de @Model.contrato.FechaFin.ToString("MMMM", @System.Globalization.CultureInfo.CreateSpecificCulture("es"))
+                                @Model.contrato.FechaFin.ToString("yyyy")
+                            </p>
+                            <p class="text-muted text-sm"><b>Prestador de Servicio: </b> @Model.contrato.Empresa </p>
+                            @{ string rep = !@Model.contrato.Representante.Equals("") ? @Model.contrato.Representante : "Por Capturar"; }
+                            <p class="text-muted text-sm"><b>Representante Legal: </b>@rep</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="col-lg-12">
+                        <a href="/catalogo/index" type='button' class="btn btn-sm btn-warning float-right"
+                           data-toggle="tooltip" title="Regresar al Listado de Servicios" data-placement="top">Regresar</a>
+                        <a href="#" class="btn btn-sm btn-primary float-right mr-2" id="newContrato" data-toggle="tooltip" title='Capturar Contrato'>Capturar Contrato</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row col-lg-12">
+        <table class="table table-responsive-xl">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Número de Contrato</th>
+                    <th>Empresa</th>
+                    <th class="text-center">Vigente</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cont in @Model.contratos)
+                {
+                    i++;
+                    <tr>
+                        <td>@i</td>
+                        <td>@cont.NumeroContrato</td>
+                        <td>@cont.Empresa</td>
+                        <td class="text-center">
+                            @if (@cont.Activo)
+                            {
+                                <div class="icon">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="icon">
+                                    <i class="fas fa-times-circle text-danger"></i>
+                                </div>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <a href="#" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                <i class="fad fa-pencil text-primary"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*Modal para Capturar Contratos*@
+<div class="modal fade" id="modal-contratos">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white">Nuevo Contrato</h4>
+                <button type="button" class="close close-incidencias text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row col-lg-12">
+                    <div class="form-row col-md-3" id="divServicio">
+                        <label for="">Servicios:</label>
+                        <input class="form-control" type="text" id="servicio" value="@Model.servicio.Nombre" disabled />
+                    </div>
+                    <div class="form-row col-md-3" id="divContrato">
+                        <label for="Anio">Número de Contrato: </label>
+                        <input class="form-control" type="text" id="contrato" />
+                        <div class="col-sm-12" id="error_contrato">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor capture el número de contrato
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row col-md-6" id="divEmpresa">
+                        <label for="">Empresa:</label>
+                        <input class="form-control" id="empresa" type="text" />
+                        <div class="col-sm-12" id="error_empresa">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor capture el nombre de la empresa
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-lg-12 mt-2">
+                    <div class="form-row col-md-6" id="divRepresentante">
+                        <label for="">Representante Legal:</label>
+                        <input class="form-control" id="representante" type="text" />
+                        <div class="col-sm-12" id="error_representante">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor capture el nombre del representante Legsal
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row col-md-3" id="divFechaInicio">
+                        <label for="">Fecha de Inicio:</label>
+                        <input class="form-control" type="date" id="fechaInicio" />
+                        <div class="col-sm-12" id="error_fechaInicio">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor capture la Fecha de Inicio
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row col-md-3" id="divContrato">
+                        <label for="">Fecha de Término:</label>
+                        <input class="form-control" type="date" id="fechaFin" />
+                        <div class="col-sm-12" id="error_fechaFin">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor capture la Fecha de Término
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-lg-12">
+                    <div class="form-row col-md-6" id="divActivo">
+                        <div class="form-check-inline i-checks mt-3">
+                            <strong class="text-black mr-3">Predeterminado</strong>
+                            <input class="predeterminado" id="predeterminado" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
+                                   data-onstyle="success" data-offstyle="danger" data-style="ios" name="aFirmada">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button type="button" class="btn btn-primary" id="crearContrato">Crear Contrato</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@*Fin del Modal para Capturar Oficios*@
+
+@section Scripts{
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            var model = @Html.Raw(Json.Serialize(@Model));
+
+            /*Errores de Captura de Contrato*/
+                $("#error_contrato").css('display','none');
+                $("#error_representante").css('display','none');
+                $("#error_empresa").css('display','none');
+                $("#error_fechaInicio").css('display','none');
+                $("#error_fechaFin").css('display','none');
+            /*Fin Errores de Captura de Contrato*/
+
+            $("#newContrato").click(function () {
+                $("#modal-contratos").modal("show");
+            });
+
+            function validaCampos() {
+                var contrato = $("#contrato").val();
+                var empresa = $("#empresa").val();
+                var representante = $("#representante").val();
+                var fechaInicio = $("#fechaInicio").val();
+                var fechaFin = $("#fechaFin").val();
+
+                if (contrato != "" && empresa != "" && representante != "" && fechaInicio != "" && fechaFin != "") {
+                    return true;
+                }
+
+                if (contrato == "") {
+                    $("#error_contrato").css('display', 'block');
+                }
+
+                if (empresa == "") {
+                    $("#error_empresa").css('display', 'block');
+                }
+
+                if (fechaInicio == "") {
+                    $("#error_fechaInicio").css('display', 'block');
+                }
+
+                if (fechaFin== "") {
+                    $("#error_fechaFin").css('display', 'block');
+                }
+
+                if (representante == "") {
+                    $("#error_representante").css('display', 'block');
+                }
+
+                return false;
+            }
+
+            $("#crearContrato").click(function () {
+                var contrato = $("#contrato").val();
+                var empresa = $("#empresa").val();
+                var representante = $("#representante").val();
+                var fechaInicio = $("#fechaInicio").val();
+                var fechaFin = $("#fechaFin").val();
+                var activo = $("#predeterminado").prop('checked');
+
+                if (fechaInicio > fechaFin) {
+                    Swal.fire({
+                        'icon': 'error',
+                        'title': 'Contratos ' + model.servicio.Nombre,
+                        'html': 'La fecha de inicio no puede ser mayor a la fecha de término. Favor de corregir'
+                    });
+                }
+
+                if (validaCampos()) {
+                    axios.post('/contratos/insertaContrato', { ServicioId: model.servicio.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
+                        NumeroContrato: contrato, Empresa: empresa, Representante: representante, FechaInicio: fechaInicio,
+                        FechaFin: fechaFin, Activo: activo
+                    }).then(response => {
+                        if (response.status == 200) {
+                            Swal.fire({
+                                'icon': 'success',
+                                'title': 'Contratos ' + model.servicio.Nombre,
+                                'html': 'El contrato se creó correctamente.'
+                            }).then(function () {
+                                window.location.href = "/catalogo/detalleContrato/" + response.data;
+                            });
+                        }
+                    });
+                }
+            });
+
+
+        });
+    </script>
+}
