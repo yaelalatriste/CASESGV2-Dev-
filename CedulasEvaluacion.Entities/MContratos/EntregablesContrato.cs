@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CedulasEvaluacion.Entities.MCatalogoServicios
+namespace CedulasEvaluacion.Entities.MContratos
 {
     public partial class EntregablesContrato
     {
@@ -25,5 +25,7 @@ namespace CedulasEvaluacion.Entities.MCatalogoServicios
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaActualizacion { get; set; }
         public DateTime FechaEliminacion { get; set; }
+
+        public ContratosServicio contrato { get; set; }
     }
 }

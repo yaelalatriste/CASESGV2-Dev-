@@ -10,7 +10,7 @@ namespace CedulasEvaluacion.Entities.MMensajeria
         public int Id { get; set; }
         public int CedulaMensajeriaId { get; set; }
         public int Pregunta { get; set; }
-        public int Sobrepeso { get; set; }
+        public decimal Sobrepeso { get; set; }
         public string Tipo { get; set; }
         public string NumeroGuia { get; set; }
         public long CodigoRastreo { get; set; }

@@ -561,7 +561,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 Id = (int)reader["Id"],
                 CedulaMensajeriaId = (int)reader["CedulaMensajeriaId"],
-                Sobrepeso = reader["Sobrepeso"] != DBNull.Value ? (int)reader["Sobrepeso"]:0,
+                Sobrepeso = reader["Sobrepeso"] != DBNull.Value ? (decimal)reader["Sobrepeso"]:0,
                 Tipo = reader["Tipo"].ToString(),
                 NumeroGuia = reader["NumeroGuia"] != DBNull.Value ? reader["NumeroGuia"].ToString(): "",
                 NombreActa = reader["ActaRobo"] != DBNull.Value ? reader["ActaRobo"].ToString(): "",

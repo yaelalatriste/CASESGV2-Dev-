@@ -1,4 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MCatalogoServicios;
+﻿using CedulasEvaluacion.Entities.MContratos;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
@@ -141,7 +141,7 @@ namespace CedulasEvaluacion.Repositories
             long size = archivo.Length;
             string folderCedula = "Contrato_"+contrato;
 
-            string newPath = Directory.GetCurrentDirectory() + "\\Entregables\\" + folderCedula;
+            string newPath = Directory.GetCurrentDirectory() + "\\ObligacionesPS\\" + folderCedula;
             if (!Directory.Exists(newPath))
             {
                 Directory.CreateDirectory(newPath);
@@ -175,7 +175,7 @@ namespace CedulasEvaluacion.Repositories
                         await cmd.ExecuteNonQueryAsync();
 
                         string archivo = (cmd.Parameters["@archivo"].Value).ToString();
-                        string newPath = Directory.GetCurrentDirectory() + "\\Entregables\\Contrato_" + entregable.ContratoId + "\\" + archivo;
+                        string newPath = Directory.GetCurrentDirectory() + "\\ObligacionesPS\\Contrato_" + entregable.ContratoId + "\\" + archivo;
                         File.Delete(newPath);
 
                         return 1;

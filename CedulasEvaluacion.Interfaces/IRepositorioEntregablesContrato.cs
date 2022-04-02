@@ -1,4 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MCatalogoServicios;
+﻿using CedulasEvaluacion.Entities.MContratos;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -80,6 +80,21 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpGet]
+        [Route("/catalogo/nuevaObligacion/{contrato}")]
+        public async Task<IActionResult> NuevaObligacion(int contrato)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
+            if (success == 1)
+            {
+                EntregablesContrato entregable = new EntregablesContrato();
+                entregable.ContratoId = contrato;
+                entregable.contrato = await vContrato.GetContratoServicioById(contrato);
+                return View(entregable);
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpGet]
         [Route("/catalogo/servicios")]
         public async Task<IActionResult> GetCatalogoServicios()
         {

@@ -88,6 +88,7 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioEntregablesTransporte, RepositorioEntregablesTransporte>();
             services.AddScoped<IRepositorioEntregablesAnalisis, RepositorioEntregablesAnalisis>();
             services.AddScoped<IRepositorioEntregablesMuebles, RepositorioEntregablesMuebles>();
+            services.AddScoped<IRepositorioEntregablesContrato, RepositorioEntregablesContrato>();
             
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {

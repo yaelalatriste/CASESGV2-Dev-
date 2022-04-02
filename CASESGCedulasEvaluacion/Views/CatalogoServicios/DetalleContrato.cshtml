@@ -53,7 +53,7 @@
                             <div class="col-lg-12 mt-3">
                                 <h3>Obligaciones PS</h3>
                                 Listado de obligaciones del prestador de servicios.
-                                <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile'><i class="fas fa-plus"></i></a>
+                                <a href="/catalogo/nuevaObligacion/@Model.contrato.Id" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile'><i class="fas fa-plus"></i></a>
                             </div>
                             <div class="row col-lg-12 mt-3">
                                 <table class="table" id="tblEntregables">
@@ -137,34 +137,3 @@
     <!-- /.modal-dialog -->
 </div>
 @*Fin Modal para la captura de Incidencias *@
-
-@* Modal para la ver Adjuntos *@
-<div class="modal fade" id="modal_pdf">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header bg-joke">
-                <h4 class="modal-title text-white" id="titlePDF"></h4>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <tr>
-                        <td><strong>Folio: </strong> @Model.Folio</td>
-                        <td><strong>Año: </strong>@Model.Anio</td>
-                        <td><strong>Mes: </strong>@Model.Mes</td>
-                        <td><strong>Inmueble: </strong>@Model.inmuebles.Nombre</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"><strong>Estatus: </strong>@Model.Estatus </td>
-                    </tr>
-                </table>
-                <div class="row" id="entregablePDF"></div>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-@*Fin Modal para ver Adjuntos*@
