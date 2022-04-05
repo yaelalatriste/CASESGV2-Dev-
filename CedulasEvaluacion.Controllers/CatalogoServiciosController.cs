@@ -14,13 +14,16 @@ namespace CedulasEvaluacion.Controllers
     {
         private readonly IRepositorioCatalogoServicios vCatalogo;
         private readonly IRepositorioContratosServicio vContrato;
+        private readonly IRepositorioEntregablesContrato eContrato;
         private readonly IRepositorioPerfiles vPerfiles;
 
-        public CatalogoServiciosController(IRepositorioCatalogoServicios ivCatalogo, IRepositorioContratosServicio ivContrato, IRepositorioPerfiles ivPerfiles)
+        public CatalogoServiciosController(IRepositorioCatalogoServicios ivCatalogo, IRepositorioContratosServicio ivContrato, 
+            IRepositorioPerfiles ivPerfiles, IRepositorioEntregablesContrato eeContrato)
         {
             this.vCatalogo = ivCatalogo ?? throw new ArgumentNullException(nameof(ivCatalogo));
             this.vContrato = ivContrato ?? throw new ArgumentNullException(nameof(ivContrato));
             this.vPerfiles = ivPerfiles ?? throw new ArgumentNullException(nameof(ivPerfiles));
+            this.eContrato = eeContrato ?? throw new ArgumentNullException(nameof(eeContrato));
         }
 
         [HttpGet]
@@ -69,6 +72,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 ModelsCatalogo models = new ModelsCatalogo();
                 models.contrato = await vContrato.GetContratoServicioById(id);
+                models.entregables = await eContrato.GetEntregablesCS(id);
                 models.servicio = await vCatalogo.GetServicioById(models.contrato.ServicioId);
                 if (models != null)
                 {
@@ -81,7 +85,7 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpGet]
         [Route("/catalogo/nuevaObligacion/{contrato}")]
-        public async Task<IActionResult> NuevaObligacion(int contrato)
+        public async Task<IActionResult> CrearObligacion(int contrato)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
@@ -89,6 +93,34 @@ namespace CedulasEvaluacion.Controllers
                 EntregablesContrato entregable = new EntregablesContrato();
                 entregable.ContratoId = contrato;
                 entregable.contrato = await vContrato.GetContratoServicioById(contrato);
+                return View("NuevaObligacion",entregable);
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpGet]
+        [Route("/catalogo/editarObligacion/{id}")]
+        public async Task<IActionResult> EditarObligacion(int id)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
+            if (success == 1)
+            {
+                EntregablesContrato entregable = await eContrato.GetEntregableCsById(id);
+                entregable.contrato = await vContrato.GetContratoServicioById(entregable.ContratoId);
+                return View("NuevaObligacion", entregable);
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpGet]
+        [Route("/catalogo/verObligacion/{id}")]
+        public async Task<IActionResult> VerObligacion(int id)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "ver");
+            if (success == 1)
+            {
+                EntregablesContrato entregable = await eContrato.GetEntregableCsById(id);
+                entregable.contrato = await vContrato.GetContratoServicioById(entregable.ContratoId);
                 return View(entregable);
             }
             return Redirect("/error/denied");

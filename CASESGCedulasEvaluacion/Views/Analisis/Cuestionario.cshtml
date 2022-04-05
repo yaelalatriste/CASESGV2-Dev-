@@ -5,6 +5,12 @@
 
 <div class="container-fluid" id="limpieza">
     <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Facturas" data-placement="top"><i class="fal fa-file-invoice"></i></a>
+    @if (@Model.facturas.Count != 0)
+    {
+        <a href="/documents/actaAnalisis/@Model.Id" class='btn-sm btn-primary float-right mr-2 mb-3' data-toggle="tooltip" title="Generar Acta ER" data-placement="top">
+            <i class="fal fa-calendar-alt"></i>
+        </a>
+    }
     <a href="/analisis/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Análisis Microbiológicos" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
@@ -80,7 +86,7 @@
                                 <input type="radio" name="pregunta2" value="false" id="radioSuccess2" class="pregunta2">
                                 <label for="radioSuccess2">No</label>
                             </div>
-                             <div class="form-row col-lg-12 mt-3" id="diviPregunta2">
+                            <div class="form-row col-lg-12 mt-3" id="diviPregunta2">
                                 <div class="form-row">
                                     <div class="col col-lg-2">
                                         <label for="fechaCierre">Fecha Programada:</label>
@@ -135,9 +141,9 @@
                                 <input type="radio" name="pregunta5" value="false" id="radioSuccess8" class="pregunta5" data-pregunta="5">
                                 <label for="radioSuccess8">No</label>
                             </div>
-                             <div class="row col-lg-2 mt-3" id="diviPregunta5">
+                            <div class="row col-lg-2 mt-3" id="diviPregunta5">
                                 <label for="comentariosP3">Muestras Recolectadas: </label>
-                                <input class="form-control dPregunta5" style="resize:none;" type="number"/>
+                                <input class="form-control dPregunta5" style="resize:none;" type="number" />
                             </div>
                         </div>
                         @* Fin de la Pregunta 5 *@

@@ -282,6 +282,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 Id = (int)reader["Id"],
                 Tipo = reader["Tipo"].ToString(),
+                Estatus = reader["Estatus"] != DBNull.Value ? reader["Estatus"].ToString() : "",
                 NombreArchivo = reader["Archivo"].ToString(),
                 FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"].ToString()),
                 Comentarios = reader["Comentarios"].ToString()

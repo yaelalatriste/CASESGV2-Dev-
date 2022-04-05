@@ -11,5 +11,6 @@ namespace CedulasEvaluacion.Entities.MCatalogoServicios
         public CatalogoServicios servicio { get; set; }
         public ContratosServicio contrato { get; set; }
         public List<ContratosServicio> contratos  { get; set; }
+        public List<EntregablesContrato> entregables { get; set; }
     }
 }

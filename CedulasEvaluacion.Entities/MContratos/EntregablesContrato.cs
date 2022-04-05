@@ -15,6 +15,8 @@ namespace CedulasEvaluacion.Entities.MContratos
         public IFormFile Archivo { get; set; }
         public string NombreArchivo { get; set; }
         public string Estatus { get; set; }
+        public decimal MontoGarantia { get; set; }
+        public decimal MontoPenalizacion { get; set; }
         public long Tamanio { get; set; }
         public DateTime FechaProgramada { get; set; }
         public DateTime FechaEntrega { get; set; }

@@ -1,6 +1,7 @@
 ﻿@model CedulasEvaluacion.Entities.MCatalogoServicios.ModelsCatalogo;
 @{
     ViewData["Title"] = "Obligaciones del Prestador de Servicios";
+    var i = 0;
 }
 
 <div class="container-fluid">
@@ -59,12 +60,49 @@
                                 <table class="table" id="tblEntregables">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>Tipo de Obligación</th>
                                             <th>Tipo de Contrato</th>
                                             <th>Periodo</th>
+                                            <th class="text-center">Penalizable</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tEntregables"></tbody>
+                                    <tbody id="tEntregables">
+                                        @foreach (var doc  in @Model.entregables)
+                                        {
+                                            i++;
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>@doc.Tipo</td>
+                                                <td>@doc.TipoContrato</td>
+                                                <td>@doc.InicioPeriodo.ToString("dd/MM/yyyy") al @doc.FinPeriodo.ToString("dd/MM/yyyy")</td>
+                                                @if (@doc.FechaProgramada < @doc.FechaEntrega)
+                                                        {
+                                                            <td class="text-center text-danger font-weight-bold">
+                                                                Si
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-center text-success font-weight-bold">
+                                                                No
+                                                            </td>
+                                                        }
+                                                <td>
+                                                    <a href="/catalogo/verObligacion/@doc.Id">
+                                                        <i class="fad fa-eye text-success mr-2"></i>
+                                                    </a>
+                                                    <a href="/catalogo/editarObligacion/@doc.Id">
+                                                        <i class="fad fa-pencil text-primary mr-2"></i>
+                                                    </a>
+                                                    <a href="/catalogo/eliminar/obligacion/@doc.Id">
+                                                        <i class="fad fa-times text-danger"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

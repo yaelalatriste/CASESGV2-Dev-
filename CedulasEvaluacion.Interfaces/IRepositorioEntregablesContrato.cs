@@ -9,7 +9,7 @@ namespace CedulasEvaluacion.Interfaces
     public interface IRepositorioEntregablesContrato
     {
         Task<List<EntregablesContrato>> GetEntregablesCS(int contrato);
-        Task<List<EntregablesContrato>> GetEntregableCsById(int id);
-        Task<int> InsertaContrato(EntregablesContrato entregable);
+        Task<EntregablesContrato> GetEntregableCsById(int id);
+        Task<int> InsertarActualizarContrato(EntregablesContrato entregable);
     }
 }

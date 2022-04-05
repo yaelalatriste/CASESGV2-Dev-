@@ -146,7 +146,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/telConvencional/revision/{id}")]
         public async Task<IActionResult> RevisarCedula(int id)
         {
-             int success = await vPerfiles.getPermiso(UserId(), modulo(), "revision");
+             int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
              if (success == 1)
              {
                 TelefoniaConvencional telCel = null;

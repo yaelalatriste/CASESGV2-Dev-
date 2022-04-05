@@ -53,7 +53,7 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
-        public async Task<List<EntregablesContrato>> GetEntregableCsById(int id)
+        public async Task<EntregablesContrato> GetEntregableCsById(int id)
         {
             try
             {
@@ -63,14 +63,14 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@id", id));
-                        var response = new List<EntregablesContrato>();
+                        var response = new EntregablesContrato();
                         await sql.OpenAsync();
 
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
                             while (await reader.ReadAsync())
                             {
-                                response.Add(MapToValueEntregablesContratos(reader));
+                                response = MapToValueEntregablesContratos(reader);
                             }
                         }
 
@@ -85,45 +85,50 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
-        public async Task<int> InsertaContrato(EntregablesContrato entregable)
+        public async Task<int> InsertarActualizarContrato(EntregablesContrato entregables)
         {
             DateTime date = DateTime.Now;
             string date_str = date.ToString("yyyyMMddHHmmss");
             int id = 0;
 
-            if (entregable.Id != 0)
+
+            if (entregables.Id != 0)
             {
-                int isDeleted = await eliminaArchivo(entregable);
+                int isDeleted = await eliminaArchivo(entregables);
             }
 
-            string saveFile = await guardaArchivo(entregable.Archivo, "Contrato_"+entregable.ContratoId,date_str);
+            string saveFile = await guardaArchivo(entregables.Archivo, entregables.ContratoId+"", date_str);
             try
             {
                 if (saveFile.Equals("Ok"))
                 {
                     using (SqlConnection sql = new SqlConnection(_connectionString))
                     {
-                        using (SqlCommand cmd = new SqlCommand("sp_insertaContratoServicio", sql))
+                        using (SqlCommand cmd = new SqlCommand("sp_insertarActualizarEntregableContrato", sql))
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.Add(new SqlParameter("@id", entregable.Id)).Direction = ParameterDirection.Output;
-                            cmd.Parameters.Add(new SqlParameter("@contratoId", entregable.ContratoId));
-                            cmd.Parameters.Add(new SqlParameter("@descripcion", entregable.Descripcion));
-                            cmd.Parameters.Add(new SqlParameter("@tipoContrato", entregable.TipoContrato));
-                            cmd.Parameters.Add(new SqlParameter("@tipo", entregable.Tipo));
-                            cmd.Parameters.Add(new SqlParameter("@archivo", entregable.Archivo));
-                            cmd.Parameters.Add(new SqlParameter("@tamanio", entregable.Tamanio));
-                            cmd.Parameters.Add(new SqlParameter("@inicioPeriodo", entregable.InicioPeriodo));
-                            cmd.Parameters.Add(new SqlParameter("@finPeriodo", entregable.FinPeriodo));
-                            cmd.Parameters.Add(new SqlParameter("@fechaProgramada", entregable.FechaProgramada));
-                            cmd.Parameters.Add(new SqlParameter("@fechaEntrega", entregable.FechaEntrega));
-                            cmd.Parameters.Add(new SqlParameter("@comentarios", entregable.Comentarios));
+                            cmd.Parameters.Add(new SqlParameter("@id", entregables.Id)).Direction = System.Data.ParameterDirection.Output;
+                            if (entregables.Id != 0)
+                                cmd.Parameters.Add(new SqlParameter("@ids", entregables.Id));
 
+                            cmd.Parameters.Add(new SqlParameter("@contratoId", entregables.ContratoId));
+                            cmd.Parameters.Add(new SqlParameter("@descripcion", entregables.Descripcion));
+                            cmd.Parameters.Add(new SqlParameter("@tipoContrato", entregables.TipoContrato));
+                            cmd.Parameters.Add(new SqlParameter("@tipo", entregables.Tipo));
+                            cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + entregables.Archivo.FileName)));
+                            cmd.Parameters.Add(new SqlParameter("@tamanio", entregables.Archivo.Length));
+                            cmd.Parameters.Add(new SqlParameter("@comentarios", entregables.Comentarios));
+                            cmd.Parameters.Add(new SqlParameter("@inicioPeriodo", entregables.InicioPeriodo));
+                            cmd.Parameters.Add(new SqlParameter("@finPeriodo", entregables.FinPeriodo));
+                            cmd.Parameters.Add(new SqlParameter("@montoGarantia", entregables.MontoGarantia));
+                            cmd.Parameters.Add(new SqlParameter("@fechaProgramada", entregables.FechaProgramada));
+                            cmd.Parameters.Add(new SqlParameter("@fechaEntrega", entregables.FechaEntrega));
 
                             await sql.OpenAsync();
                             await cmd.ExecuteNonQueryAsync();
+
                             id = Convert.ToInt32(cmd.Parameters["@id"].Value);
-                            return id;
+
                         }
                     }
                 }
@@ -136,12 +141,12 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
-        public async Task<string> guardaArchivo(IFormFile archivo, string contrato, string date)
+        public async Task<string> guardaArchivo(IFormFile archivo, string folio, string date)
         {
             long size = archivo.Length;
-            string folderCedula = "Contrato_"+contrato;
+            string folderCedula = folio;
 
-            string newPath = Directory.GetCurrentDirectory() + "\\ObligacionesPS\\" + folderCedula;
+            string newPath = Directory.GetCurrentDirectory() + "\\ObligacionesPS\\Contrato_" + folderCedula;
             if (!Directory.Exists(newPath))
             {
                 Directory.CreateDirectory(newPath);
@@ -175,7 +180,7 @@ namespace CedulasEvaluacion.Repositories
                         await cmd.ExecuteNonQueryAsync();
 
                         string archivo = (cmd.Parameters["@archivo"].Value).ToString();
-                        string newPath = Directory.GetCurrentDirectory() + "\\ObligacionesPS\\Contrato_" + entregable.ContratoId + "\\" + archivo;
+                        string newPath = Directory.GetCurrentDirectory() + "\\Entregables\\Contrato_" + entregable.ContratoId + "\\" + archivo;
                         File.Delete(newPath);
 
                         return 1;
@@ -195,6 +200,8 @@ namespace CedulasEvaluacion.Repositories
                 Id = (int)reader["Id"],
                 ContratoId = (int)reader["ContratoId"],
                 Descripcion = reader["Descripcion"] != DBNull.Value ? reader["Descripcion"].ToString() : "",
+                MontoGarantia = reader["MontoGarantia"] != DBNull.Value ? (decimal)reader["MontoGarantia"] : 0,
+                MontoPenalizacion = reader["MontoPenalizacion"] != DBNull.Value ? (decimal)reader["MontoPenalizacion"] : 0,
                 Tipo = reader["Tipo"] != DBNull.Value ? reader["Tipo"].ToString() : "",
                 TipoContrato = reader["TipoContrato"] != DBNull.Value ? reader["TipoContrato"].ToString() : "",
                 InicioPeriodo = reader["InicioPeriodo"] != DBNull.Value ? Convert.ToDateTime(reader["InicioPeriodo"].ToString()):DateTime.Now,
