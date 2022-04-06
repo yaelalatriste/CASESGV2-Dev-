@@ -90,6 +90,8 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioEntregablesMuebles, RepositorioEntregablesMuebles>();
             services.AddScoped<IRepositorioEntregablesContrato, RepositorioEntregablesContrato>();
             
+            services.AddScoped<IRepositorioReporteCedula, RepositorioReporteCedula>();
+            
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
                 options.LoginPath = "/login";
@@ -128,6 +130,7 @@ namespace CASESGCedulasEvaluacion
             {
                 endpoints.MapControllerRoute(
                     name: "default",
+                    //pattern: "{controller=ReporteCedula}/{action=Print}/{id?}");
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }

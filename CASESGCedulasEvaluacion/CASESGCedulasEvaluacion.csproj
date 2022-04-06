@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Reportes\ReporteFinancieros.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\Reportes\ReporteFinancieros.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.21" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.9" />
@@ -33,10 +41,18 @@
 
   <ItemGroup>
     <Folder Include="Connected Services\" />
-    <Folder Include="Reportes\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\Reportes\CedulaMensajeria.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="CedulasEvaluacionV2DataSet.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CedulasEvaluacionV2DataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Update="CedulasEvaluacionV2DataSet1.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -48,8 +64,12 @@
       <DependentUpon>CedulasEvaluacionV2DataSet3.xsd</DependentUpon>
     </Compile>
   </ItemGroup>
-
+  
   <ItemGroup>
+    <None Update="CedulasEvaluacionV2DataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CedulasEvaluacionV2DataSet.Designer.cs</LastGenOutput>
+    </None>
     <None Update="CedulasEvaluacionV2DataSet1.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>CedulasEvaluacionV2DataSet1.Designer.cs</LastGenOutput>

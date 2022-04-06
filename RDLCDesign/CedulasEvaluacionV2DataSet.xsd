@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CedulasEvaluacionV2DataSet" targetNamespace="http://tempuri.org/CedulasEvaluacionV2DataSet.xsd" xmlns:mstns="http://tempuri.org/CedulasEvaluacionV2DataSet.xsd" xmlns="http://tempuri.org/CedulasEvaluacionV2DataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="CedulasEvaluacionV2ConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="CedulasEvaluacionV2ConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.RDLCDesign.Properties.Settings.GlobalReference.Default.CedulasEvaluacionV2ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="view_pruebaTableAdapter" GeneratorDataComponentClassName="view_pruebaTableAdapter" Name="view_prueba" UserDataComponentName="view_pruebaTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="CedulasEvaluacionV2ConnectionString (Settings)" DbObjectName="CedulasEvaluacionV2.dbo.view_prueba" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>SELECT Id, Estatus, Folio, Mes, Anio, Calificacion, Penalizacion FROM dbo.view_prueba</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="Id" DataSetColumn="Id" />
+              <Mapping SourceColumn="Estatus" DataSetColumn="Estatus" />
+              <Mapping SourceColumn="Folio" DataSetColumn="Folio" />
+              <Mapping SourceColumn="Mes" DataSetColumn="Mes" />
+              <Mapping SourceColumn="Anio" DataSetColumn="Anio" />
+              <Mapping SourceColumn="Calificacion" DataSetColumn="Calificacion" />
+              <Mapping SourceColumn="Penalizacion" DataSetColumn="Penalizacion" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="CedulasEvaluacionV2DataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="CedulasEvaluacionV2DataSet" msprop:Generator_UserDSName="CedulasEvaluacionV2DataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="view_prueba" msprop:Generator_TableClassName="view_pruebaDataTable" msprop:Generator_TableVarName="tableview_prueba" msprop:Generator_TablePropName="view_prueba" msprop:Generator_RowDeletingName="view_pruebaRowDeleting" msprop:Generator_RowChangingName="view_pruebaRowChanging" msprop:Generator_RowEvHandlerName="view_pruebaRowChangeEventHandler" msprop:Generator_RowDeletedName="view_pruebaRowDeleted" msprop:Generator_UserTableName="view_prueba" msprop:Generator_RowChangedName="view_pruebaRowChanged" msprop:Generator_RowEvArgName="view_pruebaRowChangeEvent" msprop:Generator_RowClassName="view_pruebaRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_UserColumnName="Id" type="xs:int" />
+              <xs:element name="Estatus" msprop:Generator_ColumnVarNameInTable="columnEstatus" msprop:Generator_ColumnPropNameInRow="Estatus" msprop:Generator_ColumnPropNameInTable="EstatusColumn" msprop:Generator_UserColumnName="Estatus" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Folio" msprop:Generator_ColumnVarNameInTable="columnFolio" msprop:Generator_ColumnPropNameInRow="Folio" msprop:Generator_ColumnPropNameInTable="FolioColumn" msprop:Generator_UserColumnName="Folio">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Mes" msprop:Generator_ColumnVarNameInTable="columnMes" msprop:Generator_ColumnPropNameInRow="Mes" msprop:Generator_ColumnPropNameInTable="MesColumn" msprop:Generator_UserColumnName="Mes">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="12" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Anio" msprop:Generator_ColumnVarNameInTable="columnAnio" msprop:Generator_ColumnPropNameInRow="Anio" msprop:Generator_ColumnPropNameInTable="AnioColumn" msprop:Generator_UserColumnName="Anio" type="xs:int" />
+              <xs:element name="Calificacion" msprop:Generator_ColumnVarNameInTable="columnCalificacion" msprop:Generator_ColumnPropNameInRow="Calificacion" msprop:Generator_ColumnPropNameInTable="CalificacionColumn" msprop:Generator_UserColumnName="Calificacion" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Penalizacion" msprop:Generator_ColumnVarNameInTable="columnPenalizacion" msprop:Generator_ColumnPropNameInRow="Penalizacion" msprop:Generator_ColumnPropNameInTable="PenalizacionColumn" msprop:Generator_UserColumnName="Penalizacion" type="xs:decimal" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:view_prueba" />
+      <xs:field xpath="mstns:Id" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

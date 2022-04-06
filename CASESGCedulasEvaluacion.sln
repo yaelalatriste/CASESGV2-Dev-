@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CedulasEvaluacion.Controlle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CASESGCedulasEvaluacion", "CASESGCedulasEvaluacion\CASESGCedulasEvaluacion.csproj", "{2C704EAA-D9AC-4AC6-8198-8A38674EEF38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDLCDesign", "RDLCDesign\RDLCDesign.csproj", "{5C984891-7582-43BF-BD27-9C5B48312A21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2C704EAA-D9AC-4AC6-8198-8A38674EEF38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C704EAA-D9AC-4AC6-8198-8A38674EEF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C704EAA-D9AC-4AC6-8198-8A38674EEF38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C984891-7582-43BF-BD27-9C5B48312A21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C984891-7582-43BF-BD27-9C5B48312A21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C984891-7582-43BF-BD27-9C5B48312A21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C984891-7582-43BF-BD27-9C5B48312A21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
