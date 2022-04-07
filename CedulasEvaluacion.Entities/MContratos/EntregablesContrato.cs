@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CedulasEvaluacion.Entities.MCatalogoServicios;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,5 +30,6 @@ namespace CedulasEvaluacion.Entities.MContratos
         public DateTime FechaEliminacion { get; set; }
 
         public ContratosServicio contrato { get; set; }
+        public CatalogoServicios servicio{ get; set; }
     }
 }

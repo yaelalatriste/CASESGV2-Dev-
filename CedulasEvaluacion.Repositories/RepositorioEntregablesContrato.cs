@@ -90,14 +90,17 @@ namespace CedulasEvaluacion.Repositories
             DateTime date = DateTime.Now;
             string date_str = date.ToString("yyyyMMddHHmmss");
             int id = 0;
+            string saveFile = "Ok";
 
+            if (entregables.Archivo != null) { 
+                if (entregables.Id != 0)
+                {
+                    int isDeleted = await eliminaArchivo(entregables);
+                }
 
-            if (entregables.Id != 0)
-            {
-                int isDeleted = await eliminaArchivo(entregables);
+                saveFile = await guardaArchivo(entregables.Archivo, entregables.ContratoId + "", date_str);
             }
 
-            string saveFile = await guardaArchivo(entregables.Archivo, entregables.ContratoId+"", date_str);
             try
             {
                 if (saveFile.Equals("Ok"))
@@ -115,14 +118,17 @@ namespace CedulasEvaluacion.Repositories
                             cmd.Parameters.Add(new SqlParameter("@descripcion", entregables.Descripcion));
                             cmd.Parameters.Add(new SqlParameter("@tipoContrato", entregables.TipoContrato));
                             cmd.Parameters.Add(new SqlParameter("@tipo", entregables.Tipo));
-                            cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + entregables.Archivo.FileName)));
-                            cmd.Parameters.Add(new SqlParameter("@tamanio", entregables.Archivo.Length));
+                            if (entregables.Archivo != null)
+                            {
+                                cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + entregables.Archivo.FileName)));
+                                cmd.Parameters.Add(new SqlParameter("@tamanio", entregables.Archivo.Length));
+                            }
                             cmd.Parameters.Add(new SqlParameter("@comentarios", entregables.Comentarios));
                             cmd.Parameters.Add(new SqlParameter("@inicioPeriodo", entregables.InicioPeriodo));
                             cmd.Parameters.Add(new SqlParameter("@finPeriodo", entregables.FinPeriodo));
                             cmd.Parameters.Add(new SqlParameter("@montoGarantia", entregables.MontoGarantia));
-                            cmd.Parameters.Add(new SqlParameter("@fechaProgramada", entregables.FechaProgramada));
-                            cmd.Parameters.Add(new SqlParameter("@fechaEntrega", entregables.FechaEntrega));
+                            cmd.Parameters.Add(new SqlParameter("@fechaProgramada", entregables.FechaProgramada.ToString("MM/dd/yyyy")));
+                            cmd.Parameters.Add(new SqlParameter("@fechaEntrega", entregables.FechaEntrega.ToString("MM/dd/yyyy")));
 
                             await sql.OpenAsync();
                             await cmd.ExecuteNonQueryAsync();

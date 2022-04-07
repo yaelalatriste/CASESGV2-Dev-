@@ -77,18 +77,23 @@
                                                 <td>@doc.Tipo</td>
                                                 <td>@doc.TipoContrato</td>
                                                 <td>@doc.InicioPeriodo.ToString("dd/MM/yyyy") al @doc.FinPeriodo.ToString("dd/MM/yyyy")</td>
-                                                @if (@doc.FechaProgramada < @doc.FechaEntrega)
-                                                        {
-                                                            <td class="text-center text-danger font-weight-bold">
-                                                                Si
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td class="text-center text-success font-weight-bold">
-                                                                No
-                                                            </td>
-                                                        }
+                                                @if (@doc.FechaProgramada < @doc.FechaEntrega && !@doc.FechaEntrega.ToString("dd/MM/yyyy").Equals("01/01/0001"))
+                                                {
+                                                    <td class="text-center text-danger font-weight-bold">
+                                                        Si
+                                                    </td>
+                                                 }
+                                                 else if (@doc.FechaProgramada > @doc.FechaEntrega && !@doc.FechaEntrega.ToString("dd/MM/yyyy").Equals("01/01/0001"))
+                                                 {
+                                                    <td class="text-center text-success font-weight-bold">
+                                                        No
+                                                    </td>
+                                                 }else
+                                                 {
+                                                    <td class="text-center text-primary font-weight-bold">
+                                                        Pendiente
+                                                    </td>
+                                                 }
                                                 <td>
                                                     <a href="/catalogo/verObligacion/@doc.Id">
                                                         <i class="fad fa-eye text-success mr-2"></i>

@@ -298,7 +298,7 @@
                                                 </td>
                                             }
                                         }
-                                        else if ((@User.Claims.ElementAt(2).Value).Contains("Financieros") || (@User.Claims.ElementAt(2).Value).Equals("Mensajeria"))
+                                        else if ((@User.Claims.ElementAt(2).Value).Contains("Financieros") || (@User.Claims.ElementAt(2).Value).Contains("Mensajeria"))
                                         {
                                             <!--Financieros-->
                                             if (@entre.Estatus.Equals("Autorizado"))
@@ -446,7 +446,7 @@
                     </div>
                 </div>
                 <div class="row col-lg-12 justify-content-end mb-3">
-                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || @User.Claims.ElementAt(2).Value.Equals("Mensajeria"))
+                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                     {
                         @if (cedula == true && memo == true && @Model.Estatus.Equals("Autorizada"))
                         {

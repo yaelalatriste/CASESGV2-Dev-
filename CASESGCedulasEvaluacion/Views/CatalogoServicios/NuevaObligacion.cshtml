@@ -1,7 +1,7 @@
 ﻿@model CedulasEvaluacion.Entities.MContratos.EntregablesContrato;
 
 @{
-    ViewData["title"] = "Nueva Obligación para el Contrato \"" + @Model.contrato.NumeroContrato + "\"";
+    ViewData["title"] = "Nueva Obligación para el Contrato \"" + @Model.contrato.NumeroContrato + "\" del Servicio "+@Model.servicio.Nombre;
 }
 <div class="container-fluid" id="obligacion">
     <div class="row mb-3">
@@ -112,11 +112,6 @@
                             <input type="file" class="custom-file-input" id="customFile" accept=".pdf" asp-for="@Model.Archivo">
                             <label class="custom-file-label" for="customFile">Seleccionar Archivo</label>
                         </div>
-                        <div class="col-sm-12" id="error_customFile">
-                            <small id="dateHelp" class="text-danger">
-                                Por favor seleccione él archivo correspondiente
-                            </small>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -151,7 +146,6 @@
             $(".error_fechaProgramada").css('display', 'none');
             $(".error_fechaEntrega").css('display', 'none');
             $(".error_garantia").css('display', 'none');
-            $('#error_customFile').css('display', 'none');
 
             $("#customFile").on("change", function () {
                 var fileName = $(this).val().split("\\").pop();
@@ -190,7 +184,7 @@
                 var fechaProgramada = $("#fechaProgramada").val();
                 var customFile = $("#customFile").val();
                 if (descripcion != "" && tipoObligacion != "" && tipoContrato != "" && inicioPeriodo != "" && finPeriodo != "" && fechaProgramada != ""
-                    && customFile != "" && montoGarantia != "") {
+                    && montoGarantia != "") {
                     return true;
                 }
 
@@ -222,11 +216,6 @@
                 if (fechaProgramada == "") {
                     $('#fechaProgramada').addClass('is-invalid');
                     $('.error_fechaProgramada').css('display', 'block');
-                }
-
-                if (customFile == "") {
-                    $('#customFile').addClass('is-invalid');
-                    $('#error_customFile').css('display', 'block');
                 }
 
                 if (montoGarantia == "") {

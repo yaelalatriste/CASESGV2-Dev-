@@ -21,19 +21,30 @@
                         <td><strong>Descripción: </strong>@Model.Descripcion</td>
                         <td><strong>Obligación: </strong>@Model.Tipo</td>
                         <td><strong>Tipo de Contrato: </strong>@Model.TipoContrato</td>
-                        @if (@Model.FechaProgramada > @Model.FechaEntrega)
+                        @if (@Model.FechaProgramada > @Model.FechaEntrega && !@Model.FechaEntrega.ToString("dd/MM/yyyy").Equals("01/01/0001"))
                         {
                             <td class="text-success"><b>Penalización: </b>No</td>
                         }
-                        else
+                        else if (@Model.FechaProgramada < @Model.FechaEntrega && !@Model.FechaEntrega.Equals("01/01/0001"))
                         {
                             <td class="text-danger"><b>Penalización: </b> Si</td>
+                        }
+                        else
+                        {
+                            <td class="text-primary"><b>Penalización: </b> Pendiente</td>
                         }
                     </tr>
                     <tr>
                         <td><strong>Periodo: </strong>@Model.InicioPeriodo.ToString("dd/MM/yyyy") al @Model.FinPeriodo.ToString("dd/MM/yyyy")</td>
                         <td><strong>Fecha Programada: </strong>@Model.FechaProgramada.ToString("dd/MM/yyyy")</td>
-                        <td><strong>Fecha de Entrega: </strong>@Model.FechaEntrega.ToString("dd/MM/yyyy")</td>
+                        @if (!@Model.FechaEntrega.ToString("dd/MM/yyyy").Equals("01/01/0001"))
+                        {
+                            <td><strong>Fecha de Entrega: </strong>@Model.FechaEntrega.ToString("dd/MM/yyyy")</td>
+                        }
+                        else
+                        {
+                            <td class="text-primary"><strong>Fecha de Entrega: </strong>Pendiente</td>
+                        }
                         <td><strong>Monto de la Garantía: </strong>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.MontoGarantia)</td>
                         <td></td>
                     </tr>
@@ -45,6 +56,14 @@
         </div>
     </div>
     <div class="row col-lg-12">
-        <object class="mb-4" width="100%" height="450px" data="/contrato/verObligacion/@Model.ContratoId/@Model.NombreArchivo"></object>
+        @if (!@Model.NombreArchivo.Equals(null) && !@Model.NombreArchivo.Equals("")) {
+            <object class="mb-4" width="100%" height="450px" data="/contrato/verObligacion/@Model.ContratoId/@Model.NombreArchivo"></object>          
+         }
+         else 
+         { 
+            <div class="col-lg-12 text-center">
+                <p class="font-weight-bold text-primary">Aún no se realiza la carga de la obligación correspondiente</p>
+            </div>
+         }
     </div>
 </div>

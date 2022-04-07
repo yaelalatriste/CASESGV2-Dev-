@@ -93,6 +93,7 @@ namespace CedulasEvaluacion.Controllers
                 EntregablesContrato entregable = new EntregablesContrato();
                 entregable.ContratoId = contrato;
                 entregable.contrato = await vContrato.GetContratoServicioById(contrato);
+                entregable.servicio = await vCatalogo.GetServicioById(entregable.contrato.ServicioId);
                 return View("NuevaObligacion",entregable);
             }
             return Redirect("/error/denied");
@@ -107,6 +108,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 EntregablesContrato entregable = await eContrato.GetEntregableCsById(id);
                 entregable.contrato = await vContrato.GetContratoServicioById(entregable.ContratoId);
+                entregable.servicio = await vCatalogo.GetServicioById(entregable.contrato.ServicioId);
                 return View("NuevaObligacion", entregable);
             }
             return Redirect("/error/denied");
