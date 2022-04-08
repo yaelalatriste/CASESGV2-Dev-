@@ -1,4 +1,5 @@
 ﻿using CedulasEvaluacion.Entities.MMensajeria;
+using CedulasEvaluacion.Entities.Reportes;
 using CedulasEvaluacion.Entities.Vistas;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,6 @@ namespace CedulasEvaluacion.Interfaces
 {
     public interface IRepositorioReporteCedula
     {
-        Task<IEnumerable<VCedulas>> getCedulasMensajeria();
+        Task<IEnumerable<ReporteCedula>> getReporteMensajeria(int id);
     }
 }

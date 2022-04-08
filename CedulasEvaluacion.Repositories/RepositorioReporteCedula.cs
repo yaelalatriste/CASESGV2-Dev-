@@ -1,4 +1,5 @@
 ﻿using CedulasEvaluacion.Entities.MMensajeria;
+using CedulasEvaluacion.Entities.Reportes;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -18,17 +19,17 @@ namespace CedulasEvaluacion.Repositories
         {
             _connectionString = configuration.GetConnectionString("DatabaseConnection");
         }
-        public async Task<IEnumerable<VCedulas>> getCedulasMensajeria()
+        public async Task<IEnumerable<ReporteCedula>> getReporteMensajeria(int id)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("sp_getCedulasMensajeria", sql))
+                    using (SqlCommand cmd = new SqlCommand("sp_ReporteMensajeriaById", sql))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@user", 3));
-                        var response = new List<VCedulas>();
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        var response = new List<ReporteCedula>();
                         await sql.OpenAsync();
 
                         using (var reader = await cmd.ExecuteReaderAsync())
@@ -50,17 +51,22 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
-        private VCedulas MapToValue(SqlDataReader reader)
+        private ReporteCedula MapToValue(SqlDataReader reader)
         {
-            return new VCedulas()
+            return new ReporteCedula()
             {
                 Id = (int)reader["Id"],
-                Nombre = reader["Nombre"].ToString(),
+                Inmueble = reader["Inmueble"].ToString(),
                 Folio = reader["Folio"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Anio = (int)reader["Anio"],
+                Administracion = reader["Administracion"].ToString(),
                 Servicio = reader["Servicio"].ToString(),
-                Estatus = reader["Estatus"].ToString()
+                Estatus = reader["Estatus"].ToString(),
+                Calificacion = (decimal)reader["Calificacion"],
+                FechaCreacion = reader["FechaCreacion"].ToString(),
+                Facturas = reader["Facturas"].ToString(),
+                MontosFacturas = reader["MontosFacturas"].ToString(),
             };
         }
     }

@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\Reportes\ReporteFinancieros.rdlc" />
+    <Content Remove="wwwroot\Reportes\CedulaMensajeria.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\Reportes\ReporteFinancieros.rdlc" />
+    <EmbeddedResource Include="wwwroot\Reportes\CedulaMensajeria.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,10 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Reportes\CedulaMensajeria.rdlc" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="CedulasEvaluacionV2DataSet.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -57,6 +53,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>CedulasEvaluacionV2DataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="CedulasEvaluacionV2DataSet2.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CedulasEvaluacionV2DataSet2.xsd</DependentUpon>
     </Compile>
     <Compile Update="CedulasEvaluacionV2DataSet3.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -73,6 +74,10 @@
     <None Update="CedulasEvaluacionV2DataSet1.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>CedulasEvaluacionV2DataSet1.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="CedulasEvaluacionV2DataSet2.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CedulasEvaluacionV2DataSet2.Designer.cs</LastGenOutput>
     </None>
     <None Update="CedulasEvaluacionV2DataSet3.xsd">
       <Generator>MSDataSetGenerator</Generator>
