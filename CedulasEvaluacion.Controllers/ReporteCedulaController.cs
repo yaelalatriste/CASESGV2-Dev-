@@ -63,7 +63,7 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else if (i==2) 
                 {
-                    if (respuestas[i].Respuesta == false)
+                    if (respuestas[i].Respuesta == false && respuestas[i].Detalles.Equals(""))
                     {
                         parameters.Add("pregunta" + (i + 1), "Se presentaron Incidencias en el inmueble, las cuales se describen a continuación: ");
                     }
