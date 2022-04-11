@@ -54,5 +54,17 @@ namespace CedulasEvaluacion.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost]
+        [Route("/contratos/actualizaContrato")]
+        public async Task<IActionResult> ActualizaContrato([FromBody] ContratosServicio contratosServicio)
+        {
+            int insert = await vContrato.ActualizaContrato(contratosServicio);
+            if (insert != -1)
+            {
+                return Ok(insert);
+            }
+            return BadRequest();
+        }
     }
 }

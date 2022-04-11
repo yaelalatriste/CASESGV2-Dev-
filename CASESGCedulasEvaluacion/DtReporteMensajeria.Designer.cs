@@ -20,19 +20,19 @@ namespace CASESGCedulasEvaluacion {
     [global::System.ComponentModel.DesignerCategoryAttribute("code")]
     [global::System.ComponentModel.ToolboxItem(true)]
     [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedDataSetSchema")]
-    [global::System.Xml.Serialization.XmlRootAttribute("CedulasEvaluacionV2DataSet2")]
+    [global::System.Xml.Serialization.XmlRootAttribute("DtReporteMensajeria")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
-    public partial class CedulasEvaluacionV2DataSet2 : global::System.Data.DataSet {
+    public partial class DtReporteMensajeria : global::System.Data.DataSet {
         
         private sp_getIncidenciasByTipoMensajeriaDataTable tablesp_getIncidenciasByTipoMensajeria;
         
-        private sp_getIncidenciasMensajeriaDataTable tablesp_getIncidenciasMensajeria;
+        private sp_ReporteMensajeriaByIdDataTable tablesp_ReporteMensajeriaById;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public CedulasEvaluacionV2DataSet2() {
+        public DtReporteMensajeria() {
             this.BeginInit();
             this.InitClass();
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -43,7 +43,7 @@ namespace CASESGCedulasEvaluacion {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        protected CedulasEvaluacionV2DataSet2(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+        protected DtReporteMensajeria(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                 base(info, context, false) {
             if ((this.IsBinarySerialized(info, context) == true)) {
                 this.InitVars(false);
@@ -59,8 +59,8 @@ namespace CASESGCedulasEvaluacion {
                 if ((ds.Tables["sp_getIncidenciasByTipoMensajeria"] != null)) {
                     base.Tables.Add(new sp_getIncidenciasByTipoMensajeriaDataTable(ds.Tables["sp_getIncidenciasByTipoMensajeria"]));
                 }
-                if ((ds.Tables["sp_getIncidenciasMensajeria"] != null)) {
-                    base.Tables.Add(new sp_getIncidenciasMensajeriaDataTable(ds.Tables["sp_getIncidenciasMensajeria"]));
+                if ((ds.Tables["sp_ReporteMensajeriaById"] != null)) {
+                    base.Tables.Add(new sp_ReporteMensajeriaByIdDataTable(ds.Tables["sp_ReporteMensajeriaById"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -94,9 +94,9 @@ namespace CASESGCedulasEvaluacion {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Browsable(false)]
         [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public sp_getIncidenciasMensajeriaDataTable sp_getIncidenciasMensajeria {
+        public sp_ReporteMensajeriaByIdDataTable sp_ReporteMensajeriaById {
             get {
-                return this.tablesp_getIncidenciasMensajeria;
+                return this.tablesp_ReporteMensajeriaById;
             }
         }
         
@@ -142,7 +142,7 @@ namespace CASESGCedulasEvaluacion {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public override global::System.Data.DataSet Clone() {
-            CedulasEvaluacionV2DataSet2 cln = ((CedulasEvaluacionV2DataSet2)(base.Clone()));
+            DtReporteMensajeria cln = ((DtReporteMensajeria)(base.Clone()));
             cln.InitVars();
             cln.SchemaSerializationMode = this.SchemaSerializationMode;
             return cln;
@@ -170,8 +170,8 @@ namespace CASESGCedulasEvaluacion {
                 if ((ds.Tables["sp_getIncidenciasByTipoMensajeria"] != null)) {
                     base.Tables.Add(new sp_getIncidenciasByTipoMensajeriaDataTable(ds.Tables["sp_getIncidenciasByTipoMensajeria"]));
                 }
-                if ((ds.Tables["sp_getIncidenciasMensajeria"] != null)) {
-                    base.Tables.Add(new sp_getIncidenciasMensajeriaDataTable(ds.Tables["sp_getIncidenciasMensajeria"]));
+                if ((ds.Tables["sp_ReporteMensajeriaById"] != null)) {
+                    base.Tables.Add(new sp_ReporteMensajeriaByIdDataTable(ds.Tables["sp_ReporteMensajeriaById"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -212,10 +212,10 @@ namespace CASESGCedulasEvaluacion {
                     this.tablesp_getIncidenciasByTipoMensajeria.InitVars();
                 }
             }
-            this.tablesp_getIncidenciasMensajeria = ((sp_getIncidenciasMensajeriaDataTable)(base.Tables["sp_getIncidenciasMensajeria"]));
+            this.tablesp_ReporteMensajeriaById = ((sp_ReporteMensajeriaByIdDataTable)(base.Tables["sp_ReporteMensajeriaById"]));
             if ((initTable == true)) {
-                if ((this.tablesp_getIncidenciasMensajeria != null)) {
-                    this.tablesp_getIncidenciasMensajeria.InitVars();
+                if ((this.tablesp_ReporteMensajeriaById != null)) {
+                    this.tablesp_ReporteMensajeriaById.InitVars();
                 }
             }
         }
@@ -223,15 +223,15 @@ namespace CASESGCedulasEvaluacion {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitClass() {
-            this.DataSetName = "CedulasEvaluacionV2DataSet2";
+            this.DataSetName = "DtReporteMensajeria";
             this.Prefix = "";
-            this.Namespace = "http://tempuri.org/CedulasEvaluacionV2DataSet2.xsd";
+            this.Namespace = "http://tempuri.org/DtReporteMensajeria.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tablesp_getIncidenciasByTipoMensajeria = new sp_getIncidenciasByTipoMensajeriaDataTable();
             base.Tables.Add(this.tablesp_getIncidenciasByTipoMensajeria);
-            this.tablesp_getIncidenciasMensajeria = new sp_getIncidenciasMensajeriaDataTable();
-            base.Tables.Add(this.tablesp_getIncidenciasMensajeria);
+            this.tablesp_ReporteMensajeriaById = new sp_ReporteMensajeriaByIdDataTable();
+            base.Tables.Add(this.tablesp_ReporteMensajeriaById);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -242,7 +242,7 @@ namespace CASESGCedulasEvaluacion {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private bool ShouldSerializesp_getIncidenciasMensajeria() {
+        private bool ShouldSerializesp_ReporteMensajeriaById() {
             return false;
         }
         
@@ -257,7 +257,7 @@ namespace CASESGCedulasEvaluacion {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedDataSetSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-            CedulasEvaluacionV2DataSet2 ds = new CedulasEvaluacionV2DataSet2();
+            DtReporteMensajeria ds = new DtReporteMensajeria();
             global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
             global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
             global::System.Xml.Schema.XmlSchemaAny any = new global::System.Xml.Schema.XmlSchemaAny();
@@ -305,7 +305,7 @@ namespace CASESGCedulasEvaluacion {
         public delegate void sp_getIncidenciasByTipoMensajeriaRowChangeEventHandler(object sender, sp_getIncidenciasByTipoMensajeriaRowChangeEvent e);
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public delegate void sp_getIncidenciasMensajeriaRowChangeEventHandler(object sender, sp_getIncidenciasMensajeriaRowChangeEvent e);
+        public delegate void sp_ReporteMensajeriaByIdRowChangeEventHandler(object sender, sp_ReporteMensajeriaByIdRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -682,7 +682,7 @@ namespace CASESGCedulasEvaluacion {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                CedulasEvaluacionV2DataSet2 ds = new CedulasEvaluacionV2DataSet2();
+                DtReporteMensajeria ds = new DtReporteMensajeria();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -746,38 +746,36 @@ namespace CASESGCedulasEvaluacion {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class sp_getIncidenciasMensajeriaDataTable : global::System.Data.TypedTableBase<sp_getIncidenciasMensajeriaRow> {
+        public partial class sp_ReporteMensajeriaByIdDataTable : global::System.Data.TypedTableBase<sp_ReporteMensajeriaByIdRow> {
             
             private global::System.Data.DataColumn columnId;
             
-            private global::System.Data.DataColumn columnCedulaMensajeriaId;
+            private global::System.Data.DataColumn columnInmueble;
             
-            private global::System.Data.DataColumn columnTipo;
+            private global::System.Data.DataColumn columnFolio;
             
-            private global::System.Data.DataColumn columnNumeroGuia;
+            private global::System.Data.DataColumn columnMes;
             
-            private global::System.Data.DataColumn columnCodigoRastreo;
+            private global::System.Data.DataColumn columnAnio;
             
-            private global::System.Data.DataColumn columnAcuse;
+            private global::System.Data.DataColumn columnAdministracion;
             
-            private global::System.Data.DataColumn columnSobrepeso;
+            private global::System.Data.DataColumn columnServicio;
             
-            private global::System.Data.DataColumn columnTotalAcuses;
+            private global::System.Data.DataColumn columnEstatus;
             
-            private global::System.Data.DataColumn columnTipoServicio;
+            private global::System.Data.DataColumn columnCalificacion;
             
-            private global::System.Data.DataColumn columnFechaProgramada;
+            private global::System.Data.DataColumn columnFechaCreacion;
             
-            private global::System.Data.DataColumn columnFechaEfectiva;
+            private global::System.Data.DataColumn columnFacturas;
             
-            private global::System.Data.DataColumn columnMontoPenalizacion;
-            
-            private global::System.Data.DataColumn columnActaRobo;
+            private global::System.Data.DataColumn columnMontosFacturas;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_getIncidenciasMensajeriaDataTable() {
-                this.TableName = "sp_getIncidenciasMensajeria";
+            public sp_ReporteMensajeriaByIdDataTable() {
+                this.TableName = "sp_ReporteMensajeriaById";
                 this.BeginInit();
                 this.InitClass();
                 this.EndInit();
@@ -785,7 +783,7 @@ namespace CASESGCedulasEvaluacion {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal sp_getIncidenciasMensajeriaDataTable(global::System.Data.DataTable table) {
+            internal sp_ReporteMensajeriaByIdDataTable(global::System.Data.DataTable table) {
                 this.TableName = table.TableName;
                 if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
                     this.CaseSensitive = table.CaseSensitive;
@@ -802,7 +800,7 @@ namespace CASESGCedulasEvaluacion {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected sp_getIncidenciasMensajeriaDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+            protected sp_ReporteMensajeriaByIdDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
             }
@@ -817,97 +815,89 @@ namespace CASESGCedulasEvaluacion {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn CedulaMensajeriaIdColumn {
+            public global::System.Data.DataColumn InmuebleColumn {
                 get {
-                    return this.columnCedulaMensajeriaId;
+                    return this.columnInmueble;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn TipoColumn {
+            public global::System.Data.DataColumn FolioColumn {
                 get {
-                    return this.columnTipo;
+                    return this.columnFolio;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn NumeroGuiaColumn {
+            public global::System.Data.DataColumn MesColumn {
                 get {
-                    return this.columnNumeroGuia;
+                    return this.columnMes;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn CodigoRastreoColumn {
+            public global::System.Data.DataColumn AnioColumn {
                 get {
-                    return this.columnCodigoRastreo;
+                    return this.columnAnio;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn AcuseColumn {
+            public global::System.Data.DataColumn AdministracionColumn {
                 get {
-                    return this.columnAcuse;
+                    return this.columnAdministracion;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn SobrepesoColumn {
+            public global::System.Data.DataColumn ServicioColumn {
                 get {
-                    return this.columnSobrepeso;
+                    return this.columnServicio;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn TotalAcusesColumn {
+            public global::System.Data.DataColumn EstatusColumn {
                 get {
-                    return this.columnTotalAcuses;
+                    return this.columnEstatus;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn TipoServicioColumn {
+            public global::System.Data.DataColumn CalificacionColumn {
                 get {
-                    return this.columnTipoServicio;
+                    return this.columnCalificacion;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn FechaProgramadaColumn {
+            public global::System.Data.DataColumn FechaCreacionColumn {
                 get {
-                    return this.columnFechaProgramada;
+                    return this.columnFechaCreacion;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn FechaEfectivaColumn {
+            public global::System.Data.DataColumn FacturasColumn {
                 get {
-                    return this.columnFechaEfectiva;
+                    return this.columnFacturas;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn MontoPenalizacionColumn {
+            public global::System.Data.DataColumn MontosFacturasColumn {
                 get {
-                    return this.columnMontoPenalizacion;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn ActaRoboColumn {
-                get {
-                    return this.columnActaRobo;
+                    return this.columnMontosFacturas;
                 }
             }
             
@@ -922,64 +912,63 @@ namespace CASESGCedulasEvaluacion {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_getIncidenciasMensajeriaRow this[int index] {
+            public sp_ReporteMensajeriaByIdRow this[int index] {
                 get {
-                    return ((sp_getIncidenciasMensajeriaRow)(this.Rows[index]));
+                    return ((sp_ReporteMensajeriaByIdRow)(this.Rows[index]));
                 }
             }
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event sp_getIncidenciasMensajeriaRowChangeEventHandler sp_getIncidenciasMensajeriaRowChanging;
+            public event sp_ReporteMensajeriaByIdRowChangeEventHandler sp_ReporteMensajeriaByIdRowChanging;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event sp_getIncidenciasMensajeriaRowChangeEventHandler sp_getIncidenciasMensajeriaRowChanged;
+            public event sp_ReporteMensajeriaByIdRowChangeEventHandler sp_ReporteMensajeriaByIdRowChanged;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event sp_getIncidenciasMensajeriaRowChangeEventHandler sp_getIncidenciasMensajeriaRowDeleting;
+            public event sp_ReporteMensajeriaByIdRowChangeEventHandler sp_ReporteMensajeriaByIdRowDeleting;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event sp_getIncidenciasMensajeriaRowChangeEventHandler sp_getIncidenciasMensajeriaRowDeleted;
+            public event sp_ReporteMensajeriaByIdRowChangeEventHandler sp_ReporteMensajeriaByIdRowDeleted;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Addsp_getIncidenciasMensajeriaRow(sp_getIncidenciasMensajeriaRow row) {
+            public void Addsp_ReporteMensajeriaByIdRow(sp_ReporteMensajeriaByIdRow row) {
                 this.Rows.Add(row);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_getIncidenciasMensajeriaRow Addsp_getIncidenciasMensajeriaRow(int CedulaMensajeriaId, string Tipo, string NumeroGuia, long CodigoRastreo, string Acuse, decimal Sobrepeso, int TotalAcuses, string TipoServicio, System.DateTime FechaProgramada, System.DateTime FechaEfectiva, decimal MontoPenalizacion, string ActaRobo) {
-                sp_getIncidenciasMensajeriaRow rowsp_getIncidenciasMensajeriaRow = ((sp_getIncidenciasMensajeriaRow)(this.NewRow()));
+            public sp_ReporteMensajeriaByIdRow Addsp_ReporteMensajeriaByIdRow(string Inmueble, string Folio, string Mes, int Anio, string Administracion, string Servicio, string Estatus, string Calificacion, string FechaCreacion, string Facturas, string MontosFacturas) {
+                sp_ReporteMensajeriaByIdRow rowsp_ReporteMensajeriaByIdRow = ((sp_ReporteMensajeriaByIdRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
-                        CedulaMensajeriaId,
-                        Tipo,
-                        NumeroGuia,
-                        CodigoRastreo,
-                        Acuse,
-                        Sobrepeso,
-                        TotalAcuses,
-                        TipoServicio,
-                        FechaProgramada,
-                        FechaEfectiva,
-                        MontoPenalizacion,
-                        ActaRobo};
-                rowsp_getIncidenciasMensajeriaRow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowsp_getIncidenciasMensajeriaRow);
-                return rowsp_getIncidenciasMensajeriaRow;
+                        Inmueble,
+                        Folio,
+                        Mes,
+                        Anio,
+                        Administracion,
+                        Servicio,
+                        Estatus,
+                        Calificacion,
+                        FechaCreacion,
+                        Facturas,
+                        MontosFacturas};
+                rowsp_ReporteMensajeriaByIdRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowsp_ReporteMensajeriaByIdRow);
+                return rowsp_ReporteMensajeriaByIdRow;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_getIncidenciasMensajeriaRow FindById(int Id) {
-                return ((sp_getIncidenciasMensajeriaRow)(this.Rows.Find(new object[] {
+            public sp_ReporteMensajeriaByIdRow FindById(int Id) {
+                return ((sp_ReporteMensajeriaByIdRow)(this.Rows.Find(new object[] {
                             Id})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public override global::System.Data.DataTable Clone() {
-                sp_getIncidenciasMensajeriaDataTable cln = ((sp_getIncidenciasMensajeriaDataTable)(base.Clone()));
+                sp_ReporteMensajeriaByIdDataTable cln = ((sp_ReporteMensajeriaByIdDataTable)(base.Clone()));
                 cln.InitVars();
                 return cln;
             }
@@ -987,25 +976,24 @@ namespace CASESGCedulasEvaluacion {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             protected override global::System.Data.DataTable CreateInstance() {
-                return new sp_getIncidenciasMensajeriaDataTable();
+                return new sp_ReporteMensajeriaByIdDataTable();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             internal void InitVars() {
                 this.columnId = base.Columns["Id"];
-                this.columnCedulaMensajeriaId = base.Columns["CedulaMensajeriaId"];
-                this.columnTipo = base.Columns["Tipo"];
-                this.columnNumeroGuia = base.Columns["NumeroGuia"];
-                this.columnCodigoRastreo = base.Columns["CodigoRastreo"];
-                this.columnAcuse = base.Columns["Acuse"];
-                this.columnSobrepeso = base.Columns["Sobrepeso"];
-                this.columnTotalAcuses = base.Columns["TotalAcuses"];
-                this.columnTipoServicio = base.Columns["TipoServicio"];
-                this.columnFechaProgramada = base.Columns["FechaProgramada"];
-                this.columnFechaEfectiva = base.Columns["FechaEfectiva"];
-                this.columnMontoPenalizacion = base.Columns["MontoPenalizacion"];
-                this.columnActaRobo = base.Columns["ActaRobo"];
+                this.columnInmueble = base.Columns["Inmueble"];
+                this.columnFolio = base.Columns["Folio"];
+                this.columnMes = base.Columns["Mes"];
+                this.columnAnio = base.Columns["Anio"];
+                this.columnAdministracion = base.Columns["Administracion"];
+                this.columnServicio = base.Columns["Servicio"];
+                this.columnEstatus = base.Columns["Estatus"];
+                this.columnCalificacion = base.Columns["Calificacion"];
+                this.columnFechaCreacion = base.Columns["FechaCreacion"];
+                this.columnFacturas = base.Columns["Facturas"];
+                this.columnMontosFacturas = base.Columns["MontosFacturas"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1013,68 +1001,77 @@ namespace CASESGCedulasEvaluacion {
             private void InitClass() {
                 this.columnId = new global::System.Data.DataColumn("Id", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnId);
-                this.columnCedulaMensajeriaId = new global::System.Data.DataColumn("CedulaMensajeriaId", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCedulaMensajeriaId);
-                this.columnTipo = new global::System.Data.DataColumn("Tipo", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTipo);
-                this.columnNumeroGuia = new global::System.Data.DataColumn("NumeroGuia", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNumeroGuia);
-                this.columnCodigoRastreo = new global::System.Data.DataColumn("CodigoRastreo", typeof(long), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCodigoRastreo);
-                this.columnAcuse = new global::System.Data.DataColumn("Acuse", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAcuse);
-                this.columnSobrepeso = new global::System.Data.DataColumn("Sobrepeso", typeof(decimal), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnSobrepeso);
-                this.columnTotalAcuses = new global::System.Data.DataColumn("TotalAcuses", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTotalAcuses);
-                this.columnTipoServicio = new global::System.Data.DataColumn("TipoServicio", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTipoServicio);
-                this.columnFechaProgramada = new global::System.Data.DataColumn("FechaProgramada", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFechaProgramada);
-                this.columnFechaEfectiva = new global::System.Data.DataColumn("FechaEfectiva", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFechaEfectiva);
-                this.columnMontoPenalizacion = new global::System.Data.DataColumn("MontoPenalizacion", typeof(decimal), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMontoPenalizacion);
-                this.columnActaRobo = new global::System.Data.DataColumn("ActaRobo", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnActaRobo);
+                this.columnInmueble = new global::System.Data.DataColumn("Inmueble", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnInmueble);
+                this.columnFolio = new global::System.Data.DataColumn("Folio", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFolio);
+                this.columnMes = new global::System.Data.DataColumn("Mes", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMes);
+                this.columnAnio = new global::System.Data.DataColumn("Anio", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAnio);
+                this.columnAdministracion = new global::System.Data.DataColumn("Administracion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAdministracion);
+                this.columnServicio = new global::System.Data.DataColumn("Servicio", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnServicio);
+                this.columnEstatus = new global::System.Data.DataColumn("Estatus", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEstatus);
+                this.columnCalificacion = new global::System.Data.DataColumn("Calificacion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCalificacion);
+                this.columnFechaCreacion = new global::System.Data.DataColumn("FechaCreacion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFechaCreacion);
+                this.columnFacturas = new global::System.Data.DataColumn("Facturas", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFacturas);
+                this.columnMontosFacturas = new global::System.Data.DataColumn("MontosFacturas", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMontosFacturas);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnId}, true));
                 this.columnId.AutoIncrement = true;
                 this.columnId.AllowDBNull = false;
                 this.columnId.ReadOnly = true;
                 this.columnId.Unique = true;
-                this.columnCedulaMensajeriaId.AllowDBNull = false;
-                this.columnTipo.MaxLength = 50;
-                this.columnNumeroGuia.MaxLength = 50;
-                this.columnAcuse.MaxLength = 5;
-                this.columnTipoServicio.MaxLength = 100;
-                this.columnActaRobo.MaxLength = 2147483647;
+                this.columnInmueble.MaxLength = 128;
+                this.columnFolio.AllowDBNull = false;
+                this.columnFolio.MaxLength = 50;
+                this.columnMes.AllowDBNull = false;
+                this.columnMes.MaxLength = 12;
+                this.columnAnio.AllowDBNull = false;
+                this.columnAdministracion.MaxLength = 128;
+                this.columnServicio.MaxLength = 50;
+                this.columnEstatus.MaxLength = 50;
+                this.columnCalificacion.ReadOnly = true;
+                this.columnCalificacion.MaxLength = 30;
+                this.columnFechaCreacion.ReadOnly = true;
+                this.columnFechaCreacion.MaxLength = 62;
+                this.columnFacturas.ReadOnly = true;
+                this.columnFacturas.MaxLength = 4000;
+                this.columnMontosFacturas.ReadOnly = true;
+                this.columnMontosFacturas.MaxLength = 4000;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_getIncidenciasMensajeriaRow Newsp_getIncidenciasMensajeriaRow() {
-                return ((sp_getIncidenciasMensajeriaRow)(this.NewRow()));
+            public sp_ReporteMensajeriaByIdRow Newsp_ReporteMensajeriaByIdRow() {
+                return ((sp_ReporteMensajeriaByIdRow)(this.NewRow()));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new sp_getIncidenciasMensajeriaRow(builder);
+                return new sp_ReporteMensajeriaByIdRow(builder);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             protected override global::System.Type GetRowType() {
-                return typeof(sp_getIncidenciasMensajeriaRow);
+                return typeof(sp_ReporteMensajeriaByIdRow);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowChanged(e);
-                if ((this.sp_getIncidenciasMensajeriaRowChanged != null)) {
-                    this.sp_getIncidenciasMensajeriaRowChanged(this, new sp_getIncidenciasMensajeriaRowChangeEvent(((sp_getIncidenciasMensajeriaRow)(e.Row)), e.Action));
+                if ((this.sp_ReporteMensajeriaByIdRowChanged != null)) {
+                    this.sp_ReporteMensajeriaByIdRowChanged(this, new sp_ReporteMensajeriaByIdRowChangeEvent(((sp_ReporteMensajeriaByIdRow)(e.Row)), e.Action));
                 }
             }
             
@@ -1082,8 +1079,8 @@ namespace CASESGCedulasEvaluacion {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowChanging(e);
-                if ((this.sp_getIncidenciasMensajeriaRowChanging != null)) {
-                    this.sp_getIncidenciasMensajeriaRowChanging(this, new sp_getIncidenciasMensajeriaRowChangeEvent(((sp_getIncidenciasMensajeriaRow)(e.Row)), e.Action));
+                if ((this.sp_ReporteMensajeriaByIdRowChanging != null)) {
+                    this.sp_ReporteMensajeriaByIdRowChanging(this, new sp_ReporteMensajeriaByIdRowChangeEvent(((sp_ReporteMensajeriaByIdRow)(e.Row)), e.Action));
                 }
             }
             
@@ -1091,8 +1088,8 @@ namespace CASESGCedulasEvaluacion {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowDeleted(e);
-                if ((this.sp_getIncidenciasMensajeriaRowDeleted != null)) {
-                    this.sp_getIncidenciasMensajeriaRowDeleted(this, new sp_getIncidenciasMensajeriaRowChangeEvent(((sp_getIncidenciasMensajeriaRow)(e.Row)), e.Action));
+                if ((this.sp_ReporteMensajeriaByIdRowDeleted != null)) {
+                    this.sp_ReporteMensajeriaByIdRowDeleted(this, new sp_ReporteMensajeriaByIdRowChangeEvent(((sp_ReporteMensajeriaByIdRow)(e.Row)), e.Action));
                 }
             }
             
@@ -1100,14 +1097,14 @@ namespace CASESGCedulasEvaluacion {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowDeleting(e);
-                if ((this.sp_getIncidenciasMensajeriaRowDeleting != null)) {
-                    this.sp_getIncidenciasMensajeriaRowDeleting(this, new sp_getIncidenciasMensajeriaRowChangeEvent(((sp_getIncidenciasMensajeriaRow)(e.Row)), e.Action));
+                if ((this.sp_ReporteMensajeriaByIdRowDeleting != null)) {
+                    this.sp_ReporteMensajeriaByIdRowDeleting(this, new sp_ReporteMensajeriaByIdRowChangeEvent(((sp_ReporteMensajeriaByIdRow)(e.Row)), e.Action));
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Removesp_getIncidenciasMensajeriaRow(sp_getIncidenciasMensajeriaRow row) {
+            public void Removesp_ReporteMensajeriaByIdRow(sp_ReporteMensajeriaByIdRow row) {
                 this.Rows.Remove(row);
             }
             
@@ -1116,7 +1113,7 @@ namespace CASESGCedulasEvaluacion {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                CedulasEvaluacionV2DataSet2 ds = new CedulasEvaluacionV2DataSet2();
+                DtReporteMensajeria ds = new DtReporteMensajeria();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -1134,7 +1131,7 @@ namespace CASESGCedulasEvaluacion {
                 type.Attributes.Add(attribute1);
                 global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
                 attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "sp_getIncidenciasMensajeriaDataTable";
+                attribute2.FixedValue = "sp_ReporteMensajeriaByIdDataTable";
                 type.Attributes.Add(attribute2);
                 type.Particle = sequence;
                 global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
@@ -1534,356 +1531,291 @@ namespace CASESGCedulasEvaluacion {
         /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
-        public partial class sp_getIncidenciasMensajeriaRow : global::System.Data.DataRow {
+        public partial class sp_ReporteMensajeriaByIdRow : global::System.Data.DataRow {
             
-            private sp_getIncidenciasMensajeriaDataTable tablesp_getIncidenciasMensajeria;
+            private sp_ReporteMensajeriaByIdDataTable tablesp_ReporteMensajeriaById;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal sp_getIncidenciasMensajeriaRow(global::System.Data.DataRowBuilder rb) : 
+            internal sp_ReporteMensajeriaByIdRow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
-                this.tablesp_getIncidenciasMensajeria = ((sp_getIncidenciasMensajeriaDataTable)(this.Table));
+                this.tablesp_ReporteMensajeriaById = ((sp_ReporteMensajeriaByIdDataTable)(this.Table));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public int Id {
                 get {
-                    return ((int)(this[this.tablesp_getIncidenciasMensajeria.IdColumn]));
+                    return ((int)(this[this.tablesp_ReporteMensajeriaById.IdColumn]));
                 }
                 set {
-                    this[this.tablesp_getIncidenciasMensajeria.IdColumn] = value;
+                    this[this.tablesp_ReporteMensajeriaById.IdColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public int CedulaMensajeriaId {
-                get {
-                    return ((int)(this[this.tablesp_getIncidenciasMensajeria.CedulaMensajeriaIdColumn]));
-                }
-                set {
-                    this[this.tablesp_getIncidenciasMensajeria.CedulaMensajeriaIdColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Tipo {
+            public string Inmueble {
                 get {
                     try {
-                        return ((string)(this[this.tablesp_getIncidenciasMensajeria.TipoColumn]));
+                        return ((string)(this[this.tablesp_ReporteMensajeriaById.InmuebleColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Tipo\' de la tabla \'sp_getIncidenciasMensajeria\' es DBNull" +
-                                ".", e);
-                    }
-                }
-                set {
-                    this[this.tablesp_getIncidenciasMensajeria.TipoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string NumeroGuia {
-                get {
-                    try {
-                        return ((string)(this[this.tablesp_getIncidenciasMensajeria.NumeroGuiaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'NumeroGuia\' de la tabla \'sp_getIncidenciasMensajeria\' es " +
-                                "DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablesp_getIncidenciasMensajeria.NumeroGuiaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public long CodigoRastreo {
-                get {
-                    try {
-                        return ((long)(this[this.tablesp_getIncidenciasMensajeria.CodigoRastreoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CodigoRastreo\' de la tabla \'sp_getIncidenciasMensajeria\' " +
-                                "es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablesp_getIncidenciasMensajeria.CodigoRastreoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Acuse {
-                get {
-                    try {
-                        return ((string)(this[this.tablesp_getIncidenciasMensajeria.AcuseColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Acuse\' de la tabla \'sp_getIncidenciasMensajeria\' es DBNul" +
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Inmueble\' de la tabla \'sp_ReporteMensajeriaById\' es DBNul" +
                                 "l.", e);
                     }
                 }
                 set {
-                    this[this.tablesp_getIncidenciasMensajeria.AcuseColumn] = value;
+                    this[this.tablesp_ReporteMensajeriaById.InmuebleColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public decimal Sobrepeso {
+            public string Folio {
                 get {
-                    try {
-                        return ((decimal)(this[this.tablesp_getIncidenciasMensajeria.SobrepesoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Sobrepeso\' de la tabla \'sp_getIncidenciasMensajeria\' es D" +
-                                "BNull.", e);
-                    }
+                    return ((string)(this[this.tablesp_ReporteMensajeriaById.FolioColumn]));
                 }
                 set {
-                    this[this.tablesp_getIncidenciasMensajeria.SobrepesoColumn] = value;
+                    this[this.tablesp_ReporteMensajeriaById.FolioColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public int TotalAcuses {
+            public string Mes {
+                get {
+                    return ((string)(this[this.tablesp_ReporteMensajeriaById.MesColumn]));
+                }
+                set {
+                    this[this.tablesp_ReporteMensajeriaById.MesColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public int Anio {
+                get {
+                    return ((int)(this[this.tablesp_ReporteMensajeriaById.AnioColumn]));
+                }
+                set {
+                    this[this.tablesp_ReporteMensajeriaById.AnioColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Administracion {
                 get {
                     try {
-                        return ((int)(this[this.tablesp_getIncidenciasMensajeria.TotalAcusesColumn]));
+                        return ((string)(this[this.tablesp_ReporteMensajeriaById.AdministracionColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TotalAcuses\' de la tabla \'sp_getIncidenciasMensajeria\' es" +
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Administracion\' de la tabla \'sp_ReporteMensajeriaById\' es" +
                                 " DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tablesp_getIncidenciasMensajeria.TotalAcusesColumn] = value;
+                    this[this.tablesp_ReporteMensajeriaById.AdministracionColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string TipoServicio {
+            public string Servicio {
                 get {
                     try {
-                        return ((string)(this[this.tablesp_getIncidenciasMensajeria.TipoServicioColumn]));
+                        return ((string)(this[this.tablesp_ReporteMensajeriaById.ServicioColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TipoServicio\' de la tabla \'sp_getIncidenciasMensajeria\' e" +
-                                "s DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Servicio\' de la tabla \'sp_ReporteMensajeriaById\' es DBNul" +
+                                "l.", e);
                     }
                 }
                 set {
-                    this[this.tablesp_getIncidenciasMensajeria.TipoServicioColumn] = value;
+                    this[this.tablesp_ReporteMensajeriaById.ServicioColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public System.DateTime FechaProgramada {
+            public string Estatus {
                 get {
                     try {
-                        return ((global::System.DateTime)(this[this.tablesp_getIncidenciasMensajeria.FechaProgramadaColumn]));
+                        return ((string)(this[this.tablesp_ReporteMensajeriaById.EstatusColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'FechaProgramada\' de la tabla \'sp_getIncidenciasMensajeria" +
-                                "\' es DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Estatus\' de la tabla \'sp_ReporteMensajeriaById\' es DBNull" +
+                                ".", e);
                     }
                 }
                 set {
-                    this[this.tablesp_getIncidenciasMensajeria.FechaProgramadaColumn] = value;
+                    this[this.tablesp_ReporteMensajeriaById.EstatusColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public System.DateTime FechaEfectiva {
+            public string Calificacion {
                 get {
                     try {
-                        return ((global::System.DateTime)(this[this.tablesp_getIncidenciasMensajeria.FechaEfectivaColumn]));
+                        return ((string)(this[this.tablesp_ReporteMensajeriaById.CalificacionColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'FechaEfectiva\' de la tabla \'sp_getIncidenciasMensajeria\' " +
-                                "es DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Calificacion\' de la tabla \'sp_ReporteMensajeriaById\' es D" +
+                                "BNull.", e);
                     }
                 }
                 set {
-                    this[this.tablesp_getIncidenciasMensajeria.FechaEfectivaColumn] = value;
+                    this[this.tablesp_ReporteMensajeriaById.CalificacionColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public decimal MontoPenalizacion {
+            public string FechaCreacion {
                 get {
                     try {
-                        return ((decimal)(this[this.tablesp_getIncidenciasMensajeria.MontoPenalizacionColumn]));
+                        return ((string)(this[this.tablesp_ReporteMensajeriaById.FechaCreacionColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'MontoPenalizacion\' de la tabla \'sp_getIncidenciasMensajer" +
-                                "ia\' es DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'FechaCreacion\' de la tabla \'sp_ReporteMensajeriaById\' es " +
+                                "DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tablesp_getIncidenciasMensajeria.MontoPenalizacionColumn] = value;
+                    this[this.tablesp_ReporteMensajeriaById.FechaCreacionColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string ActaRobo {
+            public string Facturas {
                 get {
                     try {
-                        return ((string)(this[this.tablesp_getIncidenciasMensajeria.ActaRoboColumn]));
+                        return ((string)(this[this.tablesp_ReporteMensajeriaById.FacturasColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'ActaRobo\' de la tabla \'sp_getIncidenciasMensajeria\' es DB" +
-                                "Null.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Facturas\' de la tabla \'sp_ReporteMensajeriaById\' es DBNul" +
+                                "l.", e);
                     }
                 }
                 set {
-                    this[this.tablesp_getIncidenciasMensajeria.ActaRoboColumn] = value;
+                    this[this.tablesp_ReporteMensajeriaById.FacturasColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsTipoNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.TipoColumn);
+            public string MontosFacturas {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_ReporteMensajeriaById.MontosFacturasColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'MontosFacturas\' de la tabla \'sp_ReporteMensajeriaById\' es" +
+                                " DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_ReporteMensajeriaById.MontosFacturasColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetTipoNull() {
-                this[this.tablesp_getIncidenciasMensajeria.TipoColumn] = global::System.Convert.DBNull;
+            public bool IsInmuebleNull() {
+                return this.IsNull(this.tablesp_ReporteMensajeriaById.InmuebleColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsNumeroGuiaNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.NumeroGuiaColumn);
+            public void SetInmuebleNull() {
+                this[this.tablesp_ReporteMensajeriaById.InmuebleColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetNumeroGuiaNull() {
-                this[this.tablesp_getIncidenciasMensajeria.NumeroGuiaColumn] = global::System.Convert.DBNull;
+            public bool IsAdministracionNull() {
+                return this.IsNull(this.tablesp_ReporteMensajeriaById.AdministracionColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsCodigoRastreoNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.CodigoRastreoColumn);
+            public void SetAdministracionNull() {
+                this[this.tablesp_ReporteMensajeriaById.AdministracionColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetCodigoRastreoNull() {
-                this[this.tablesp_getIncidenciasMensajeria.CodigoRastreoColumn] = global::System.Convert.DBNull;
+            public bool IsServicioNull() {
+                return this.IsNull(this.tablesp_ReporteMensajeriaById.ServicioColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsAcuseNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.AcuseColumn);
+            public void SetServicioNull() {
+                this[this.tablesp_ReporteMensajeriaById.ServicioColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetAcuseNull() {
-                this[this.tablesp_getIncidenciasMensajeria.AcuseColumn] = global::System.Convert.DBNull;
+            public bool IsEstatusNull() {
+                return this.IsNull(this.tablesp_ReporteMensajeriaById.EstatusColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsSobrepesoNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.SobrepesoColumn);
+            public void SetEstatusNull() {
+                this[this.tablesp_ReporteMensajeriaById.EstatusColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetSobrepesoNull() {
-                this[this.tablesp_getIncidenciasMensajeria.SobrepesoColumn] = global::System.Convert.DBNull;
+            public bool IsCalificacionNull() {
+                return this.IsNull(this.tablesp_ReporteMensajeriaById.CalificacionColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsTotalAcusesNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.TotalAcusesColumn);
+            public void SetCalificacionNull() {
+                this[this.tablesp_ReporteMensajeriaById.CalificacionColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetTotalAcusesNull() {
-                this[this.tablesp_getIncidenciasMensajeria.TotalAcusesColumn] = global::System.Convert.DBNull;
+            public bool IsFechaCreacionNull() {
+                return this.IsNull(this.tablesp_ReporteMensajeriaById.FechaCreacionColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsTipoServicioNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.TipoServicioColumn);
+            public void SetFechaCreacionNull() {
+                this[this.tablesp_ReporteMensajeriaById.FechaCreacionColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetTipoServicioNull() {
-                this[this.tablesp_getIncidenciasMensajeria.TipoServicioColumn] = global::System.Convert.DBNull;
+            public bool IsFacturasNull() {
+                return this.IsNull(this.tablesp_ReporteMensajeriaById.FacturasColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsFechaProgramadaNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.FechaProgramadaColumn);
+            public void SetFacturasNull() {
+                this[this.tablesp_ReporteMensajeriaById.FacturasColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetFechaProgramadaNull() {
-                this[this.tablesp_getIncidenciasMensajeria.FechaProgramadaColumn] = global::System.Convert.DBNull;
+            public bool IsMontosFacturasNull() {
+                return this.IsNull(this.tablesp_ReporteMensajeriaById.MontosFacturasColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsFechaEfectivaNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.FechaEfectivaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetFechaEfectivaNull() {
-                this[this.tablesp_getIncidenciasMensajeria.FechaEfectivaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsMontoPenalizacionNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.MontoPenalizacionColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetMontoPenalizacionNull() {
-                this[this.tablesp_getIncidenciasMensajeria.MontoPenalizacionColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsActaRoboNull() {
-                return this.IsNull(this.tablesp_getIncidenciasMensajeria.ActaRoboColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetActaRoboNull() {
-                this[this.tablesp_getIncidenciasMensajeria.ActaRoboColumn] = global::System.Convert.DBNull;
+            public void SetMontosFacturasNull() {
+                this[this.tablesp_ReporteMensajeriaById.MontosFacturasColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -1925,22 +1857,22 @@ namespace CASESGCedulasEvaluacion {
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public class sp_getIncidenciasMensajeriaRowChangeEvent : global::System.EventArgs {
+        public class sp_ReporteMensajeriaByIdRowChangeEvent : global::System.EventArgs {
             
-            private sp_getIncidenciasMensajeriaRow eventRow;
+            private sp_ReporteMensajeriaByIdRow eventRow;
             
             private global::System.Data.DataRowAction eventAction;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_getIncidenciasMensajeriaRowChangeEvent(sp_getIncidenciasMensajeriaRow row, global::System.Data.DataRowAction action) {
+            public sp_ReporteMensajeriaByIdRowChangeEvent(sp_ReporteMensajeriaByIdRow row, global::System.Data.DataRowAction action) {
                 this.eventRow = row;
                 this.eventAction = action;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_getIncidenciasMensajeriaRow Row {
+            public sp_ReporteMensajeriaByIdRow Row {
                 get {
                     return this.eventRow;
                 }
@@ -1956,7 +1888,7 @@ namespace CASESGCedulasEvaluacion {
         }
     }
 }
-namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
+namespace CASESGCedulasEvaluacion.DtReporteMensajeriaTableAdapters {
     
     
     /// <summary>
@@ -2121,7 +2053,7 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(CedulasEvaluacionV2DataSet2.sp_getIncidenciasByTipoMensajeriaDataTable dataTable, global::System.Nullable<int> cedulaId, string tipo) {
+        public virtual int Fill(DtReporteMensajeria.sp_getIncidenciasByTipoMensajeriaDataTable dataTable, global::System.Nullable<int> cedulaId, string tipo) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((cedulaId.HasValue == true)) {
                 this.Adapter.SelectCommand.Parameters[1].Value = ((int)(cedulaId.Value));
@@ -2146,7 +2078,7 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual CedulasEvaluacionV2DataSet2.sp_getIncidenciasByTipoMensajeriaDataTable GetData(global::System.Nullable<int> cedulaId, string tipo) {
+        public virtual DtReporteMensajeria.sp_getIncidenciasByTipoMensajeriaDataTable GetData(global::System.Nullable<int> cedulaId, string tipo) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((cedulaId.HasValue == true)) {
                 this.Adapter.SelectCommand.Parameters[1].Value = ((int)(cedulaId.Value));
@@ -2160,7 +2092,7 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
             else {
                 this.Adapter.SelectCommand.Parameters[2].Value = ((string)(tipo));
             }
-            CedulasEvaluacionV2DataSet2.sp_getIncidenciasByTipoMensajeriaDataTable dataTable = new CedulasEvaluacionV2DataSet2.sp_getIncidenciasByTipoMensajeriaDataTable();
+            DtReporteMensajeria.sp_getIncidenciasByTipoMensajeriaDataTable dataTable = new DtReporteMensajeria.sp_getIncidenciasByTipoMensajeriaDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -2175,7 +2107,7 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
     [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
         ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-    public partial class sp_getIncidenciasMensajeriaTableAdapter : global::System.ComponentModel.Component {
+    public partial class sp_ReporteMensajeriaByIdTableAdapter : global::System.ComponentModel.Component {
         
         private global::System.Data.SqlClient.SqlDataAdapter _adapter;
         
@@ -2189,7 +2121,7 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public sp_getIncidenciasMensajeriaTableAdapter() {
+        public sp_ReporteMensajeriaByIdTableAdapter() {
             this.ClearBeforeFill = true;
         }
         
@@ -2286,20 +2218,19 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
             this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
             global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
             tableMapping.SourceTable = "Table";
-            tableMapping.DataSetTable = "sp_getIncidenciasMensajeria";
+            tableMapping.DataSetTable = "sp_ReporteMensajeriaById";
             tableMapping.ColumnMappings.Add("Id", "Id");
-            tableMapping.ColumnMappings.Add("CedulaMensajeriaId", "CedulaMensajeriaId");
-            tableMapping.ColumnMappings.Add("Tipo", "Tipo");
-            tableMapping.ColumnMappings.Add("NumeroGuia", "NumeroGuia");
-            tableMapping.ColumnMappings.Add("CodigoRastreo", "CodigoRastreo");
-            tableMapping.ColumnMappings.Add("Acuse", "Acuse");
-            tableMapping.ColumnMappings.Add("Sobrepeso", "Sobrepeso");
-            tableMapping.ColumnMappings.Add("TotalAcuses", "TotalAcuses");
-            tableMapping.ColumnMappings.Add("TipoServicio", "TipoServicio");
-            tableMapping.ColumnMappings.Add("FechaProgramada", "FechaProgramada");
-            tableMapping.ColumnMappings.Add("FechaEfectiva", "FechaEfectiva");
-            tableMapping.ColumnMappings.Add("MontoPenalizacion", "MontoPenalizacion");
-            tableMapping.ColumnMappings.Add("ActaRobo", "ActaRobo");
+            tableMapping.ColumnMappings.Add("Inmueble", "Inmueble");
+            tableMapping.ColumnMappings.Add("Folio", "Folio");
+            tableMapping.ColumnMappings.Add("Mes", "Mes");
+            tableMapping.ColumnMappings.Add("Anio", "Anio");
+            tableMapping.ColumnMappings.Add("Administracion", "Administracion");
+            tableMapping.ColumnMappings.Add("Servicio", "Servicio");
+            tableMapping.ColumnMappings.Add("Estatus", "Estatus");
+            tableMapping.ColumnMappings.Add("Calificacion", "Calificacion");
+            tableMapping.ColumnMappings.Add("FechaCreacion", "FechaCreacion");
+            tableMapping.ColumnMappings.Add("Facturas", "Facturas");
+            tableMapping.ColumnMappings.Add("MontosFacturas", "MontosFacturas");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -2317,20 +2248,20 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "dbo.sp_getIncidenciasMensajeria";
+            this._commandCollection[0].CommandText = "dbo.sp_ReporteMensajeriaById";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.StoredProcedure;
             this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@cedulaId", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(CedulasEvaluacionV2DataSet2.sp_getIncidenciasMensajeriaDataTable dataTable, global::System.Nullable<int> cedulaId) {
+        public virtual int Fill(DtReporteMensajeria.sp_ReporteMensajeriaByIdDataTable dataTable, global::System.Nullable<int> id) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            if ((cedulaId.HasValue == true)) {
-                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(cedulaId.Value));
+            if ((id.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(id.Value));
             }
             else {
                 this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
@@ -2346,15 +2277,15 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual CedulasEvaluacionV2DataSet2.sp_getIncidenciasMensajeriaDataTable GetData(global::System.Nullable<int> cedulaId) {
+        public virtual DtReporteMensajeria.sp_ReporteMensajeriaByIdDataTable GetData(global::System.Nullable<int> id) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            if ((cedulaId.HasValue == true)) {
-                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(cedulaId.Value));
+            if ((id.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(id.Value));
             }
             else {
                 this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
             }
-            CedulasEvaluacionV2DataSet2.sp_getIncidenciasMensajeriaDataTable dataTable = new CedulasEvaluacionV2DataSet2.sp_getIncidenciasMensajeriaDataTable();
+            DtReporteMensajeria.sp_ReporteMensajeriaByIdDataTable dataTable = new DtReporteMensajeria.sp_ReporteMensajeriaByIdDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -2428,7 +2359,7 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private int UpdateUpdatedRows(CedulasEvaluacionV2DataSet2 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
+        private int UpdateUpdatedRows(DtReporteMensajeria dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
             return result;
         }
@@ -2438,7 +2369,7 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private int UpdateInsertedRows(CedulasEvaluacionV2DataSet2 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
+        private int UpdateInsertedRows(DtReporteMensajeria dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
             return result;
         }
@@ -2448,7 +2379,7 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private int UpdateDeletedRows(CedulasEvaluacionV2DataSet2 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
+        private int UpdateDeletedRows(DtReporteMensajeria dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
             int result = 0;
             return result;
         }
@@ -2482,7 +2413,7 @@ namespace CASESGCedulasEvaluacion.CedulasEvaluacionV2DataSet2TableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public virtual int UpdateAll(CedulasEvaluacionV2DataSet2 dataSet) {
+        public virtual int UpdateAll(DtReporteMensajeria dataSet) {
             if ((dataSet == null)) {
                 throw new global::System.ArgumentNullException("dataSet");
             }

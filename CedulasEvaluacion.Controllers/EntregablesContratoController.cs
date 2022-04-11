@@ -29,7 +29,7 @@ namespace CedulasEvaluacion.Controllers
             int success = await eContrato.InsertarActualizarContrato(entregables);
             if (success != -1)
             {
-                return Redirect("/catalogo/verObligacion/"+success);
+                return Ok(success);
             }
             else
             {

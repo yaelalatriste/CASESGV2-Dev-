@@ -144,6 +144,39 @@ namespace CedulasEvaluacion.Repositories
                 return -1;
             }
         }
+
+        public async Task<int> ActualizaContrato(ContratosServicio contratosServicio)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_actualizaContratoServicio", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", contratosServicio.Id));
+                        cmd.Parameters.Add(new SqlParameter("@usuarioId", contratosServicio.UsuarioId));
+                        cmd.Parameters.Add(new SqlParameter("@servicioId", contratosServicio.ServicioId));
+                        cmd.Parameters.Add(new SqlParameter("@contrato", contratosServicio.NumeroContrato));
+                        cmd.Parameters.Add(new SqlParameter("@empresa", contratosServicio.Empresa));
+                        cmd.Parameters.Add(new SqlParameter("@representante", contratosServicio.Representante));
+                        cmd.Parameters.Add(new SqlParameter("@fechaInicio", contratosServicio.FechaInicio));
+                        cmd.Parameters.Add(new SqlParameter("@fechaFin", contratosServicio.FechaFin));
+                        cmd.Parameters.Add(new SqlParameter("@activo", contratosServicio.Activo));
+
+
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return -1;
+            }
+        }
         private ContratosServicio MapToValueContratos(SqlDataReader reader)
         {
             return new ContratosServicio

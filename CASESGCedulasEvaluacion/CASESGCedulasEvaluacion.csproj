@@ -9,7 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\Reportes\CedulaMensajeria.rdlc" />
+    <EmbeddedResource Include="wwwroot\Reportes\CedulaMensajeria.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -44,44 +46,36 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="CedulasEvaluacionV2DataSet.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>CedulasEvaluacionV2DataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Update="CedulasEvaluacionV2DataSet1.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>CedulasEvaluacionV2DataSet1.xsd</DependentUpon>
-    </Compile>
-    <Compile Update="CedulasEvaluacionV2DataSet2.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>CedulasEvaluacionV2DataSet2.xsd</DependentUpon>
     </Compile>
     <Compile Update="CedulasEvaluacionV2DataSet3.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>CedulasEvaluacionV2DataSet3.xsd</DependentUpon>
     </Compile>
+    <Compile Update="DtReporteMensajeria.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DtReporteMensajeria.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   
   <ItemGroup>
-    <None Update="CedulasEvaluacionV2DataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>CedulasEvaluacionV2DataSet.Designer.cs</LastGenOutput>
-    </None>
     <None Update="CedulasEvaluacionV2DataSet1.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>CedulasEvaluacionV2DataSet1.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="CedulasEvaluacionV2DataSet2.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>CedulasEvaluacionV2DataSet2.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="CedulasEvaluacionV2DataSet3.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>CedulasEvaluacionV2DataSet3.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="DtReporteMensajeria.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DtReporteMensajeria.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
 

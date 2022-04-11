@@ -10,18 +10,15 @@
                data-toggle="tooltip" title="Regresar al Listado de Servicios" data-placement="top"><i class="fal fa-arrow-left"></i></a>
         </div>
     </div>
-    <form method="post" asp-controller="EntregablesContrato" asp-action="InsertarActualizarContrato" enctype="multipart/form-data">
         <div class="card">
             <div class="card-header bg-joke text-white">
                 <h5 class="mt-2">Datos de Obligación</h5>
             </div>
             <div class="card-body">
                 <div class="row col-lg-12">
-                        <input class="form-control" value="@Model.Id" id="contrato" asp-for="@Model.Id" type="hidden"/>
-                        <input class="form-control" value="@Model.ContratoId" id="contrato" asp-for="@Model.ContratoId" type="hidden"/>
                     <div class="col-lg-5">
                         <label for="">Descripción:</label>
-                        <input class="form-control" type="text" id="descripcion" asp-for="@Model.Descripcion" />
+                        <input class="form-control" type="text" id="descripcion" />
                         <div class="col-sm-12 error_descripcion">
                             <small id="dateHelp" class="text-danger">
                                 Por favor seleccione la descripción de la obligacion
@@ -30,7 +27,7 @@
                     </div>
                     <div class=" col-lg-4">
                         <label for="">Obligación:</label>
-                        <select class="form-control" id="tipoObligacion" asp-for="@Model.Tipo">
+                        <select class="form-control" id="tipoObligacion" >
                             <option value="">Seleccione una opción</option>
                             <option value="Programa de Operación">Programa de Operación</option>
                             <option value="Fianza de Cumplimiento">Fianza de Cumplimiento</option>
@@ -45,7 +42,7 @@
                     </div>
                     <div class="col-lg-3">
                         <label for="">Tipo de Obligación:</label>
-                        <select class="form-control" id="tipoContrato" asp-for="@Model.TipoContrato">
+                        <select class="form-control" id="tipoContrato">
                             <option value="">Seleccione una opción</option>
                             <option value="Anual">Anual</option>
                             <option value="Plurianual">Plurianual</option>
@@ -61,7 +58,7 @@
                 <div class="row col-lg-12 mt-4">
                     <div class=" col-lg-3">
                         <label for="">Inicio del Periodo:</label>
-                        <input class="form-control" type="date" id="inicioPeriodo" asp-for="@Model.InicioPeriodo" />
+                        <input class="form-control" type="date" id="inicioPeriodo" />
                         <div class="col-sm-12 error_inicioPeriodo">
                             <small id="dateHelp" class="text-danger">
                                 Por favor seleccione el inicio del periodo
@@ -70,7 +67,7 @@
                     </div>
                     <div class=" col-lg-3">
                         <label for="">Fin del Periodo:</label>
-                        <input class="form-control" type="date" id="finPeriodo" asp-for="@Model.FinPeriodo"/>
+                        <input class="form-control" type="date" id="finPeriodo" />
                         <div class="col-sm-12 error_finPeriodo">
                             <small id="dateHelp" class="text-danger">
                                 Por favor seleccione el fin del periodo
@@ -79,7 +76,7 @@
                     </div>
                     <div class=" col-lg-3">
                         <label for="">Fecha Programada:</label>
-                        <input class="form-control" type="date" id="fechaProgramada" asp-for="@Model.FechaProgramada"/>
+                        <input class="form-control" type="date" id="fechaProgramada" />
                         <div class="col-sm-12 error_fechaProgramada">
                             <small id="dateHelp" class="text-danger">
                                 Por favor seleccione la fecha programada
@@ -88,7 +85,7 @@
                     </div>
                     <div class=" col-lg-3">
                         <label for="">Fecha de Entrega:</label>
-                        <input class="form-control" type="date" id="fechaEntrega" asp-for="@Model.FechaEntrega" />
+                        <input class="form-control" type="date" id="fechaEntrega" />
                         <div class="col-sm-12 error_fechaEntrega">
                             <small id="dateHelp" class="text-danger">
                                 Por favor seleccione la fecha de entrega
@@ -99,7 +96,7 @@
                 <div class="row col-lg-12 mt-4">
                     <div class="col-lg-3">
                         <label for="">Monto Garantía:</label>
-                        <input class="form-control" type="text" id="montoGarantia" asp-for="@Model.MontoGarantia" />
+                        <input class="form-control" type="text" id="montoGarantia" />
                         <div class="col-sm-12 error_garantia">
                             <small id="dateHelp" class="text-danger">
                                 Por favor seleccione el monto de la garantía
@@ -109,7 +106,7 @@
                     <div class="form-group col-lg-6">
                         <label for="elegirArchivo">Seleccionar Archivo: </label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="customFile" accept=".pdf" asp-for="@Model.Archivo">
+                            <input type="file" class="custom-file-input" id="customFile" accept=".pdf" />
                             <label class="custom-file-label" for="customFile">Seleccionar Archivo</label>
                         </div>
                     </div>
@@ -122,7 +119,6 @@
                 </div>
             </div>
         </div>
-    </form>
 </div>
 
 @section Scripts{
@@ -136,8 +132,28 @@
                 $('#finPeriodo').val(null);
                 $('#fechaProgramada').val(null);
                 $('#fechaEntrega').val(null);
+            } else {
+                var ip = @Html.Raw(Json.Serialize(@Model.InicioPeriodo.ToString("yyyy-MM-dd")));
+                var fp = @Html.Raw(Json.Serialize(@Model.FinPeriodo.ToString("yyyy-MM-dd")));
+                var pd = @Html.Raw(Json.Serialize(@Model.FechaProgramada.ToString("yyyy-MM-dd")));
+                var fe = @Html.Raw(Json.Serialize(@Model.FechaEntrega.ToString("yyyy-MM-dd")));
+                
+                $('#idEntregable').val(model.id);
+                $("#descripcion").val(model.descripcion);
+                $("#tipoObligacion").val(model.tipo);
+                $("#tipoContrato").val(model.tipoContrato);
+                $("#inicioPeriodo").val(ip);
+                $("#finPeriodo").val(fp);
+                $("#montoGarantia").val(model.montoGarantia);
+                $("#fechaProgramada").val(pd);
+                if (fe != "0001-01-01") {
+                    $("#fechaEntrega").val(fe);
+                } else {
+                    $("#fechaEntrega").val();
+                }
+                $(".custom-file-label").text(model.nombreArchivo);
             }
-            
+
             $(".error_descripcion").css('display', 'none');
             $(".error_tipoObligacion").css('display', 'none');
             $(".error_tipoContrato").css('display', 'none');
@@ -175,6 +191,8 @@
             });
 
             $("#guardarObligacion").click(function () {
+                var formData = new FormData();
+                var id = $('#idEntregable').val();
                 var descripcion = $("#descripcion").val();
                 var tipoObligacion = $("#tipoObligacion").val();
                 var tipoContrato = $("#tipoContrato").val();
@@ -182,9 +200,50 @@
                 var finPeriodo = $("#finPeriodo").val();
                 var montoGarantia = $("#montoGarantia").val();
                 var fechaProgramada = $("#fechaProgramada").val();
-                var customFile = $("#customFile").val();
+                var fechaEntrega = $("#fechaEntrega").val();
+                var customFile = document.getElementById('customFile').files[0];
+
+
                 if (descripcion != "" && tipoObligacion != "" && tipoContrato != "" && inicioPeriodo != "" && finPeriodo != "" && fechaProgramada != ""
-                    && montoGarantia != "") {
+                    && montoGarantia != "")
+                {
+                    if (model.id != 0) {
+                        id = parseInt(id);
+                    } else {
+                        id = 0;
+                    }
+
+                    formData.append("Id", model.id);
+                    formData.append("ContratoId", model.contratoId);
+                    formData.append("Tipo", tipoObligacion);
+                    formData.append("Descripcion", descripcion);
+                    formData.append("TipoContrato", tipoContrato);
+                    if (customFile != "") {
+                        formData.append("Archivo", customFile);
+                    }
+                    formData.append("MontoGarantia", montoGarantia);
+                    formData.append("FechaProgramada", fechaProgramada);
+                    if (fechaEntrega != "") {
+                        formData.append("FechaEntrega", fechaEntrega);
+                    }
+                    formData.append("InicioPeriodo", inicioPeriodo);
+                    formData.append("FinPeriodo", finPeriodo);
+
+                    var msg = "actualizó";
+
+                    axios.post('/contrato/InsertarActualizarContrato', formData, { headers: { 'Content-Type': 'multipart/form-data' }
+                    }).then(response => {
+                        if (id == 0) {
+                            msg = "inserto";
+                        }
+                        Swal.fire({
+                            'icon': 'success',
+                            'title': 'Obligaciones PS',
+                            'html': 'La obligación del prestador de ser servicio se ' + msg + ' correctamente.'
+                        }).then(function () {
+                            window.location.href = "/catalogo/verObligacion/" + response.data;
+                        });
+                    });
                     return true;
                 }
 

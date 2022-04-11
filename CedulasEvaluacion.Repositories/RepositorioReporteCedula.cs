@@ -63,7 +63,7 @@ namespace CedulasEvaluacion.Repositories
                 Administracion = reader["Administracion"].ToString(),
                 Servicio = reader["Servicio"].ToString(),
                 Estatus = reader["Estatus"].ToString(),
-                Calificacion = (decimal)reader["Calificacion"],
+                Calificacion = reader["Calificacion"].ToString(),
                 FechaCreacion = reader["FechaCreacion"].ToString(),
                 Facturas = reader["Facturas"].ToString(),
                 MontosFacturas = reader["MontosFacturas"].ToString(),

@@ -83,7 +83,7 @@
                                                         Si
                                                     </td>
                                                  }
-                                                 else if (@doc.FechaProgramada > @doc.FechaEntrega && !@doc.FechaEntrega.ToString("dd/MM/yyyy").Equals("01/01/0001"))
+                                                 else if (@doc.FechaProgramada >= @doc.FechaEntrega && !@doc.FechaEntrega.ToString("dd/MM/yyyy").Equals("01/01/0001"))
                                                  {
                                                     <td class="text-center text-success font-weight-bold">
                                                         No

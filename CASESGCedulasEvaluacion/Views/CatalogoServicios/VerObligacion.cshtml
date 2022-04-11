@@ -21,7 +21,7 @@
                         <td><strong>Descripción: </strong>@Model.Descripcion</td>
                         <td><strong>Obligación: </strong>@Model.Tipo</td>
                         <td><strong>Tipo de Contrato: </strong>@Model.TipoContrato</td>
-                        @if (@Model.FechaProgramada > @Model.FechaEntrega && !@Model.FechaEntrega.ToString("dd/MM/yyyy").Equals("01/01/0001"))
+                        @if (@Model.FechaProgramada >= @Model.FechaEntrega && !@Model.FechaEntrega.ToString("dd/MM/yyyy").Equals("01/01/0001"))
                         {
                             <td class="text-success"><b>Penalización: </b>No</td>
                         }

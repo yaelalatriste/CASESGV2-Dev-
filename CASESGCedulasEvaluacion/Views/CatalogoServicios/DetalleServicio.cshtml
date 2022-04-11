@@ -71,8 +71,14 @@
                             }
                         </td>
                         <td class="text-center">
-                            <a href="/catalogo/detalleContrato/@cont.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Contrato" data-placement="top">
+                            <a href="/catalogo/detalleContrato/@cont.Id" class="text-center ml-2" data-toggle="tooltip" title="Ver Entregables de Obligaciones" data-placement="top">
+                                <i class="fad fa-eye text-success"></i>
+                            </a>
+                            <a href="#" class="text-center ml-2 btn_editContrato" data-toggle="tooltip" title="Modificar Contrato" data-placement="top"
+                               data-id="@cont.Id" data-contrato="@cont.NumeroContrato" data-empresa="@cont.Empresa" data-replegal="@cont.Representante"
+                               data-fechai="@cont.FechaInicio.ToString("yyyy-MM-dd")" data-fechaf="@cont.FechaFin.ToString("yyyy-MM-dd")" data-activo="@cont.Activo">
                                 <i class="fad fa-pencil text-primary"></i>
+
                             </a>
                         </td>
                     </tr>
@@ -94,6 +100,7 @@
             </div>
             <div class="modal-body">
                 <div class="row col-lg-12">
+                    <input class="form-control" type="number" id="contratoId" />
                     <div class="form-row col-md-3" id="divServicio">
                         <label for="">Servicios:</label>
                         <input class="form-control" type="text" id="servicio" value="@Model.servicio.Nombre" disabled />
@@ -157,7 +164,7 @@
                 </div>
             </div>
             <div class="modal-footer justify-content-end">
-                <button type="button" class="btn btn-primary" id="crearContrato">Crear Contrato</button>
+                <button type="button" class="btn btn-primary" id="crearContrato"></button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -181,6 +188,7 @@
             /*Fin Errores de Captura de Contrato*/
 
             $("#newContrato").click(function () {
+                $("#crearContrato").text("Crear Contrato");
                 $("#modal-contratos").modal("show");
             });
 
@@ -219,6 +227,7 @@
             }
 
             $("#crearContrato").click(function () {
+                var id = $("#contratoId").val();
                 var contrato = $("#contrato").val();
                 var empresa = $("#empresa").val();
                 var representante = $("#representante").val();
@@ -229,29 +238,60 @@
                 if (fechaInicio > fechaFin) {
                     Swal.fire({
                         'icon': 'error',
-                        'title': 'Contratos ' + model.servicio.Nombre,
+                        'title': 'Contratos del servicio de "' + model.servicio.nombre + '"',
                         'html': 'La fecha de inicio no puede ser mayor a la fecha de término. Favor de corregir'
                     });
                 }
 
                 if (validaCampos()) {
-                    axios.post('/contratos/insertaContrato', { ServicioId: model.servicio.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
-                        NumeroContrato: contrato, Empresa: empresa, Representante: representante, FechaInicio: fechaInicio,
-                        FechaFin: fechaFin, Activo: activo
-                    }).then(response => {
-                        if (response.status == 200) {
-                            Swal.fire({
-                                'icon': 'success',
-                                'title': 'Contratos ' + model.servicio.Nombre,
-                                'html': 'El contrato se creó correctamente.'
-                            }).then(function () {
-                                window.location.href = "/catalogo/detalleContrato/" + response.data;
-                            });
-                        }
-                    });
+                    if (id == 0) {
+                        axios.post('/contratos/insertaContrato', {
+                            ServicioId: model.servicio.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
+                            NumeroContrato: contrato, Empresa: empresa, Representante: representante, FechaInicio: fechaInicio,
+                            FechaFin: fechaFin, Activo: activo
+                        }).then(response => {
+                            if (response.status == 200) {
+                                Swal.fire({
+                                    'icon': 'success',
+                                    'title': 'Contratos del servicio de "' + model.servicio.nombre+'"',
+                                    'html': 'El contrato se creó correctamente.'
+                                }).then(function () {
+                                    window.location.href = "/catalogo/detalleContrato/" + response.data;
+                                });
+                            }
+                        });
+                    } else {
+                        axios.post('/contratos/actualizaContrato', {Id: parseInt(id),ServicioId: model.servicio.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
+                            NumeroContrato: contrato, Empresa: empresa, Representante: representante, FechaInicio: fechaInicio,
+                            FechaFin: fechaFin, Activo: activo
+                        }).then(response => {
+                            if (response.status == 200) {
+                                Swal.fire({
+                                    'icon': 'success',
+                                    'title': 'Contratos del servicio de "' + model.servicio.nombre + '"',
+                                    'html': 'El contrato se actualizó correctamente.'
+                                }).then(function () {
+                                    window.location.href = "/catalogo/detalleServicio/" + model.contrato.servicioId;
+                                });
+                            }
+                        });
+                    }
                 }
             });
 
+            $(".btn_editContrato").click(function () {
+                $("#contratoId").val($(this).data('id'));
+                $("#contrato").val($(this).data('contrato'));
+                $("#empresa").val($(this).data('empresa'));
+                $("#representante").val($(this).data('replegal'));
+                $("#fechaInicio").val($(this).data('fechai'));
+                $("#fechaFin").val($(this).data('fechaf'));
+                if ($(this).data('activo') == 1) {
+                    $("#predeterminado").prop('checked');
+                }
+                $("#crearContrato").text("Actualizar Contrato");
+                $("#modal-contratos").modal("show");
+            });
 
         });
     </script>

@@ -177,7 +177,7 @@
                 <div class="col-lg-12 h3 mt-4">
                     Incidencias en Recolección
                 </div>
-                @if (@Model.recoleccion.Count > 0)
+                @if (@Model.RespuestasEncuesta[0].Respuesta == false)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
@@ -268,7 +268,7 @@
                 <div class="col-lg-12 h3 mt-4">
                     Incidencias en Entrega de Guías
                 </div>
-                @if (@Model.entrega.Count > 0)
+                @if (@Model.RespuestasEncuesta[1].Respuesta == false)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
@@ -359,7 +359,7 @@
                 <div class="col-lg-12 h3 mt-4">
                     Incidencias en Acuses
                 </div>
-                @if (@Model.acuses.Count > 0)
+                @if (@Model.RespuestasEncuesta[2].Respuesta == false)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
@@ -435,7 +435,7 @@
                 <div class="col-lg-12 h3 mt-4">
                     Incidencias de Guías en Mal Estado
                 </div>
-                @if (@Model.malEstado.Count > 0)
+                @if (@Model.RespuestasEncuesta[3].Respuesta == true)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
@@ -511,7 +511,7 @@
                 <div class="col-lg-12 h3 mt-4">
                     Incidencias de Guías Extraviadas
                 </div>
-                @if (@Model.extraviadas.Count > 0)
+                @if (@Model.RespuestasEncuesta[4].Respuesta == true)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
@@ -587,7 +587,7 @@
                 <div class="col-lg-12 h3 mt-4">
                     Incidencias de Guías Robadas
                 </div>
-                @if (@Model.robadas.Count > 0)
+                @if (@Model.RespuestasEncuesta[5].Respuesta == true)
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
