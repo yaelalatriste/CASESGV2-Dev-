@@ -63,9 +63,16 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else if (i==2) 
                 {
-                    if (respuestas[i].Respuesta == false && respuestas[i].Detalles.Equals(""))
+                    if (respuestas[i].Respuesta == false)
                     {
-                        parameters.Add("pregunta" + (i + 1), "Se presentaron Incidencias en el inmueble, las cuales se describen a continuación: ");
+                        if (respuestas[i].Detalles.Equals("N/A"))
+                        {
+                            parameters.Add("pregunta" + (i + 1), "No aplica la entrega de acuses en el mes de evaluación.");
+                        }
+                        else
+                        {
+                            parameters.Add("pregunta" + (i + 1), "Se presentaron Incidencias en el inmueble, las cuales se describen a continuación: ");
+                        }
                     }
                     else
                     {

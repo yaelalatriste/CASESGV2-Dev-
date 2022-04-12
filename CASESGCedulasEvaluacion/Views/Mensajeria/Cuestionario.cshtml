@@ -1499,55 +1499,59 @@
                 /*Enviar la Cedula*/
                 $('.btn_enviar').click(function () {
                     let incidenciasMn = false;
+                    let respuesta = "";
                     let i = 0;
-                        if (model.facturas.length == 0) {
-                            Swal.fire({
-                                'icon': 'error',
-                                'title': 'Servicio de Mensajería Acelerada',
-                                'html': 'No has registrado ninguna factura en la cédula'
-                            });
-                            return false;
-                        }
-                        guardaCedula();
+                    if (model.facturas.length == 0) {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Mensajería Acelerada',
+                            'html': 'No has registrado ninguna factura en la cédula'
+                        });
+                        return false;
+                    }
 
-                        for (i = 0; i < 7; i++) {
-                            var tInci = ["Recoleccion", "Entrega", "Acuses", "Mal Estado", "Extraviadas", "Robadas"];
-                            let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
-                            if (respuesta == null || respuesta == "") {
-                                Swal.fire({
-                                    'icon': 'error',
-                                    'title': 'Servicio de Mensajería Acelerada',
-                                    'html': 'No ha respondido la <strong>Pregunta ' + (i + 1) +'</strong>'
-                                });
-                                return false;
-                            }
+                    guardaCedula();
 
-                            if (i != 6) {
-                                if ((i <= 2 && respuesta == "false") || (i > 2 && respuesta == "true")) {
-                                    incidenciasMn = cuentaincidenciasMensajeria(tInci[i]);
-                                    if (incidenciasMn == false) {
-                                        console.log(i);
-                                        break;
-                                    }
+                    for (i = 0; i < 7; i++) {
+                        incidenciasMn = true;
+                        var tInci = ["Recoleccion", "Entrega", "Acuses", "Mal Estado", "Extraviadas", "Robadas"];
+                        respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
+                        if (respuesta == null || respuesta == "") {
+                            break;
+                        } else {
+                            //alert(respuesta + "-" + "Pregunta " + (i + 1));
+                            if ((i <= 2 && respuesta == "false") || (i > 2 && i < 6 && respuesta == "true")) {
+                                incidenciasMn = cuentaincidenciasMensajeria(tInci[i]);
+                                if (incidenciasMn == false) {
+                                    break;
                                 }
                             }
-
-                            if (i == 6) {
-                                incidenciasMn = true;
-                            }
                         }
-
-                        if (incidenciasMn == false) {
-                            Swal.fire({
-                                'icon': 'error',
-                                'title': 'Servicio de Mensajería Acelerada',
-                                'html': 'No ha capturado las incidencias de la <strong>Pregunta ' + (i + 1) + '</strong>. Favor de Revisar'
-                            });
-                            return false;
-                        }
-
+                    }
+                    
+                    if (respuesta == null || respuesta == "")
+                    {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Mensajería Acelerada',
+                            'html': 'No ha respondido la <strong>Pregunta ' + (i + 1) + '</strong>'
+                        });
+                        return false;
+                    }
+                    else if (incidenciasMn == false)
+                    {
+                         Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Mensajería Acelerada',
+                            'html': 'No ha capturado las incidencias de la <strong>Pregunta ' + (i + 1) + '</strong>. Favor de Revisar'
+                         });
+                         return false;
+                    }
+                    else
+                    {
                         validaEntregables();
-                    });
+                    }
+                });
                 /*Enviar de guardar la cedula*/
 
             /********************************** FIN GUARDAR/ENVIAR CÉDULA **********************************/

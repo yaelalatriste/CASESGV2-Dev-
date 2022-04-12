@@ -399,7 +399,7 @@
                             <button href="" class="btn btn-info float-right mr-3 tramitar_cedula" data-memo="@memo" data-rechazado="@rechazat"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
                         }
                     }
-                    else if (@User.Claims.ElementAt(2).Value.Equals("Financieros") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
+                    else if (@User.Claims.ElementAt(2).Value.Contains("Financieros") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
                     {
                         @if (rechazat == false && estatus == false && @Model.Estatus.Equals("En Trámite"))
                         {

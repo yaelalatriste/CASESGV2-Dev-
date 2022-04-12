@@ -359,7 +359,7 @@
                 <div class="col-lg-12 h3 mt-4">
                     Incidencias en Acuses
                 </div>
-                @if (@Model.RespuestasEncuesta[2].Respuesta == false)
+                @if (@Model.RespuestasEncuesta[2].Respuesta == false && !@Model.RespuestasEncuesta[2].Detalles.Equals("N/A"))
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
@@ -406,12 +406,12 @@
                         </div>
                     </div>
                 }
-                else
+                else if (@Model.RespuestasEncuesta[2].Respuesta == false && @Model.RespuestasEncuesta[2].Detalles.Equals("N/A"))
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">El prestador de servicios cumplió con la entrega de acuses semanales en el mes, evitando la(s) penalizaciones correspondientes.</p>
+                                <p class="h3 text-justify text-success">La entrega de acuses semanales no aplica en el mes de evaluación, no se aplican las penalizaciones correspondientes.</p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -429,6 +429,30 @@
                             </h5>
                         </div>
                     </div>
+                }
+                else
+                {
+                <div class="row mt-4">
+                    <div class="row col-lg-12 mt-3">
+                        <div class="col-lg-9 mt-3 ml-4">
+                            <p class="h3 text-justify text-success">El prestador de servicios cumplió con la entrega de acuses semanales en el mes, evitando la(s) penalizaciones correspondientes.</p>
+                        </div>
+                        <div class="col-lg-2" style="margin-top: -18px;">
+                            <div class="small-box bg-warning">
+                                <div class="icon">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-12">
+                        <h5 class="text-success ml-4">
+                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
+                        </h5>
+                    </div>
+                </div>
                 }
             </div>
             <div class="tab-pane fade" id="malEstado" role="tabpanel" aria-labelledby="contact-tab">
