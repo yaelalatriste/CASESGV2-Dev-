@@ -144,7 +144,7 @@
 
                 Swal.fire({
                     'icon': 'warning',
-                    'title': 'Servicio de Agua para Beber',
+                    'title': 'Servicio de Bienes Muebles',
                     'html': '¿Estás seguro de eliminar la cédula con folio: ' + folio + '?',
                     'confirmButtonColor': '#3085d6',
                     'cancelButtonColor': '#d33',
@@ -153,10 +153,10 @@
                     'showCancelButton': true
                 }).then(response => {
                     if (response.isConfirmed) {
-                        axios.get("/agua/eliminar/" + id).then(response => {
+                        axios.get("/muebles/eliminar/" + id).then(response => {
                             if (response.status == 200) {
                                 Swal.fire({
-                                    'title': 'Servicio de Agua para Beber',
+                                    'title': 'Servicio de Bienes Muebles',
                                     'html': 'La cédula fue eliminada con éxito.',
                                     'icon': 'success'
                                 }).then(function () {

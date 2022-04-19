@@ -540,6 +540,11 @@
                             <!--Enviar a Revision por la CAE-->
                             <button href="" class="btn btn-success float-right mr-3 autorizar_cae"><i class="fas fa-check mr-2"></i>Autorizar Documentación</button>
                         }
+                        else if (rechazat == false && estatus == false && @Model.Estatus.Equals("Trámite Rechazado"))
+                        {
+                            <!--Enviar a Revision por la CAE-->
+                            <button href="" class="btn btn-success float-right mr-3 autorizar_cae"><i class="fas fa-check mr-2"></i>Autorizar Documentación</button>
+                        }
                     }
                     else if (@User.Claims.ElementAt(2).Value.Contains("Financieros") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
                     {

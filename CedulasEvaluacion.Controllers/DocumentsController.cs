@@ -5520,13 +5520,13 @@ namespace CedulasEvaluacion.Controllers
             {
                 document.Replace("|Estado|", "en la " + cedula.Estado, false, true);
                 document.Replace("|Coordinacion|", "COORDINACIÓN DE CONTROL OPERATIVO DE ADMINISTRACIONES DE EDIFICIOS", false, true);
-                document.Replace("|Inmueble|",CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC), false, true);
+                document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC), false, true);
             }
             else
             {
                 document.Replace("|Estado|", "en el " + cedula.Estado, false, true);
                 document.Replace("|Coordinacion|", "COORDINACIÓN DE ADMINISTRACIÓN REGIONAL", false, true);
-                document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.TipoInmueble) +" " + CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Estado), false, true);
+                document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.TipoInmueble) + " " + CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Estado), false, true);
             }
 
             document.Replace("|InmuebleP|", cedula.InmuebleC, false, true);
@@ -5572,14 +5572,14 @@ namespace CedulasEvaluacion.Controllers
                     if (!cedula.facturas[i].receptor.usoCFDI.Equals("G02"))
                     {
                         strFacturas += cedula.facturas[i].comprobante.Folio + "\n";
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado + "\n";
+                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy")+ "\n";
 
                         total += cedula.facturas[i].comprobante.Total;
                     }
                     else
                     {
-                        strNotas += cedula.facturas[i].comprobante.Folio;
-                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado;
+                        strNotas += cedula.facturas[i].comprobante.Folio + "\n";
+                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
                         totalNC += cedula.facturas[i].comprobante.Total;
                     }
                 }
@@ -5587,14 +5587,14 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (!cedula.facturas[i].receptor.usoCFDI.Equals("G02"))
                     {
-                        strFacturas += cedula.facturas[i].comprobante.Folio;
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado;
+                        strFacturas += cedula.facturas[i].comprobante.Folio + "\n";
+                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
                         total += cedula.facturas[i].comprobante.Total;
                     }
                     else
                     {
-                        strNotas += cedula.facturas[i].comprobante.Folio;
-                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado;
+                        strNotas += cedula.facturas[i].comprobante.Folio + "\n";
+                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
                         totalNC += cedula.facturas[i].comprobante.Total;
                     }
                 }
@@ -5622,7 +5622,7 @@ namespace CedulasEvaluacion.Controllers
                                 else
                                 {
                                     cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad+" - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
+                                    strCantidades = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
                                 }
                             }
                             else
@@ -5636,7 +5636,7 @@ namespace CedulasEvaluacion.Controllers
                                 else
                                 {
                                     cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad+" - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
+                                    strCantidades += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
                                 }
                             }
                         }
@@ -5652,7 +5652,7 @@ namespace CedulasEvaluacion.Controllers
                                 else
                                 {
                                     cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad+" - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
+                                    strCantidadesNota = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
                                 }
                             }
                             else
@@ -5666,7 +5666,7 @@ namespace CedulasEvaluacion.Controllers
                                 else
                                 {
                                     cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad+" - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
+                                    strCantidadesNota += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
                                 }
                             }
                         }
@@ -5685,7 +5685,7 @@ namespace CedulasEvaluacion.Controllers
                                 else
                                 {
                                     cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad +unidad+ " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
+                                    strCantidades = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
                                 }
                             }
                             else
@@ -5699,7 +5699,7 @@ namespace CedulasEvaluacion.Controllers
                                 else
                                 {
                                     cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad+" - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
+                                    strCantidades += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
                                 }
                             }
                         }
@@ -5715,7 +5715,7 @@ namespace CedulasEvaluacion.Controllers
                                 else
                                 {
                                     cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad +"  - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
+                                    strCantidadesNota = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + "  - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
                                 }
                             }
                             else
@@ -5728,7 +5728,7 @@ namespace CedulasEvaluacion.Controllers
                                 else
                                 {
                                     cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota += cantidadS +" "+cedula.facturas[i].concepto[j].Unidad +unidad+" - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
+                                    strCantidadesNota += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
                                 }
                             }
                         }
@@ -5741,7 +5741,7 @@ namespace CedulasEvaluacion.Controllers
 
             document.Replace("|ImporteIVA|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total), false, true);
             document.Replace("|CantidadServicios|", strCantidades + "", false, true);
-            document.Replace("|FechaTimbrado|", Convert.ToDateTime(strTimbrado).ToString("dd/MM/yyyy"), false, true);
+            document.Replace("|FechaTimbrado|", strTimbrado, false, true);
             document.Replace("|FolioFactura|", strFacturas, false, true);
 
             document.Replace("|ImporteNota|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalNC), false, true);

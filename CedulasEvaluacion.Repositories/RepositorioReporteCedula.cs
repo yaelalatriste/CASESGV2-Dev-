@@ -51,6 +51,37 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
+        public async Task<IEnumerable<ReporteFinancieros>> getReporteFinancierosLimpieza()
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_reporteFinancierosLimpieza", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        var response = new List<ReporteFinancieros>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValueFinancieros(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+
         private ReporteCedula MapToValue(SqlDataReader reader)
         {
             return new ReporteCedula()
@@ -67,6 +98,27 @@ namespace CedulasEvaluacion.Repositories
                 FechaCreacion = reader["FechaCreacion"].ToString(),
                 Facturas = reader["Facturas"].ToString(),
                 MontosFacturas = reader["MontosFacturas"].ToString(),
+            };
+        }
+        private ReporteFinancieros MapToValueFinancieros(SqlDataReader reader)
+        {
+            return new ReporteFinancieros()
+            {
+                Id = (int)reader["Id"],
+                Inmueble = reader["Inmueble"].ToString(),
+                Folio = reader["Folio"].ToString(),
+                FolioFactura = reader["FolioFactura"].ToString(),
+                Mes = reader["Mes"].ToString(),
+                Anio = (int)reader["Anio"],
+                Inasistencias = reader["Inasistencias"] != DBNull.Value ? (int)reader["Inasistencias"]:0,
+                Calificacion = (decimal) reader["Calificacion"],
+                PenaPO = (decimal)reader["PenaPO"],
+                PenaUniforme = (decimal)reader["PenaUniforme"],
+                PenaCapacitacion = (decimal)reader["PenaCapacitacion"],
+                PenaCalificacion = (decimal)reader["PenaCalificacion"],
+                PenaEquipo = (decimal)reader["PenaEquipo"],
+                TotalInmueble = (decimal)reader["TotalInmueble"],
+                Estatus = reader["Estatus"].ToString(),
             };
         }
     }

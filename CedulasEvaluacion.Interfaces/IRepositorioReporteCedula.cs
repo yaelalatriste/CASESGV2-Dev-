@@ -11,5 +11,6 @@ namespace CedulasEvaluacion.Interfaces
     public interface IRepositorioReporteCedula
     {
         Task<IEnumerable<ReporteCedula>> getReporteMensajeria(int id);
+        Task<IEnumerable<ReporteFinancieros>> getReporteFinancierosLimpieza();
     }
 }

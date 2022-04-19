@@ -106,5 +106,21 @@ namespace CedulasEvaluacion.Controllers
             var result = local.Execute(RenderType.Pdf,extension, parameters,mimtype);
             return File(result.MainStream,"application/pdf");
         }
+
+        [Route("/financieros/limpieza")]
+        public async Task<IActionResult> ReporteLimpieza()
+        {
+            string mimtype = "";
+            int extension = 3;
+            var incidencias = new List<IncidenciasMensajeria>();
+            var path = $"{this.web.WebRootPath}\\Reportes\\ReporteFinancieros.rdlc";
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            LocalReport local = new LocalReport(path);
+            var cedulas = await vrCedula.getReporteFinancierosLimpieza();
+            local.AddDataSource("ReporteFinancierosLimpieza", cedulas);
+
+            var result = local.Execute(RenderType.ExcelOpenXml, extension, parameters, mimtype);
+            return File(result.MainStream, "application/msexcel", "ReporteLimpieza_"+DateTime.Now+".xlsx");
+        }
     }
 }
