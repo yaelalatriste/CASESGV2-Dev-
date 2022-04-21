@@ -1384,7 +1384,7 @@
         </TablixRowHierarchy>
         <DataSetName>ReporteFinancierosLimpieza</DataSetName>
         <Height>1.8cm</Height>
-        <Width>44.3527cm</Width>
+        <Width>44.35271cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1395,7 +1395,7 @@
     <Height>2in</Height>
     <Style />
   </Body>
-  <Width>17.46169in</Width>
+  <Width>17.4617in</Width>
   <Page>
     <PageHeader>
       <Height>3.11078cm</Height>

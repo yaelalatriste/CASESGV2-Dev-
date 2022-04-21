@@ -150,10 +150,10 @@ namespace CedulasEvaluacion.Repositories
                             cmd.Parameters.Add(new SqlParameter("@codigoRastreo", incidenciasMensajeria.CodigoRastreo));
                         if (!incidenciasMensajeria.NumeroGuia.Equals(""))
                             cmd.Parameters.Add(new SqlParameter("@numeroGuia", incidenciasMensajeria.NumeroGuia));
+                        if (!incidenciasMensajeria.Sobrepeso.Equals(""))
+                            cmd.Parameters.Add(new SqlParameter("@sobrepeso", incidenciasMensajeria.Sobrepeso));
                         if (!incidenciasMensajeria.TipoServicio.Equals(""))
                             cmd.Parameters.Add(new SqlParameter("@tipoServicio", incidenciasMensajeria.TipoServicio));
-                        if (!incidenciasMensajeria.Acuse.Equals(""))
-                            cmd.Parameters.Add(new SqlParameter("@acuse", incidenciasMensajeria.Acuse));
                         if (incidenciasMensajeria.TotalAcuses != 0)
                             cmd.Parameters.Add(new SqlParameter("@totalAcuses", incidenciasMensajeria.TotalAcuses));
                         
@@ -245,6 +245,8 @@ namespace CedulasEvaluacion.Repositories
                             cmd.Parameters.Add(new SqlParameter("@codigoRastreo", incidenciasMensajeria.CodigoRastreo));
                         if (!incidenciasMensajeria.NumeroGuia.Equals(""))
                             cmd.Parameters.Add(new SqlParameter("@numeroGuia", incidenciasMensajeria.NumeroGuia));
+                        if (!incidenciasMensajeria.Sobrepeso.Equals(""))
+                            cmd.Parameters.Add(new SqlParameter("@sobrepeso", incidenciasMensajeria.Sobrepeso));
                         if (!incidenciasMensajeria.TipoServicio.Equals(""))
                             cmd.Parameters.Add(new SqlParameter("@tipoServicio", incidenciasMensajeria.TipoServicio));
                         if (!incidenciasMensajeria.Acuse.Equals("") && !incidenciasMensajeria.Acuse.Equals(null))

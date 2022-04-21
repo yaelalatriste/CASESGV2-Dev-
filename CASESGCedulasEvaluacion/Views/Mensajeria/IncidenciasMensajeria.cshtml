@@ -57,6 +57,7 @@
                                             <th>Numero Guía</th>
                                             <th>Codigo Rastreo</th>
                                             <th>Tipo de Servicio</th>
+                                            <th>Sobrepeso</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -75,10 +76,11 @@
                                                     <td>@incidencia.NumeroGuia</td>
                                                     <td>@incidencia.CodigoRastreo</td>
                                                     <td>@incidencia.TipoServicio</td>
+                                                    <td>@incidencia.Sobrepeso</td>
                                                     <td>
                                                         <a href="#" class="update_incidencia" data-id="@incidencia.Id" data-tipo="@incidencia.Tipo" data-fechap="@incidencia.FechaProgramada.ToString("yyyy-MM-dd")"
                                                            data-fechae="@incidencia.FechaEfectiva.ToString("yyyy-MM-dd")" data-numero="@incidencia.NumeroGuia" data-codigo="@incidencia.CodigoRastreo"
-                                                           data-tipose="@incidencia.TipoServicio">
+                                                           data-tipose="@incidencia.TipoServicio" data-sobrepeso="@incidencia.Sobrepeso">
                                                             <i class="fad fa-pencil text-primary mr-2"></i>
                                                         </a>
                                                         <a href="#" class="delete_incidencia" data-id="@incidencia.Id" data-tipo="@incidencia.Tipo" data-numero="@incidencia.NumeroGuia">
@@ -129,7 +131,7 @@
                                                     <td>
                                                         <a href="#" class="update_incidencia" data-id="@incidencia.Id" data-tipo="@incidencia.Tipo" data-fechap="@incidencia.FechaProgramada.ToString("yyyy-MM-dd")"
                                                            data-fechae="@incidencia.FechaEfectiva.ToString("yyyy-MM-dd")" data-numero="@incidencia.NumeroGuia" data-codigo="@incidencia.CodigoRastreo"
-                                                           data-tipose="@incidencia.TipoServicio">
+                                                           data-tipose="@incidencia.TipoServicio" data-sobrepeso="@incidencia.Sobrepeso">
                                                             <i class="fad fa-pencil text-primary mr-2"></i>
                                                         </a>
                                                         <a href="#" class="delete_incidencia" data-id="@incidencia.Id" data-tipo="@incidencia.Tipo" data-numero="@incidencia.NumeroGuia">
@@ -517,16 +519,12 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="form-group col-lg-4" id="divTieneAcuse">
-                                <label for="tieneAcuse">¿Tiene Acuse?</label>
-                                <select class="form-control" id="tiene_acuse">
-                                    <option value="">¿Existe Acuse?</option>
-                                    <option value="SI">SI</option>
-                                    <option value="NO">NO</option>
-                                </select>
-                                <div class="col-sm-12" id="error_tieneAcuse">
+                            <div class="form-group col-lg-4" id="divSobrepeso">
+                                <label for="tieneAcuse">Sobrepeso</label>
+                                <input class="form-control" id="total_sobrepeso" type="number"/>
+                                <div class="col-sm-12" id="error_sobrepeso">
                                     <small id="dateHelp" class="text-danger">
-                                        Por favor seleccione si la incidencia se presento con Acuse
+                                        Por favor capture el sobrepeso de la guía
                                     </small>
                                 </div>
                             </div>
@@ -608,7 +606,7 @@
                 $('#error_numeroGuia').css('display', 'none');
                 $('#error_tipoServicio').css('display', 'none');
                 $('#error_totalAcuses').css('display', 'none');
-                $('#error_tieneAcuse').css('display', 'none');
+                $('#error_sobrepeso').css('display', 'none');
                 $('#error_archivoActa').css('display', 'none');
             /*Fin de Mensajes de Error*/
 
@@ -619,7 +617,7 @@
                 $('#div_numeroGuia').css('display', 'none');
                 $('#div_tipoServicio').css('display', 'none');
                 $('#div_totalAcuses').css('display', 'none');
-                $('#divTieneAcuse').css('display', 'none');
+                $('#divSobrepeso').css('display', 'none');
                 $('#divArchivoActa').css('display', 'none');
             /*Fin de Ocultar los Elementos*/
 
@@ -653,7 +651,6 @@
                         $('#div_codigoRastreo').css('display', 'block');
                         $('#div_numeroGuia').css('display', 'block');
                         $('#div_tipoServicio').css('display', 'block');
-                        $('#divTieneAcuse').css('display', 'block');
                         $('#div_totalAcuses').css('display', 'none');
                     } else if ($(this).val() == "Acuses") {
                         $("#id_incidencia").val("");
@@ -667,7 +664,7 @@
                         $('#div_codigoRastreo').css('display', 'none');
                         $('#div_numeroGuia').css('display', 'none');
                         $('#div_tipoServicio').css('display', 'none');
-                        $('#divTieneAcuse').css('display', 'none');
+                        $('#divSobrepeso').css('display', 'none');
                         $('#div_fechaProgramada').css('display', 'block');
                         $('#div_fechaEfectiva').css('display', 'block');
                         $('#div_totalAcuses').css('display', 'block');
@@ -679,7 +676,7 @@
                         $("#numero_guia").val("");
                         $("#tipo_servicio").val("");
                         $("#acuses_faltantes").val("");
-                        $("#tiene_acuse").val("");
+                        $("#total_sobrepeso").val("");
 
                         $('#div_codigoRastreo').css('display', 'block');
                         $('#div_numeroGuia').css('display', 'block');
@@ -709,7 +706,7 @@
                     $('#div_numeroGuia').css('display', 'none');
                     $('#div_tipoServicio').css('display', 'none');
                     $('#div_totalAcuses').css('display', 'none');
-                    $('#divTieneAcuse').css('display', 'none');
+                    $('#divSobrepeso').css('display', 'none');
                     $("#modal-incidencias").modal('show');
                     $("#categoria").val("");
                     $("#categoria").prop('disabled',false);
@@ -838,12 +835,21 @@
             /****************** Fin Adjuntar Incidencias Excel  *********************/
 
             /********************** Capturar Incidencias ***********************/
+                $("#tipo_servicio").change(function () {
+                    if ($(this).val() == "Nacional Sobrepeso" || $(this).val() == "Internacional Sobrepeso") {
+                        $("#divSobrepeso").css("display", "block");
+                    } else {
+                        $("#divSobrepeso").css("display", "none");
+                        $("#total_sobrepeso").val("");
+                    }
+                });
+
                 function validaCampos(){
                     var categoria = $("#categoria").val();
 
                     if (categoria == "Entrega" || categoria == "Recoleccion") {
                         if ($("#fecha_programada").val() != "" && $("#fecha_efectiva").val() != "" && $("#codigo_rastreo").val() != "" &&
-                            $("#numero_guia").val() != "" && $("#tipo_servicio").val() != "" && $("#tiene_acuse").val() != "") {
+                            $("#numero_guia").val() != "" && $("#tipo_servicio").val() != "" && $("#total_sobrepeso").val() != "") {
                             return true;
                         }
 
@@ -872,9 +878,9 @@
                             $('#error_tipoServicio').css('display', 'block');
                         }
 
-                        if ($("#tiene_acuse").val() == "") {
-                            $('#tiene_acuse').addClass('is-invalid');
-                            $('#error_tieneAcuse').css('display', 'block');
+                        if ($("#total_sobrepeso").val() == "") {
+                            $('#total_sobrepeso').addClass('is-invalid');
+                            $('#error_sobrepeso').css('display', 'block');
                         }
 
                         return false;
@@ -960,7 +966,7 @@
                     var codigoRastreo = $("#codigo_rastreo").val() != '' ? $("#codigo_rastreo").val()+"" : "";
                     var numeroGuia = $("#numero_guia").val() != '' ? $("#numero_guia").val(): "";
                     var tipoServicio = $("#tipo_servicio").val() != '' ? $("#tipo_servicio").val() : "";
-                    var acuse = $("#tiene_acuse").val() != '' ? $("#tiene_acuse").val() : "";
+                    var sobrepeso = $("#total_sobrepeso").val() != '' ? $("#total_sobrepeso").val() : "";
                     var totalAcuses = $("#acuses_faltantes").val() != '' ? $("#acuses_faltantes").val() : 0;
 
                     var pregunta = tInci.indexOf(categoria)+1;
@@ -979,7 +985,7 @@
                             if (id == 0) {
                                 axios.post('/mensajeria/incidencias', {
                                     CedulaMensajeriaId: parseInt(model.id), Pregunta: parseInt(pregunta),
-                                    Tipo: categoria, FechaProgramada: fechaProgramada, Acuse: acuse,
+                                    Tipo: categoria, FechaProgramada: fechaProgramada, Sobrepeso: sobrepeso,
                                     FechaEfectiva: fechaEfectiva, CodigoRastreo: parseInt(codigoRastreo), NumeroGuia: numeroGuia,
                                     TipoServicio: tipoServicio, TotalAcuses: parseInt(totalAcuses)
                                 }).then(res => {
@@ -1002,7 +1008,7 @@
                                 axios.post('/mensajeria/actualiza/incidencia', {
                                     ID: parseInt(id),
                                     CedulaMensajeriaId: parseInt(model.id), Pregunta: parseInt(pregunta),
-                                    Tipo: categoria, FechaProgramada: fechaProgramada, Acuse: acuse,
+                                    Tipo: categoria, FechaProgramada: fechaProgramada, Sobrepeso: sobrepeso,
                                     FechaEfectiva: fechaEfectiva, CodigoRastreo: parseInt(codigoRastreo), NumeroGuia: numeroGuia,
                                     TipoServicio: tipoServicio, TotalAcuses: parseInt(totalAcuses)
                                 }).then(res => {
@@ -1109,6 +1115,7 @@
                 $(".update_incidencia").click(function () {
                     var id = $(this).data("id");
                     var categoria = $(this).data("tipo");
+                    var sobrepeso = $(this).data("sobrepeso");
                     var fechaProgramada = $(this).data("fechap");
                     var fechaEfectiva = $(this).data("fechae");
                     var codigoRastreo = $(this).data("codigo");
@@ -1125,7 +1132,13 @@
 
                     if (categoria == "Robadas") {
                         $(".nameFile").text($(this).data("file"));
+                    } else if (categoria == "Recoleccion" || categoria == "Entrega") {
+                        if ($("#tipo_servicio").val() == "Nacional Sobrepeso" || $("#tipo_servicio").val() == "Internacional Sobrepeso") {
+                            $("#divSobrepeso").css("display","block");
+                            $("#total_sobrepeso").val(sobrepeso);
+                        }
                     }
+
 
                     $("#modal-incidencias").modal('show');
 

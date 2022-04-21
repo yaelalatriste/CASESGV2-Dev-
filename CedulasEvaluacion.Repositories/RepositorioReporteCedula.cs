@@ -51,6 +51,38 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
+        public async Task<IEnumerable<ReporteCedula>> getReporteLimpieza(int id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_ReporteLimpiezaById", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        var response = new List<ReporteCedula>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValue(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+
         public async Task<IEnumerable<ReporteFinancieros>> getReporteFinancierosLimpieza()
         {
             try

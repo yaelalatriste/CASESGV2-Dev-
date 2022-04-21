@@ -299,7 +299,7 @@ namespace CedulasEvaluacion.Repositories
 
         /*Metodo para Actualizar los datos de la Factura*/
         public async Task<Facturas> updateFacturas(Facturas facturas)
-        {
+         {
             await copiaFactura(facturas.Xml);
             facturas = desglozaXML(facturas);
             try

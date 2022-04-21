@@ -11,6 +11,12 @@
                 <i class="fal fa-calendar-alt"></i>
             </a>
         }
+        @if (@Model.facturas.Count != 0 && Model.Estatus.Equals("Trámite Rechazado") && (Model.Mes.Equals("Enero") || Model.Mes.Equals("Febrero")))
+        {
+            <a href="/documents/alcanceActa/@Model.Id" class='btn-sm btn-danger float-right mr-2 mb-3' data-toggle="tooltip" title="Generar Alcace AER" data-placement="top">
+                <i class="fal fa-calendar-alt"></i>
+            </a>
+        }
         <a href="/limpieza/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
@@ -197,10 +203,10 @@
                 <div class="row col-lg-12 mt-1 h6">
                     <div class="col-lg-12">
                         <div class="col-lg-12 mb-3">
-                            @if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Autorizado CAE")) && ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || (@User.Claims.ElementAt(2).Value).Contains("Administrador")))
-                            {
+                            @*if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Autorizado CAE")) && ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || (@User.Claims.ElementAt(2).Value).Contains("Administrador")))
+                            {*@
                                 <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
-                            }
+                            @*}*@
                         </div>
                         <h6 class="mt-4"><strong>Entregables Adjuntos</strong></h6>
                         <table class="table" id="tableEntregables">
@@ -253,6 +259,16 @@
                                         {
                                             memo = true;
                                             tipo = "Memorándum";
+                                            <td>@Html.DisplayName(tipo)</td>
+                                        }
+                                        else if (entre.Tipo.Equals("AlcanceMO")) 
+                                        {
+                                            tipo = "Alcance a Memorándum/Oficio";
+                                            <td>@Html.DisplayName(tipo)</td>
+                                        }
+                                        else if (entre.Tipo.Equals("AlcanceAER")) 
+                                        {
+                                            tipo = "Alcance a Acta E-R";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
                                         else
@@ -621,7 +637,99 @@
     </div>
 </div>
 
+@* Modal para agregar facturas la cedula *@
+<div class="modal fade" id="modal-facturas">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white">Agregar/Modificar Factura</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" id="idFactura" type="hidden" />
+                <div class="row col-lg-12 mt-2">
+                    <div class="form-group col-lg-6">
+                        <label for="elegirArchivo">Seleccionar Archivo XML: </label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input file_factura" id="fileFactura" accept=".xml">
+                            <label class="custom-file-label" for="customFile">Subir "XML" de la factura</label>
+                        </div>
+                        <div class="col-sm-12 error_customFile">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione él archivo correspondiente
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button type="button" class="btn btn-primary" id="agregarFactura">Guardar Factura</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@* FIN del Modal para agregar facturas la cedula *@
 
+@* Modal para ver las facturas de la cedula *@
+<div class="modal fade" id="modal-ver-facturas">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white">Factura Capturadas</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 mt-3">
+                        <table class="table table-responsive" id="listado_facturas">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Empresa</th>
+                                    <th>Folio Fiscal</th>
+                                    <th>Numero de la Factura</th>
+                                    <th>Subtotal de la Factura</th>
+                                    <th>Total</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaFacturas"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@* FIN del Modal para ver las facturas de la cedula *@
+
+@* Modal para ver los conceptos de las facturas de la cedula *@
+<div class="modal fade" id="modal-ver-conceptos">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white" id="factura_serie"></h4>
+                <button type="button" class="close close_conceptos text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class=" row col-lg-12" id="detalle_conceptos"></div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+@* Fin de Modal para ver los conceptos de las facturas de la cedula *@
 
 @* Modal para la captura de Adjuntos *@
 <div class="modal fade" id="modal_evidencias">
@@ -893,7 +1001,7 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),Estatus: "Autorizado CAE", 
+                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),Estatus: "Autorizado CAE",
                                                                            Comentarios: "Se autorizó la documentación por la CAE"}).then(hist => {
                                 if (hist.status == 200) {
                                     axios.post('/cedLimpieza/aprovRechCed', { Id: model.id, Estatus: "Autorizado CAE" }).then(response => {
@@ -1162,17 +1270,32 @@
                     axios.get('/limpieza/getFacturas/' + model.id + '/' + 1).then(table => {
                         var facturas = table.data;
                         for (var i = 0; i < facturas.length; i++) {
-                            table += "<tr>" +
-                                "<td>" + (i + 1) + "</td>" +
-                                "<td>" + facturas[i].emisor.nombre + "</td>" +
-                                "<td>" + facturas[i].timbreFiscal.uuid + "</td>" +
-                                "<td>" + (facturas[i].comprobante.serie + "" + facturas[i].comprobante.folio) + "</td>" +
-                                "<td> $" + parseFloat(facturas[i].comprobante.subTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>" +
-                                "<td> $" + parseFloat(facturas[i].comprobante.total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>" +
-                                "<td>" +
-                                "<a class='view_factura' href='#' data-id='" + i + "'><i class='far fa-list text-success'></i></a>" +
-                                "</td>" +
-                                "</tr>";
+                            if (facturas[i].comprobante.serie == 'NC') {
+                                table += "<tr>" +
+                                    "<td>" + (i + 1) + "</td>" +
+                                    "<td>" + facturas[i].emisor.nombre + "</td>" +
+                                    "<td>" + facturas[i].timbreFiscal.uuid + "</td>" +
+                                    "<td>" + (facturas[i].comprobante.serie + "" + facturas[i].comprobante.folio) + "</td>" +
+                                    "<td> $" + parseFloat(facturas[i].comprobante.subTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>" +
+                                    "<td> $" + parseFloat(facturas[i].comprobante.total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>" +
+                                    "<td>" +
+                                    "<a class='view_factura' href='#' data-id='" + i + "'><i class='far fa-list text-success'></i></a>" +
+                                    "<a class='update_factura' href='#' data-id='" + facturas[i].id + "' data-toggle='tooltip' title='Actualizar XML' data-placement='top'><i class='fad fa-pencil text-primary ml-2'></i></a>" +
+                                    "</td>" +
+                                    "</tr>";
+                            } else {
+                                table += "<tr>" +
+                                    "<td>" + (i + 1) + "</td>" +
+                                    "<td>" + facturas[i].emisor.nombre + "</td>" +
+                                    "<td>" + facturas[i].timbreFiscal.uuid + "</td>" +
+                                    "<td>" + (facturas[i].comprobante.serie + "" + facturas[i].comprobante.folio) + "</td>" +
+                                    "<td> $" + parseFloat(facturas[i].comprobante.subTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>" +
+                                    "<td> $" + parseFloat(facturas[i].comprobante.total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>" +
+                                    "<td>" +
+                                    "<a class='view_factura' href='#' data-id='" + i + "'><i class='far fa-list text-success'></i></a>" +
+                                    "</td>" +
+                                    "</tr>";
+                            }
                         }
                         $("#listaFacturas").html(table);
                         if (facturas.length == 0) {
@@ -1183,14 +1306,101 @@
                     });
                     $('#modal-ver-facturas').modal('show');
                 });
-                /*Fin de Ver Facturas*/
+            /*Fin de Ver Facturas*/
+
+                $(document).on('click', '.update_factura', function () {
+                    var id = $(this).data('id');
+                    $("#idFactura").val(id);
+                    $('#modal-ver-facturas').modal('hide');
+                    $("#modal-facturas").modal('show');
+                });
+                $(".file_factura").change(function (e) {
+                    var archivo = e.target.files[0];
+                    var fileName = $(this).val().split("\\").pop();
+                    var ext = fileName.split('.').pop();
+                    if (ext == "xml") {
+                        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                        if ($('.file_factura').hasClass('is-invalid')) {
+                            $('.file_factura').removeClass('is-invalid');
+                            $('.file_factura').addClass('is-valid');
+                            $('.error_customFile').css('display', 'none')
+                        } else {
+                            $('.file_factura').addClass('is-valid');
+                        }
+                    } else {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Formato Incorrecto',
+                            'text': 'El archivo que intentas adjuntar no es válido. Favor de solo seleccionar archivos "Xml"'
+                        });
+                        $(".custom-file-label").text("Seleccionar Archivo");
+                        document.getElementById('customFile').value = '';
+                        if ($('.file_factura').hasClass('is-valid')) {
+                            $('.file_factura').removeClass('is-valid');
+                            $('.file_factura').addClass('is-invalid');
+                        }
+                        $('.file_factura').addClass('is-invalid');
+                        $('.error_customFile').css('display', 'block');
+                    }
+                });
+                function validaCamposArchivoXml() {
+                    if ($('.file_factura').val() == "") {
+                        $('.file_factura').addClass('is-invalid');
+                        $('.error_customFile').css('display', 'block');
+
+                        return false;
+                    }
+                    return true;
+                }
+                $('#agregarFactura').click(function () {
+                     var id = $("#idFactura").val();
+
+                     var formData = new FormData();
+                     var file = document.getElementById('fileFactura').files[0];
+
+                     if (id.length > 0) {
+                         id = parseInt(id);
+                     } else {
+                         id = 0;
+                     }
+
+                     formData.append("Id", id);
+                     formData.append("ServicioId", 1);
+                     formData.append("CedulaId", model.id);
+                     formData.append("Xml", file);
+                     if (validaCamposArchivoXml() == true) {
+                         if (id == "") {
+                             axios.post('/limpieza/insertaFactura', formData).then(fact => {
+                                 Swal.fire({
+                                     'icon': "success",
+                                     'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
+                                     'html': 'La factura fue agregada a la cédula de forma correcta.'
+                                 }).then(function () {
+                                     window.location.reload();
+                                 });
+                             });
+                         } else {
+                             axios.post('/limpieza/updateFactura', formData).then(fact => {
+                                 Swal.fire({
+                                     'icon': "success",
+                                     'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
+                                     'html': 'La factura fue actualizada de forma correcta.'
+                                 }).then(function () {
+                                     window.location.reload();
+                                 });
+                             });
+                         }
+                     }
+
+                 });
             /*Fin de Ver Facturas*/
 
             /************************************ CARGA/EDICION ARCHIVOS ************************************/
                 /*Modal para Adjuntar Archivos*/
                     $('.btn_addFile').click(function () {
                         $('#tipo_entregable').prop('disabled', false);
-                        var options = '<option value="">Seleccione un Entregable</option>';
+                        var options = '<option value="">Seleccione un Entregable</option><option value="AlcanceAER">Alcance a Acta Entrega-Recepción</option>+
+                            '<option value = "AlcanceMO" > Alcance a Memorándum/Oficio</option>';
                         axios.get("/cedLimpieza/getListadoEntregablesLimpieza/" + model.id).then(response => {
                             response = response.data;
                             var memo = false;
@@ -1391,7 +1601,8 @@
                         $('#modal_evidencias').modal('show');
                         var options = '<option value="">Seleccione un Entregable</option><option value="ActaER">Acta Entrega - Recepción</option><option value="Factura">Factura</option>'+
                             '<option value="SAT">Validación del SAT</option><option value="NotaCredito">Nota de Crédito</option><option value="Cedula_Firmada">Cédula Firmada (FIREL)</option>' +
-                            '<option value="Memorandum">Acuse Memorándum (FIREL)</option>';
+                            '<option value="Memorandum">Acuse Memorándum (FIREL)</option><option value="AlcanceAER">Alcance a Acta Entrega-Recepción</option>' +
+                            '<option value = "AlcanceMO" > Alcance a Memorándum/Oficio</option>';
                         $("#tipo_entregable").html(options);
                         var id = $(this).data('id');
                         var tipo = $(this).data('tipo');

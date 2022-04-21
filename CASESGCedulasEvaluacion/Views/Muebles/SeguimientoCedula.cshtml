@@ -247,6 +247,10 @@
                                             tipo = "Memorándum";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
+                                        else if (entre.Tipo.Equals("HojaCotizacion"))
+                                        {
+                                            <td>Hoja de Cotización</td>
+                                        }
                                         else
                                         {
                                             tipo = @entre.Tipo;

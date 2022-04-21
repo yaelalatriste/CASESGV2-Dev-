@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Reportes\CedulaLimpieza.rdlc" />
     <Content Remove="wwwroot\Reportes\CedulaMensajeria.rdlc" />
     <Content Remove="wwwroot\Reportes\ReporteFinancieros.rdlc" />
   </ItemGroup>
@@ -13,7 +14,12 @@
     <EmbeddedResource Include="wwwroot\Reportes\CedulaMensajeria.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="wwwroot\Reportes\ReporteFinancieros.rdlc" />
+    <EmbeddedResource Include="wwwroot\Reportes\ReporteFinancieros.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="wwwroot\Reportes\CedulaLimpieza.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +59,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>CedulasEvaluacionV2DataSet3.xsd</DependentUpon>
     </Compile>
+    <Compile Update="DtCedulaLimpieza.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DtCedulaLimpieza.xsd</DependentUpon>
+    </Compile>
     <Compile Update="DtReporteFinancieros.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -70,13 +81,20 @@
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>CedulasEvaluacionV2DataSet3.Designer.cs</LastGenOutput>
     </None>
+    <None Update="DtCedulaLimpieza.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DtCedulaLimpieza.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="DtReporteFinancieros.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>DtReporteFinancieros.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="DtReporteMensajeria.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>DtReporteMensajeria.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

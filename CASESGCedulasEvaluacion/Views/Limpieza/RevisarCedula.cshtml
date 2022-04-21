@@ -561,6 +561,14 @@
                                                     else if (entre.Tipo.Equals("Memorandum"))
                                                     {
                                                         <td>Memorándum</td>
+                                                    } 
+                                                    else if (entre.Tipo.Equals("AlcanceMO")) 
+                                                    {
+                                                        <td>Alcance a Memorándum/Oficio</td>
+                                                    }
+                                                    else if (entre.Tipo.Equals("AlcanceAER")) 
+                                                    {
+                                                        <td>Alcance a Acta E-R</td>
                                                     }
                                                     <td>@entre.NombreArchivo</td>
                                                     <td>@entre.FechaCreacion.ToString("yyyy-MM-dd")</td>
