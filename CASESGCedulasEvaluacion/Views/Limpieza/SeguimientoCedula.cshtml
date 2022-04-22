@@ -1399,7 +1399,7 @@
                 /*Modal para Adjuntar Archivos*/
                     $('.btn_addFile').click(function () {
                         $('#tipo_entregable').prop('disabled', false);
-                        var options = '<option value="">Seleccione un Entregable</option><option value="AlcanceAER">Alcance a Acta Entrega-Recepción</option>+
+                        var options = '<option value="">Seleccione un Entregable</option><option value="AlcanceAER">Alcance a Acta Entrega-Recepción</option>'+
                             '<option value = "AlcanceMO" > Alcance a Memorándum/Oficio</option>';
                         axios.get("/cedLimpieza/getListadoEntregablesLimpieza/" + model.id).then(response => {
                             response = response.data;
