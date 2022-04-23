@@ -18,6 +18,7 @@ namespace CedulasEvaluacion.Entities.Models
         public int CedulaResiduosId { get; set; }
         public int CedulaMuebleId { get; set; }
         public int CedulaConvencionalId { get; set; }
+        public int CedulaEvaluacionId { get; set; }
         public int Pregunta { get; set; }
         public bool Respuesta { get; set; }
         public string Detalles { get; set; }

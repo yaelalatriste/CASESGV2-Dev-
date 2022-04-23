@@ -40,7 +40,7 @@ namespace CedulasEvaluacion.Controllers
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
 
-        [Route("/mensajeria/cedula/{id?}")]
+        [Route("/cedula/mensajeria/{id?}")]
         public async Task<IActionResult> GeneraCedula(int id)
         {
             var incidencias = new List<IncidenciasMensajeria>();
