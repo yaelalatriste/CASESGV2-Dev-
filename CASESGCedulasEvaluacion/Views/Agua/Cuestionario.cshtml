@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MAgua.CedulaAgua;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula del Servicio de Suministro de Agua Purificada para Beber con Folio: " + Model.Folio;
 }
@@ -11,7 +11,7 @@
             <i class="fal fa-calendar-alt"></i>
         </a>
     }
-    <a href="/agua/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Agua para Beber" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/agua/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Agua para Beber" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
             <tr>
@@ -1561,12 +1561,12 @@
                             let type = document.getElementsByClassName("pregunta" + (i + 1))[0];
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (i == 0 && type.getAttribute("type") == "date" && $(".pregunta" + (i + 1)).val() != '') {
-                                respuestas.push({ CedulaAguaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
                             } else if (respuesta != null) {
                                 if (i == 5) {
-                                    respuestas.push({ CedulaAguaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() });
                                 } else {
-                                    respuestas.push({ CedulaAguaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 }
                             }
                         }
@@ -1596,12 +1596,12 @@
                         let type = document.getElementsByClassName("pregunta" + (i + 1))[0];
                         let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                         if (i == 0 && type.getAttribute("type") == "date" && $(".pregunta" + (i + 1)).val() != '') {
-                            respuestas.push({ CedulaAguaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
+                            respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
                         } else if (respuesta != null) {
                             if (i == 5) {
-                                respuestas.push({ CedulaAguaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() });
                             } else {
-                                respuestas.push({ CedulaAguaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                             }
                         }
                     }
@@ -1649,14 +1649,14 @@
                             });
                             return false;
                         } else {
-                            axios.post("/agua/sendCedula/"+model.id).then(response => {
+                            axios.post("/agua/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
                                 if (response.status == 200) {
                                     Swal.fire({
                                         'icon': "success",
                                         'title': 'Servicio de Agua Para Beber',
                                         'html': "Se envió la cédula para su revisión correctamente."
                                     }).then(function () {
-                                        window.location.href = "/agua/index";
+                                        window.location.href = "/agua/index/"+model.servicioId;
                                     });
                                 } else {
                                     Swal.fire({

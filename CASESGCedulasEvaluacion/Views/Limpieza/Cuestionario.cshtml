@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.Models.CedulaLimpieza
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula del Servicio de Limpieza en Áreas Comunes y Oficinas con Folio: " + Model.Folio;
 }
@@ -610,7 +610,7 @@
                     <div class="form-group col-lg-4">
                         <label for="tipoIncidencia">Tipo de Entregable:</label>
                         <select class="form-control" id="tipo_entregable">
-                            @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                            @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || (@User.Claims.ElementAt(2).Value).Contains("Administrador"))
                             {
                                 <option value="">Seleccione un Entregable</option>
                                 <option value="ActaER">Acta Entrega - Recepción</option>
@@ -619,9 +619,8 @@
                                 <option value="NotaCredito">Nota de Crédito</option>
                                 <option value="Reporte(s)">Reporte(s)</option>
                             }
-                            else
+                            @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                             {
-                                <option value="">Seleccione un Entregable</option>
                                 <option value="EBD">Entregable Bajo Demanda</option>
                             }
                         </select>
@@ -762,7 +761,7 @@
                     $('#incidencias_pr2').css('display', 'block');
                 } else {
                     /*Validamos que no tengan Incidencias*/
-                    axios.get("/limpieza/getIncidencias", { params: { cedulaId: parseInt(@Model.Id) } }).then(response => {
+                    axios.get("/limpieza/getIncidencias/"+@Model.Id).then(response => {
                             if (response.data.length > 0) {
                                 Swal.fire({
                                     'icon': 'warning',
@@ -829,7 +828,7 @@
                     $('#incidencias_pr4').css('display', 'block');
                 } else {
                     /*Validamos que no tengan Incidencias*/
-                    axios.get("/limpieza/getIncidenciasEquipo", { params: { cedulaId: parseInt(@Model.Id) } }).then(response => {
+                    axios.get("/limpieza/getIncidenciasEquipo/"+@Model.Id).then(response => {
                             if (response.data.length > 0) {
                                 Swal.fire({
                                     'icon': 'warning',
@@ -1243,7 +1242,7 @@
                 /*Mostrar Incidencias Capturadas*/
                     $('#consulta_incidencias').click(function () {
                         $('#modal-consultaIncidencias').modal('show');
-                        axios.get("/limpieza/getIncidencias", { params: { cedulaId: parseInt(@Model.Id) } }).then(response => {
+                        axios.get("/limpieza/getIncidencias/"+@Model.Id).then(response => {
                             $('#tIncidencias').html(response.data);
                         });
                     });
@@ -1253,7 +1252,7 @@
                     $(document).on("click", ".update_incidencia", function () {
                         let id = parseInt($(this).data('id'));
                         $('#modal-consultaIncidencias').modal('hide');
-                            axios.get("/limpieza/getIncidencia", { params: { cedulaId: id } }).then(response => {
+                            axios.get("/limpieza/getIncidencia/"+id).then(response => {
                                 $('#id_incidencia').val(response.data.id);
                                 $('#tipo_incidencia').val(response.data.incidencia.tipo).change();
                                 $('#comentarios_incidencias').val(response.data.comentarios);
@@ -1356,6 +1355,12 @@
                         if (id == "" || id == null) {
                             id = 0;
                         }
+                        
+                        if (pregunta == "" || pregunta == null) {
+                            pregunta = 0;
+                        }
+
+
                         if (validaCamposIncidencia()) {
                             axios.post("/limpieza/guardaIncidencias", { Id: parseInt(id), CedulaLimpiezaId: @Model.Id, FechaIncidencia: fecha, Comentarios: comentarios, Pregunta: parseInt(pregunta),
                                                                     Incidencia: { Tipo: tipo, Nombre: area }
@@ -1467,7 +1472,7 @@
 
                 /*Mostrar Incidencias de Equipo*/
                     $('#btn_showInciEquipo').click(function () {
-                        axios.get("/limpieza/getIncidenciasEquipo",{ params: { cedulaId: parseInt(@Model.Id) } }).then(response => {
+                        axios.get("/limpieza/getIncidenciasEquipo/"+@Model.Id).then(response => {
                             $('#tIncidenciasEquipo').html(response.data);
                         });
                         $('#modal-consultaIncidenciasEquipo').modal('show');
@@ -1486,7 +1491,7 @@
                             $("#area_inciEquipo").html(tipos);
                         });
                         $('#modal-consultaIncidenciasEquipo').modal('hide');
-                        axios.get("/limpieza/getIncidencia", { params: { cedulaId: id } }).then(response => {
+                        axios.get("/limpieza/getIncidencia/"+id ).then(response => {
                                 $('#id_incidencia').val(response.data.id);
                                 $('#area_inciEquipo option[value="' + response.data.incidencia.nombre + '"]').attr('selected', 'selected');
                                 $('#comentarios_inciEquipo').val(response.data.comentarios);
@@ -1557,12 +1562,17 @@
                     $('#guardaInciEquipo').click(function () {
                         let html = "";
                         let id = $('#id_incidencia').val();
+                        let pregunta = $('#id_pregunta').val();
                         let fecha = $('#fecha_inciEquipo').val();
                         let tipo = $('#tipo_inciEquipo').val();
                         let area = $('#area_inciEquipo').val();
                         let comentarios = $('#comentarios_inciEquipo').val();
                         if (id == "" || id == null) {
                             id = 0;
+                        }
+                        
+                        if (pregunta == "" || pregunta == null) {
+                            pregunta = 0;
                         }
 
                         if (validaCamposIncidenciaIncidenciaEquipo()) {
@@ -1582,7 +1592,7 @@
                                         'html': "La incidencia presentada en las actividades de Maquinaria y Equipo fue "+html+" de forma correcta."
                                     });
                                     guardaCedula();
-                                    axios.get("/limpieza/getIncidencias", { params: { cedulaId: parseInt(@Model.Id) } }).then(response => {
+                                    axios.get("/limpieza/getIncidencias/"+@Model.Id).then(response => {
                                         $('#tIncidencias').html(response.data);
                                     });
                                     $('#cerrar_modal').trigger('click');
@@ -1957,14 +1967,14 @@
                                 } else if (respuesta == "false" && (i + 1) == 7) {
                                     detalles = $('#comentarios_acta').val();
                                 }
-                                respuestas.push({ CedulaLimpiezaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles});
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles});
                             } else {
-                                respuestas.push({ CedulaLimpiezaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                             }
                         }
                     }
 
-                    axios.post("/cedLimpieza/evaluation", respuestas).then(response => {
+                    axios.post("/limpieza/evaluation", respuestas).then(response => {
                         if (response.status == 200) {
                             Swal.fire({
                                 'icon': "success",
@@ -1998,9 +2008,9 @@
                                 } else if (respuesta == "false" && (i + 1) == 7) {
                                     detalles = $('#comentarios_acta').val();
                                 }
-                                respuestas.push({ CedulaLimpiezaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
                             } else {
-                                respuestas.push({ CedulaLimpiezaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                             }
                         }
                     }
@@ -2059,14 +2069,15 @@
                             });
                             return false;
                         } else {
-                            axios.post("/cedLimpieza/sendCedula/"+model.id).then(response => {
+                            
+                            axios.post("/limpieza/sendCedula/"+model.servicioId+"/"+model.id).then(response => {
                                 if (response.status == 200) {
                                     Swal.fire({
                                         'icon': "success",
                                         'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
                                         'html': "Se envió la cédula para su revisión correctamente."
                                     }).then(function () {
-                                        window.location.href = "/limpieza/index";
+                                        window.location.href = "/limpieza/index/"+model.servicioId;
                                     });
                                 } else {
                                     Swal.fire({
@@ -2111,9 +2122,9 @@
                                     } else if (respuesta == "false" && (i + 1) == 7) {
                                         detalles = $('#comentarios_acta').val();
                                     }
-                                    respuestas.push({ CedulaLimpiezaId: model.id, Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles, MontoPenalizacion: model.montoFactura });
+                                    respuestas.push({ CedulaEvaluacionId: model.id, Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles, MontoPenalizacion: model.montoFactura });
                                 } else {
-                                    respuestas.push({ CedulaLimpiezaId: model.id, Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null, MontoPenalizacion: model.montoFactura });
+                                    respuestas.push({ CedulaEvaluacionId: model.id, Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null, MontoPenalizacion: model.montoFactura });
                                 }
                             } else {
                                 Swal.fire({
@@ -2127,7 +2138,7 @@
 
                         /*Validamos que ya hayan capturado las incidencias*/
                             if (String(respuestas[1].Respuesta) == "false" ) {
-                                axios.get("/limpieza/getIncidencias",{ params: { cedulaId: parseInt(@Model.Id) } }).then(response => {
+                                axios.get("/limpieza/getIncidencias/"+@Model.Id).then(response => {
                                     if (response.data.length == 0) {
                                         Swal.fire({
                                             'icon': "error",
@@ -2140,7 +2151,7 @@
                             }
 
                             if (String(respuestas[3].Respuesta) == "false" ) {
-                                axios.get("/limpieza/getIncidenciasEquipo", { params: { cedulaId: parseInt(@Model.Id) } }).then(response => {
+                                axios.get("/limpieza/getIncidenciasEquipo/"+@Model.Id).then(response => {
                                     if (response.data.length == 0) {
                                         Swal.fire({
                                             'icon': "error",
@@ -2239,10 +2250,10 @@
                             });
                             return false;
                         } else {
-                            respuestas.push({ CedulaLimpiezaId: parseInt(model.id), Pregunta: pregunta, Respuesta: (respuesta == "true"), Detalles: "Capacitación" });
-                            axios.post("/cedLimpieza/evaluation", respuestas).then(response => {
+                            respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: pregunta, Respuesta: (respuesta == "true"), Detalles: "Capacitación" });
+                            axios.post("/limpieza/evaluation", respuestas).then(response => {
                                 if (response.status == 200) {
-                                    axios.post("/cedLimpieza/sendCedula/" + model.id).then(response => {
+                                    axios.post("/limpieza/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
                                         Swal.fire({
                                             'icon': "success",
                                             'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',

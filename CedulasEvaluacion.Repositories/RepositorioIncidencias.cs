@@ -137,8 +137,9 @@ namespace CedulasEvaluacion.Repositories
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                string msg = ex.Message;
                 return null;
             }
         }

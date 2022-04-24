@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MAgua.CedulaAgua;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Seguimiento a la Cédula del Servicio Suministro de Agua Purificada para Beber: " + Model.Folio;
 }
@@ -11,7 +11,7 @@
                 <i class="fal fa-calendar-alt"></i>
             </a>
         }
-        <a href="/agua/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
+        <a href="/agua/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">

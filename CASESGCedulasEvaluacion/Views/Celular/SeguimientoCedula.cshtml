@@ -1,11 +1,11 @@
-﻿@model CedulasEvaluacion.Entities.MCelular.TelefoniaCelular;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Seguimiento a la Cédula del Servicio de Telefonía Celular e Internet Móvil: " + Model.Folio;
 }
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/telCelular/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
+        <a href="/telCelular/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -92,7 +92,7 @@
                                         }
                                         <p class="text-sm">
                                             @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                        @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
+                                                          @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
                                             }
                                             @if (total > 0)
                                             {
@@ -109,14 +109,14 @@
                                             }
                                         </p>
                                         @*<ul class="ml-4 mb-0 fa-ul">
-                                        <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Recolección: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)</li>
-                                        <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Entrega: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
-                                        <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Acuses: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
-                                        <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Mal Estado: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
-                                        <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Extraviadas: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[4].MontoPenalizacion)</li>
-                                        <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Material: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)</li>
-                                        <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Penalización en Calidad y Eficiencia: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
-                                    </ul>*@
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Recolección: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Entrega: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Acuses: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Mal Estado: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Extraviadas: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[4].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Material: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Penalización en Calidad y Eficiencia: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
+                                            </ul>*@
                                         <div>
                                             <img src="~/img/web1.jpg" alt="Alternate Text" width="40%" />
                                         </div>
@@ -167,7 +167,7 @@
                             </thead>
                             <tbody>
                                 @{ string tipo = ""; }
-                                @foreach (var entre in @Model.IEntregables)
+                                @foreach (var entre in @Model.iEntregables)
                                 {
                                     <tr>
                                         @if (entre.Tipo.Equals("ActaER"))

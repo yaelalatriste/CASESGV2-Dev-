@@ -1,11 +1,11 @@
-﻿@model CedulasEvaluacion.Entities.MConvencional.TelefoniaConvencional;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Seguimiento a la Cédula del Servicio de Telefonía Convencional e Internet Móvil: " + Model.Folio;
 }
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/telConvencional/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
+        <a href="/telConvencional/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -92,7 +92,7 @@
                                         }
                                         <p class="text-sm">
                                             @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                          @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
+                                                            @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
                                             }
                                             @if (total > 0)
                                             {

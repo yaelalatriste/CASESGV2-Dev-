@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MMensajeria.CedulaMensajeria
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Servicio de Mensajería Acelerada: " + Model.Folio;
 }
@@ -41,6 +41,7 @@
         window.onload = function () {
             var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             var facturas = new Array();
+            var model = @Html.Raw(Json.Serialize(@Model));
 
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -82,10 +83,10 @@
 
 
                 if (isContinue == true) {
-                    axios.get('/mensajeria/validaPeriodo/' + anio + '/' + mes + '/' + inmueble).then(response => {
+                    axios.get('/mensajeria/validaPeriodo/' + model.servicioId + '/' + anio + '/' + mes + '/' + inmueble).then(response => {
                         if (response.status == 200 && response.data == 0) {
                             axios.post('/mensajeria/new', {
-                                InmuebleId: parseInt(inmueble), Anio: parseInt(anio), Mes: mes
+                                InmuebleId: parseInt(inmueble), Anio: parseInt(anio), Mes: mes, ServicioId: model.servicioId
                             }).then(res => {
                                 Swal.fire({
                                     'icon': 'success',

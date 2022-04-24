@@ -253,7 +253,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@id", cedulaMuebles.Id));
                         cmd.Parameters.Add(new SqlParameter("@estatus", cedulaMuebles.Estatus));
-                        cmd.Parameters.Add(new SqlParameter("@servicio", 11));
+                        cmd.Parameters.Add(new SqlParameter("@servicioId", 11));
 
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
@@ -337,7 +337,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 Id = (int)reader["Id"],
                 Folio = reader["Folio"].ToString(),
-                OrigenDestino = reader["OrigenDestino"].ToString(),
+                Destino = reader["OrigenDestino"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Anio = (int)reader["Anio"],
                 Servicio = reader["Servicio"].ToString(),

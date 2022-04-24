@@ -1,11 +1,11 @@
-﻿@model CedulasEvaluacion.Entities.MConvencional.TelefoniaConvencional;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula Telefonía Convencional - Folio: " + Model.Folio;
 }
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/telConvencional/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
+        <a href="/telConvencional/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -116,7 +116,7 @@
                                         }
                                         <p class="text-sm">
                                             @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                  @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
+                                                    @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
                                             }
                                             @if (total > 0)
                                             {
@@ -164,8 +164,8 @@
             <div class="tab-pane fade mt-2 ml-3" id="altaEquipo" role="tabpanel" aria-labelledby="home-tab">
                 <div class="row">
                     <h4 class="mt-2 mb-2">Contratación e Instalación de Lineas</h4>
-                     <div class="col-lg-12">
-                        @if (@Model.contratacion.Count > 0)
+                    <div class="col-lg-12">
+                        @if (@Model.incidencias.contratacion.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -188,7 +188,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.contratacion)
+                                                @foreach (var p1 in Model.incidencias.contratacion)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -198,14 +198,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -219,20 +220,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.contratacion.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.contratacion.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -256,7 +257,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -270,7 +271,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Cableado Interior en Instalación de Líneas Tel.</h4>
                     <div class="col-lg-12">
-                        @if (@Model.cableado.Count > 0)
+                        @if (@Model.incidencias.cableado.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -293,7 +294,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.cableado)
+                                                @foreach (var p1 in Model.incidencias.cableado)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -303,14 +304,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -324,20 +326,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.cableado.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.cableado.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -361,7 +363,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -375,7 +377,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Entrega de Aparato Telefónico</h4>
                     <div class="col-lg-12">
-                        @if (@Model.entregaAparato.Count > 0)
+                        @if (@Model.incidencias.entregaAparato.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -398,7 +400,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.entregaAparato)
+                                                @foreach (var p1 in Model.incidencias.entregaAparato)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -408,14 +410,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -429,20 +432,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.entregaAparato.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.entregaAparato.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -466,7 +469,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -480,7 +483,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Cambio de Domicilio</h4>
                     <div class="col-lg-12">
-                        @if (@Model.cambioDomicilio.Count > 0)
+                        @if (@Model.incidencias.cambioDomicilio.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -503,7 +506,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.cambioDomicilio)
+                                                @foreach (var p1 in Model.incidencias.cambioDomicilio)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -513,14 +516,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -534,20 +538,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.cambioDomicilio.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.cambioDomicilio.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -571,7 +575,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -585,7 +589,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Reubicación de Líneas Telefónicas</h4>
                     <div class="col-lg-12">
-                        @if (@Model.reubicacion.Count > 0)
+                        @if (@Model.incidencias.reubicacion.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -608,7 +612,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.reubicacion)
+                                                @foreach (var p1 in Model.incidencias.reubicacion)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -618,14 +622,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -639,20 +644,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.reubicacion.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.reubicacion.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -676,7 +681,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -690,7 +695,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Activación de Identificador de Llamadas</h4>
                     <div class="col-lg-12">
-                        @if (@Model.identificador.Count > 0)
+                        @if (@Model.incidencias.identificador.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -713,7 +718,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.identificador)
+                                                @foreach (var p1 in Model.incidencias.identificador)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -723,14 +728,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -744,20 +750,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.identificador.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.identificador.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -781,7 +787,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -795,7 +801,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Instalación de Troncales Digitales y DID's</h4>
                     <div class="col-lg-12">
-                        @if (@Model.instalaciónTroncal.Count > 0)
+                        @if (@Model.incidencias.instalaciónTroncal.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -818,7 +824,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.instalaciónTroncal)
+                                                @foreach (var p1 in Model.incidencias.instalaciónTroncal)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -828,14 +834,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -849,20 +856,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.instalaciónTroncal.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.instalaciónTroncal.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -886,7 +893,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -900,7 +907,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Contratación e Instalación de Internet</h4>
                     <div class="col-lg-12">
-                        @if (@Model.contratacionInternet.Count > 0)
+                        @if (@Model.incidencias.contratacionInternet.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -923,7 +930,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.contratacionInternet)
+                                                @foreach (var p1 in Model.incidencias.contratacionInternet)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -933,14 +940,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -954,20 +962,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.contratacionInternet.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.contratacionInternet.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -991,7 +999,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -1005,7 +1013,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Habilitación de Servicios de Telefonía</h4>
                     <div class="col-lg-12">
-                        @if (@Model.habilitacionServicios.Count > 0)
+                        @if (@Model.incidencias.habilitacionServicios.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -1028,7 +1036,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.habilitacionServicios)
+                                                @foreach (var p1 in Model.incidencias.habilitacionServicios)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -1038,14 +1046,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -1059,20 +1068,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.habilitacionServicios.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.habilitacionServicios.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -1096,7 +1105,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -1110,7 +1119,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Cancelación de Servicios</h4>
                     <div class="col-lg-12">
-                        @if (@Model.cancelacionServicios.Count > 0)
+                        @if (@Model.incidencias.cancelacionServicios.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -1133,7 +1142,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.cancelacionServicios)
+                                                @foreach (var p1 in Model.incidencias.cancelacionServicios)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -1143,14 +1152,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -1164,20 +1174,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.cancelacionServicios.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.cancelacionServicios.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -1201,7 +1211,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>
@@ -1215,7 +1225,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Reporte de Fallas</h4>
                     <div class="col-lg-12">
-                        @if (@Model.reporteFallas.Count > 0)
+                        @if (@Model.incidencias.reporteFallas.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -1238,7 +1248,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.reporteFallas)
+                                                @foreach (var p1 in Model.incidencias.reporteFallas)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -1248,14 +1258,15 @@
                                                         <td>@p1.FechaAtencion</td>
                                                         <td>@p1.DiasAtencion</td>
                                                         <td>@p1.DiasRetraso</td>
-                                                        @if (@p1.DiasRetraso < 21) 
-                                                        { 
+                                                        @if (@p1.DiasRetraso < 21)
+                                                        {
                                                             <td class="text-center">
                                                                 <div class="icon">
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                 </div>
                                                             </td>
-                                                        }else
+                                                        }
+                                                        else
                                                         {
                                                             <td class="text-center">
                                                                 <div class="icon">
@@ -1269,20 +1280,20 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.reporteFallas.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.reporteFallas.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                    <h5 class="text-danger ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                    </h5>
-                                </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -1306,7 +1317,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h5 class="text-success ml-4">
-                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                                     </h5>
                                 </div>
                             </div>

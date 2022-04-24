@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MCelular.TelefoniaCelular;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Servicio de Telefonía Celular e Internet Móvil";
 }
@@ -36,7 +36,7 @@
     <script>
         window.onload = function () {
             var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            var facturas = new Array();
+            var model = @Html.Raw(Json.Serialize(@Model));
 
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -63,10 +63,10 @@
 
 
                 if (isContinue == true) {
-                    axios.get('/telCelular/validaPeriodo/' + anio + '/' + mes).then(response => {
+                    axios.get('/telCelular/validaPeriodo/' + model.servicioId + '/' + anio + '/' + mes + '/' + inmueble).then(response => {
                         if (response.status == 200 && response.data == 0) {
                             axios.post('/telCelular/new', {
-                                Anio: parseInt(anio), Mes: mes
+                                InmuebleId: parseInt(7), Anio: parseInt(anio), Mes: mes, ServicioId: model.servicioId
                             }).then(res => {
                                 Swal.fire({
                                     'icon': 'success',

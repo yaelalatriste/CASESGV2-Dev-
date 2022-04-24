@@ -1,5 +1,5 @@
 ﻿@* Cuestionario Mensajeria *@
-@model CedulasEvaluacion.Entities.MMensajeria.CedulaMensajeria
+@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Incidencias en la Cédula del Servicio de Mensajería Acelerada con Folio: " + Model.Folio;
 }
@@ -63,7 +63,7 @@
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
                                         @{ int i = 0; }
-                                        @foreach (var incidencia in Model.incidenciasMensajeria)
+                                        @foreach (var incidencia in Model.incidencias.mensajeria)
                                         {
                                             if (incidencia.Tipo.Equals("Recoleccion"))
                                             {
@@ -116,7 +116,7 @@
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
                                         @{ i = 0; }
-                                        @foreach (var incidencia in Model.incidenciasMensajeria)
+                                        @foreach (var incidencia in Model.incidencias.mensajeria)
                                         {
                                             if (incidencia.Tipo.Equals("Entrega"))
                                             {
@@ -165,7 +165,7 @@
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
                                         @{ i = 0; }
-                                        @foreach (var incidencia in Model.incidenciasMensajeria)
+                                        @foreach (var incidencia in Model.incidencias.mensajeria)
                                         {
                                             if (incidencia.Tipo.Equals("Acuses"))
                                             {
@@ -211,7 +211,7 @@
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
                                         @{ i = 0; }
-                                        @foreach (var incidencia in Model.incidenciasMensajeria)
+                                        @foreach (var incidencia in Model.incidencias.mensajeria)
                                         {
                                             if (incidencia.Tipo.Equals("Mal Estado"))
                                             {
@@ -257,7 +257,7 @@
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
                                         @{ i = 0; }
-                                        @foreach (var incidencia in Model.incidenciasMensajeria)
+                                        @foreach (var incidencia in Model.incidencias.mensajeria)
                                         {
                                             if (incidencia.Tipo.Equals("Extraviadas"))
                                             {
@@ -305,7 +305,7 @@
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
                                         @{ i = 0; }
-                                        @foreach (var incidencia in Model.incidenciasMensajeria)
+                                        @foreach (var incidencia in Model.incidencias.mensajeria)
                                         {
                                             if (incidencia.Tipo.Equals("Robadas"))
                                             {
@@ -317,7 +317,7 @@
                                                     <td>@incidencia.TipoServicio</td>
                                                     <td>@incidencia.NombreActa</td>
                                                     <td>
-                                                        <a href="#" class="view_actaRobo" data-toggle="tooltip" title='Ver el Acta de Robo' data-placement="top" data-tipo="@incidencia.TipoServicio" 
+                                                        <a href="#" class="view_actaRobo" data-toggle="tooltip" title='Ver el Acta de Robo' data-placement="top" data-tipo="@incidencia.TipoServicio"
                                                            data-guia="@incidencia.NumeroGuia" data-codigo="@incidencia.CodigoRastreo" data-file="@incidencia.NombreActa">
                                                             <i class="fad fa-eye text-success mr-2"></i>
                                                         </a>
@@ -521,7 +521,7 @@
                             </div>
                             <div class="form-group col-lg-4" id="divSobrepeso">
                                 <label for="tieneAcuse">Sobrepeso</label>
-                                <input class="form-control" id="total_sobrepeso" type="number"/>
+                                <input class="form-control" id="total_sobrepeso" type="number" />
                                 <div class="col-sm-12" id="error_sobrepeso">
                                     <small id="dateHelp" class="text-danger">
                                         Por favor capture el sobrepeso de la guía
@@ -1056,7 +1056,7 @@
                         });
                         return false;
                     }
-                    
+
                     if (categoria == "Robadas") {
                         formData.append("Id", id);
                         formData.append("CedulaMensajeriaId", model.id);

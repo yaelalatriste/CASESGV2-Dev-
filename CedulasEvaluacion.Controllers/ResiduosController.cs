@@ -1,4 +1,5 @@
-﻿using CedulasEvaluacion.Entities.Models;
+﻿using CedulasEvaluacion.Entities.MCedula;
+using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.MResiduos;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
@@ -16,6 +17,7 @@ namespace CedulasEvaluacion.Controllers
     [Authorize]
     public class ResiduosController : Controller
     {
+        private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioResiduos vResiduos;
         private readonly IRepositorioIncidenciasResiduos iResiduos;
         private readonly IRepositorioEntregablesResiduos eResiduos;
@@ -23,11 +25,11 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vPerfiles;
-        private readonly IHostingEnvironment environment;
 
-        public ResiduosController(IRepositorioResiduos iResiduos, IRepositorioIncidenciasResiduos ivResiduos, IRepositorioEntregablesResiduos ieResiduos, IRepositorioFacturas iFacturas,
-                                 IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, IRepositorioInmuebles iVInmueble, IHostingEnvironment environment)
+        public ResiduosController(IRepositorioEvaluacionServicios viCedula, IRepositorioResiduos iResiduos, IRepositorioIncidenciasResiduos ivResiduos, IRepositorioEntregablesResiduos ieResiduos, IRepositorioFacturas iFacturas,
+                                 IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, IRepositorioInmuebles iVInmueble)
         {
+            this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vResiduos = iResiduos ?? throw new ArgumentNullException(nameof(iResiduos));
             this.iResiduos = ivResiduos ?? throw new ArgumentNullException(nameof(ivResiduos));
             this.eResiduos = ieResiduos ?? throw new ArgumentNullException(nameof(ieResiduos));
@@ -35,43 +37,43 @@ namespace CedulasEvaluacion.Controllers
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vUsuarios = iUsuarios ?? throw new ArgumentNullException(nameof(iUsuarios));
             this.vPerfiles = iPerfiles ?? throw new ArgumentNullException(nameof(iPerfiles));
-            this.environment = environment;
         }
 
-        //Metodo Index
-        [Route("/residuos/index")]
-        public async Task<IActionResult> Index()
+        //Metodo que regresa las cedulas aceptadas, guardadas o rechazadas 
+        [Route("/residuos/index/{servicio?}")]
+        public async Task<IActionResult> Index(int servicio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
                 List<VCedulas> resultado = new List<VCedulas>();
-                resultado = await vResiduos.GetCedulasResiduos(UserId());
+                resultado = await vCedula.GetCedulasEvaluacion(servicio, UserId());
                 return View(resultado);
             }
             return Redirect("/error/denied");
         }
 
         //Metodo para abrir la vista y generar la nueva Cedula
-        [Route("/residuos/nuevaCedula")]
+        [Route("/residuos/nuevaCedula/{servicio}")]
         [HttpGet]
-        public async Task<IActionResult> NuevaCedula(Residuos residuos)
+        public async Task<IActionResult> NuevaCedula(int servicio)
         {
-            residuos = new Residuos();
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
-                return View(residuos);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula.ServicioId = servicio;
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }
 
         //inserta la cedula
         [Route("/residuos/new")]
-        public async Task<IActionResult> insertaCedula([FromBody] Residuos residuos)
+        public async Task<IActionResult> insertaCedula([FromBody] CedulaEvaluacion cedula)
         {
-            residuos.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
-            int insert = await vResiduos.insertaCedula(residuos);
+            cedula.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
+            int insert = await vCedula.insertaCedula(cedula);
             if (insert != -1)
             {
                 return Ok(insert);
@@ -79,10 +81,11 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/residuos/validaPeriodo/{anio?}/{mes?}/{inmueble?}")]
-        public async Task<IActionResult> validaPeriodo(int anio, string mes,int inmueble)
+
+        [Route("/residuos/validaPeriodo/{servicio}/{anio?}/{mes?}/{inmueble?}")]
+        public async Task<IActionResult> validaPeriodo(int servicio, int anio, string mes, int inmueble)
         {
-            int valida = await vResiduos.VerificaCedula(anio, mes,inmueble);
+            int valida = await vCedula.VerificaCedula(servicio, anio, mes, inmueble);
             if (valida != -1)
             {
                 return Ok(valida);
@@ -93,24 +96,28 @@ namespace CedulasEvaluacion.Controllers
         [Route("/residuos/evaluacion/{id?}")]
         public async Task<IActionResult> Cuestionario(int id)
         {
-            Residuos residuos = await vResiduos.CedulaById(id);
-            if (residuos.Estatus.Equals("Enviado a DAS"))
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
+            if (success == 1)
             {
-                return Redirect("/error/cedSend");
+                CedulaEvaluacion cedula = await vCedula.CedulaById(id);
+                if (cedula.Estatus.Equals("Enviado a DAS"))
+                {
+                    return Redirect("/error/cedSend");
+                }
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
+                cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
+                cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
+                return View(cedula);
             }
-            residuos.inmuebles = await vInmuebles.inmuebleById(residuos.InmuebleId);
-            residuos.RespuestasEncuesta = await vResiduos.obtieneRespuestas(id);
-            residuos.facturas = await vFacturas.getFacturas(id, residuos.ServicioId);
-            residuos.TotalMontoFactura = vFacturas.obtieneTotalFacturas(residuos.facturas);
-            return View(residuos);
+            return Redirect("/error/denied");
         }
 
-        //Va guardando las respuestas de la evaluacion
         [HttpPost]
         [Route("/residuos/evaluation")]
         public async Task<IActionResult> guardaCuestionario([FromBody] List<RespuestasEncuesta> respuestas)
         {
-            int success = await vResiduos.GuardaRespuestas(respuestas);
+            int success = await vCedula.GuardaRespuestas(respuestas);
             if (success != 0)
             {
                 return Ok();
@@ -123,11 +130,11 @@ namespace CedulasEvaluacion.Controllers
 
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
-        [Route("/residuos/sendCedula/{cedula?}")]
-        public async Task<IActionResult> enviaCedula(int cedula)
+        [Route("/residuos/sendCedula/{servicio?}/{id?}")]
+        public async Task<IActionResult> enviaCedula(int servicio, int id)
         {
             int success = 0;
-            success = await vResiduos.enviaRespuestas(cedula);
+            success = await vCedula.enviaRespuestas(servicio, id);
             if (success != -1)
             {
                 return Ok();
@@ -145,17 +152,18 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                Residuos residuos= null;
-                residuos = await vResiduos.CedulaById(id);
+                CedulaEvaluacion residuos= null;
+                residuos = await vCedula.CedulaById(id);
                 residuos.facturas = await vFacturas.getFacturas(id, residuos.ServicioId);//
                 residuos.TotalMontoFactura = vFacturas.obtieneTotalFacturas(residuos.facturas);
                 residuos.inmuebles = await vInmuebles.inmuebleById(residuos.InmuebleId);
                 residuos.usuarios = await vUsuarios.getUserById(residuos.UsuarioId);
-                residuos.incidenciasManifiesto = await iResiduos.getIncidenciasTipo(residuos.Id,"ManifiestoEntrega");
-                residuos.incidenciasResiduos = await iResiduos.getIncidencias(residuos.Id);
-                residuos.rEntregables = await eResiduos.getEntregables(residuos.Id);
+                residuos.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+                residuos.incidencias.incidenciasManifiesto = await iResiduos.getIncidenciasTipo(residuos.Id,"ManifiestoEntrega");
+                residuos.incidencias.incidenciasResiduos = await iResiduos.getIncidencias(residuos.Id);
+                residuos.iEntregables = await eResiduos.getEntregables(residuos.Id);
                 residuos.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                residuos.RespuestasEncuesta = await vResiduos.obtieneRespuestas(residuos.Id);
+                residuos.RespuestasEncuesta = await vCedula.obtieneRespuestas(residuos.Id);
                 residuos.historialCedulas = new List<HistorialCedulas>();
                 residuos.historialCedulas = await vResiduos.getHistorialResiduos(residuos.Id);
                 foreach (var user in residuos.historialCedulas)
@@ -174,15 +182,15 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
-                Residuos residuos = null;
-                residuos = await vResiduos.CedulaById(id);
+                CedulaEvaluacion residuos = null;
+                residuos = await vCedula.CedulaById(id);
                 residuos.facturas = await vFacturas.getFacturas(id, residuos.ServicioId);//
                 residuos.TotalMontoFactura = vFacturas.obtieneTotalFacturas(residuos.facturas);
                 residuos.inmuebles = await vInmuebles.inmuebleById(residuos.InmuebleId);
                 residuos.usuarios = await vUsuarios.getUserById(residuos.UsuarioId);
-                residuos.rEntregables = await eResiduos.getEntregables(residuos.Id);
+                residuos.iEntregables = await eResiduos.getEntregables(residuos.Id);
                 residuos.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                residuos.RespuestasEncuesta = await vResiduos.obtieneRespuestas(residuos.Id);
+                residuos.RespuestasEncuesta = await vCedula.obtieneRespuestas(residuos.Id);
                 residuos.historialCedulas = new List<HistorialCedulas>();
                 residuos.historialCedulas = await vResiduos.getHistorialResiduos(residuos.Id);
                 foreach (var user in residuos.historialCedulas)

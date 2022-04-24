@@ -101,6 +101,8 @@ namespace CedulasEvaluacion.Repositories
                         cmd.Parameters.Add(new SqlParameter("@servicioId", cedula.ServicioId));
                         cmd.Parameters.Add(new SqlParameter("@usuario", cedula.UsuarioId));
                         cmd.Parameters.Add(new SqlParameter("@inmueble", cedula.InmuebleId));
+                        if(cedula.InmuebleDestinoId != 0)
+                            cmd.Parameters.Add(new SqlParameter("@inmuebleDestino", cedula.InmuebleDestinoId));
                         cmd.Parameters.Add(new SqlParameter("@folio", generaFolio(cedula.InmuebleId, cedula.Mes, await GetFolioCedula(cedula.ServicioId))));
                         cmd.Parameters.Add(new SqlParameter("@mes", cedula.Mes));
                         cmd.Parameters.Add(new SqlParameter("@anio", cedula.Anio));
@@ -395,6 +397,7 @@ namespace CedulasEvaluacion.Repositories
                 Id = (int)reader["Id"],
                 Folio = reader["Folio"].ToString(),
                 Nombre = reader["Nombre"].ToString(),
+                Destino = reader["Destino"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Anio = (int)reader["Anio"],
                 Servicio = reader["Servicio"].ToString(),
@@ -410,6 +413,7 @@ namespace CedulasEvaluacion.Repositories
                 ServicioId = (int)reader["ServicioId"],
                 UsuarioId = (int)reader["UsuarioId"],
                 InmuebleId = (int)reader["InmuebleId"],
+                InmuebleDestinoId = reader["InmuebleDestinoId"] != DBNull.Value ? (int)reader["InmuebleDestinoId"]:0,
                 Folio = reader["Folio"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Anio = (int)reader["Anio"],

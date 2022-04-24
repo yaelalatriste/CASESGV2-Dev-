@@ -1,4 +1,5 @@
-﻿using CedulasEvaluacion.Entities.MConvencional;
+﻿using CedulasEvaluacion.Entities.MCedula;
+using CedulasEvaluacion.Entities.MConvencional;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
@@ -16,60 +17,63 @@ namespace CedulasEvaluacion.Controllers
     [Authorize]
     public class ConvencionalController : Controller
     {
+        private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioConvencional vConvencional;
         private readonly IRepositorioIncidenciasConvencional iConvencional;
         private readonly IRepositorioEntregablesConvencional eConvencional;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vPerfiles;
-        private readonly IHostingEnvironment environment;
 
-        public ConvencionalController(IRepositorioConvencional iConvencional, IRepositorioIncidenciasConvencional ivConvencional, IRepositorioEntregablesConvencional ieConvencional, 
-                                      IRepositorioFacturas iFacturas, IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, IHostingEnvironment environment)
+        public ConvencionalController(IRepositorioEvaluacionServicios viCedula, IRepositorioConvencional iConvencional, IRepositorioIncidenciasConvencional ivConvencional, IRepositorioEntregablesConvencional ieConvencional, 
+                                      IRepositorioFacturas iFacturas, IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles)
         {
+            this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vConvencional = iConvencional ?? throw new ArgumentNullException(nameof(iConvencional));
             this.iConvencional = ivConvencional ?? throw new ArgumentNullException(nameof(ivConvencional));
             this.eConvencional = ieConvencional ?? throw new ArgumentNullException(nameof(ieConvencional));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vUsuarios = iUsuarios ?? throw new ArgumentNullException(nameof(iUsuarios));
             this.vPerfiles = iPerfiles ?? throw new ArgumentNullException(nameof(iPerfiles));
-            this.environment = environment;
         }
 
-        //Metodo Index
-        [Route("/telConvencional/index")]
-        public async Task<IActionResult> Index()
+
+
+        //Metodo que regresa las cedulas aceptadas, guardadas o rechazadas 
+        [Route("/telConvencional/index/{servicio?}")]
+        public async Task<IActionResult> Index(int servicio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
                 List<VCedulas> resultado = new List<VCedulas>();
-                resultado = await vConvencional.GetCedulasConvencional(UserId());
+                resultado = await vCedula.GetCedulasEvaluacion(servicio, UserId());
                 return View(resultado);
             }
             return Redirect("/error/denied");
         }
 
         //Metodo para abrir la vista y generar la nueva Cedula
-        [Route("/telConvencional/nuevaCedula")]
+        [Route("/telConvencional/nuevaCedula/{servicio}")]
         [HttpGet]
-        public async Task<IActionResult> NuevaCedula(TelefoniaConvencional telefoniaConvencional)
+        public async Task<IActionResult> NuevaCedula(int servicio)
         {
-            telefoniaConvencional = new TelefoniaConvencional();
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
-                return View(telefoniaConvencional);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula.ServicioId = servicio;
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }
 
         //inserta la cedula
         [Route("/telConvencional/new")]
-        public async Task<IActionResult> insertaCedula([FromBody] TelefoniaConvencional telefoniaConvencional)
+        public async Task<IActionResult> insertaCedula([FromBody] CedulaEvaluacion cedula)
         {
-            telefoniaConvencional.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
-            int insert = await vConvencional.insertaCedula(telefoniaConvencional);
+            cedula.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
+            int insert = await vCedula.insertaCedula(cedula);
             if (insert != -1)
             {
                 return Ok(insert);
@@ -77,10 +81,11 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/telConvencional/validaPeriodo/{anio?}/{mes?}")]
-        public async Task<IActionResult> validaPeriodo(int anio, string mes)
+
+        [Route("/telConvencional/validaPeriodo/{servicio}/{anio?}/{mes?}/{inmueble?}")]
+        public async Task<IActionResult> validaPeriodo(int servicio, int anio, string mes, int inmueble)
         {
-            int valida = await vConvencional.VerificaCedula(anio, mes);
+            int valida = await vCedula.VerificaCedula(servicio, anio, mes, inmueble);
             if (valida != -1)
             {
                 return Ok(valida);
@@ -91,33 +96,30 @@ namespace CedulasEvaluacion.Controllers
         [Route("/telConvencional/evaluacion/{id?}")]
         public async Task<IActionResult> Cuestionario(int id)
         {
-            TelefoniaConvencional telefoniaConvencional = await vConvencional.CedulaById(id);
-            if (telefoniaConvencional.Estatus.Equals("Enviado a DAS"))
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
+            if (success == 1)
             {
-                return Redirect("/error/cedSend");
+                CedulaEvaluacion cedula = await vCedula.CedulaById(id);
+                if (cedula.Estatus.Equals("Enviado a DAS"))
+                {
+                    return Redirect("/error/cedSend");
+                }
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
+                cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
+                cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
+                return View(cedula);
             }
-            telefoniaConvencional.RespuestasEncuesta = await vConvencional.obtieneRespuestas(id);
-            telefoniaConvencional.facturas = await vFacturas.getFacturas(id, telefoniaConvencional.ServicioId);
-            telefoniaConvencional.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telefoniaConvencional.facturas);
-            return View(telefoniaConvencional);
-        }
-
-        [Route("/telConvencional/incidencias/{id?}")]
-        public async Task<IActionResult> IncidenciasConvencional(int id)
-        {
-            TelefoniaConvencional telefoniaConvencional = await vConvencional.CedulaById(id);
-            telefoniaConvencional.incidenciasConvencional = await iConvencional.getIncidenciasConvencional(id);
-            return View(telefoniaConvencional);
+            return Redirect("/error/denied");
         }
 
         [HttpPost]
         [Route("/telConvencional/evaluation")]
-        public async Task<IActionResult> guardaRespuestas([FromBody] List<RespuestasEncuesta> respuestas)
+        public async Task<IActionResult> guardaCuestionario([FromBody] List<RespuestasEncuesta> respuestas)
         {
-            int success = await vConvencional.GuardaRespuestas(respuestas);
+            int success = await vCedula.GuardaRespuestas(respuestas);
             if (success != 0)
             {
-                return Ok(success);
+                return Ok();
             }
             else
             {
@@ -127,11 +129,11 @@ namespace CedulasEvaluacion.Controllers
 
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
-        [Route("/telConvencional/sendCedula/{cedula?}")]
-        public async Task<IActionResult> enviaCedula(int cedula)
+        [Route("/telConvencional/sendCedula/{servicio?}/{id?}")]
+        public async Task<IActionResult> enviaCedula(int servicio, int id)
         {
             int success = 0;
-            success = await vConvencional.enviaRespuestas(cedula);
+            success = await vCedula.enviaRespuestas(servicio, id);
             if (success != -1)
             {
                 return Ok();
@@ -142,6 +144,16 @@ namespace CedulasEvaluacion.Controllers
             }
         }
 
+
+        [Route("/telConvencional/incidencias/{id?}")]
+        public async Task<IActionResult> IncidenciasConvencional(int id)
+        {
+            CedulaEvaluacion telefoniaConvencional = await vCedula.CedulaById(id);
+            telefoniaConvencional.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+            telefoniaConvencional.incidencias.convencional = await iConvencional.getIncidenciasConvencional(id);
+            return View(telefoniaConvencional);
+        }
+
         [HttpGet]
         [Route("/telConvencional/revision/{id}")]
         public async Task<IActionResult> RevisarCedula(int id)
@@ -149,25 +161,26 @@ namespace CedulasEvaluacion.Controllers
              int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
              if (success == 1)
              {
-                TelefoniaConvencional telCel = null;
-                telCel = await vConvencional.CedulaById(id);
+                CedulaEvaluacion telCel = null;
+                telCel = await vCedula.CedulaById(id);
                 telCel.facturas = await vFacturas.getFacturas(id, telCel.ServicioId);//
                 telCel.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telCel.facturas);
                 telCel.usuarios = await vUsuarios.getUserById(telCel.UsuarioId);
-                telCel.contratacion = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "contratacion_instalacion");
-                telCel.cableado = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "cableado");
-                telCel.entregaAparato = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "entregaAparato");
-                telCel.cambioDomicilio = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "cambioDomicilio");
-                telCel.reubicacion = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "reubicacion");
-                telCel.identificador = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "identificadorLlamadas");
-                telCel.instalaciónTroncal = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "troncales");
-                telCel.contratacionInternet = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "internet");
-                telCel.habilitacionServicios = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "serviciosTelefonia");
-                telCel.cancelacionServicios = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "cancelacion");
-                telCel.reporteFallas = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "reportesFallas");
+                telCel.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+                telCel.incidencias.contratacion = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "contratacion_instalacion");
+                telCel.incidencias.cableado = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "cableado");
+                telCel.incidencias.entregaAparato = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "entregaAparato");
+                telCel.incidencias.cambioDomicilio = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "cambioDomicilio");
+                telCel.incidencias.reubicacion = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "reubicacion");
+                telCel.incidencias.identificador = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "identificadorLlamadas");
+                telCel.incidencias.instalaciónTroncal = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "troncales");
+                telCel.incidencias.contratacionInternet = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "internet");
+                telCel.incidencias.habilitacionServicios = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "serviciosTelefonia");
+                telCel.incidencias.cancelacionServicios = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "cancelacion");
+                telCel.incidencias.reporteFallas = await iConvencional.ListIncidenciasTipoConvencional(telCel.Id, "reportesFallas");
                 telCel.iEntregables = await eConvencional.getEntregables(telCel.Id);
                 telCel.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                telCel.RespuestasEncuesta = await vConvencional.obtieneRespuestas(telCel.Id);
+                telCel.RespuestasEncuesta = await vCedula.obtieneRespuestas(telCel.Id);
                 telCel.historialCedulas = new List<HistorialCedulas>();
                 telCel.historialCedulas = await vConvencional.getHistorialConvencional(telCel.Id);
                 foreach (var user in telCel.historialCedulas)
@@ -186,14 +199,14 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
-                TelefoniaConvencional telCel = null;
-                telCel = await vConvencional.CedulaById(id);
+                CedulaEvaluacion telCel = null;
+                telCel = await vCedula.CedulaById(id);
                 telCel.facturas = await vFacturas.getFacturas(id, telCel.ServicioId);//
                 telCel.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telCel.facturas);
                 telCel.usuarios = await vUsuarios.getUserById(telCel.UsuarioId);
                 telCel.iEntregables = await eConvencional.getEntregables(telCel.Id);
                 telCel.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                telCel.RespuestasEncuesta = await vConvencional.obtieneRespuestas(telCel.Id);
+                telCel.RespuestasEncuesta = await vCedula.obtieneRespuestas(telCel.Id);
                 telCel.historialCedulas = new List<HistorialCedulas>();
                 telCel.historialCedulas = await vConvencional.getHistorialConvencional(telCel.Id);
                 foreach (var user in telCel.historialCedulas)

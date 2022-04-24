@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MResiduos.Residuos;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     var title = TempData["Title"] as string;
     ViewData["Title"] = "Revisión de la Cédula del Servicio de RPBI con Folio: " + Model.Folio;
@@ -6,7 +6,7 @@
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/residuos/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
+        <a href="/residuos/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -126,7 +126,7 @@
                                         }
                                         <p class="text-sm">
                                             @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                        @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
+                                                          @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
                                             }
                                             @if (total > 0)
                                             {
@@ -175,11 +175,11 @@
                                 <br />
                                 <p class="h4 text-danger">Horario Programado: @fechas[0]</p>
                                 <p class="h4 text-danger">Horario Realizado: @fechas[1]</p>
-                                @{ 
-                                    double f = ((DateTime.Parse(fechas[1]) - DateTime.Parse(fechas[0])).TotalSeconds/3600)/24;
+                                @{
+                                    double f = ((DateTime.Parse(fechas[1]) - DateTime.Parse(fechas[0])).TotalSeconds / 3600) / 24;
                                 }
                                 <p class="h4 text-danger">Días de Retraso: @f día(s)</p>
-                                
+
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -359,7 +359,7 @@
                                         <th>Datos Faltantes</th>
                                     </tr>
                                 </thead>
-                                @foreach (var inc in @Model.incidenciasManifiesto)
+                                @foreach (var inc in @Model.incidencias.incidenciasManifiesto)
                                 {
                                     string[] manifiesto = inc.Comentarios.Split("|");
                                     <tbody>
@@ -369,57 +369,58 @@
                                             if (!m.Equals(""))
                                             {
                                                 { j++; }
-                                                 <tr>
+                                                <tr>
                                                     <td>@j</td>
-                                                     @if (@m.Equals("DatosTitularMedico")) {
+                                                    @if (@m.Equals("DatosTitularMedico"))
+                                                    {
                                                         <td>Nombre, Sello y Firma del titular del servicio médico</td>
-                                                     }
-                                                     else if (@m.Equals("ConsultorioBrindaServicio"))
-                                                     { 
-                                                         <td>Domicilio del Consultorio que brinda el servicio</td>
-                                                     }
-                                                     else if (@m.Equals("DescripcionResiduo"))
-                                                     { 
-                                                         <td>Descripción e identificación del Tipo de Residuo</td>
-                                                     }
-                                                     else if (@m.Equals("DatosRecoleccion"))
-                                                     { 
-                                                         <td>Nombre y firma del responsable de la recolección</td>
-                                                     }
-                                                     else if (@m.Equals("DetallesResiduo"))
-                                                     { 
-                                                         <td>Cantidad y Unidad de medida del Residuo</td>
-                                                     }
-                                                     else if (@m.Equals("EnvaseUtilizado"))
-                                                     { 
-                                                         <td>Envase o contenedor utilizado</td>
-                                                     }
-                                                     else if (@m.Equals("ManejoSeguro"))
-                                                     { 
-                                                         <td>Instrucciones especiales e información para su manejo seguro</td>
-                                                     }
-                                                     else if (@m.Equals("CentroDestinatario"))
-                                                     { 
-                                                         <td>Descripción General de la Transportación y del Centro de Acopio o Destinatario</td>
-                                                     }
-                                                     else if (@m.Equals("RegistroAmbiental"))
-                                                     { 
-                                                         <td>Número de Registro Ambiental</td>
-                                                     }
-                                                     else if (@m.Equals("NumeroManifiesto"))
-                                                     { 
-                                                         <td>Número de Manifiesto</td>
-                                                     }
-                                                     else if (@m.Equals("Clasificacion"))
-                                                     { 
-                                                         <td>Clasificación</td>
-                                                     }
+                                                    }
+                                                    else if (@m.Equals("ConsultorioBrindaServicio"))
+                                                    {
+                                                        <td>Domicilio del Consultorio que brinda el servicio</td>
+                                                    }
+                                                    else if (@m.Equals("DescripcionResiduo"))
+                                                    {
+                                                        <td>Descripción e identificación del Tipo de Residuo</td>
+                                                    }
+                                                    else if (@m.Equals("DatosRecoleccion"))
+                                                    {
+                                                        <td>Nombre y firma del responsable de la recolección</td>
+                                                    }
+                                                    else if (@m.Equals("DetallesResiduo"))
+                                                    {
+                                                        <td>Cantidad y Unidad de medida del Residuo</td>
+                                                    }
+                                                    else if (@m.Equals("EnvaseUtilizado"))
+                                                    {
+                                                        <td>Envase o contenedor utilizado</td>
+                                                    }
+                                                    else if (@m.Equals("ManejoSeguro"))
+                                                    {
+                                                        <td>Instrucciones especiales e información para su manejo seguro</td>
+                                                    }
+                                                    else if (@m.Equals("CentroDestinatario"))
+                                                    {
+                                                        <td>Descripción General de la Transportación y del Centro de Acopio o Destinatario</td>
+                                                    }
+                                                    else if (@m.Equals("RegistroAmbiental"))
+                                                    {
+                                                        <td>Número de Registro Ambiental</td>
+                                                    }
+                                                    else if (@m.Equals("NumeroManifiesto"))
+                                                    {
+                                                        <td>Número de Manifiesto</td>
+                                                    }
+                                                    else if (@m.Equals("Clasificacion"))
+                                                    {
+                                                        <td>Clasificación</td>
+                                                    }
                                                 </tr>
                                             }
                                         }
                                     </tbody>
                                 }
-                             </table>
+                            </table>
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -486,7 +487,7 @@
                                 </thead>
                                 <tbody>
                                     @{ int j = 0;}
-                                    @foreach (var inc in @Model.incidenciasResiduos)
+                                    @foreach (var inc in @Model.incidencias.incidenciasResiduos)
                                     {
                                         { j++; }
                                         <tr>
@@ -496,7 +497,7 @@
                                         </tr>
                                     }
                                 </tbody>
-                             </table>
+                            </table>
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -558,7 +559,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var entre in @Model.rEntregables)
+                                @foreach (var entre in @Model.iEntregables)
                                 {
                                     <tr>
                                         @if (entre.Tipo.Equals("ActaER"))
@@ -589,7 +590,7 @@
                                         {
                                             <td>Memorándum</td>
                                         }
-                                        else 
+                                        else
                                         {
                                             <td>@entre.Tipo</td>
                                         }

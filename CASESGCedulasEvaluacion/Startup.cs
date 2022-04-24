@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using CedulasEvaluacion.Repositories;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using CedulasEvaluacion.Services;
 
 namespace CASESGCedulasEvaluacion
 {
@@ -91,7 +92,11 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioEntregablesContrato, RepositorioEntregablesContrato>();
             
             services.AddScoped<IRepositorioReporteCedula, RepositorioReporteCedula>();
-            
+            services.AddScoped<IRepositorioEvaluacionServicios, RepositorioEvaluacionServicios>();
+
+            //Services
+            services.AddTransient<ServiceModulos>();
+
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
                 options.LoginPath = "/login";

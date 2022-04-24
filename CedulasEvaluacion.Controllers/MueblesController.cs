@@ -1,4 +1,5 @@
-﻿using CedulasEvaluacion.Entities.MMuebles;
+﻿using CedulasEvaluacion.Entities.MCedula;
+using CedulasEvaluacion.Entities.MMuebles;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
@@ -14,6 +15,7 @@ namespace CedulasEvaluacion.Controllers
 {
     public class MueblesController : Controller
     {
+        private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioMuebles vMuebles;
         private readonly IRepositorioIncidenciasMuebles iMuebles;
         private readonly IRepositorioEntregablesMuebles eMuebles;
@@ -23,10 +25,11 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioFacturas vFacturas;
         private readonly IHostingEnvironment environment;
 
-        public MueblesController(IRepositorioMuebles iVMuebles, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
+        public MueblesController(IRepositorioEvaluacionServicios viCedula, IRepositorioMuebles iVMuebles, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                     IRepositorioIncidenciasMuebles iiMuebles, IRepositorioEntregablesMuebles eeMuebles,
                                     IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas, IHostingEnvironment environment)
         {
+            this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vMuebles = iVMuebles ?? throw new ArgumentNullException(nameof(iVMuebles));
             this.iMuebles = iiMuebles ?? throw new ArgumentNullException(nameof(iiMuebles));
             this.eMuebles = eeMuebles ?? throw new ArgumentNullException(nameof(eeMuebles));
@@ -37,37 +40,41 @@ namespace CedulasEvaluacion.Controllers
             this.environment = environment;
         }
 
-        [Route("/muebles/index")]
-        public async Task<IActionResult> Index()
+        //Metodo que regresa las cedulas aceptadas, guardadas o rechazadas 
+        [Route("/muebles/index/{servicio?}")]
+        public async Task<IActionResult> Index(int servicio)
         {
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
                 List<VCedulas> resultado = new List<VCedulas>();
-                resultado = await vMuebles.GetCedulasMuebles(UserId());
+                resultado = await vCedula.GetCedulasEvaluacion(servicio, UserId());
                 return View(resultado);
             }
             return Redirect("/error/denied");
         }
 
-        [Route("/muebles/nuevaCedula")]
-        public async Task<IActionResult> NuevaCedula(CedulaMuebles cedulaMuebles)
+        //Metodo para abrir la vista y generar la nueva Cedula
+        [Route("/muebles/nuevaCedula/{servicio}")]
+        [HttpGet]
+        public async Task<IActionResult> NuevaCedula(int servicio)
         {
-            cedulaMuebles = new CedulaMuebles();
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
-                return View(cedulaMuebles);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula.ServicioId = servicio;
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }
 
-
+        //inserta la cedula
         [Route("/muebles/new")]
-        public async Task<IActionResult> insertaCedula([FromBody] CedulaMuebles cedulaMuebles)
+        public async Task<IActionResult> insertaCedula([FromBody] CedulaEvaluacion cedula)
         {
-            cedulaMuebles.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
-            int insert = await vMuebles.insertaCedula(cedulaMuebles);
+            cedula.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
+            int insert = await vCedula.insertaCedula(cedula);
             if (insert != -1)
             {
                 return Ok(insert);
@@ -81,29 +88,29 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                CedulaMuebles cedulaMuebles = await vMuebles.CedulaById(id);
-                if (cedulaMuebles.Estatus.Equals("Enviado a DAS") && (@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                CedulaEvaluacion cedula = await vCedula.CedulaById(id);
+                if (cedula.Estatus.Equals("Enviado a DAS"))
                 {
                     return Redirect("/error/cedSend");
                 }
-                cedulaMuebles.inmuebleOrigen = await vInmuebles.inmuebleById(cedulaMuebles.InmuebleOrigenId);
-                cedulaMuebles.inmuebleDestino = await vInmuebles.inmuebleById(cedulaMuebles.InmuebleDestinoId);
-                cedulaMuebles.RespuestasEncuesta = await vMuebles.obtieneRespuestas(id);
-                cedulaMuebles.facturas = await vFacturas.getFacturas(id, cedulaMuebles.ServicioId);
-                cedulaMuebles.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedulaMuebles.facturas);
-                return View(cedulaMuebles);
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                cedula.inmuebleDestino = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
+                cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
+                cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }
 
         [HttpPost]
         [Route("/muebles/evaluation")]
-        public async Task<IActionResult> guardaRespuestas([FromBody] List<RespuestasEncuesta> respuestas)
+        public async Task<IActionResult> guardaCuestionario([FromBody] List<RespuestasEncuesta> respuestas)
         {
-            int success = await vMuebles.GuardaRespuestas(respuestas);
+            int success = await vCedula.GuardaRespuestas(respuestas);
             if (success != 0)
             {
-                return Ok(success);
+                return Ok();
             }
             else
             {
@@ -113,11 +120,11 @@ namespace CedulasEvaluacion.Controllers
 
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
-        [Route("/muebles/sendCedula/{cedula?}")]
-        public async Task<IActionResult> enviaCedula(int cedula)
+        [Route("/muebles/sendCedula/{servicio?}/{id?}")]
+        public async Task<IActionResult> enviaCedula(int servicio, int id)
         {
             int success = 0;
-            success = await vMuebles.enviaRespuestas(cedula);
+            success = await vCedula.enviaRespuestas(servicio, id);
             if (success != -1)
             {
                 return Ok();
@@ -135,17 +142,18 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                CedulaMuebles cedMuebles = null;
-                cedMuebles = await vMuebles.CedulaById(id);
+                CedulaEvaluacion cedMuebles = null;
+                cedMuebles = await vCedula.CedulaById(id);
                 cedMuebles.facturas = await vFacturas.getFacturas(id, cedMuebles.ServicioId);//
                 cedMuebles.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedMuebles.facturas);
-                cedMuebles.inmuebleOrigen = await vInmuebles.inmuebleById(cedMuebles.InmuebleOrigenId);
+                cedMuebles.inmuebles = await vInmuebles.inmuebleById(cedMuebles.InmuebleId);
                 cedMuebles.inmuebleDestino = await vInmuebles.inmuebleById(cedMuebles.InmuebleDestinoId);
+                cedMuebles.incidencias = new Entities.MIncidencias.ModelsIncidencias();
                 cedMuebles.usuarios = await vUsuarios.getUserById(cedMuebles.UsuarioId);
                 cedMuebles.iEntregables = await eMuebles.getEntregables(cedMuebles.Id);
-                cedMuebles.incidencias = await iMuebles.GetIncidencias(cedMuebles.Id);
+                cedMuebles.incidencias.muebles = await iMuebles.GetIncidencias(cedMuebles.Id);
                 cedMuebles.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedMuebles.RespuestasEncuesta = await vMuebles.obtieneRespuestas(cedMuebles.Id);
+                cedMuebles.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedMuebles.Id);
                 cedMuebles.historialCedulas = new List<HistorialCedulas>();
                 cedMuebles.historialCedulas = await vMuebles.getHistorialMuebles(cedMuebles.Id);
                 foreach (var user in cedMuebles.historialCedulas)
@@ -171,17 +179,16 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
-                CedulaMuebles cedMuebles = null;
-                cedMuebles = await vMuebles.CedulaById(id);
+                CedulaEvaluacion cedMuebles = null;
+                cedMuebles = await vCedula.CedulaById(id);
                 cedMuebles.facturas = await vFacturas.getFacturas(id, cedMuebles.ServicioId);//
                 cedMuebles.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedMuebles.facturas);
-                cedMuebles.inmuebleOrigen = await vInmuebles.inmuebleById(cedMuebles.InmuebleOrigenId);
+                cedMuebles.inmuebles = await vInmuebles.inmuebleById(cedMuebles.InmuebleId);
                 cedMuebles.inmuebleDestino = await vInmuebles.inmuebleById(cedMuebles.InmuebleDestinoId);
                 cedMuebles.usuarios = await vUsuarios.getUserById(cedMuebles.UsuarioId);
                 cedMuebles.iEntregables = await eMuebles.getEntregables(cedMuebles.Id);
-                cedMuebles.incidencias = await iMuebles.GetIncidencias(cedMuebles.Id);
                 cedMuebles.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedMuebles.RespuestasEncuesta = await vMuebles.obtieneRespuestas(cedMuebles.Id);
+                cedMuebles.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedMuebles.Id);
                 cedMuebles.historialCedulas = new List<HistorialCedulas>();
                 cedMuebles.historialCedulas = await vMuebles.getHistorialMuebles(cedMuebles.Id);
                 foreach (var user in cedMuebles.historialCedulas)

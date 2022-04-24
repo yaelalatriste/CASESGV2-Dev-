@@ -22,6 +22,7 @@ namespace CedulasEvaluacion.Controllers
 
         private string [] tiposIncidencia = {"Recoleccion","Entrega","Acuses", "Mal Estado","Extraviadas","Robadas" };
         private readonly IWebHostEnvironment web;
+        private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioReporteCedula vrCedula;
         private readonly IRepositorioMensajeria vMensajeria;
         private readonly IRepositorioIncidenciasMensajeria iMensajeria;
@@ -29,9 +30,10 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioIncidencias iLimpieza;
 
         public ReporteCedulaController(IWebHostEnvironment vweb,IRepositorioReporteCedula vvReporte, IRepositorioIncidenciasMensajeria iiMensajeria,
-            IRepositorioMensajeria viMensajeria, IRepositorioLimpieza viLimpieza, IRepositorioIncidencias iiLimpieza)
+            IRepositorioMensajeria viMensajeria, IRepositorioLimpieza viLimpieza, IRepositorioIncidencias iiLimpieza, IRepositorioEvaluacionServicios viCedula)
         {
             this.web = vweb;
+            this.vCedula = viCedula;
             this.vrCedula = vvReporte;
             this.vMensajeria = viMensajeria;
             this.iMensajeria = iiMensajeria;
@@ -48,7 +50,7 @@ namespace CedulasEvaluacion.Controllers
             var path = Directory.GetCurrentDirectory()+ "\\Reports\\CedulaMensajeria.rdlc";
             local.ReportPath = path;
             var cedulas = await vrCedula.getReporteMensajeria(id);
-            var respuestas = await vMensajeria.obtieneRespuestas(id);
+            var respuestas = await vCedula.obtieneRespuestas(id);
             for (int i = 0; i < respuestas.Count; i++)
             {
                 if (i < 6)

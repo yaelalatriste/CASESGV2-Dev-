@@ -1,11 +1,11 @@
-﻿@model CedulasEvaluacion.Entities.MCelular.TelefoniaCelular;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula Telefonía Celular e Internet Móvil - Folio: " + Model.Folio;
 }
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/telCelular/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
+        <a href="/telCelular/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -151,7 +151,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2 ml-2">Requerimiento Alta con Equipo</h4>
                     <div class="col-lg-12">
-                        @if (@Model.altaEntrega.Count > 0)
+                        @if (@Model.incidencias.altaEntrega.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -175,7 +175,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.altaEntrega)
+                                                @foreach (var p1 in Model.incidencias.altaEntrega)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -214,14 +214,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-2">
-                                        <strong>Total de Requerimientos: </strong> @Model.altaEntrega.Count
+                                        <strong>Total de Requerimientos: </strong> @Model.incidencias.altaEntrega.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -259,7 +259,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2 ml-2">Alta de Servicio sin Equipo</h4>
                     <div class="col-lg-12">
-                        @if (@Model.altasentrega.Count > 0)
+                        @if (@Model.incidencias.altasentrega.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -283,7 +283,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.altasentrega)
+                                                @foreach (var p1 in Model.incidencias.altasentrega)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -322,14 +322,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-2">
-                                        <strong>Total de Entregas: </strong> @Model.altasentrega.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.altasentrega.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -367,7 +367,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Baja de Servicios</h4>
                     <div class="col-lg-12">
-                        @if (@Model.bajaServicio.Count > 0)
+                        @if (@Model.incidencias.bajaServicio.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -391,7 +391,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.bajaServicio)
+                                                @foreach (var p1 in Model.incidencias.bajaServicio)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -430,14 +430,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.bajaServicio.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.bajaServicio.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -475,7 +475,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Reactivación por Robo/Extravío</h4>
                     <div class="col-lg-12">
-                        @if (@Model.reactivacion.Count > 0)
+                        @if (@Model.incidencias.reactivacion.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -499,7 +499,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.reactivacion)
+                                                @foreach (var p1 in Model.incidencias.reactivacion)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -538,14 +538,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.reactivacion.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.reactivacion.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -583,7 +583,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Suspensión por Robo/Extravío</h4>
                     <div class="col-lg-12">
-                        @if (@Model.suspension.Count > 0)
+                        @if (@Model.incidencias.suspension.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -607,7 +607,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.suspension)
+                                                @foreach (var p1 in Model.incidencias.suspension)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -646,14 +646,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.suspension.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.suspension.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -691,7 +691,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Cambio de Perfil</h4>
                     <div class="col-lg-12">
-                        @if (@Model.cambioPerfil.Count > 0)
+                        @if (@Model.incidencias.cambioPerfil.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -715,7 +715,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.cambioPerfil)
+                                                @foreach (var p1 in Model.incidencias.cambioPerfil)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -754,14 +754,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.cambioPerfil.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.cambioPerfil.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -799,7 +799,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Switcheo de SIM Card</h4>
                     <div class="col-lg-12">
-                        @if (@Model.switcheoCard.Count > 0)
+                        @if (@Model.incidencias.switcheoCard.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -823,7 +823,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.switcheoCard)
+                                                @foreach (var p1 in Model.incidencias.switcheoCard)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -862,14 +862,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.switcheoCard.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.switcheoCard.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -907,7 +907,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Cambio de Número o Región</h4>
                     <div class="col-lg-12">
-                        @if (@Model.cambioRegion.Count > 0)
+                        @if (@Model.incidencias.cambioRegion.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -931,7 +931,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.cambioRegion)
+                                                @foreach (var p1 in Model.incidencias.cambioRegion)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -970,14 +970,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.cambioRegion.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.cambioRegion.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -1015,7 +1015,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Solicitud de Servicios de Voz/Datos</h4>
                     <div class="col-lg-12">
-                        @if (@Model.servicioVozDatos.Count > 0)
+                        @if (@Model.incidencias.servicioVozDatos.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -1039,7 +1039,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.servicioVozDatos)
+                                                @foreach (var p1 in Model.incidencias.servicioVozDatos)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -1078,14 +1078,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.servicioVozDatos.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.servicioVozDatos.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -1123,7 +1123,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Diagnóstico de Equipo</h4>
                     <div class="col-lg-12">
-                        @if (@Model.diagnostico.Count > 0)
+                        @if (@Model.incidencias.diagnostico.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -1147,7 +1147,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.diagnostico)
+                                                @foreach (var p1 in Model.incidencias.diagnostico)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -1186,14 +1186,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.diagnostico.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.diagnostico.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -1231,7 +1231,7 @@
                 <div class="row">
                     <h4 class="mt-2 mb-2">Reparación de Equipo</h4>
                     <div class="col-lg-12">
-                        @if (@Model.reparacion.Count > 0)
+                        @if (@Model.incidencias.reparacion.Count > 0)
                         {
                             <div class="row mt-2">
                                 <div class="row col-lg-12 mt-3">
@@ -1255,7 +1255,7 @@
                                             </thead>
                                             <tbody>
                                                 @{ var i = 0;}
-                                                @foreach (var p1 in Model.diagnostico)
+                                                @foreach (var p1 in Model.incidencias.diagnostico)
                                                 {
                                                     i = i + 1;
                                                     <tr>
@@ -1294,14 +1294,14 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <h6 class="text-danger ml-4">
-                                        <strong>Total de Entregas: </strong> @Model.reparacion.Count
+                                        <strong>Total de Entregas: </strong> @Model.incidencias.reparacion.Count
                                     </h6>
                                 </div>
                                 @*<div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
-                                </h5>
-                            </div>*@
+                                        <h5 class="text-danger ml-4">
+                                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@Model.RespuestasEncuesta[0].MontoPenalizacion)
+                                        </h5>
+                                    </div>*@
                             </div>
                         }
                         else
@@ -1368,7 +1368,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var entre in @Model.IEntregables)
+                                            @foreach (var entre in @Model.iEntregables)
                                             {
                                                 <tr>
                                                     @if (entre.Tipo.Equals("ActaER"))

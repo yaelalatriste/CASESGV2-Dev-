@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.Models.CedulaLimpieza
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @using Newtonsoft.Json
 
 @{
@@ -43,7 +43,7 @@
     <script>
         window.onload = function () {
             var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            var facturas = new Array();
+            var model = @Html.Raw(Json.Serialize(@Model));
 
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -74,7 +74,7 @@
             });
             /*********** Fin del llenado del combo inmuebles *********/
 
-           
+
             /**************** Validación/Guardado al generar el folio ******************/
                 $('#verificarPeriodo').click(function (event) {
                     event.preventDefault();
@@ -83,12 +83,12 @@
                     var anio = $('#select_anio').val();
                     var mes = $('#select_mes').val();
 
-                    
+
                     if (isContinue == true) {
-                        axios.get('/limpieza/validaPeriodo/' + anio + '/' + mes + '/' + inmueble).then(response => {
+                        axios.get('/limpieza/validaPeriodo/' + model.servicioId+'/'+anio + '/' + mes + '/' + inmueble).then(response => {
                             if (response.status == 200 && response.data == 0) {
                                 axios.post('/limpieza/new', {
-                                    InmuebleId: parseInt(inmueble), Anio: parseInt(anio), Mes: mes }).then(res => {
+                                    InmuebleId: parseInt(inmueble), Anio: parseInt(anio), Mes: mes,ServicioId: model.servicioId }).then(res => {
                                     Swal.fire({
                                         'icon': 'success',
                                         'title': 'Limpieza en Áreas Comunes y Oficinas',
@@ -146,7 +146,7 @@
                             'title': 'Limpieza en Áreas Comunes y Oficinas',
                             'html': 'Por favor seleccione el inmueble correspondiente.'
                         });
-                            
+
                         return false;
                     }
 
@@ -163,8 +163,8 @@
                     return true;
                 }
 
-               
-            
+
+
             /*************** Fin de Validación/Guardado al generar el folio ************/
 
         }

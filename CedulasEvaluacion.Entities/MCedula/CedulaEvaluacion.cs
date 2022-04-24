@@ -1,4 +1,5 @@
 ﻿using CedulasEvaluacion.Entities.MFacturas;
+using CedulasEvaluacion.Entities.MIncidencias;
 using CedulasEvaluacion.Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace CedulasEvaluacion.Entities.MCedula
         public int Id { get; set; }
         public int ServicioId { get; set; }
         public int InmuebleId { get; set; }
+        public int InmuebleDestinoId { get; set; }
         public int UsuarioId { get; set; }
         public string Folio { get; set; }
         public string Mes { get; set; }
@@ -25,11 +27,14 @@ namespace CedulasEvaluacion.Entities.MCedula
         public decimal TotalMontoFactura { get; set; }
 
         public virtual Inmueble inmuebles { get; set; }
+        public virtual Inmueble inmuebleDestino { get; set; }
         public virtual Usuarios usuarios { get; set; }
         public virtual List<Facturas> facturas { get; set; }
         public virtual List<Entregables> iEntregables { get; set; }
         public List<RespuestasEncuesta> RespuestasEncuesta { get; set; }
         public List<HistorialCedulas> historialCedulas { get; set; }
         public List<HistorialEntregables> historialEntregables { get; set; }
+        public ModelsIncidencias incidencia { get; set; }
+        public ModelsIncidencias incidencias { get; set; }
     }
 }

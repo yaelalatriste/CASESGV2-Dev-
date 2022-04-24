@@ -10,12 +10,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using CedulasEvaluacion.Entities.MFumigacion;
+using CedulasEvaluacion.Entities.MCedula;
 
 namespace CedulasEvaluacion.Controllers
 {
     [Authorize]
     public class FumigacionController : Controller
     {
+        private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioFumigacion vFumigacion;
         private readonly IRepositorioIncidenciasFumigacion iFumigacion;
         private readonly IRepositorioEntregablesFumigacion eFumigacion;
@@ -23,12 +25,12 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
         private readonly IRepositorioFacturas vFacturas;
-        private readonly IHostingEnvironment environment;
 
-        public FumigacionController(IRepositorioFumigacion iVFumigacion, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
+        public FumigacionController(IRepositorioEvaluacionServicios viCedula, IRepositorioFumigacion iVFumigacion, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                     IRepositorioIncidenciasFumigacion iiFumigacion, IRepositorioEntregablesFumigacion eeFumigacion,
-                                    IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas, IHostingEnvironment environment)
+                                    IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
         {
+            this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vFumigacion = iVFumigacion ?? throw new ArgumentNullException(nameof(iVFumigacion));
             this.iFumigacion = iiFumigacion ?? throw new ArgumentNullException(nameof(iiFumigacion));
             this.eFumigacion = eeFumigacion ?? throw new ArgumentNullException(nameof(eeFumigacion));
@@ -36,54 +38,58 @@ namespace CedulasEvaluacion.Controllers
             this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));
             this.vRepositorioPerfiles = iRepositorioPerfiles ?? throw new ArgumentNullException(nameof(iRepositorioPerfiles));
-            this.environment = environment;
         }
 
         //Metodo que regresa las cedulas aceptadas, guardadas o rechazadas 
-        [Route("/fumigacion/index")]
-        public async Task<IActionResult> Index()
+        [Route("/fumigacion/index/{servicio?}")]
+        public async Task<IActionResult> Index(int servicio)
         {
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
                 List<VCedulas> resultado = new List<VCedulas>();
-                resultado = await vFumigacion.GetCedulasFumigacion(UserId());
+                resultado = await vCedula.GetCedulasEvaluacion(servicio, UserId());
                 return View(resultado);
             }
             return Redirect("/error/denied");
         }
 
-        [Route("/fumigacion/nuevaCedula")]
-        public async Task<IActionResult> NuevaCedula(CedulaFumigacion cedulaFumigacion)
+        //Metodo para abrir la vista y generar la nueva Cedula
+        [Route("/fumigacion/nuevaCedula/{servicio}")]
+        [HttpGet]
+        public async Task<IActionResult> NuevaCedula(int servicio)
         {
-            cedulaFumigacion = new CedulaFumigacion();
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
-                return View(cedulaFumigacion);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula.ServicioId = servicio;
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }
 
-       [Route("/fumigacion/validaPeriodo/{anio?}/{mes?}/{inmueble?}")]
-        public async Task<IActionResult> validaPeriodo(int anio, string mes, int inmueble)
+        //inserta la cedula
+        [Route("/fumigacion/new")]
+        public async Task<IActionResult> insertaCedula([FromBody] CedulaEvaluacion cedula)
         {
-            int valida = await vFumigacion.VerificaCedula(anio, mes, inmueble);
-            if (valida != -1)
+            cedula.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
+            int insert = await vCedula.insertaCedula(cedula);
+            if (insert != -1)
             {
-                return Ok(valida);
+                return Ok(insert);
             }
             return BadRequest();
         }
 
-        [Route("/fumigacion/new")]
-        public async Task<IActionResult> insertaCedula([FromBody] CedulaFumigacion cedulaFumigacion)
+
+        [Route("/fumigacion/validaPeriodo/{servicio}/{anio?}/{mes?}/{inmueble?}")]
+        public async Task<IActionResult> validaPeriodo(int servicio, int anio, string mes, int inmueble)
         {
-            cedulaFumigacion.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
-            int insert = await vFumigacion.insertaCedula(cedulaFumigacion);
-            if (insert != -1)
+            int valida = await vCedula.VerificaCedula(servicio, anio, mes, inmueble);
+            if (valida != -1)
             {
-                return Ok(insert);
+                return Ok(valida);
             }
             return BadRequest();
         }
@@ -94,28 +100,28 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                CedulaFumigacion cedulaFumigacion = await vFumigacion.CedulaById(id);
-                if (cedulaFumigacion.Estatus.Equals("Enviado a DAS") && isEvaluate() == true)
+                CedulaEvaluacion cedula = await vCedula.CedulaById(id);
+                if (cedula.Estatus.Equals("Enviado a DAS") && isEvaluate() == true)
                 {
                     return Redirect("/error/cedSend");
                 }
-                cedulaFumigacion.inmuebles = await vInmuebles.inmuebleById(cedulaFumigacion.InmuebleId);
-                cedulaFumigacion.RespuestasEncuesta = await vFumigacion.obtieneRespuestas(id);
-                cedulaFumigacion.facturas = await vFacturas.getFacturas(id, cedulaFumigacion.ServicioId);
-                cedulaFumigacion.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedulaFumigacion.facturas);
-                return View(cedulaFumigacion);
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
+                cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
+                cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }
 
         [HttpPost]
         [Route("/fumigacion/evaluation")]
-        public async Task<IActionResult> guardaRespuestas([FromBody] List<RespuestasEncuesta> respuestas)
+        public async Task<IActionResult> guardaCuestionario([FromBody] List<RespuestasEncuesta> respuestas)
         {
-            int success = await vFumigacion.GuardaRespuestas(respuestas);
+            int success = await vCedula.GuardaRespuestas(respuestas);
             if (success != 0)
             {
-                return Ok(success);
+                return Ok();
             }
             else
             {
@@ -125,11 +131,11 @@ namespace CedulasEvaluacion.Controllers
 
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
-        [Route("/fumigacion/sendCedula/{cedula?}")]
-        public async Task<IActionResult> enviaCedula(int cedula)
+        [Route("/fumigacion/sendCedula/{servicio?}/{id?}")]
+        public async Task<IActionResult> enviaCedula(int servicio, int id)
         {
             int success = 0;
-            success = await vFumigacion.enviaRespuestas(cedula);
+            success = await vCedula.enviaRespuestas(servicio, id);
             if (success != -1)
             {
                 return Ok();
@@ -147,16 +153,17 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                CedulaFumigacion cedFum = null;
-                cedFum = await vFumigacion.CedulaById(id);
+                CedulaEvaluacion cedFum = null;
+                cedFum = await vCedula.CedulaById(id);
                 cedFum.facturas = await vFacturas.getFacturas(id, cedFum.ServicioId);//
                 cedFum.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedFum.facturas);
                 cedFum.inmuebles = await vInmuebles.inmuebleById(cedFum.InmuebleId);
                 cedFum.usuarios = await vUsuarios.getUserById(cedFum.UsuarioId);
                 cedFum.iEntregables = await eFumigacion.getEntregables(cedFum.Id);
-                cedFum.incidencias = await iFumigacion.GetIncidencias(cedFum.Id);
+                cedFum.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+                cedFum.incidencias.fumigacion = await iFumigacion.GetIncidencias(cedFum.Id);
                 cedFum.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedFum.RespuestasEncuesta = await vFumigacion.obtieneRespuestas(cedFum.Id);
+                cedFum.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedFum.Id);
                 cedFum.historialCedulas = new List<HistorialCedulas>();
                 cedFum.historialCedulas = await vFumigacion.getHistorialFumigacion(cedFum.Id);
                 foreach (var user in cedFum.historialCedulas)
@@ -171,7 +178,6 @@ namespace CedulasEvaluacion.Controllers
                 {
                     return Redirect("/fumigacion/evaluacion/" + id);
                 }
-                return View(cedFum);
             }
             return Redirect("/error/denied");
         }
@@ -183,15 +189,15 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
-                CedulaFumigacion cedFum = null;
-                cedFum = await vFumigacion.CedulaById(id);
+                CedulaEvaluacion cedFum = null;
+                cedFum = await vCedula.CedulaById(id);
                 cedFum.facturas = await vFacturas.getFacturas(id, cedFum.ServicioId);//
                 cedFum.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedFum.facturas);
                 cedFum.inmuebles = await vInmuebles.inmuebleById(cedFum.InmuebleId);
                 cedFum.usuarios = await vUsuarios.getUserById(cedFum.UsuarioId);
                 cedFum.iEntregables = await eFumigacion.getEntregables(cedFum.Id);
-                cedFum.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedFum.RespuestasEncuesta = await vFumigacion.obtieneRespuestas(cedFum.Id);
+                //cedFum.RespuestasEncuesta = new List<RespuestasEncuesta>();
+                //cedFum.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedFum.Id);
                 cedFum.historialCedulas = new List<HistorialCedulas>();
                 cedFum.historialCedulas = await vFumigacion.getHistorialFumigacion(cedFum.Id);
                 foreach (var user in cedFum.historialCedulas)

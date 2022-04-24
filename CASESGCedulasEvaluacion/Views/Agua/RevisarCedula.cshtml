@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MAgua.CedulaAgua;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     var title = TempData["Title"] as string;
     ViewData["Title"] = "Revisión de la Cédula del Servicio Suministro de Agua Purificada para Beber: " + Model.Folio;
@@ -6,7 +6,7 @@
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/agua/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
+        <a href="/agua/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -135,30 +135,30 @@
                                             <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
                                         @*<p class="text-sm">
-            @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                                  @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion
-                                                                  + Model.PenaCalificacion + Model.capacitacion.MontoPenalizacion + Model.TotalBajoDemanda);
-            }
-            @if (total > 0)
-            {
-                <h5 class="text-danger">
-                    <b>Total Penalizable:</b> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total)
-                </h5>
-            }
-            else
-            {
-                <h5 class="text-success">
-                    <b>No hay Monto Penalizable</b>
-                </h5>
-            }
-        </p>
-        <ul class="ml-4 mb-0 fa-ul">
-            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
-            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Uniforme: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
-            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades en Equipo: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
-            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Entregables Bajo Demanda: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.TotalBajoDemanda)</li>
-            <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Calificación: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
-        </ul>*@
+                                                @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
+                                                                                                      @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion
+                                                                                                      + Model.PenaCalificacion + Model.capacitacion.MontoPenalizacion + Model.TotalBajoDemanda);
+                                                }
+                                                @if (total > 0)
+                                                {
+                                                    <h5 class="text-danger">
+                                                        <b>Total Penalizable:</b> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total)
+                                                    </h5>
+                                                }
+                                                else
+                                                {
+                                                    <h5 class="text-success">
+                                                        <b>No hay Monto Penalizable</b>
+                                                    </h5>
+                                                }
+                                            </p>
+                                            <ul class="ml-4 mb-0 fa-ul">
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Uniforme: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades en Equipo: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Entregables Bajo Demanda: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.TotalBajoDemanda)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Calificación: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
+                                            </ul>*@
                                         <div>
                                             <img src="~/img/web1.jpg" alt="Alternate Text" width="40%" />
                                         </div>
@@ -198,7 +198,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var inci in @Model.incidencias)
+                                        @foreach (var inci in @Model.incidencias.agua)
                                         {
                                             if (inci.Pregunta.Equals(2 + ""))
                                             {
@@ -283,7 +283,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var inci in @Model.incidencias)
+                                    @foreach (var inci in @Model.incidencias.agua)
                                     {
                                         if (inci.Pregunta.Equals(3 + ""))
                                         {
@@ -368,7 +368,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var inci in @Model.incidencias)
+                                        @foreach (var inci in @Model.incidencias.agua)
                                         {
                                             if (inci.Pregunta.Equals(4 + ""))
                                             {
@@ -582,13 +582,13 @@
                                             <td>Reporte(s)</td>
                                         }
                                         else if (entre.Tipo.Equals("Cedula_Firmada"))
-                                         {
+                                        {
                                             <td>Cédula Firmada</td>
-                                         }
-                                         else if (entre.Tipo.Equals("Memorandum"))
-                                         {
+                                        }
+                                        else if (entre.Tipo.Equals("Memorandum"))
+                                        {
                                             <td>Memorándum</td>
-                                         }
+                                        }
                                         <td>@entre.NombreArchivo</td>
                                         <td>@entre.FechaCreacion.ToString("yyyy-MM-dd")</td>
                                         <td>

@@ -1,5 +1,5 @@
 ﻿@* Incidencias Celular *@
-@model CedulasEvaluacion.Entities.MCelular.TelefoniaCelular;
+@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Requerimientos en la Cédula de Telefonía Celular e Internet Móvil con folio: " + Model.Folio;
 }
@@ -72,7 +72,7 @@
                                     </thead>
                                     <tbody>
                                         @{ var i = 0;}
-                                        @foreach (var p1 in Model.incidenciasCelular)
+                                        @foreach (var p1 in Model.incidencias.celular)
                                         {
                                             if (p1.Tipo == "Alta_Equipo")
                                             {
@@ -123,7 +123,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasCelular)
+                                        @foreach (var p2 in Model.incidencias.celular)
                                         {
                                             if (p2.Tipo == "Alta")
                                             {
@@ -174,7 +174,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasCelular)
+                                        @foreach (var p2 in Model.incidencias.celular)
                                         {
                                             if (p2.Tipo == "Baja")
                                             {
@@ -225,7 +225,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasCelular)
+                                        @foreach (var p2 in Model.incidencias.celular)
                                         {
                                             if (p2.Tipo == "Reactivacion")
                                             {
@@ -276,7 +276,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasCelular)
+                                        @foreach (var p2 in Model.incidencias.celular)
                                         {
                                             if (p2.Tipo == "Suspension")
                                             {
@@ -327,7 +327,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasCelular)
+                                        @foreach (var p2 in Model.incidencias.celular)
                                         {
                                             if (p2.Tipo == "Perfil")
                                             {
@@ -378,7 +378,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasCelular)
+                                        @foreach (var p2 in Model.incidencias.celular)
                                         {
                                             if (p2.Tipo == "SIM")
                                             {
@@ -429,7 +429,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasCelular)
+                                        @foreach (var p2 in Model.incidencias.celular)
                                         {
                                             if (p2.Tipo == "CambioNumeroRegion")
                                             {
@@ -480,7 +480,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasCelular)
+                                        @foreach (var p2 in Model.incidencias.celular)
                                         {
                                             if (p2.Tipo == "VozDatos")
                                             {
@@ -531,7 +531,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasCelular)
+                                        @foreach (var p2 in Model.incidencias.celular)
                                         {
                                             if (p2.Tipo == "Diagnostico")
                                             {
@@ -582,7 +582,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasCelular)
+                                        @foreach (var p2 in Model.incidencias.celular)
                                         {
                                             if (p2.Tipo == "Reparacion")
                                             {
@@ -877,7 +877,7 @@
                             'html': 'Por favor seleccione el Perfil Controlado'
                         });
                     }
-                   
+
                     return false;
             }
 
@@ -907,7 +907,7 @@
                         });
                         return false;
                     }
-                    
+
                     if (id == "") {
                         id = 0;
                     } else {
@@ -956,7 +956,7 @@
                             });
                         }
                     }
-                    
+
                 });
 
                 $(".update_incidencia").click(function(){

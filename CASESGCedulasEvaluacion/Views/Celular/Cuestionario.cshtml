@@ -1,12 +1,12 @@
 ﻿@* Cuestionario Telefonia Celular *@
-@model CedulasEvaluacion.Entities.MCelular.TelefoniaCelular;
+@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula de Telefonía Celular e Internet Móvil - Folio: " + Model.Folio;
 }
 
 <div class="container-fluid" id="limpieza">
     <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Facturas" data-placement="top"><i class="fal fa-file-invoice"></i></a>
-    <a href="/telCelular/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/telCelular/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
             <tr>
@@ -1768,7 +1768,7 @@
                         for (let i = 0; i < 11; i++) {
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta != null) {
-                                respuestas.push({ CedulaCelularId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true") });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true") });
                             }
                         }
 
@@ -1794,13 +1794,13 @@
                         for (let i = 0; i < 11; i++) {
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta != null) {
-                                respuestas.push({ CedulaCelularId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true") });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true") });
                             }
                         }
 
                         axios.post("/telCelular/evaluation", respuestas).then(response => {
                             if (response.status == 200) {
-                               
+
                             } else {
                                 Swal.fire({
                                     'icon': "error",
@@ -1841,14 +1841,14 @@
                                 });
                                 return false;
                             } else {
-                                axios.post("/telCelular/sendCedula/"+model.id).then(response => {
+                                axios.post("/telCelular/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
                                     if (response.status == 200) {
                                         Swal.fire({
                                             'icon': "success",
                                             'title': "Servicio de Telefonía Celular",
                                             'html': "Se envíó la cédula para su revisión correctamente."
                                         }).then(function () {
-                                            window.location.href = "/telCelular/index";
+                                            window.location.href = "/telCelular/index/"+model.servicioId;
                                         });
                                     } else {
                                         Swal.fire({

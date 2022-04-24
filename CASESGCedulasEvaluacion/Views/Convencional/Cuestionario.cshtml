@@ -1,5 +1,5 @@
 ﻿@* Cuestionario Telefonia Convencional *@
-@model CedulasEvaluacion.Entities.MConvencional.TelefoniaConvencional;
+@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula de Telefonía Convencional - Folio: " + Model.Folio;
 }
@@ -389,7 +389,7 @@
                             <option value="Factura">Factura</option>
                             <option value="SAT">Validación del SAT</option>
                             <option value="Reporte de Servicio">Reporte de Servicio</option>
-                            <option value="Cuadro de Servicios">Cuadro de Servicios</option>                            
+                            <option value="Cuadro de Servicios">Cuadro de Servicios</option>
                         </select>
                         <div class="col-sm-12" id="error_tipoEntre">
                             <small id="dateHelp" class="text-danger">
@@ -1693,7 +1693,7 @@
                         for (let i = 0; i < 11; i++) {
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta != null) {
-                                respuestas.push({ CedulaCelularId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true") });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true") });
                             }
                         }
 
@@ -1721,7 +1721,7 @@
                         for (let i = 0; i < 11; i++) {
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta != null) {
-                                respuestas.push({ CedulaCelularId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true") });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true") });
                             }
                         }
 
@@ -1770,14 +1770,14 @@
                                 });
                                 return false;
                             } else {
-                                axios.post("/telConvencional/sendCedula/"+model.id).then(response => {
+                                axios.post("/telConvencional/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
                                     if (response.status == 200) {
                                         Swal.fire({
                                             'icon': "success",
                                             'title': "Servicio de Telefonía Convencional",
                                             'html': "Se envíó la cédula para su revisión correctamente."
                                         }).then(function () {
-                                            window.location.href = "/telConvencional/index";
+                                            window.location.href = "/telConvencional/index/"+model.servicioId;
                                         });
                                     } else {
                                         Swal.fire({

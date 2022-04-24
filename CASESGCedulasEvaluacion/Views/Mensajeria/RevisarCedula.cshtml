@@ -1,11 +1,11 @@
-﻿@model CedulasEvaluacion.Entities.MMensajeria.CedulaMensajeria
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion
 @{
     ViewData["Title"] = "Revisión a la Cédula del Servicio de Mensajería Acelerada: " + Model.Folio;
 }
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/mensajeria/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
+        <a href="/mensajeria/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -199,7 +199,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
-                                        @foreach (var incidencia in Model.recoleccion)
+                                        @foreach (var incidencia in Model.incidencias.recoleccion)
                                         {
                                             <tr>
                                                 <td>@incidencia.Id</td>
@@ -229,7 +229,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                <strong>Total de Incidencias: </strong> @Model.recoleccion.Count
+                                <strong>Total de Incidencias: </strong> @Model.incidencias.recoleccion.Count
                             </h5>
                         </div>
                         <div class="col-lg-12">
@@ -290,7 +290,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
-                                        @foreach (var incidencia in Model.entrega)
+                                        @foreach (var incidencia in Model.incidencias.entrega)
                                         {
                                             <tr>
                                                 <td>@incidencia.Id</td>
@@ -320,7 +320,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                <strong>Total de Incidencias: </strong> @Model.entrega.Count
+                                <strong>Total de Incidencias: </strong> @Model.incidencias.entrega.Count
                             </h5>
                         </div>
                         <div class="col-lg-12">
@@ -377,7 +377,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
-                                        @foreach (var incidencia in Model.acuses)
+                                        @foreach (var incidencia in Model.incidencias.acuses)
                                         {
                                             <tr>
                                                 <td>@incidencia.Id</td>
@@ -396,7 +396,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                <strong>Total de Incidencias: </strong> @Model.acuses.Count
+                                <strong>Total de Incidencias: </strong> @Model.incidencias.acuses.Count
                             </h5>
                         </div>
                         <div class="col-lg-12">
@@ -477,7 +477,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
-                                        @foreach (var incidencia in Model.malEstado)
+                                        @foreach (var incidencia in Model.incidencias.malEstado)
                                         {
                                             <tr>
                                                 <td>@incidencia.Id</td>
@@ -496,7 +496,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                <strong>Total de Incidencias: </strong> @Model.malEstado.Count
+                                <strong>Total de Incidencias: </strong> @Model.incidencias.malEstado.Count
                             </h5>
                         </div>
                         <div class="col-lg-12">
@@ -553,7 +553,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
-                                        @foreach (var incidencia in Model.extraviadas)
+                                        @foreach (var incidencia in Model.incidencias.extraviadas)
                                         {
                                             <tr>
                                                 <td>@incidencia.Id</td>
@@ -572,7 +572,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                <strong>Total de Incidencias: </strong> @Model.extraviadas.Count
+                                <strong>Total de Incidencias: </strong> @Model.incidencias.extraviadas.Count
                             </h5>
                         </div>
                         <div class="col-lg-12">
@@ -631,7 +631,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tIncidenciasEquipo">
-                                        @foreach (var incidencia in Model.robadas)
+                                        @foreach (var incidencia in Model.incidencias.robadas)
                                         {
                                             <tr>
                                                 <td>@incidencia.Id</td>
@@ -657,7 +657,7 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                <strong>Total de Incidencias: </strong> @Model.robadas.Count
+                                <strong>Total de Incidencias: </strong> @Model.incidencias.robadas.Count
                             </h5>
                         </div>
                         <div class="col-lg-12">

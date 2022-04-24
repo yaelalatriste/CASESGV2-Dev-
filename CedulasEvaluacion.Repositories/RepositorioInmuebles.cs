@@ -86,24 +86,31 @@ namespace CedulasEvaluacion.Repositories
         //obtenemos una administración por ID
         public async Task<Inmueble> inmuebleById(int id)
         {
-            using (SqlConnection sql = new SqlConnection(_connectionString))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand("sp_getInmuebleById", sql))
+                using (SqlConnection sql = new SqlConnection(_connectionString))
                 {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@id", id));
-                    Inmueble response = null;
-                    await sql.OpenAsync();
-
-                    using (var reader = await cmd.ExecuteReaderAsync())
+                    using (SqlCommand cmd = new SqlCommand("sp_getInmuebleById", sql))
                     {
-                        while (await reader.ReadAsync())
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        Inmueble response = null;
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            response = MapToValue(reader);
+                            while (await reader.ReadAsync())
+                            {
+                                response = MapToValue(reader);
+                            }
                         }
+                        return response;
                     }
-                    return response;
                 }
+            }catch(Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
             }
         }
 

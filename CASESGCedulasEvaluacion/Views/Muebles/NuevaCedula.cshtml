@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MMuebles.CedulaMuebles;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @using Newtonsoft.Json
 
 @{
@@ -18,9 +18,11 @@
                         <option value="2022">2022</option>
                     </select>
                 </div>
-                <div class=" col-lg-4">
-                    <label for="">Inmueble de Origen:</label>
-                    <select class="form-control" asp-for="@Model.InmuebleOrigenId" id="select_inmueble" required disabled="true"></select>
+                <div class="col-lg-4">
+                    <label>Inmueble Destino</label>
+                    <div class="select2-purple">
+                        <select class="form-control select2bs4" data-dropdown-css-class="select2-purple" asp-for="@Model.InmuebleId" id="select_inmuebleOrigen" required disabled="true"></select>
+                    </div>
                 </div>
                 <div class="col-lg-4">
                     <label>Inmueble Destino</label>
@@ -49,6 +51,7 @@
         window.onload = function () {
             var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             var facturas = new Array();
+            var model = @Html.Raw(Json.Serialize(@Model));
 
             $('[data-toggle="tooltip"]').tooltip();
             $(".select2").select2();
@@ -59,20 +62,20 @@
             /***********Llenamos el Combo de inmuebles*****************/
             $("#select_anio").change(function () {
                 let optionsInmueble = "<option value=''>Seleccione el Inmueble</option>";
-                $('#select_inmueble').prop("disabled", false);
-                axios.get('/inmuebles/evaluar').then(response => {
+                $('#select_inmuebleOrigen').prop("disabled", false);
+                axios.get('/inmuebles/getInmuebles').then(response => {
                     response = response.data;
                     response.forEach(function (inm) {
                         optionsInmueble += "<option value=" + inm.id + ">" + inm.nombre + "</option>"
                     });
-                    $("#select_inmueble").html(optionsInmueble);
+                    $("#select_inmuebleOrigen").html(optionsInmueble);
                 });
                 changeInput = true;
             });
             /************ Fin del Combo de inmuebles ******************/
 
             /************* Llenamos el Combo de inmuebles *************/
-            $("#select_inmueble").change(function () {
+            $("#select_inmuebleOrigen").change(function () {
                 let optionsInmueble = "<option value=''>Seleccione el Inmueble</option>";
                 $('#select_inmuebleDestino').prop("disabled", false);
                 axios.get('/inmuebles/getInmuebles').then(response => {
@@ -101,7 +104,7 @@
             $('#verificarPeriodo').click(function (event) {
                 event.preventDefault();
                 var isContinue = validaFormulario();
-                var inmuebleOrigen = $('#select_inmueble').val();
+                var inmuebleOrigen = $('#select_inmuebleOrigen').val();
                 var inmuebleDestino = $('#select_inmuebleDestino').val();
                 var anio = $('#select_anio').val();
                 var mes = $('#select_mes').val();
@@ -109,7 +112,7 @@
 
                 if (isContinue == true) {
                     axios.post('/muebles/new', {
-                        InmuebleOrigenId: parseInt(inmuebleOrigen), InmuebleDestinoId: parseInt(inmuebleDestino), Anio: parseInt(anio), Mes: mes
+                        InmuebleId: parseInt(inmuebleOrigen), InmuebleDestinoId: parseInt(inmuebleDestino), Anio: parseInt(anio), Mes: mes, ServicioId: parseInt(model.servicioId)
                     }).then(res => {
                         Swal.fire({
                             'icon': 'success',
@@ -125,7 +128,7 @@
                             'text': 'Error al generar la cédula del servicio de bienes muebles'
                         });
                     });
-                    
+
                 }
             });
 

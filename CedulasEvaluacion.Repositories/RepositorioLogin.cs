@@ -228,7 +228,12 @@ namespace CedulasEvaluacion.Repositories
                 Id = (int)reader["Id"],
                 PerfilId = (int)reader["PerfilId"],
                 Empleado = reader["Empleado"].ToString(),
-                Modulo = reader["Modulo"].ToString()
+                ModuloId = (int)reader["ModuloId"],
+                ServicioId = reader["ServicioId"] != DBNull.Value ? (int)reader["ServicioId"] : 0,
+                Modulo = reader["Modulo"].ToString(),
+                Icono = reader["Icono"] != DBNull.Value ? reader["Icono"].ToString() : "",
+                Servicio = reader["Servicio"] != DBNull.Value ? reader["Servicio"].ToString() : "",
+                URL = reader["URL"].ToString(),
             };
         }
 

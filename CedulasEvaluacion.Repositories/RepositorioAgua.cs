@@ -252,7 +252,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@id", cedulaAgua.Id));
                         cmd.Parameters.Add(new SqlParameter("@estatus", cedulaAgua.Estatus));
-                        cmd.Parameters.Add(new SqlParameter("@servicio", 9));
+                        cmd.Parameters.Add(new SqlParameter("@servicioId", 9));
 
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();

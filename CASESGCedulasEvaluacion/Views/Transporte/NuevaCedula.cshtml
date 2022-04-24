@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MTransporte.CedulaTransporte;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @using Newtonsoft.Json
 
 @{
@@ -42,7 +42,7 @@
     <script>
         window.onload = function () {
             var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            var facturas = new Array();
+            var model = @Html.Raw(Json.Serialize(@Model));
 
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -84,10 +84,10 @@
 
 
                 if (isContinue == true) {
-                    axios.get('/transporte/validaPeriodo/' + anio + '/' + mes + '/' + inmueble).then(response => {
+                    axios.get('/transporte/validaPeriodo/' + model.servicioId + '/' + anio + '/' + mes + '/' + inmueble).then(response => {
                         if (response.status == 200 && response.data == 0) {
                             axios.post('/transporte/new', {
-                                InmuebleId: parseInt(inmueble), Anio: parseInt(anio), Mes: mes
+                                InmuebleId: parseInt(inmueble), Anio: parseInt(anio), Mes: mes, ServicioId: model.servicioId
                             }).then(res => {
                                 Swal.fire({
                                     'icon': 'success',

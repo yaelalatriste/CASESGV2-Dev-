@@ -1,7 +1,7 @@
 ﻿@* Incidencias Convencional *@
-@model CedulasEvaluacion.Entities.MConvencional.TelefoniaConvencional;
+@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
-    ViewData["Title"] = "Requerimientos en la cédula con folio: " + Model.Folio+" del servicio de \"Telefonía Convencional\"";
+    ViewData["Title"] = "Requerimientos en la cédula con folio: " + Model.Folio + " del servicio de \"Telefonía Convencional\"";
 }
 <div class="container-fluid" id="limpieza">
     <div class="row float-right">
@@ -70,7 +70,7 @@
                                     </thead>
                                     <tbody>
                                         @{ var i = 0;}
-                                        @foreach (var p1 in Model.incidenciasConvencional)
+                                        @foreach (var p1 in Model.incidencias.convencional)
                                         {
                                             if (p1.Tipo == "contratacion_instalacion")
                                             {
@@ -117,7 +117,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasConvencional)
+                                        @foreach (var p2 in Model.incidencias.convencional)
                                         {
                                             if (p2.Tipo == "cableado")
                                             {
@@ -164,7 +164,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasConvencional)
+                                        @foreach (var p2 in Model.incidencias.convencional)
                                         {
                                             if (p2.Tipo == "entregaAparato")
                                             {
@@ -211,7 +211,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasConvencional)
+                                        @foreach (var p2 in Model.incidencias.convencional)
                                         {
                                             if (p2.Tipo == "cambioDomicilio")
                                             {
@@ -258,7 +258,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasConvencional)
+                                        @foreach (var p2 in Model.incidencias.convencional)
                                         {
                                             if (p2.Tipo == "reubicacion")
                                             {
@@ -305,7 +305,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasConvencional)
+                                        @foreach (var p2 in Model.incidencias.convencional)
                                         {
                                             if (p2.Tipo == "identificadorLlamadas")
                                             {
@@ -352,7 +352,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasConvencional)
+                                        @foreach (var p2 in Model.incidencias.convencional)
                                         {
                                             if (p2.Tipo == "troncales")
                                             {
@@ -399,7 +399,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasConvencional)
+                                        @foreach (var p2 in Model.incidencias.convencional)
                                         {
                                             if (p2.Tipo == "internet")
                                             {
@@ -446,7 +446,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasConvencional)
+                                        @foreach (var p2 in Model.incidencias.convencional)
                                         {
                                             if (p2.Tipo == "serviciosTelefonia")
                                             {
@@ -493,7 +493,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasConvencional)
+                                        @foreach (var p2 in Model.incidencias.convencional)
                                         {
                                             if (p2.Tipo == "cancelacion")
                                             {
@@ -540,7 +540,7 @@
                                     </thead>
                                     <tbody>
                                         @{ i = 0;}
-                                        @foreach (var p2 in Model.incidenciasConvencional)
+                                        @foreach (var p2 in Model.incidencias.convencional)
                                         {
                                             if (p2.Tipo == "reportesFallas")
                                             {
@@ -786,7 +786,7 @@
                         $('#div_fechaSolicitud').css('display', 'none');
                         $('#div_fechaAtencion').css('display', 'none');
                     }
-                    
+
                     $('#div_linea').css('display', 'block');
                 });
             /*FIN de Campos a Llenar al seleccionar la categoria de incidencias*/

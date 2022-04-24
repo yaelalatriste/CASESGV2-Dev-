@@ -1,10 +1,10 @@
-﻿@model CedulasEvaluacion.Entities.MFumigacion.CedulaFumigacion;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @using Newtonsoft.Json
 
 @{
     ViewData["title"] = "Servicio de Fumigación y Fauna Nociva";
 }
-<div class="container-fluid" id="limpieza">
+<div class="container-fluid" id="fumigacion">
     <div class="card">
         <div class="card-header bg-joke text-white">
             <h5 class="mt-2">Generar Cédula</h5>
@@ -43,6 +43,7 @@
         window.onload = function () {
             var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             var facturas = new Array();
+            var model = @Html.Raw(Json.Serialize(@Model));
 
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -76,53 +77,52 @@
 
             /**************** Validación/Guardado al generar el folio ******************/
             $('#verificarPeriodo').click(function (event) {
-                event.preventDefault();
-                var isContinue = validaFormulario();
-                var inmueble = $('#select_inmueble').val();
-                var anio = $('#select_anio').val();
-                var mes = $('#select_mes').val();
+                    event.preventDefault();
+                    var isContinue = validaFormulario();
+                    var inmueble = $('#select_inmueble').val();
+                    var anio = $('#select_anio').val();
+                    var mes = $('#select_mes').val();
 
 
-                if (isContinue == true) {
-                    axios.get('/fumigacion/validaPeriodo/' + anio + '/' + mes + '/' + inmueble).then(response => {
-                        if (response.status == 200 && response.data == 0) {
-                            axios.post('/fumigacion/new', {
-                                InmuebleId: parseInt(inmueble), Anio: parseInt(anio), Mes: mes
-                            }).then(res => {
-                                Swal.fire({
-                                    'icon': 'success',
-                                    'title': 'Servicio de Fumigación y Fauna Nociva',
-                                    'text': 'La cédula del servicio de fumigación fue generada de manera correcta.'
-                                }).then(function () {
-                                    window.location.href = '/fumigacion/evaluacion/' + res.data;
+                    if (isContinue == true) {
+                        axios.get('/fumigacion/validaPeriodo/' + model.servicioId+'/'+anio + '/' + mes + '/' + inmueble).then(response => {
+                            if (response.status == 200 && response.data == 0) {
+                                axios.post('/fumigacion/new', {
+                                    InmuebleId: parseInt(inmueble), Anio: parseInt(anio), Mes: mes,ServicioId: model.servicioId }).then(res => {
+                                    Swal.fire({
+                                        'icon': 'success',
+                                        'title': 'Servicio de Fumigación y Fauna Nociva',
+                                        'text': 'La cédula del servicio de fumigacion fue generada de manera correcta.'
+                                    }).then(function () {
+                                        window.location.href = '/fumigacion/evaluacion/' + res.data;
+                                    });
                                 });
-                            });
-                        } else {
+                            } else {
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Servicio de Fumigación y Fauna Nociva',
+                                    'html': 'Ya fue generada una cédula para el inmueble <strong>' + $('#select_inmueble option:selected').html() + '</strong> para ' +
+                                        '<strong>' + $('#select_mes option:selected').html() + '</strong> <strong>' + $('#select_anio option:selected').html() + '</strong>',
+                                    'confirmButtonColor': '#3085d6',
+                                    'cancelButtonColor': '#d33',
+                                    'confirmButtonText': 'Ir a la cédula',
+                                    'cancelButtonText': 'Cancelar y corregir',
+                                    'showCancelButton': true,
+                                }).then(res => {
+                                    if (res.isConfirmed) {
+                                        window.location.href = '/fumigacion/evaluacion/' + response.data;
+                                    }
+                                });
+                            }
+                        }).catch(error => {
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Servicio de Fumigación y Fauna Nociva',
-                                'html': 'Ya fue generada una cédula para el inmueble <strong>' + $('#select_inmueble option:selected').html() + '</strong> para ' +
-                                    '<strong>' + $('#select_mes option:selected').html() + '</strong> <strong>' + $('#select_anio option:selected').html() + '</strong>',
-                                'confirmButtonColor': '#3085d6',
-                                'cancelButtonColor': '#d33',
-                                'confirmButtonText': 'Ir a la cédula',
-                                'cancelButtonText': 'Cancelar y corregir',
-                                'showCancelButton': true,
-                            }).then(res => {
-                                if (res.isConfirmed) {
-                                    window.location.href = '/fumigacion/evaluacion/' + response.data;
-                                }
+                                'text': 'Error al generar la cédula de fumigacion'
                             });
-                        }
-                    }).catch(error => {
-                        Swal.fire({
-                            'icon': 'error',
-                            'title': 'Servicio de Fumigación y Fauna Nociva',
-                            'text': 'Error al generar la cédula de limpieza'
                         });
-                    });
-                }
-            });
+                    }
+                });
 
             function validaFormulario() {
                 var anio = $('#select_anio').val();

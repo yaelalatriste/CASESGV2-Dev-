@@ -1,18 +1,18 @@
-﻿@model CedulasEvaluacion.Entities.MMuebles.CedulaMuebles;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula del Servicio de Transportación de Bienes Muebles con Folio: " + Model.Folio;
 }
 
 <div class="container-fluid" id="limpieza">
     <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Facturas" data-placement="top"><i class="fal fa-file-invoice"></i></a>
-    <a href="/muebles/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Bienes Muebles" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/muebles/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Bienes Muebles" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
             <tr>
                 <td data-toggle="tooltip" title="Folio de evaluación asignado por el sistema" data-placement="top" style="font-family: Tahoma; font-size: 13.5px; letter-spacing: 0.8px;"><strong>Folio: </strong> @Model.Folio</td>
                 <td data-toggle="tooltip" title="Año de evaluación del servicio" data-placement="top"><strong>Año: </strong>@Model.Anio</td>
                 <td data-toggle="tooltip" title="Mes evaluado" data-placement="top"><strong>Mes: </strong>@Model.Mes</td>
-                <td data-toggle="tooltip" title="Administración/Inmueble de Origen" data-placement="top"><strong>Inmueble de Origen: </strong>@Model.inmuebleOrigen.Nombre</td>
+                <td data-toggle="tooltip" title="Administración/Inmueble de Origen" data-placement="top"><strong>Inmueble de Origen: </strong>@Model.inmuebles.Nombre</td>
                 <td data-toggle="tooltip" title="Administración/Inmueble Destino" data-placement="top"><strong>Inmueble Destino: </strong>@Model.inmuebleDestino.Nombre</td>
                 <td data-toggle="tooltip" title="Estatus de la cédula del servicio de Bienes Muebles" data-placement="top"><strong>Estatus: </strong>@Model.Estatus</td>
             </tr>
@@ -589,7 +589,7 @@
                         <td><strong>Folio: </strong> @Model.Folio</td>
                         <td><strong>Año: </strong>@Model.Anio</td>
                         <td><strong>Mes: </strong>@Model.Mes</td>
-                        <td><strong>Inmueble: </strong>@Model.inmuebleOrigen.Nombre</td>
+                        <td><strong>Inmueble: </strong>@Model.inmuebles.Nombre</td>
                     </tr>
                     <tr>
                         <td colspan="4"><strong>Estatus: </strong>@Model.Estatus </td>
@@ -888,7 +888,7 @@
                         }
                     }
                 });
-               
+
             } else {
                 for (var i = 0; i < respuestas.length; i++) {
                     if (respuestas[i].detalles == "N/A") {
@@ -1420,20 +1420,21 @@
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta != '' && respuesta != null) {
                                 if (i == 0) {
-                                    respuestas.push({ CedulaMuebleId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),
+                                    respuestas.push({
+                                        CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),
                                                       Detalles: $("#fecha_solicitada").val() + "|" + $("#fecha_llegada").val()
                                     });
                                 } else if (i == 3 && respuesta == "false") {
                                     respuestas.push({
-                                        CedulaMuebleId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),
+                                        CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),
                                         Detalles: $("#personalSolicitado").val() + "|" + $("#personalBrindado").val()
                                     });
                                 } else if (respuesta == "N/A") {
-                                    respuestas.push({ CedulaMuebleId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: respuesta });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: respuesta });
                                 } else {
-                                    respuestas.push({ CedulaMuebleId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 }
-                            } 
+                            }
                         }
 
                         //return false;
@@ -1463,7 +1464,7 @@
                             if (respuesta != '' && respuesta != null) {
                                 if (i > 4) {
                                     respuestas.push({
-                                        CedulaMuebleId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),
+                                        CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),
                                         Detalles: $("#fecha_programadaP"+(i+1)).val() + "|" + $("#fecha_entregaP"+(i+1)).val()
                                     });
                                 }
@@ -1498,19 +1499,19 @@
                         if (respuesta != '' && respuesta != null) {
                             if (i == 0) {
                                 respuestas.push({
-                                    CedulaMuebleId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),
+                                    CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),
                                     Detalles: $("#fecha_solicitada").val() + "|" + $("#fecha_llegada").val()
                                 });
                             }
                         } else if (i == 3 && respuesta == "false") {
                             respuestas.push({
-                                CedulaMuebleId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),
+                                CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),
                                 Detalles: $("#personalSolicitado").val() + "|" + $("#personalBrindado").val()
                             });
                         } else if (respuesta == "N/A") {
-                            respuestas.push({ CedulaMuebleId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: respuesta });
+                            respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: respuesta });
                         } else {
-                            respuestas.push({ CedulaMuebleId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                            respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                         }
                     }
 
@@ -1559,14 +1560,14 @@
                             });
                             return false;
                         } else {
-                            axios.post("/muebles/sendCedula/"+model.id).then(response => {
+                            axios.post("/muebles/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
                                 if (response.status == 200) {
                                     Swal.fire({
                                         'icon': "success",
                                         'title': 'Servicio de Transportación de Bienes Muebles',
                                         'html': "Se envió la cédula para su revisión correctamente."
                                     }).then(function () {
-                                        window.location.href = "/muebles/index";
+                                        window.location.href = "/muebles/index/"+model.servicioId;
                                     });
                                 } else {
                                     Swal.fire({

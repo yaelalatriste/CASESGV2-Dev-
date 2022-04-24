@@ -1,5 +1,5 @@
 ﻿@* Cuestionario Mensajeria *@
-@model CedulasEvaluacion.Entities.MMensajeria.CedulaMensajeria
+@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula de Mensajería Acelerada con Folio: " + Model.Folio;
 }
@@ -12,7 +12,7 @@
             <i class="fal fa-calendar-alt"></i>
         </a>
     }
-    <a href="/mensajeria/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/mensajeria/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
             <tr>
@@ -757,7 +757,7 @@
                     let pr1 = $(this).val();
                     if (pr1 == "false") {
                         axios.get('/mensajeria/incidenciasTipo/' + model.id + '/Extraviadas').then(total => {
-                            
+
                             if (total.data > 0) {
                                 Swal.fire({
                                     'icon': 'warning',
@@ -831,10 +831,10 @@
                         var divTbl = "";
                         $('#modal-ver-facturas').modal('hide');
                         axios.get('/limpieza/getFacturas/' + model.id + '/' + 3).then(table => {
-                            
+
                             $("#factura_serie").text("Detalle de la Factura: " + table.data[id].comprobante.serie + table.data[id].comprobante.folio);
                             var conceptos = table.data[id].concepto;
-                            
+
                             for (var i = 0; i < conceptos.length; i++) {
                                 divTbl += '<div class="row col-lg-12 mt-1">' +
                                     '<table class="table table-borderless">' +
@@ -1032,7 +1032,7 @@
                 /*Fin Agregar Facturas*/
 
 
-            /******************************* FIN Agregar/Cambiar los valores de la Cédula **********************************/               
+            /******************************* FIN Agregar/Cambiar los valores de la Cédula **********************************/
 
             /************************************** CARGA/EDICION ARCHIVOS **************************************/
                 /*Modal para Adjuntar Archivos*/
@@ -1103,7 +1103,7 @@
                         var id = $('#file_id').val();
                         var tipo = $('#tipo_entregable').val();
                         var comentarios = $('#comentarios_entregable').val();
-                        
+
                         if (id.length > 0) {
                             id = parseInt(id);
                         } else {
@@ -1376,12 +1376,12 @@
                             if (respuesta != null) {
                                 if (respuesta == "N/A") {
                                     detalles = "N/A";
-                                    respuestas.push({ CedulaMensajeriaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
                                 }else if ((i + 1) == 7) {
                                     let detalles = $('#detalles').val();
-                                    respuestas.push({ CedulaMensajeriaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
                                 } else {
-                                    respuestas.push({ CedulaMensajeriaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 }
                             }
                         }
@@ -1412,19 +1412,19 @@
                             if (respuesta != null) {
                                 if (respuesta == "N/A") {
                                     detalles = "N/A";
-                                    respuestas.push({ CedulaMensajeriaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
                                 } else if ((i + 1) == 6) {
                                     let detalles = $('#detalles1').val();
-                                    respuestas.push({ CedulaMensajeriaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
                                 } else {
-                                    respuestas.push({ CedulaMensajeriaId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 }
                             }
                         }
 
                         axios.post("/mensajeria/evaluation", respuestas).then(response => {
                             if (response.status == 200) {
-                                
+
                             } else {
                                 Swal.fire({
                                     'icon': "error",
@@ -1464,7 +1464,7 @@
                                 }
                             }
 
-                            
+
                             if (msg != "") {
                                 Swal.fire({
                                     'icon': 'error',
@@ -1473,14 +1473,14 @@
                                 });
                                 return false;
                             } else {
-                                axios.post("/mensajeria/sendCedula/"+model.id).then(response => {
+                                axios.post("/mensajeria/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
                                     if (response.status == 200) {
                                         Swal.fire({
                                             'icon': "success",
                                             'title': 'Servicio de Mensajería Acelerada',
                                             'html': "Se envíó la cédula para su revisión correctamente."
                                         }).then(function () {
-                                            window.location.href = "/mensajeria/index";
+                                            window.location.href = "/mensajeria/index/"+model.servicioId;
                                         });
                                     } else {
                                         Swal.fire({
@@ -1528,7 +1528,7 @@
                             }
                         }
                     }
-                    
+
                     if (respuesta == null || respuesta == "")
                     {
                         Swal.fire({

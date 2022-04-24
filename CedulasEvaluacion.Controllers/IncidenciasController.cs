@@ -75,11 +75,11 @@ namespace CedulasEvaluacion.Controllers
 
         /*Metodo para obtener la incidencia antes de actualizar*/
         [HttpGet]
-        [Route("/limpieza/getIncidencia")]
-        public async Task<IActionResult> getIncidenciaBeforeUpdate([FromQuery] int cedulaId)
+        [Route("/limpieza/getIncidencia/{id}")]
+        public async Task<IActionResult> getIncidenciaBeforeUpdate(int id)
         {
             IncidenciasLimpieza incidencia = null;
-            incidencia = await vIncidencias.getIncidenciaBeforeUpdate(cedulaId);
+            incidencia = await vIncidencias.getIncidenciaBeforeUpdate(id);
             if (incidencia != null)
             {
                 return Ok(incidencia);
@@ -91,11 +91,11 @@ namespace CedulasEvaluacion.Controllers
 
         /*Metodo para obtener las incidencias*/
         [HttpGet]
-        [Route("/limpieza/getIncidencias")]
-        public async Task<IActionResult> getIncidencias([FromQuery] int cedulaId)
+        [Route("/limpieza/getIncidencias/{id}")]
+        public async Task<IActionResult> getIncidencias(int id)
         {
             List<VIncidenciasLimpieza> success = null;
-            success = await vIncidencias.getIncidencias(cedulaId);
+            success = await vIncidencias.getIncidencias(id);
             string table = "";
             if (success != null)
             {
@@ -161,11 +161,11 @@ namespace CedulasEvaluacion.Controllers
 
         /*Metodo para obtener las incidencias de Equipo*/
         [HttpGet]
-        [Route("/limpieza/getIncidenciasEquipo")]
-        public async Task<IActionResult> getIncidenciasEquipo([FromQuery] int cedulaId)
+        [Route("/limpieza/getIncidenciasEquipo/{id}")]
+        public async Task<IActionResult> getIncidenciasEquipo(int id)
         {
             List<VIncidenciasLimpieza> success = null;
-            success = await vIncidencias.getIncidenciasEquipo(cedulaId);
+            success = await vIncidencias.getIncidenciasEquipo(id);
             string table = "";
             if (success != null)
             {

@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.Models.CedulaLimpieza
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Seguimiento a la Cédula del Servicio de Limpieza en Áreas Comunes y Oficinas con Folio: " + Model.Folio;
 }
@@ -17,7 +17,7 @@
                 <i class="fal fa-calendar-alt"></i>
             </a>
         }
-        <a href="/limpieza/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
+        <a href="/limpieza/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -572,8 +572,8 @@
                     <div class="col-lg-12 h3 ml-4">
                         Seguimiento de la Cédula
                     </div>
-                    <div class="row col-lg-12">
-                        <table class="table" id="historialCedula">
+                    <div class="col-lg-12">
+                        <table class="table table-responsive-xl" id="historialCedula">
                             <thead>
                                 <tr>
                                     <th>Servicio</th>
@@ -874,9 +874,9 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "En Trámite", Comentarios: "Se envió a trámite por parte de la administración."}).then(hist => {
+                            axios.post('/limpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "En Trámite", Comentarios: "Se envió a trámite por parte de la administración."}).then(hist => {
                                 if (hist.status == 200) {
-                                    axios.post('/cedLimpieza/aprovRechCed', { Id: model.id, Estatus: "En Trámite" }).then(response => {
+                                    axios.post('/limpieza/aprovRechCed', { Id: model.id, Estatus: "En Trámite" }).then(response => {
                                         if (response.status == 200) {
                                             Swal.fire({
                                                 'icon': 'success',
@@ -911,9 +911,9 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite de Pago", Comentarios: "Se envió para trámite de pago." }).then(hist => {
+                            axios.post('/limpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite de Pago", Comentarios: "Se envió para trámite de pago." }).then(hist => {
                                 if (hist.status == 200) {
-                                    axios.post('/cedLimpieza/aprovRechCed', { Id: model.id, Estatus: "Trámite de Pago" }).then(response => {
+                                    axios.post('/limpieza/aprovRechCed', { Id: model.id, Estatus: "Trámite de Pago" }).then(response => {
                                         if (response.status == 200) {
                                             Swal.fire({
                                                 'icon': 'success',
@@ -955,10 +955,10 @@
                                 inputPlaceholder: 'Escriba los comentarios correspondientes'
                             }).then(send => {
                                 if (send.value.length > 0) {
-                                    axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite Rechazado", Comentarios: send.value
+                                    axios.post('/limpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite Rechazado", Comentarios: send.value
                                     }).then(hist => {
                                         if (hist.status == 200) {
-                                            axios.post('/cedLimpieza/aprovRechCed', { Id: model.id, Estatus: "Trámite Rechazado" }).then(response => {
+                                            axios.post('/limpieza/aprovRechCed', { Id: model.id, Estatus: "Trámite Rechazado" }).then(response => {
                                                 if (response.status == 200) {
                                                     Swal.fire({
                                                         'icon': 'success',
@@ -1001,10 +1001,10 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),Estatus: "Autorizado CAE",
+                            axios.post('/limpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),Estatus: "Autorizado CAE",
                                                                            Comentarios: "Se autorizó la documentación por la CAE"}).then(hist => {
                                 if (hist.status == 200) {
-                                    axios.post('/cedLimpieza/aprovRechCed', { Id: model.id, Estatus: "Autorizado CAE" }).then(response => {
+                                    axios.post('/limpieza/aprovRechCed', { Id: model.id, Estatus: "Autorizado CAE" }).then(response => {
                                         if (response.status == 200) {
                                             Swal.fire({
                                                 'icon': 'success',
@@ -1051,9 +1051,9 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/cedLimpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Revisión CAE", Comentarios: "Se envía a revisión por la CAE" }).then(hist => {
+                            axios.post('/limpieza/historialLimpieza', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Revisión CAE", Comentarios: "Se envía a revisión por la CAE" }).then(hist => {
                                 if (hist.status == 200) {
-                                    axios.post('/cedLimpieza/aprovRechCed', { Id: model.id, Estatus: "Revisión CAE" }).then(response => {
+                                    axios.post('/limpieza/aprovRechCed', { Id: model.id, Estatus: "Revisión CAE" }).then(response => {
                                         if (response.status == 200) {
                                             Swal.fire({
                                                 'icon': 'success',

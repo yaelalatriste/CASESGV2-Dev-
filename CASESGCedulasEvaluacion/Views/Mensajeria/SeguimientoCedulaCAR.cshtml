@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MMensajeria.CedulaMensajeria;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Seguimiento a la Cédula del Servicio de Mensajería Acelerada: " + Model.Folio;
 }
@@ -11,7 +11,7 @@
                 <i class="fal fa-calendar-alt"></i>
             </a>
         }
-        <a href="/mensajeria/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
+        <a href="/mensajeria/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -376,7 +376,7 @@
                                             }
                                             else if (@entre.Estatus.Equals("Rechazado"))
                                             {
-                                                rechazat=true;
+                                                rechazat = true;
                                                 <td class="row col-lg-12 justify-content-center">
                                                     <div class="icon text-danger font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Rechazado">
                                                         <i class="fas fa-check-circle"></i> Rechazado

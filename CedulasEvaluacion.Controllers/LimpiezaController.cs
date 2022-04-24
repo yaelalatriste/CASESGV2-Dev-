@@ -1,4 +1,5 @@
 ﻿using CASESGCedulasEvaluacion.Entities.Vistas;
+using CedulasEvaluacion.Entities.MCedula;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
@@ -23,6 +24,7 @@ namespace CedulasEvaluacion.Controllers
     [Authorize]
     public class LimpiezaController : Controller
     {
+        private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioLimpieza vlimpieza;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioIncidencias vIncidencias;
@@ -30,12 +32,11 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
-        private readonly IHostingEnvironment environment;
 
-        public LimpiezaController(IRepositorioLimpieza iVLimpieza, IRepositorioInmuebles iVInmueble, IRepositorioIncidencias iIncidencias,
-                                  IRepositorioUsuarios iVUsuario, IRepositorioEntregables iEntregables, IHostingEnvironment environment, 
-                                  IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
+        public LimpiezaController(IRepositorioEvaluacionServicios viCedula, IRepositorioLimpieza iVLimpieza, IRepositorioInmuebles iVInmueble, IRepositorioIncidencias iIncidencias,
+                                  IRepositorioUsuarios iVUsuario, IRepositorioEntregables iEntregables, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
         {
+            this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vlimpieza = iVLimpieza ?? throw new ArgumentNullException(nameof(iVLimpieza));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vIncidencias = iIncidencias ?? throw new ArgumentNullException(nameof(iIncidencias));
@@ -43,44 +44,44 @@ namespace CedulasEvaluacion.Controllers
             this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));
             this.vRepositorioPerfiles = iRepositorioPerfiles ?? throw new ArgumentNullException(nameof(iRepositorioPerfiles));
-            this.environment = environment;
         }
 
         //Metodo que regresa las cedulas aceptadas, guardadas o rechazadas 
-        [Route("/limpieza/index")]
-        public async Task<IActionResult> Index()
+        [Route("/limpieza/index/{servicio?}")]
+        public async Task<IActionResult> Index(int servicio)
         {
-            TempData["Title"] = "\"Cédulas - Servicio Limpieza\"";
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
                 List<VCedulas> resultado = new List<VCedulas>();
-                resultado = await vlimpieza.GetCedulasLimpieza(UserId());
+                resultado = await vCedula.GetCedulasEvaluacion(servicio, UserId());
                 return View(resultado);
             }
             return Redirect("/error/denied");
         }
 
         //Metodo para abrir la vista y generar la nueva Cedula
-        [Route("/limpieza/nuevaCedula")]
+        [Route("/limpieza/nuevaCedula/{servicio}")]
         [HttpGet]
-        public async Task<IActionResult> NuevaCedula(CedulaLimpieza cedulaLimpieza)
+        public async Task<IActionResult> NuevaCedula(int servicio)
         {
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
                 TempData["Title"] = "\"Limpieza en Áreas Comunes y Oficinas\"";
-                return View(cedulaLimpieza);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula.ServicioId = servicio;
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }
 
         //inserta la cedula
         [Route("/limpieza/new")]
-        public async Task<IActionResult> insertaCedula([FromBody]CedulaLimpieza cedulaLimpieza)
+        public async Task<IActionResult> insertaCedula([FromBody] CedulaEvaluacion cedula)
         {
-            cedulaLimpieza.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
-            int insert = await vlimpieza.NuevaCedula(cedulaLimpieza);
+            cedula.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
+            int insert = await vCedula.insertaCedula(cedula);
             if (insert != -1)
             {
                 return Ok(insert);
@@ -89,10 +90,10 @@ namespace CedulasEvaluacion.Controllers
         }
 
 
-        [Route("/limpieza/validaPeriodo/{anio?}/{mes?}/{inmueble?}")]
-        public async Task<IActionResult> validaPeriodo(int anio, string mes, int inmueble)
+        [Route("/limpieza/validaPeriodo/{servicio}/{anio?}/{mes?}/{inmueble?}")]
+        public async Task<IActionResult> validaPeriodo(int servicio, int anio, string mes, int inmueble)
         {
-            int valida = await vlimpieza.VerificaCedula(anio, mes, inmueble);
+            int valida = await vCedula.VerificaCedula(servicio, anio, mes, inmueble);
             if (valida != -1)
             {
                 return Ok(valida);
@@ -106,40 +107,26 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                CedulaLimpieza cedulaLimpieza = await vlimpieza.CedulaById(id);
-                if (cedulaLimpieza.Estatus.Equals("Enviado a DAS") && isEvaluate() == true)
+                CedulaEvaluacion cedula = await vCedula.CedulaById(id);
+                if (cedula.Estatus.Equals("Enviado a DAS") && isEvaluate() == true)
                 {
                     return Redirect("/error/cedSend");
                 }
-                cedulaLimpieza.inmuebles = await vInmuebles.inmuebleById(cedulaLimpieza.InmuebleId);
-                cedulaLimpieza.RespuestasEncuesta = await vlimpieza.obtieneRespuestas(id);
-                cedulaLimpieza.facturas = await vFacturas.getFacturas(id,cedulaLimpieza.ServicioId);
-                cedulaLimpieza.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedulaLimpieza.facturas);
-                return View(cedulaLimpieza);
-            } 
-            return Redirect("/error/denied");
-        }
-        
-        //Pendiente de Revisar
-        [Route("/limpieza/cedula/{id?}")]
-        public async Task<IActionResult> CedulabyId(int id)
-        {
-            CedulaLimpieza cedulaLimpieza = await vlimpieza.CedulaById(id);
-            cedulaLimpieza.inmuebles = await vInmuebles.inmuebleById(cedulaLimpieza.InmuebleId);
-            cedulaLimpieza.RespuestasEncuesta = await vlimpieza.obtieneRespuestas(id);
-            if(cedulaLimpieza != null)
-            {
-                return Ok(cedulaLimpieza);
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
+                cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
+                cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
+                return View(cedula);
             }
-            return BadRequest();
+            return Redirect("/error/denied");
         }
 
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
-        [Route("cedLimpieza/evaluation")]
-        public async Task<IActionResult> guardaCuestionario([FromBody] List<RespuestasEncuesta> respuestas) 
+        [Route("/limpieza/evaluation")]
+        public async Task<IActionResult> guardaCuestionario([FromBody] List<RespuestasEncuesta> respuestas)
         {
-            int success = await vlimpieza.GuardaRespuestas(respuestas);
+            int success = await vCedula.GuardaRespuestas(respuestas);
             if (success != 0)
             {
                 return Ok();
@@ -157,20 +144,23 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                CedulaLimpieza cedLim = null;
-                cedLim = await vlimpieza.CedulaById(id);
+                CedulaEvaluacion cedLim = null;
+                cedLim = await vCedula.CedulaById(id);
                 cedLim.facturas = await vFacturas.getFacturas(id, cedLim.ServicioId);//
                 cedLim.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedLim.facturas);
                 cedLim.inmuebles = await vInmuebles.inmuebleById(cedLim.InmuebleId);
-                cedLim.capacitacion = await vEntregables.getCapacitacionLimpieza(cedLim.Id);
                 cedLim.usuarios = await vUsuarios.getUserById(cedLim.UsuarioId);
-                cedLim.incidencias = await vIncidencias.getIncidencias(cedLim.Id);
-                cedLim.iEquipos = await vIncidencias.getIncidenciasEquipo(cedLim.Id);
+                //Incidencias
+                List<VIncidenciasLimpieza> incidencias = await vIncidencias.getIncidencias(cedLim.Id);
+                List<VIncidenciasLimpieza> equipo = await vIncidencias.getIncidenciasEquipo(cedLim.Id);
+                cedLim.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+                cedLim.incidencias.iLimpieza = incidencias;
+                cedLim.incidencias.iEquipo = new List<VIncidenciasLimpieza>();
+                cedLim.incidencias.iEquipo = equipo;
                 cedLim.iEntregables = await vEntregables.getEntregables(cedLim.Id);
-                cedLim.eAdicionales = await vEntregables.getEntregablesBDLimpieza(cedLim.Id);
-                cedLim.TotalBajoDemanda = obtieneTotalBajoDemanda(cedLim.eAdicionales);
+                //cedLim.TotalBajoDemanda = obtieneTotalBajoDemanda(cedLim.eAdicionales);
                 cedLim.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedLim.RespuestasEncuesta = await vlimpieza.obtieneRespuestas(cedLim.Id);
+                cedLim.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedLim.Id);
                 cedLim.historialCedulas = new List<HistorialCedulas>();
                 cedLim.historialCedulas = await vlimpieza.getHistorial(cedLim.Id);
                 foreach (var user in cedLim.historialCedulas)
@@ -178,7 +168,7 @@ namespace CedulasEvaluacion.Controllers
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
                 TempData["Title"] = "Cédula de Limpieza con número de folio: ";
-                if(cedLim.RespuestasEncuesta.Count == 8)
+                if (cedLim.RespuestasEncuesta.Count == 8)
                 {
                     return View(cedLim);
                 }
@@ -197,30 +187,23 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
-                CedulaLimpieza cedLim = null;
-                cedLim = await vlimpieza.CedulaById(id);
+                CedulaEvaluacion cedLim = null;
+                cedLim = await vCedula.CedulaById(id);
                 cedLim.facturas = await vFacturas.getFacturas(id, cedLim.ServicioId);//
                 cedLim.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedLim.facturas);
                 cedLim.inmuebles = await vInmuebles.inmuebleById(cedLim.InmuebleId);
                 cedLim.usuarios = await vUsuarios.getUserById(cedLim.UsuarioId);
                 cedLim.iEntregables = await vEntregables.getEntregables(cedLim.Id);
-                cedLim.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedLim.RespuestasEncuesta = await vlimpieza.obtieneRespuestas(cedLim.Id);
                 cedLim.historialEntregables = new List<HistorialEntregables>();
-                cedLim.historialEntregables = await vEntregables.getHistorialEntregables(cedLim.Id); cedLim = await vlimpieza.CedulaById(id);
+                cedLim.historialEntregables = await vEntregables.getHistorialEntregables(cedLim.Id);
                 cedLim.facturas = await vFacturas.getFacturas(id, cedLim.ServicioId);//
                 cedLim.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedLim.facturas);
                 cedLim.inmuebles = await vInmuebles.inmuebleById(cedLim.InmuebleId);
-                cedLim.capacitacion = await vEntregables.getCapacitacionLimpieza(cedLim.Id);
-                cedLim.usuarios = await vUsuarios.getUserById(cedLim.UsuarioId);
-                cedLim.incidencias = await vIncidencias.getIncidencias(cedLim.Id);
-                cedLim.iEquipos = await vIncidencias.getIncidenciasEquipo(cedLim.Id);
+                cedLim.usuarios = await vUsuarios.getUserById(cedLim.UsuarioId);                
                 cedLim.iEntregables = await vEntregables.getEntregables(cedLim.Id);
-                cedLim.eAdicionales = await vEntregables.getEntregablesBDLimpieza(cedLim.Id);
-                cedLim.TotalBajoDemanda = obtieneTotalBajoDemanda(cedLim.eAdicionales);
                 cedLim.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedLim.RespuestasEncuesta = await vlimpieza.obtieneRespuestas(cedLim.Id);
-                cedLim.historialEntregables= new List<HistorialEntregables>();
+                cedLim.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedLim.Id);
+                cedLim.historialEntregables = new List<HistorialEntregables>();
                 cedLim.historialEntregables = await vEntregables.getHistorialEntregables(cedLim.Id);
                 foreach (var user in cedLim.historialEntregables)
                 {
@@ -240,11 +223,11 @@ namespace CedulasEvaluacion.Controllers
 
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
-        [Route("/cedLimpieza/sendCedula/{id?}")]
-        public async Task<IActionResult> enviaCedula(int id)
+        [Route("/limpieza/sendCedula/{servicio?}/{id?}")]
+        public async Task<IActionResult> enviaCedula(int servicio, int id)
         {
             int success = 0;
-            success = await vlimpieza.enviaRespuestas(id);
+            success = await vCedula.enviaRespuestas(servicio, id);
             if (success != -1)
             {
                 return Ok();
@@ -257,11 +240,15 @@ namespace CedulasEvaluacion.Controllers
 
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
-        [Route("cedLimpieza/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaLimpieza cedulaLimpieza)
+        [Route("/limpieza/aprovRechCed")]
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion cedulae)
         {
+            CedulaLimpieza cedula = new CedulaLimpieza();
+            cedula.Id = cedulae.Id;
+            cedula.Estatus = cedulae.Estatus;
+            cedula.ServicioId = cedulae.ServicioId;
             int success = 0;
-            success = await vlimpieza.apruebaRechazaCedula(cedulaLimpieza);
+            success = await vlimpieza.apruebaRechazaCedula(cedula);
             if (success != 0)
             {
                 return Ok();
@@ -273,11 +260,11 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpPost]
-        [Route("cedLimpieza/historialLimpieza")]
+        [Route("/limpieza/historialLimpieza")]
         public async Task<IActionResult> historialLimpieza([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vlimpieza.capturaHistorial(historialCedulas);           
+            success = await vlimpieza.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();
@@ -304,7 +291,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/limpieza/eliminar/{id?}")]
         public async Task<IActionResult> EliminaCedula(int id)
         {
-            int excel = await vlimpieza.EliminaCedula(id);
+            int excel = await vCedula.EliminaCedula(id);
             if (excel != -1)
             {
                 return Ok(excel);
@@ -312,13 +299,11 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-
         /*Datos del Modulo*/
         private int UserId()
         {
             return Convert.ToInt32(User.Claims.ElementAt(0).Value);
         }
-
         private string modulo()
         {
             return "Limpieza";

@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MFumigacion.CedulaFumigacion;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula del Servicio de Fumigación y Control de Fauna Nociva con Folio: " + Model.Folio;
 }
@@ -11,7 +11,7 @@
             <i class="fal fa-calendar-alt"></i>
         </a>
     }
-    <a href="/fumigacion/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Fumigación" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/fumigacion/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Fumigación" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
             <tr>
@@ -1748,14 +1748,14 @@
                             let type = document.getElementsByClassName("pregunta" + (i + 1))[0];
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (i == 0 && type.getAttribute("type") == "date" && $(".pregunta" + (i + 1)).val() != '') {
-                                respuestas.push({ CedulaFumigacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
                             } else if (respuesta != null) {
                                 if (i == 7) {
-                                    respuestas.push({ CedulaFumigacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() + "|" + $("#mes_correspondiente").val() });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() + "|" + $("#mes_correspondiente").val() });
                                 } else if (i == 5 || i == 6) {
-                                    respuestas.push({ CedulaFumigacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() });
                                 } else {
-                                    respuestas.push({ CedulaFumigacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 }
                             }
                         }
@@ -1785,14 +1785,14 @@
                         let type = document.getElementsByClassName("pregunta" + (i + 1))[0];
                         let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                         if (i == 0 && type.getAttribute("type") == "date" && $(".pregunta" + (i + 1)).val() != '') {
-                            respuestas.push({ CedulaFumigacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
+                            respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
                         } else if (respuesta != null) {
                             if (i == 7) {
-                                respuestas.push({ CedulaFumigacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() + "|" + $("#mes_correspondiente").val() });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() + "|" + $("#mes_correspondiente").val() });
                             } else if (i == 5 || i == 6) {
-                                respuestas.push({ CedulaFumigacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#pregunta" + (i + 1)).val() });
                             } else {
-                                respuestas.push({ CedulaFumigacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                             }
                         }
                     }
@@ -1841,14 +1841,14 @@
                             });
                             return false;
                         } else {
-                            axios.post("/fumigacion/sendCedula/"+model.id).then(response => {
+                            axios.post("/fumigacion/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
                                 if (response.status == 200) {
                                     Swal.fire({
                                         'icon': "success",
                                         'title': 'Servicio de Fumigación',
                                         'html': "Se envió la cédula para su revisión correctamente."
                                     }).then(function () {
-                                        window.location.href = "/fumigacion/index";
+                                        window.location.href = "/fumigacion/index/"+model.servicioId;
                                     });
                                 } else {
                                     Swal.fire({
@@ -1951,10 +1951,10 @@
                             });
                             return false;
                         } else {
-                            respuestas.push({ CedulaFumigacionId: parseInt(model.id), Pregunta: pregunta, Respuesta: (respuesta == "true"), Detalles: "Capacitación" });
+                            respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: pregunta, Respuesta: (respuesta == "true"), Detalles: "Capacitación" });
                             axios.post("/fumigacion/evaluation", respuestas).then(response => {
                                 if (response.status == 200) {
-                                    axios.post("/fumigacion/sendCedula/" + model.id).then(response => {
+                                    axios.post("/fumigacion/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
                                         Swal.fire({
                                             'icon': "success",
                                             'title': 'Servicio de Fumigación',

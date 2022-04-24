@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CedulasEvaluacion.Controllers\CedulasEvaluacion.Controllers.csproj" />
     <ProjectReference Include="..\CedulasEvaluacion.Entities\CedulasEvaluacion.Entities.csproj" />
+    <ProjectReference Include="..\CedulasEvaluacion.Services\CedulasEvaluacion.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

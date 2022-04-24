@@ -1,12 +1,12 @@
-﻿@model CedulasEvaluacion.Entities.MMuebles.CedulaMuebles;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     var title = TempData["Title"] as string;
-    ViewData["Title"] = "Revisión de la Cédula del Servicio de Transporte para Servidores Públicos: " + Model.Folio;
+    ViewData["Title"] = "Revisión de la Cédula del Servicio de Transportación de Bienes Muebles: " + Model.Folio;
 }
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/muebles/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
+        <a href="/muebles/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -49,7 +49,7 @@
                     <div class="col-lg-12 mt-3">
                         <div class="card bg-light d-flex flex-fill">
                             <div class="card-header border-bottom-0">
-                                <h2 class="lead mt-4"><b>Inmueble Origen: </b> @Model.inmuebleOrigen.Nombre</h2>
+                                <h2 class="lead mt-4"><b>Inmueble Origen: </b> @Model.inmuebles.Nombre</h2>
                                 <h2 class="lead mt-4 mb-3"><b>Inmueble Destino: </b> @Model.inmuebleDestino.Nombre</h2>
                             </div>
                             <div class="card-body pt-0">
@@ -127,30 +127,30 @@
                                             <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
                                         @*<p class="text-sm">
-            @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                                  @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion
-                                                                  + Model.PenaCalificacion + Model.capacitacion.MontoPenalizacion + Model.TotalBajoDemanda);
-            }
-            @if (total > 0)
-            {
-                <h5 class="text-danger">
-                    <b>Total Penalizable:</b> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total)
-                </h5>
-            }
-            else
-            {
-                <h5 class="text-success">
-                    <b>No hay Monto Penalizable</b>
-                </h5>
-            }
-        </p>
-        <ul class="ml-4 mb-0 fa-ul">
-            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
-            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Uniforme: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
-            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades en Equipo: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
-            <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Entregables Bajo Demanda: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.TotalBajoDemanda)</li>
-            <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Calificación: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
-        </ul>*@
+                                                @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
+                                                                                                      @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion
+                                                                                                      + Model.PenaCalificacion + Model.capacitacion.MontoPenalizacion + Model.TotalBajoDemanda);
+                                                }
+                                                @if (total > 0)
+                                                {
+                                                    <h5 class="text-danger">
+                                                        <b>Total Penalizable:</b> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total)
+                                                    </h5>
+                                                }
+                                                else
+                                                {
+                                                    <h5 class="text-success">
+                                                        <b>No hay Monto Penalizable</b>
+                                                    </h5>
+                                                }
+                                            </p>
+                                            <ul class="ml-4 mb-0 fa-ul">
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Uniforme: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades en Equipo: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Entregables Bajo Demanda: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.TotalBajoDemanda)</li>
+                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Calificación: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
+                                            </ul>*@
                                         <div>
                                             <img src="~/img/web1.jpg" alt="Alternate Text" width="40%" />
                                         </div>
@@ -181,8 +181,10 @@
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-danger">El prestador de servicios no cumplió con la fecha y hora solicitada para la prestación del servicio, la fecha en que se solicito fue,
-                                    <strong>@fechaSolicitud</strong> y la fecha y hora de llegada fue: <strong>@fechaRespuesta</strong>, siendo acreedor a una penalización correspondiente.</p>
+                                <p class="h3 text-justify text-danger">
+                                    El prestador de servicios no cumplió con la fecha y hora solicitada para la prestación del servicio, la fecha en que se solicito fue,
+                                    <strong>@fechaSolicitud</strong> y la fecha y hora de llegada fue: <strong>@fechaRespuesta</strong>, siendo acreedor a una penalización correspondiente.
+                                </p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -414,7 +416,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var inci in @Model.incidencias)
+                                        @foreach (var inci in @Model.incidencias.muebles)
                                         {
                                             if (inci.Pregunta.Equals(5 + ""))
                                             {
@@ -741,7 +743,7 @@
                         <td><strong>Folio: </strong> @Model.Folio</td>
                         <td><strong>Año: </strong>@Model.Anio</td>
                         <td><strong>Mes: </strong>@Model.Mes</td>
-                        <td><strong>Inmueble Origen: </strong>@Model.inmuebleOrigen.Nombre</td>
+                        <td><strong>Inmueble Origen: </strong>@Model.inmuebles.Nombre</td>
                         <td><strong>Inmueble Destino: </strong>@Model.inmuebleDestino.Nombre</td>
                     </tr>
                     <tr>

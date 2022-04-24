@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MTransporte.CedulaTransporte;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula del Servicio de Transporte para Servidores Públicos con Folio: " + Model.Folio;
 }
@@ -373,7 +373,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-responsive-xl" >
+                        <table class="table table-responsive-xl">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -769,7 +769,7 @@
                                 $("#detalle" + (i + 1)).val(respuestas[i].detalles);
                             }
                         }
-                       
+
                     }
                     else if (tipoPregunta == "date") {
                         $('.pregunta' + respuestas[i].pregunta).val(respuestas[i].detalles);
@@ -836,7 +836,7 @@
                                 $('#diviPregunta2').css('display', 'none');
                             }
                         });
-                        
+
                     } else {
                         $('#diviPregunta2').css('display', 'block');
                     }
@@ -1044,7 +1044,7 @@
 
                 $(".viewIncidencias").click(function () {
                     let pregunta = $(this).data('pregunta');
-                    
+
                     axios.get('/transporte/tablaIncidencias/' + model.id + '/' + pregunta).then(table => {
                         $("#tbl_incidencias").html(table.data);
                     }).catch(error => {
@@ -1057,7 +1057,7 @@
                     $("#modal-consultaIncidencias").modal('show');
                 });
 
-                $('#fechaIncidencia').change(function () { 
+                $('#fechaIncidencia').change(function () {
                     if ($(this).val() == '') {
                         $('#fechaIncidencia').removeClass('is-valid');
                         $('#fechaIncidencia').addClass('is-invalid');
@@ -1069,7 +1069,7 @@
                     }
                 });
 
-                $('#horaIncidencia').change(function () { 
+                $('#horaIncidencia').change(function () {
                     if ($(this).val() == '') {
                         $('#horaIncidencia').removeClass('is-valid');
                         $('#horaIncidencia').addClass('is-invalid');
@@ -1081,7 +1081,7 @@
                     }
                  });
 
-                $('#inciComentarios').change(function () { 
+                $('#inciComentarios').change(function () {
                     if ($(this).val() == '') {
                         $('#inciComentarios').removeClass('is-valid');
                         $('#inciComentarios').addClass('is-invalid');
@@ -1098,7 +1098,7 @@
                     let fechaIncidencia = $('#fechaIncidencia').val();
                     let horaIncidencia = $('#horaIncidencia').val();
                     let comentarios = $('#inciComentarios').val();
-                    
+
                     if (tipo != "Horario y Ruta Estipulado") {
                         if (fechaIncidencia == '') {
                             $('#fechaIncidencia').addClass('is-invalid');
@@ -1128,7 +1128,7 @@
                         if (fechaIncidencia != '' && horaIncidencia != '' && comentarios != '') {
                             return true;
                         }
-                    } 
+                    }
                     return false;
                 }
 
@@ -1167,7 +1167,7 @@
                                 });
                             });
                         } else {
-                            axios.post("/transporte/actualiza/incidencia", { Id: parseInt(id), Tipo: tipo, FechaIncidencia: fechaIncidencia, 
+                            axios.post("/transporte/actualiza/incidencia", { Id: parseInt(id), Tipo: tipo, FechaIncidencia: fechaIncidencia,
                                                                              HoraPresentada: horaIncidencia,  Comentarios: comentarios
                             }).then(response => {
                                 if (response.status == 200) {
@@ -1239,7 +1239,7 @@
 
                 $(document).on("click", ".delete_incidencia", function(){
                     var id = $(this).data("id");
-                    
+
                     Swal.fire({
                             'icon': 'warning',
                             'title': 'Servicio de Transporte de Personal',
@@ -1599,12 +1599,12 @@
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
 
                             if (type == "date" && $(".pregunta" + (i + 1)).val()) {
-                                respuestas.push({ CedulaTransporteId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
                             } else if (respuesta != null && respuesta != "undefined") {
                                 if (i == 2 || i == 3) {
-                                    respuestas.push({ CedulaTransporteId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#detalle" + (i + 1)).val() });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#detalle" + (i + 1)).val() });
                                 } else {
-                                    respuestas.push({ CedulaTransporteId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 }
                             }
                         }
@@ -1634,12 +1634,12 @@
                         let type = $('.pregunta' + (i + 1)).attr("type");
                         let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                         if (type == "date" && $(".pregunta" + (i + 1)).val()) {
-                            respuestas.push({ CedulaTransporteId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
+                            respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: "true", Detalles: $(".pregunta" + (i + 1)).val() + "" });
                         } else if (respuesta != null || respuesta != '') {
                             if (i == 2 || i == 3) {
-                                respuestas.push({ CedulaTransporteId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#detalle" + (i + 1)).val() });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#detalle" + (i + 1)).val() });
                             } else {
-                                respuestas.push({ CedulaTransporteId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                             }
                         }
                     }
@@ -1688,7 +1688,7 @@
                             });
                             return false;
                         } else {
-                            axios.post("/transporte/sendCedula/"+model.id).then(response => {
+                            axios.post("/transporte/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
                                 if (response.status == 200) {
                                     Swal.fire({
                                         'icon': "success",
@@ -1752,7 +1752,7 @@
                                     'icon': 'error',
                                     'title': 'Servicio de Transporte de Personal',
                                     'html': 'No ha capturado la <strong>Pregunta ' + (i + 1) + '</strong>'
-                                });                                   
+                                });
                             }else if($("#detalle" + (i + 1)).val() == "" && respuesta == "false") {
                                 Swal.fire({
                                     'icon': 'error',

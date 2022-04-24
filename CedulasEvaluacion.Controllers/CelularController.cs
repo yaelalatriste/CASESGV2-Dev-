@@ -1,4 +1,5 @@
-﻿using CedulasEvaluacion.Entities.MCelular;
+﻿using CedulasEvaluacion.Entities.MCedula;
+using CedulasEvaluacion.Entities.MCelular;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
@@ -16,6 +17,7 @@ namespace CedulasEvaluacion.Controllers
     [Authorize]
     public partial class CelularController : Controller
     {
+        private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioCelular vCelular;
         private readonly IRepositorioIncidenciasCelular iCelular;
         private readonly IRepositorioEntregablesCelular eCelular;
@@ -25,9 +27,10 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioPerfiles vPerfiles;
         private readonly IHostingEnvironment environment;
 
-        public CelularController(IRepositorioCelular iCelular, IRepositorioIncidenciasCelular ivCelular, IRepositorioEntregablesCelular ieCelular, IRepositorioFacturas iFacturas, 
+        public CelularController(IRepositorioEvaluacionServicios viCedula, IRepositorioCelular iCelular, IRepositorioIncidenciasCelular ivCelular, IRepositorioEntregablesCelular ieCelular, IRepositorioFacturas iFacturas, 
                                  IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, IRepositorioPerfilCelular viPCelular, IHostingEnvironment environment)
         {
+            this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vCelular = iCelular ?? throw new ArgumentNullException(nameof(iCelular));
             this.vPCelular = viPCelular ?? throw new ArgumentNullException(nameof(viPCelular));
             this.iCelular = ivCelular ?? throw new ArgumentNullException(nameof(ivCelular));
@@ -38,40 +41,41 @@ namespace CedulasEvaluacion.Controllers
             this.environment = environment;
         }
 
-        //Metodo Index
-        [Route("/telCelular/index")]
-        public async Task<IActionResult> Index()
+        //Metodo que regresa las cedulas aceptadas, guardadas o rechazadas 
+        [Route("/telCelular/index/{servicio?}")]
+        public async Task<IActionResult> Index(int servicio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
                 List<VCedulas> resultado = new List<VCedulas>();
-                resultado = await vCelular.GetCedulasCelular(UserId());
+                resultado = await vCedula.GetCedulasEvaluacion(servicio, UserId());
                 return View(resultado);
             }
             return Redirect("/error/denied");
         }
 
         //Metodo para abrir la vista y generar la nueva Cedula
-        [Route("/telCelular/nuevaCedula")]
+        [Route("/telCelular/nuevaCedula/{servicio}")]
         [HttpGet]
-        public async Task<IActionResult> NuevaCedula(TelefoniaCelular telefoniaCelular)
+        public async Task<IActionResult> NuevaCedula(int servicio)
         {
-            telefoniaCelular = new TelefoniaCelular();
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
-                return View(telefoniaCelular);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula.ServicioId = servicio;
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }
 
         //inserta la cedula
         [Route("/telCelular/new")]
-        public async Task<IActionResult> insertaCedula([FromBody] TelefoniaCelular telefoniaCelular)
+        public async Task<IActionResult> insertaCedula([FromBody] CedulaEvaluacion cedula)
         {
-            telefoniaCelular.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
-            int insert = await vCelular.insertaCedula(telefoniaCelular);
+            cedula.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
+            int insert = await vCedula.insertaCedula(cedula);
             if (insert != -1)
             {
                 return Ok(insert);
@@ -79,10 +83,11 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/telCelular/validaPeriodo/{anio?}/{mes?}")]
-        public async Task<IActionResult> validaPeriodo(int anio, string mes)
+
+        [Route("/telCelular/validaPeriodo/{servicio}/{anio?}/{mes?}/{inmueble?}")]
+        public async Task<IActionResult> validaPeriodo(int servicio, int anio, string mes, int inmueble)
         {
-            int valida = await vCelular.VerificaCedula(anio, mes);
+            int valida = await vCedula.VerificaCedula(servicio, anio, mes, inmueble);
             if (valida != -1)
             {
                 return Ok(valida);
@@ -93,23 +98,61 @@ namespace CedulasEvaluacion.Controllers
         [Route("/telCelular/evaluacion/{id?}")]
         public async Task<IActionResult> Cuestionario(int id)
         {
-            TelefoniaCelular telefoniaCelular = await vCelular.CedulaById(id);
-            if (telefoniaCelular.Estatus.Equals("Enviado a DAS"))
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
+            if (success == 1)
             {
-                return Redirect("/error/cedSend");
+                CedulaEvaluacion cedula = await vCedula.CedulaById(id);
+                if (cedula.Estatus.Equals("Enviado a DAS"))
+                {
+                    return Redirect("/error/cedSend");
+                }
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
+                cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
+                cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
+                return View(cedula);
             }
-            telefoniaCelular.RespuestasEncuesta = await vCelular.obtieneRespuestas(id);
-            telefoniaCelular.facturas = await vFacturas.getFacturas(id, telefoniaCelular.ServicioId);
-            telefoniaCelular.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telefoniaCelular.facturas);
-            return View(telefoniaCelular);
+            return Redirect("/error/denied");
+        }
+
+        [HttpPost]
+        [Route("/telCelular/evaluation")]
+        public async Task<IActionResult> guardaCuestionario([FromBody] List<RespuestasEncuesta> respuestas)
+        {
+            int success = await vCedula.GuardaRespuestas(respuestas);
+            if (success != 0)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        //Va guardando las respuestas de la evaluacion
+        [HttpPost]
+        [Route("/telCelular/sendCedula/{servicio?}/{id?}")]
+        public async Task<IActionResult> enviaCedula(int servicio, int id)
+        {
+            int success = 0;
+            success = await vCedula.enviaRespuestas(servicio, id);
+            if (success != -1)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [Route("/telCelular/incidencias/{id?}")]
         public async Task<IActionResult> IncidenciasCelular(int id)
         {
-            TelefoniaCelular telefoniaCelular = await vCelular.CedulaById(id);
-            telefoniaCelular.incidenciasCelular = await iCelular.getIncidenciasCelular(id);
-            return View(telefoniaCelular);
+            CedulaEvaluacion telCel = await vCedula.CedulaById(id);
+            telCel.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+            telCel.incidencias.celular = await iCelular.getIncidenciasCelular(id);
+            return View(telCel);
         }
 
         [HttpGet]
@@ -119,14 +162,14 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
-                TelefoniaCelular telCel = null;
-                telCel = await vCelular.CedulaById(id);
+                CedulaEvaluacion telCel = null;
+                telCel = await vCedula.CedulaById(id);
                 telCel.facturas = await vFacturas.getFacturas(id, telCel.ServicioId);//
                 telCel.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telCel.facturas);
                 telCel.usuarios = await vUsuarios.getUserById(telCel.UsuarioId);
-                telCel.IEntregables = await eCelular.getEntregables(telCel.Id);
+                telCel.iEntregables = await eCelular.getEntregables(telCel.Id);
                 telCel.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                telCel.RespuestasEncuesta = await vCelular.obtieneRespuestas(telCel.Id);
+                telCel.RespuestasEncuesta = await vCedula.obtieneRespuestas(telCel.Id);
                 telCel.historialCedulas = new List<HistorialCedulas>();
                 telCel.historialCedulas = await vCelular.getHistorialCelular(telCel.Id);
                 foreach (var user in telCel.historialCedulas)
@@ -144,38 +187,6 @@ namespace CedulasEvaluacion.Controllers
             return Redirect("/error/denied");
         }
 
-        [HttpPost]
-        [Route("/telCelular/evaluation")]
-        public async Task<IActionResult> guardaRespuestas([FromBody] List<RespuestasEncuesta> respuestas)
-        {
-            int success = await vCelular.GuardaRespuestas(respuestas);
-            if (success != 0)
-            {
-                return Ok(success);
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
-
-        //Va guardando las respuestas de la evaluacion
-        [HttpPost]
-        [Route("/telCelular/sendCedula/{cedula?}")]
-        public async Task<IActionResult> enviaCedula(int cedula)
-        {
-            int success = 0;
-            success = await vCelular.enviaRespuestas(cedula);
-            if (success != -1)
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
-
         [HttpGet]
         [Route("/telCelular/revision/{id}")]
         public async Task<IActionResult> RevisarCedula(int id)
@@ -183,25 +194,26 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                TelefoniaCelular telCel = null;
-                telCel = await vCelular.CedulaById(id);
+                CedulaEvaluacion telCel = null;
+                telCel = await vCedula.CedulaById(id);
                 telCel.facturas = await vFacturas.getFacturas(id, telCel.ServicioId);//
                 telCel.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telCel.facturas);
                 telCel.usuarios = await vUsuarios.getUserById(telCel.UsuarioId);
-                telCel.altaEntrega = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Alta_Equipo");
-                telCel.altasentrega = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Alta");
-                telCel.bajaServicio = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Baja");
-                telCel.reactivacion = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Reactivacion");
-                telCel.suspension = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Suspension");
-                telCel.cambioPerfil = await iCelular.ListIncidenciasTipoCelular(telCel.Id,"Perfil");
-                telCel.switcheoCard = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "SIM");
-                telCel.cambioRegion = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "CambioNumeroRegion");
-                telCel.servicioVozDatos = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "VozDatos");
-                telCel.diagnostico = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Diagnostico");
-                telCel.reparacion = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Reparacion");
-                telCel.IEntregables = await eCelular.getEntregables(telCel.Id);
+                telCel.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+                telCel.incidencias.altaEntrega = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Alta_Equipo");
+                telCel.incidencias.altasentrega = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Alta");
+                telCel.incidencias.bajaServicio = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Baja");
+                telCel.incidencias.reactivacion = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Reactivacion");
+                telCel.incidencias.suspension = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Suspension");
+                telCel.incidencias.cambioPerfil = await iCelular.ListIncidenciasTipoCelular(telCel.Id,"Perfil");
+                telCel.incidencias.switcheoCard = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "SIM");
+                telCel.incidencias.cambioRegion = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "CambioNumeroRegion");
+                telCel.incidencias.servicioVozDatos = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "VozDatos");
+                telCel.incidencias.diagnostico = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Diagnostico");
+                telCel.incidencias.reparacion = await iCelular.ListIncidenciasTipoCelular(telCel.Id, "Reparacion");
+                telCel.iEntregables = await eCelular.getEntregables(telCel.Id);
                 telCel.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                telCel.RespuestasEncuesta = await vCelular.obtieneRespuestas(telCel.Id);
+                telCel.RespuestasEncuesta = await vCedula.obtieneRespuestas(telCel.Id);
                 telCel.historialCedulas = new List<HistorialCedulas>();
                 telCel.historialCedulas = await vCelular.getHistorialCelular(telCel.Id);
                 foreach (var user in telCel.historialCedulas)
