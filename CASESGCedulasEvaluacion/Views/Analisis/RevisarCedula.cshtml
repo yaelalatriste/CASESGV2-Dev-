@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MAnalisis.CedulaAnalisis;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     var title = TempData["Title"] as string;
     ViewData["Title"] = "Revisión de la Cédula del Servicio de Análisis Microbiológicos con Folio: " + Model.Folio;
@@ -129,7 +129,7 @@
                                         }
                                         <p class="text-sm">
                                             @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                            @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
+                                                                @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
                                             }
                                             @if (total > 0)
                                             {
@@ -244,7 +244,7 @@
                                     </thead>
                                     <tbody>
                                         @{ int j = 0;}
-                                        @foreach (var inc in @Model.incidencias)
+                                        @foreach (var inc in @Model.incidencias.analisis)
                                         {
                                             { j++; }
                                             <tr>
@@ -328,7 +328,7 @@
                                 </thead>
                                 <tbody>
                                     @{ int j = 0;}
-                                    @foreach (var inc in @Model.incidencias)
+                                    @foreach (var inc in @Model.incidencias.analisis)
                                     {
                                         { j++; }
                                         <tr>

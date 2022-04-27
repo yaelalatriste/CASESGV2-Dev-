@@ -114,6 +114,39 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
+        public async Task<IEnumerable<ReporteCedula>> getCedulaByServicio(int servicio, int id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_generaCedulaByServicio", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        var response = new List<ReporteCedula>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValue(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+
         private ReporteCedula MapToValue(SqlDataReader reader)
         {
             return new ReporteCedula()

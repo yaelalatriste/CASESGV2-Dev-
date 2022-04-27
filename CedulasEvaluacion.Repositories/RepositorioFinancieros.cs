@@ -21,7 +21,6 @@ namespace CedulasEvaluacion.Repositories
         {
             _connectionString = configuration.GetConnectionString("DatabaseConnection");
         }
-
         public async Task<List<DashboardFinancieros>> GetCedulasFinancieros()
         {
             try
@@ -52,7 +51,6 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
         public async Task<List<DashboardFinancieros>> GetDetalleServicio(string servicio)
         {
             try
@@ -84,7 +82,6 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
         public async Task<List<Oficio>> GetOficiosFinancieros(string servicio)
         {
             try
@@ -116,7 +113,6 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
         public async Task<Oficio> GetOficioById(int id)
         {
             try
@@ -148,9 +144,8 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
         //Obtiene las Cédulas en Trámite de Pago de un Servicio Específico
-        public async Task<List<DetalleCedula>> GetCedulasTramitePago(int id, string servicio)
+        public async Task<List<DetalleCedula>> GetCedulasTramitePago(int id, int servicio)
         {
             try
             {
@@ -182,7 +177,7 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-        public async Task<List<DetalleCedula>> GetCedulasOficio(int id)
+        public async Task<List<DetalleCedula>> GetCedulasOficio(int id, int servicio)
         {
             try
             {
@@ -192,6 +187,7 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@oficio", id));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
                         var response = new List<DetalleCedula>();
                         await sql.OpenAsync();
 
@@ -414,7 +410,6 @@ namespace CedulasEvaluacion.Repositories
                 Total = (int)reader["Total"]
             };
         }
-
         //Detalle de Servicio
         private DashboardFinancieros MapToValueServicio(SqlDataReader reader)
         {
@@ -425,10 +420,10 @@ namespace CedulasEvaluacion.Repositories
                 Mes = reader["Mes"].ToString(),
                 Fondo = reader["Fondo"].ToString(),
                 Icono = reader["Icono"].ToString(),
-                Total = (int)reader["Total"]
+                Total = (int)reader["Total"],
+                ServicioId = (int) reader["ServicioId"]
             };
         }
-
         private DetalleCedula MapToValueDetalle(SqlDataReader reader)
         {
             return new DetalleCedula
@@ -446,7 +441,6 @@ namespace CedulasEvaluacion.Repositories
                 IVA = (decimal)reader["IVA"],
             };
         }
-
         private Oficio MapToValueOficios(SqlDataReader reader)
         {
             return new Oficio

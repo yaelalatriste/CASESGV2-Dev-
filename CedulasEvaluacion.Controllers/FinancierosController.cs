@@ -59,7 +59,7 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpGet]
         [Route("/financieros/oficio/{servicio}/{id}")]
-        public async Task<IActionResult> NuevoOficio(int id, string servicio)
+        public async Task<IActionResult> NuevoOficio(int id, int servicio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
@@ -68,7 +68,7 @@ namespace CedulasEvaluacion.Controllers
                 oficio.detalleCedulas = new List<DetalleCedula>();
                 oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id,servicio);
                 oficio.cedulasOficio= new List<DetalleCedula>();
-                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id);
+                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id,servicio);
                 return View(oficio);
             }
             return Redirect("/error/denied");
@@ -76,16 +76,16 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpGet]
         [Route("/financieros/revisar/{servicio}/{id}")]
-        public async Task<IActionResult> RevisarOficio(int id, string servicio)
+        public async Task<IActionResult> RevisarOficio(int id, int servicio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
                 Oficio oficio = await vFinancieros.GetOficioById(id);
-                oficio.detalleCedulas = new List<DetalleCedula>();
-                oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id, servicio);
+                //oficio.detalleCedulas = new List<DetalleCedula>();
+                //oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id, servicio);
                 oficio.cedulasOficio = new List<DetalleCedula>();
-                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id);
+                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id,servicio);
                 return View(oficio);
             }
             return Redirect("/error/denied");

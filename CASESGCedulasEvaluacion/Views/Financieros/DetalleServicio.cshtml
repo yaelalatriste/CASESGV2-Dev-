@@ -53,7 +53,7 @@
                             <td>
                                 @if (@of.Estatus.Equals("En Proceso"))
                                 {
-                                    <a href="/financieros/oficio/@Model.dashboard.ElementAt(0).Servicio/@of.Id" data-toggle="tooltip" title='Editar el Oficio "@of.Anio/@of.NumeroOficio"'>
+                                    <a href="/financieros/oficio/@Model.oficio[0].ServicioId/@of.Id" data-toggle="tooltip" title='Editar el Oficio "@of.Anio/@of.NumeroOficio"'>
                                         <i class="fas fa-pencil text-primary mr-2"></i>
                                     </a>
                                 }
@@ -234,6 +234,9 @@
             var tbody = "";
             var tbodyC = "";
             var tbodyF = "";
+            var model = @Html.Raw(Json.Serialize(@Model));
+
+            console.log(model);
 
             $("#tableOficios").DataTable({
                 paging: true,
@@ -324,10 +327,10 @@
                 axios.get('/catalogo/servicios').then(options => {
                     options = options.data;
                     for (let i = 0; i < options.length; i++) {
-                        servicios += '<option value="'+options[i].nombre+'" data-id="'+options[i].id+'">'+options[i].nombre+'</option>';
+                        servicios += '<option value="'+options[i].id+'">'+options[i].nombre+'</option>';
                     }
                     $("#selectServicio").html(servicios);
-                    $("#selectServicio").val(dashboard[0].servicio).change();
+                    $("#selectServicio").val(model.dashboard[0].servicioId).change();
                     $("#selectServicio").prop('disabled',true);
                 });
                 /*Llenado de la Lista de Servicios*/
@@ -380,8 +383,7 @@
             });
 
             $("#crearOficio").click(function () {
-                var option = $("#selectServicio").find('option:selected');
-                var servicio = option.data('id');
+                var servicio = $("#selectServicio").val();
                 var anio = $("#selectAnio").val();
                 var oficio = $("#numeroOficio").val();
 
@@ -393,7 +395,7 @@
                                 'title': 'Oficios para Trámite de Pago',
                                 'html': 'Se generó el oficio correctamente.'
                             }).then(function () {
-                                window.location.href = '/financieros/oficio/' + dashboard[0].servicio+'/'+response.data;
+                                window.location.href = '/financieros/oficio/' + dashboard[0].servicioId+'/'+response.data;
                             });
                         }
                     });

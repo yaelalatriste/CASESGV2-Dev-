@@ -36,7 +36,7 @@
                     <div class="tab-content" id="myTabContent">
                         @if (@Model.Estatus.Equals("En Proceso"))
                         {
-                            @* Pregunta 1 *@
+                            @* Cédulas en Trámite de Pago *@
                             <div class="tab-pane fade mt-2 ml-3 show active" id="pregunta_1" role="tabpanel" aria-labelledby="profile-tab">
                                 <p class="text-black h5">Cédulas pendientes de enviar a "DGPPT"</p>
                                 <div class="col-lg-12 mt-3">
@@ -87,9 +87,9 @@
                                     </table>
                                 </div>
                             </div>
-                            @* Fin de la Pregunta 1 *@
+                            @* Fin Cédulas en Trámite de Pago*@
                         }
-                        @* Pregunta 2 *@
+                        @* Cédulas Asignadas en el Oficio *@
                         <div class="tab-pane fade mt-2 ml-3" id="pregunta_2" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="text-black h5">Cédulas asignadas en el oficio para pago</p>
                             <div class="col-lg-12 mt-3">
@@ -134,7 +134,7 @@
                                 </table>
                             </div>
                         </div>
-                        @* Fin de la Pregunta 2 *@
+                        @* Cédulas Asignadas en el Oficio*@
                     </div>
                 </div>
             </div>

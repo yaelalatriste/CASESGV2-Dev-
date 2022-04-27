@@ -47,6 +47,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>DtCedulaLimpieza.xsd</DependentUpon>
     </Compile>
+    <Compile Update="DtGeneraCedulaByServicio.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DtGeneraCedulaByServicio.xsd</DependentUpon>
+    </Compile>
     <Compile Update="DtReporteFinancieros.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -69,6 +74,11 @@
       <LastGenOutput>DtCedulaLimpieza.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="DtGeneraCedulaByServicio.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DtGeneraCedulaByServicio.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="DtReporteFinancieros.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>DtReporteFinancieros.Designer.cs</LastGenOutput>
@@ -80,6 +90,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Reports\CedulaLimpieza.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Reports\CedulaBienesMuebles.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Reports\CedulaCelular.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Reports\CedulaMensajeria.rdlc">

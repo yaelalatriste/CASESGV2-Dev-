@@ -13,5 +13,6 @@ namespace CedulasEvaluacion.Interfaces
         Task<IEnumerable<ReporteCedula>> getReporteMensajeria(int id);
         Task<IEnumerable<ReporteCedula>> getReporteLimpieza(int id);
         Task<IEnumerable<ReporteFinancieros>> getReporteFinancierosLimpieza();
+        Task<IEnumerable<ReporteCedula>> getCedulaByServicio(int servicio, int id);
     }
 }

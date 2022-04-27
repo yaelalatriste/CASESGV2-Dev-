@@ -226,7 +226,7 @@ namespace CedulasEvaluacion.Repositories
         {
             PerfilesCelular pc = new PerfilesCelular();
             pc.Id = reader["PerfilCelularId"] != DBNull.Value ? (int)reader["PerfilCelularId"]:0;
-            pc.Nombre = reader["Nombre"] != DBNull.Value ? reader["Nombre"].ToString() : "";
+            
 
             return new IncidenciasCelular
             {
@@ -242,6 +242,7 @@ namespace CedulasEvaluacion.Repositories
                 FechaSolicitud = reader["FechaSolicitud"] != DBNull.Value ? Convert.ToDateTime(reader["FechaSolicitud"]) : DateTime.Now,
                 FechaAtencion = reader["FechaAtencion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaAtencion"]) : DateTime.Now,
                 MontoPenalizacion = reader["MontoPenalizacion"] != DBNull.Value ? Convert.ToDecimal(reader["MontoPenalizacion"]) : 0,
+                Nombre = reader["NombrePerfil"] != DBNull.Value ? reader["NombrePerfil"].ToString() : "",
                 perfilesCelular = pc,
             };
         }

@@ -85,8 +85,10 @@ namespace CedulasEvaluacion.Controllers
                                     IRepositorioIncidenciasCelular ivCelular, IRepositorioConvencional iConvencional, IRepositorioIncidenciasConvencional ivConvencional, 
                                     IRepositorioEntregablesConvencional ieConvencional, IRepositorioDocuments ivDocuments, IRepositorioIncidenciasMuebles iiMuebles, 
                                     IRepositorioMuebles iVMuebles, IRepositorioAnalisis ivAnalisis, IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioInmuebles viInmuebles,
-                                    IRepositorioFacturas viFacturas)
+                                    IRepositorioFacturas viFacturas, IRepositorioIncidencias iiIncidencias)
         {
+
+            this.vIncidencias = iiIncidencias?? throw new ArgumentNullException(nameof(iiIncidencias));
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vDocuments = ivDocuments ?? throw new ArgumentNullException(nameof(ivDocuments));
 
@@ -1177,11 +1179,11 @@ namespace CedulasEvaluacion.Controllers
                 string strFacturas = "";
                 decimal totalFacturas = 0;
 
-                CedulaTransporte cedula = new CedulaTransporte();
-                cedula = await vTransporte.CedulaById(id);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula = await vCedula.CedulaById(id);
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
-                cedula.incidencias = await iTransporte.GetIncidenciasPregunta(id,2);
+                cedula.incidencias.transporte = await iTransporte.GetIncidenciasPregunta(id,2);
                 cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedula.RespuestasEncuesta = await vTransporte.obtieneRespuestas(id);
                 cedula.facturas = new List<Facturas>();
@@ -1202,13 +1204,13 @@ namespace CedulasEvaluacion.Controllers
                 }
 
                 //obtenemos el documento con marcas
-                if (cedula.incidencias.Count > 0)
+                if (cedula.incidencias.transporte.Count > 0)
                 {
                     Table tablaActividades = tablas.AddTable(true);
 
                     String[] cabeceraFechas = { "Tipo","Fecha de la Incidencia","Hora Presentada", "Comentarios" };
 
-                    tablaActividades.ResetCells(cedula.incidencias.Count + 1, cabeceraFechas.Length);
+                    tablaActividades.ResetCells(cedula.incidencias.transporte.Count + 1, cabeceraFechas.Length);
 
                     TableRow recRow = tablaActividades.Rows[0];
                     recRow.IsHeader = true;
@@ -1233,7 +1235,7 @@ namespace CedulasEvaluacion.Controllers
                         TR.CharacterFormat.TextColor = Color.White;
                     }
 
-                    for (int r = 0; r < cedula.incidencias.Count; r++)
+                    for (int r = 0; r < cedula.incidencias.transporte.Count; r++)
                     {
                         TableRow DataRow = tablaActividades.Rows[r + 1];
                         //Fila Height
@@ -1247,19 +1249,19 @@ namespace CedulasEvaluacion.Controllers
                             Paragraph p2 = DataRow.Cells[c].AddParagraph();
                             if (c == 0)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].Tipo);
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].Tipo);
                             }
                             if (c == 1)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].FechaIncidencia.ToString("dd/MM/yyyy"));
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].FechaIncidencia.ToString("dd/MM/yyyy"));
                             }
                             if (c == 2)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].HoraPresentada+"");
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].HoraPresentada+"");
                             }
                             if (c == 3)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].Comentarios);
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].Comentarios);
                             }
                             //Formato de celdas
                             p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
@@ -1298,15 +1300,15 @@ namespace CedulasEvaluacion.Controllers
                         "\n\n" + cedula.RespuestasEncuesta[3].Detalles, false, true);
                 }
 
-                cedula.incidencias = await iTransporte.GetIncidenciasPregunta(id, 5);
+                cedula.incidencias.transporte = await iTransporte.GetIncidenciasPregunta(id, 5);
                 //obtenemos el documento con marcas
-                if (cedula.incidencias.Count > 0)
+                if (cedula.incidencias.transporte.Count > 0)
                 {
                     Table tablaHoras = tablas.AddTable(true);
 
                     String[] cabeceraHoras = { "Tipo", "Fecha de la Incidencia", "Comentarios" };
 
-                    tablaHoras.ResetCells(cedula.incidencias.Count + 1, cabeceraHoras.Length);
+                    tablaHoras.ResetCells(cedula.incidencias.transporte.Count + 1, cabeceraHoras.Length);
 
                     TableRow recRow = tablaHoras.Rows[0];
                     recRow.IsHeader = true;
@@ -1331,7 +1333,7 @@ namespace CedulasEvaluacion.Controllers
                         TR.CharacterFormat.TextColor = Color.White;
                     }
 
-                    for (int r = 0; r < cedula.incidencias.Count; r++)
+                    for (int r = 0; r < cedula.incidencias.transporte.Count; r++)
                     {
                         TableRow DataRow = tablaHoras.Rows[r + 1];
                         //Fila Height
@@ -1345,15 +1347,15 @@ namespace CedulasEvaluacion.Controllers
                             Paragraph p2 = DataRow.Cells[c].AddParagraph();
                             if (c == 0)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].Tipo);
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].Tipo);
                             }
                             if (c == 1)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].FechaIncidencia.ToString("dd/MM/yyyy"));
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].FechaIncidencia.ToString("dd/MM/yyyy"));
                             }
                             if (c == 2)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].Comentarios);
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].Comentarios);
                             }
                             //Formato de celdas
                             p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
@@ -1372,15 +1374,15 @@ namespace CedulasEvaluacion.Controllers
                     document.Replace("||Supervision||", "El personal cumplió con la supervisión del servicio.", false, true);
                 }
 
-                cedula.incidencias = await iTransporte.GetIncidenciasPregunta(id, 6);
+                cedula.incidencias.transporte = await iTransporte.GetIncidenciasPregunta(id, 6);
                 //obtenemos el documento con marcas
-                if (cedula.incidencias.Count > 0)
+                if (cedula.incidencias.transporte.Count > 0)
                 {
                     Table tablaHoras = tablas.AddTable(true);
 
                     String[] cabeceraHoras = { "Tipo", "Fecha de la Incidencia", "Comentarios" };
 
-                    tablaHoras.ResetCells(cedula.incidencias.Count + 1, cabeceraHoras.Length);
+                    tablaHoras.ResetCells(cedula.incidencias.transporte.Count + 1, cabeceraHoras.Length);
 
                     TableRow recRow = tablaHoras.Rows[0];
                     recRow.IsHeader = true;
@@ -1405,7 +1407,7 @@ namespace CedulasEvaluacion.Controllers
                         TR.CharacterFormat.TextColor = Color.White;
                     }
 
-                    for (int r = 0; r < cedula.incidencias.Count; r++)
+                    for (int r = 0; r < cedula.incidencias.transporte.Count; r++)
                     {
                         TableRow DataRow = tablaHoras.Rows[r + 1];
                         //Fila Height
@@ -1419,15 +1421,15 @@ namespace CedulasEvaluacion.Controllers
                             Paragraph p2 = DataRow.Cells[c].AddParagraph();
                             if (c == 0)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].Tipo);
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].Tipo);
                             }
                             if (c == 1)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].FechaIncidencia.ToString("dd/MM/yyyy"));
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].FechaIncidencia.ToString("dd/MM/yyyy"));
                             }
                             if (c == 2)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].Comentarios);
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].Comentarios);
                             }
                             //Formato de celdas
                             p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
@@ -2279,7 +2281,7 @@ namespace CedulasEvaluacion.Controllers
                         TR2.CharacterFormat.FontSize = 9;
                     }
                 }
-                document.Replace("||Pregunta6||", "Se presentarón cambios de Perfil en este mes.", false, true);
+                document.Replace("||Pregunta6||", "Se presentarón  en este mes.", false, true);
                 BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
                 marcaActividades.MoveToBookmark("Pregunta6", true, true);
                 marcaActividades.InsertTable(tablaActividades3);
@@ -2558,7 +2560,7 @@ namespace CedulasEvaluacion.Controllers
                         TR2.CharacterFormat.FontSize = 9;
                     }
                 }
-                document.Replace("||Pregunta9||", "Se presentarón solicitudes de voz y/o datos en este mes.", false, true);
+                document.Replace("||Pregunta9||", "Se presentarón  en este mes.", false, true);
                 BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
                 marcaActividades.MoveToBookmark("Pregunta9", true, true);
                 marcaActividades.InsertTable(tablaActividades3);
@@ -2651,7 +2653,7 @@ namespace CedulasEvaluacion.Controllers
                         TR2.CharacterFormat.FontSize = 9;
                     }
                 }
-                document.Replace("||Pregunta10||", "Se presentarón solicitudes de diagnóstico de equipo en este mes.", false, true);
+                document.Replace("||Pregunta10||", "Se presentarón  en este mes.", false, true);
                 BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
                 marcaActividades.MoveToBookmark("Pregunta10", true, true);
                 marcaActividades.InsertTable(tablaActividades3);
@@ -2751,7 +2753,7 @@ namespace CedulasEvaluacion.Controllers
             }
             else
             {
-                document.Replace("||Pregunta11||", "No se presentarón solicitudes de reparación de equipo en este mes.", false, true);
+                document.Replace("||Pregunta11||", "No se presentarón  en este mes.", false, true);
             }
 
 
@@ -4054,11 +4056,11 @@ namespace CedulasEvaluacion.Controllers
                 string strFacturas = "";
                 decimal totalFacturas = 0;
 
-                CedulaAnalisis cedula = new CedulaAnalisis();
-                cedula = await vAnalisis.CedulaById(id);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula = await vCedula.CedulaById(id);
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
-                cedula.incidencias = await iAnalisis.GetIncidencias(id);
+                cedula.incidencias.analisis = await iAnalisis.GetIncidencias(id);
                 cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedula.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(id);
                 cedula.facturas = new List<Facturas>();
@@ -4087,13 +4089,13 @@ namespace CedulasEvaluacion.Controllers
                 }
 
                 //P3
-                if (cedula.incidencias.Count > 0)
+                if (cedula.incidencias.analisis.Count > 0)
                 {
                     Table tablaActividades = tablas.AddTable(true);
 
                     String[] cabeceraFechas = { "Fecha de la Incidencia", "Tipo", "Comentarios" };
 
-                    tablaActividades.ResetCells(cedula.incidencias.Count + 1, cabeceraFechas.Length);
+                    tablaActividades.ResetCells(cedula.incidencias.analisis.Count + 1, cabeceraFechas.Length);
 
                     TableRow recRow = tablaActividades.Rows[0];
                     recRow.IsHeader = true;
@@ -4118,7 +4120,7 @@ namespace CedulasEvaluacion.Controllers
                         TR.CharacterFormat.TextColor = Color.White;
                     }
 
-                    for (int r = 0; r < cedula.incidencias.Count; r++)
+                    for (int r = 0; r < cedula.incidencias.analisis.Count; r++)
                     {
                         TableRow DataRow = tablaActividades.Rows[r + 1];
                         //Fila Height
@@ -4132,15 +4134,15 @@ namespace CedulasEvaluacion.Controllers
                             Paragraph p2 = DataRow.Cells[c].AddParagraph();
                             if (c == 0)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].FechaIncidencia.ToString("dd/MM/yyyy"));
+                                TR2 = p2.AppendText(cedula.incidencias.analisis[r].FechaIncidencia.ToString("dd/MM/yyyy"));
                             }
                             if (c == 1)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].Tipo);
+                                TR2 = p2.AppendText(cedula.incidencias.analisis[r].Tipo);
                             }
                             if (c == 2)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].Comentarios);
+                                TR2 = p2.AppendText(cedula.incidencias.analisis[r].Comentarios);
                             }
                             //Formato de celdas
                             p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
@@ -4267,8 +4269,8 @@ namespace CedulasEvaluacion.Controllers
         {
 
             ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            CedulaLimpieza cedulaLimpieza = new CedulaLimpieza();
-            cedulaLimpieza = await vlimpieza.CedulaById(id);
+            CedulaEvaluacion cedulaLimpieza = new CedulaEvaluacion();
+            cedulaLimpieza = await vCedula.CedulaById(id);
             cedula = await vDocuments.getDatosActa(id, 1);
             cedula.facturas = new List<Facturas>();
             cedula.facturas = await vFacturas.getFacturas(id, 1);
@@ -4397,8 +4399,8 @@ namespace CedulasEvaluacion.Controllers
         {
 
             ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            CedulaLimpieza cedulaLimpieza = new CedulaLimpieza();
-            cedulaLimpieza = await vlimpieza.CedulaById(id);
+            CedulaEvaluacion cedulaLimpieza = new CedulaEvaluacion();
+            cedulaLimpieza = await vCedula.CedulaById(id);
             cedula = await vDocuments.getDatosActa(id, 1);
             cedula.facturas = new List<Facturas>();
             cedula.facturas = await vFacturas.getFacturas(id, 1);
@@ -4528,8 +4530,8 @@ namespace CedulasEvaluacion.Controllers
         {
 
             ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            CedulaFumigacion cedulaFumigacion = new CedulaFumigacion();
-            cedulaFumigacion = await vFumigacion.CedulaById(id);
+            CedulaEvaluacion cedulaFumigacion = new CedulaEvaluacion();
+            cedulaFumigacion = await vCedula.CedulaById(id);
             cedula = await vDocuments.getDatosActa(id, 2);
             cedula.facturas = new List<Facturas>();
             cedula.facturas = await vFacturas.getFacturas(id, 2);
@@ -5392,8 +5394,8 @@ namespace CedulasEvaluacion.Controllers
         {
 
             ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            Residuos cedulaResiduos = new Residuos();
-            cedulaResiduos = await vResiduos.CedulaById(id);
+            CedulaEvaluacion cedulaResiduos = new CedulaEvaluacion();
+            cedulaResiduos = await vCedula.CedulaById(id);
             cedulaResiduos.usuarios = await vUsuarios.getUserById(cedulaResiduos.UsuarioId);
             cedula = await vDocuments.getDatosActa(id, 8);
             cedula.facturas = new List<Facturas>();

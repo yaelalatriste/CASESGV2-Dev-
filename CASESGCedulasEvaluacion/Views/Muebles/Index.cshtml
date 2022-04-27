@@ -97,7 +97,7 @@
                             }
                             @if (!item.Estatus.Equals("En Proceso"))
                             {
-                                <a href="/reporte/muebles/@item.Id" class="text-center pdf ml-2" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                <a href="/cedula/muebles/@item.ServicioId/@item.Id" class="text-center pdf ml-2" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
                                     @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
                                     {
                                         <i class="fal fa-file-pdf text-success"></i>

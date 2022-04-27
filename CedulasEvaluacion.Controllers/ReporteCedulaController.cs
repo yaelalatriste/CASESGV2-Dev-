@@ -14,6 +14,8 @@ using CedulasEvaluacion.Entities.Vistas;
 using System.Globalization;
 using System.IO;
 using Microsoft.Reporting.NETCore;
+using CedulasEvaluacion.Entities.MMuebles;
+using CedulasEvaluacion.Entities.MCelular;
 
 namespace CedulasEvaluacion.Controllers
 {
@@ -21,16 +23,26 @@ namespace CedulasEvaluacion.Controllers
     {
 
         private string [] tiposIncidencia = {"Recoleccion","Entrega","Acuses", "Mal Estado","Extraviadas","Robadas" };
+        private string[] tiposCelular = { "Alta_Equipo", "Alta", "Baja", "Reactivacion", "Suspension", "Perfil", "SIM", "CambioNumeroRegion", 
+                                          "VozDatos", "Diagnostico", "Reparacion"};
+        private string[] rCelular = { "altas con entrega de equipo", "altas sin entrega de equipo", "bajas de servicio", "reactivaciones por robo/extravío", "suspensiones por robo/extravío", "cambios de perfil", "switcheos de SIM Card", "cambios de número o región",
+                                          "solicitudes de voz y/o datos", "solicitudes de diagnóstico de equipo", "solicitudes de reparación de equipo"};
+
+
         private readonly IWebHostEnvironment web;
         private readonly IRepositorioEvaluacionServicios vCedula;
+        
         private readonly IRepositorioReporteCedula vrCedula;
         private readonly IRepositorioMensajeria vMensajeria;
         private readonly IRepositorioIncidenciasMensajeria iMensajeria;
         private readonly IRepositorioLimpieza vLimpieza;
         private readonly IRepositorioIncidencias iLimpieza;
+        private readonly IRepositorioIncidenciasMuebles iMuebles;
+        private readonly IRepositorioIncidenciasCelular iCelular;
 
         public ReporteCedulaController(IWebHostEnvironment vweb,IRepositorioReporteCedula vvReporte, IRepositorioIncidenciasMensajeria iiMensajeria,
-            IRepositorioMensajeria viMensajeria, IRepositorioLimpieza viLimpieza, IRepositorioIncidencias iiLimpieza, IRepositorioEvaluacionServicios viCedula)
+            IRepositorioMensajeria viMensajeria, IRepositorioLimpieza viLimpieza, IRepositorioIncidencias iiLimpieza, IRepositorioEvaluacionServicios viCedula, 
+            IRepositorioIncidenciasMuebles IiMuebles, IRepositorioIncidenciasCelular iiCelular)
         {
             this.web = vweb;
             this.vCedula = viCedula;
@@ -39,6 +51,8 @@ namespace CedulasEvaluacion.Controllers
             this.iMensajeria = iiMensajeria;
             this.vLimpieza = viLimpieza;
             this.iLimpieza = iiLimpieza;
+            this.iMuebles = IiMuebles;
+            this.iCelular = iiCelular;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
 
@@ -124,7 +138,7 @@ namespace CedulasEvaluacion.Controllers
             var path = Directory.GetCurrentDirectory() + "\\Reports\\CedulaLimpieza.rdlc";
             local.ReportPath = path;
             var cedulas = await vrCedula.getReporteLimpieza(id);
-            var respuestas = await vLimpieza.obtieneRespuestas(id);
+            var respuestas = await vCedula.obtieneRespuestas(id);
             for (int i = 0; i < respuestas.Count; i++)
             {
                 if (i == 0)
@@ -213,6 +227,110 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaLimpieza", cedulas));
+            var pdf = local.Render("PDF");
+            return File(pdf, "application/pdf");
+        }
+
+        [Route("/cedula/muebles/{servicio}/{id?}")]
+        public async Task<IActionResult> GeneraCedulaMuebles(int servicio, int id)
+        {
+            var incidencias = new List<IncidenciasMuebles>();
+            LocalReport local = new LocalReport();
+            var path = Directory.GetCurrentDirectory() + "\\Reports\\CedulaBienesMuebles.rdlc";
+            local.ReportPath = path;
+            var cedulas = await vrCedula.getCedulaByServicio(servicio, id);
+            var respuestas = await vCedula.obtieneRespuestas(id);
+            for (int i = 0; i < respuestas.Count; i++)
+            {
+                if (i == 0)
+                {
+                    if (respuestas[i].Respuesta == false) 
+                    { 
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicios no cumplió con la fecha y hora solicitada para la prestación del servicio, la fecha en que se solicito fue," +
+                                     Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]) +" y la fecha y hora de llegada fue:"+ Convert.ToDateTime(respuestas[i].Detalles.Split("|")[1])
+                                     + ".")});
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicios cumplió con la fecha y hora solicitada para la prestación del servicio.") });
+                    }
+                }
+                else if (i == 1)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con la maquinaria, equipo y herramientas para la prestación del servicio.") });
+                        
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador cumplió con la maquinaria, equipo y herramientas para la prestación del servicio.") });
+                    }
+                }
+                else if (i == 2)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con la unidad de transporte solicitada para la prestación del servicio.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador cumplió con la unidad de transporte solicitada para la prestación del servicio.") });
+                    }
+                }
+                else if (i == 3)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con el personal necesario para realizar la prestación del servicio.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador cumplió con el personal necesario para realizar la prestación del servicio.") });
+                    }
+                }
+                else if (i == 4)
+                {
+                    incidencias = await iMuebles.GetIncidenciasPregunta(id, (i + 1));
+                    local.DataSources.Add(new ReportDataSource("IncidenciasMuebles", incidencias));
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal no cumplió con las actividades contempladas en el programa de operación, las cuales se describen a continuación:") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal cumplió con las actividades contempladas en el programa de operación, no presentó incidencias en el mes.") });
+                    }
+                }
+            }
+            local.DataSources.Add(new ReportDataSource("CedulaMuebles", cedulas));
+            var pdf = local.Render("PDF");
+            return File(pdf, "application/pdf");
+        }
+
+        [Route("/cedula/celular/{servicio}/{id?}")]
+        public async Task<IActionResult> GeneraCedulaCelular(int servicio, int id)
+        {
+            var incidencias = new List<IncidenciasCelular>();
+            LocalReport local = new LocalReport();
+            var path = Directory.GetCurrentDirectory() + "\\Reports\\CedulaCelular.rdlc";
+            local.ReportPath = path;
+            var cedulas = await vrCedula.getCedulaByServicio(servicio, id);
+            var respuestas = await vCedula.obtieneRespuestas(id);
+            for (int i = 0; i < respuestas.Count; i++)
+            {
+                    incidencias = await iCelular.ListIncidenciasTipoCelular(id, tiposCelular[i]);
+                    local.DataSources.Add(new ReportDataSource("Incidencias" + tiposCelular[i], incidencias));
+                if (respuestas[i].Respuesta == true)
+                {
+                    local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentarón " + rCelular[i] + " en el mes y se describen a continuación: ") });
+                }
+                else
+                {
+                    local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón " + rCelular[i] + " en el mes.") });
+                }
+            }
+            local.DataSources.Add(new ReportDataSource("CedulaCelular", cedulas));
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }

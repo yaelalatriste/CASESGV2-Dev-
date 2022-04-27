@@ -19,6 +19,7 @@ namespace CedulasEvaluacion.Entities.MCelular
         public int DiasRetraso { get; set; }
         public string Archivo { get; set; }
         public string Folio { get; set; }
+        public string Nombre { get; set; }
         public bool Penalizable { get; set; }
         public decimal MontoPenalizacion { get; set; }
         public virtual PerfilesCelular perfilesCelular { get; set; }

@@ -1,4 +1,5 @@
 ﻿using CedulasEvaluacion.Entities.MAnalisis;
+using CedulasEvaluacion.Entities.MCedula;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
@@ -16,6 +17,7 @@ namespace CedulasEvaluacion.Controllers
     [Authorize]
     public class AnalisisController : Controller
     {
+        private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioAnalisis vAnalisis;
         private readonly IRepositorioIncidenciasAnalisis iAnalisis;
         private readonly IRepositorioEntregablesAnalisis eAnalisis;
@@ -25,10 +27,11 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioFacturas vFacturas;
         private readonly IHostingEnvironment environment;
 
-        public AnalisisController(IRepositorioAnalisis iVAnalisis, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
+        public AnalisisController(IRepositorioEvaluacionServicios viCedula, IRepositorioAnalisis iVAnalisis, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                     IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioEntregablesAnalisis eeAnalisis,
                                     IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas, IHostingEnvironment environment)
         {
+            this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vAnalisis = iVAnalisis ?? throw new ArgumentNullException(nameof(iVAnalisis));
             this.iAnalisis = iiAnalisis ?? throw new ArgumentNullException(nameof(iiAnalisis));
             this.eAnalisis = eeAnalisis ?? throw new ArgumentNullException(nameof(eeAnalisis));
@@ -39,50 +42,55 @@ namespace CedulasEvaluacion.Controllers
             this.environment = environment;
         }
 
-        [Route("/analisis/index")]
-        public async Task<IActionResult> Index()
+        [Route("/analisis/index/{servicio?}")]
+        public async Task<IActionResult> Index(int servicio)
         {
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
                 List<VCedulas> resultado = new List<VCedulas>();
-                resultado = await vAnalisis.GetCedulasAnalisis(UserId());
+                resultado = await vCedula.GetCedulasEvaluacion(servicio, UserId());
                 return View(resultado);
             }
             return Redirect("/error/denied");
         }
 
-        [Route("/analisis/nuevaCedula")]
-        public async Task<IActionResult> NuevaCedula(CedulaAnalisis cedulaAnalisis)
+        //Metodo para abrir la vista y generar la nueva Cedula
+        [Route("/analisis/nuevaCedula/{servicio}")]
+        [HttpGet]
+        public async Task<IActionResult> NuevaCedula(int servicio)
         {
-            cedulaAnalisis = new CedulaAnalisis();
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
-                return View(cedulaAnalisis);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula.ServicioId = servicio;
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }
 
-        [Route("/analisis/validaPeriodo/{anio?}/{mes?}/{inmueble?}")]
-        public async Task<IActionResult> validaPeriodo(int anio, string mes, int inmueble)
+        //inserta la cedula
+        [Route("/analisis/new")]
+        public async Task<IActionResult> insertaCedula([FromBody] CedulaEvaluacion cedula)
         {
-            int valida = await vAnalisis.VerificaCedula(anio, mes, inmueble);
-            if (valida != -1)
+            cedula.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
+            int insert = await vCedula.insertaCedula(cedula);
+            if (insert != -1)
             {
-                return Ok(valida);
+                return Ok(insert);
             }
             return BadRequest();
         }
 
-        [Route("/analisis/new")]
-        public async Task<IActionResult> insertaCedula([FromBody] CedulaAnalisis cedulaAnalisis)
+
+        [Route("/analisis/validaPeriodo/{servicio}/{anio?}/{mes?}/{inmueble?}")]
+        public async Task<IActionResult> validaPeriodo(int servicio, int anio, string mes, int inmueble)
         {
-            cedulaAnalisis.UsuarioId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
-            int insert = await vAnalisis.insertaCedula(cedulaAnalisis);
-            if (insert != -1)
+            int valida = await vCedula.VerificaCedula(servicio, anio, mes, inmueble);
+            if (valida != -1)
             {
-                return Ok(insert);
+                return Ok(valida);
             }
             return BadRequest();
         }
@@ -93,28 +101,28 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                CedulaAnalisis cedulaAnalisis = await vAnalisis.CedulaById(id);
-                if (cedulaAnalisis.Estatus.Equals("Enviado a DAS"))
+                CedulaEvaluacion cedula = await vCedula.CedulaById(id);
+                if (cedula.Estatus.Equals("Enviado a DAS"))
                 {
                     return Redirect("/error/cedSend");
                 }
-                cedulaAnalisis.inmuebles = await vInmuebles.inmuebleById(cedulaAnalisis.InmuebleId);
-                cedulaAnalisis.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(id);
-                cedulaAnalisis.facturas = await vFacturas.getFacturas(id, cedulaAnalisis.ServicioId);
-                cedulaAnalisis.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedulaAnalisis.facturas);
-                return View(cedulaAnalisis);
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
+                cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
+                cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }
 
         [HttpPost]
         [Route("/analisis/evaluation")]
-        public async Task<IActionResult> guardaRespuestas([FromBody] List<RespuestasEncuesta> respuestas)
+        public async Task<IActionResult> guardaCuestionario([FromBody] List<RespuestasEncuesta> respuestas)
         {
-            int success = await vAnalisis.GuardaRespuestas(respuestas);
+            int success = await vCedula.GuardaRespuestas(respuestas);
             if (success != 0)
             {
-                return Ok(success);
+                return Ok();
             }
             else
             {
@@ -124,11 +132,11 @@ namespace CedulasEvaluacion.Controllers
 
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
-        [Route("/analisis/sendCedula/{cedula?}")]
-        public async Task<IActionResult> enviaCedula(int cedula)
+        [Route("/analisis/sendCedula/{servicio?}/{id?}")]
+        public async Task<IActionResult> enviaCedula(int servicio, int id)
         {
             int success = 0;
-            success = await vAnalisis.enviaRespuestas(cedula);
+            success = await vCedula.enviaRespuestas(servicio, id);
             if (success != -1)
             {
                 return Ok();
@@ -146,16 +154,17 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                CedulaAnalisis cedAna = null;
-                cedAna = await vAnalisis.CedulaById(id);
+                CedulaEvaluacion cedAna = null;
+                cedAna = await vCedula.CedulaById(id);
                 cedAna.facturas = await vFacturas.getFacturas(id, cedAna.ServicioId);//
                 cedAna.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedAna.facturas);
                 cedAna.inmuebles = await vInmuebles.inmuebleById(cedAna.InmuebleId);
                 cedAna.usuarios = await vUsuarios.getUserById(cedAna.UsuarioId);
                 cedAna.iEntregables = await eAnalisis.getEntregables(cedAna.Id);
-                cedAna.incidencias = await iAnalisis.GetIncidencias(cedAna.Id);
+                cedAna.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+                cedAna.incidencias.analisis = await iAnalisis.GetIncidencias(cedAna.Id);
                 cedAna.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedAna.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(cedAna.Id);
+                cedAna.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedAna.Id);
                 cedAna.historialCedulas = new List<HistorialCedulas>();
                 cedAna.historialCedulas = await vAnalisis.getHistorialAnalisis(cedAna.Id);
                 foreach (var user in cedAna.historialCedulas)
@@ -174,15 +183,15 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
-                CedulaAnalisis cedFum = null;
-                cedFum = await vAnalisis.CedulaById(id);
+                CedulaEvaluacion cedFum = null;
+                cedFum = await vCedula.CedulaById(id);
                 cedFum.facturas = await vFacturas.getFacturas(id, cedFum.ServicioId);//
                 cedFum.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedFum.facturas);
                 cedFum.inmuebles = await vInmuebles.inmuebleById(cedFum.InmuebleId);
                 cedFum.usuarios = await vUsuarios.getUserById(cedFum.UsuarioId);
-                //cedFum.iEntregables = await eAnalisis.getEntregables(cedFum.Id);
+                cedFum.iEntregables = await eAnalisis.getEntregables(cedFum.Id);
                 cedFum.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedFum.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(cedFum.Id);
+                cedFum.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedFum.Id);
                 cedFum.historialCedulas = new List<HistorialCedulas>();
                 cedFum.historialCedulas = await vAnalisis.getHistorialAnalisis(cedFum.Id);
                 foreach (var user in cedFum.historialCedulas)

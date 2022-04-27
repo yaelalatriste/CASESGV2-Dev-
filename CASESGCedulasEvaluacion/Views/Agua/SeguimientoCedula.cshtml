@@ -1016,6 +1016,20 @@
                 });
             /*Fin de Tramitar Cedula*/
 
+            $("#tipo_entregable").change(function () {
+                if ($(this).val() == 'Memorandum') {
+                    Swal.fire({
+                        'icon': 'info',
+                        'title': 'Servicio de Agua Para Beber',
+                        'html': '<p style="text-align: justify">Tenga en cuenta que para adjuntar el <b>Acuse Memorándum (FIREL)</b> al sistema <b>CASESG</b> firmado electrónicamente' +
+                            ' por el <b>Jefe de Departamento y/o Subdirector</b> de área, <b>Administrador de Edificios</b>, y por la ' +
+                            '<b>Coordinación de Operación de Control Operativo de Administraciones de Edificios (CAE) </b> de lo contrario el trámite estará inconcluso por lo cual será rechazado ' +
+                            ' y tendrá que volver a generar un nuevo <b>Memorándum</b>.</p>'
+                    });
+                }
+            });
+
+
             /*Ver archivo en modal*/
             $(document).on('click', '.view_file', function () {
                 let nombre = $(this).data('file');

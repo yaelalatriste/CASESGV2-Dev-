@@ -1,8 +1,8 @@
-﻿@model CedulasEvaluacion.Entities.MAnalisis.CedulaAnalisis;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @using Newtonsoft.Json
 
 @{
-    ViewData["title"] = "Servicio de Transporte para Servidores Públicos";
+    ViewData["title"] = "Servicio de Análisis Microbilógicos";
 }
 <div class="container-fluid" id="limpieza">
     <div class="card">
@@ -42,7 +42,7 @@
     <script>
         window.onload = function () {
             var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            var facturas = new Array();
+            var model = @Html.Raw(Json.Serialize(@Model));
 
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -84,10 +84,10 @@
 
 
                 if (isContinue == true) {
-                    axios.get('/analisis/validaPeriodo/' + anio + '/' + mes + '/' + inmueble).then(response => {
+                    axios.get('/analisis/validaPeriodo/' + model.servicioId + '/' + anio + '/' + mes + '/' + inmueble).then(response => {
                         if (response.status == 200 && response.data == 0) {
                             axios.post('/analisis/new', {
-                                InmuebleId: parseInt(inmueble), Anio: parseInt(anio), Mes: mes
+                                InmuebleId: parseInt(inmueble), Anio: parseInt(anio), Mes: mes, ServicioId: model.servicioId
                             }).then(res => {
                                 Swal.fire({
                                     'icon': 'success',
