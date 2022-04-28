@@ -1,4 +1,5 @@
-﻿using CedulasEvaluacion.Entities.Vistas;
+﻿using CedulasEvaluacion.Entities.MPerfiles;
+using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
 using System;
 using System.Collections.Generic;

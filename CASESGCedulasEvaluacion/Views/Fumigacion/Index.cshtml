@@ -95,7 +95,7 @@
                             }
                             @if (!item.Estatus.Equals("En Proceso"))
                             {
-                                <a href="#" data-id="@item.Id" data-estatus="@item.Estatus"  class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                <a href="#" data-id="@item.Id" data-servicio="@item.ServicioId" data-estatus="@item.Estatus"  class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
                                     @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
                                     {
                                         <i class="fal fa-file-pdf text-success"></i>
@@ -125,6 +125,7 @@
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
+
             localStorage.clear();
 
             $("#dt_inmuebles").DataTable({
@@ -139,6 +140,7 @@
             $('.btn_pdf').click(function () {
                 let id = $(this).data('id');
                 let estatus = $(this).data('estatus');
+                let servicio = $(this).data('servicio');
                 if (estatus == 'Autorizada') {
                     Swal.fire({
                         'icon': 'info',
@@ -146,10 +148,10 @@
                         'html': '<p style="text-align: justify">Tu cédula de evaluación ya fue autorizada, no olvides firmarla electrónicamente y posteriormente <strong>enviarla a la DAS a través del CASESG, de lo ' +
                             'contrario no se recibirá la documentación en físico. <br><br>Para más información comunicate a la ext. 2574 o 2635. </strong></p>'
                     }).then(function () {
-                        window.location.href = "/reporte/fumigacion/" + id;
+                        window.open("/cedula/fumigacion/" + servicio + "/" + id, '_blank');
                     });
                 } else {
-                    window.location.href = "/reporte/fumigacion/" + id;
+                    window.open("/cedula/fumigacion/" + servicio+ "/" + id, '_blank');
                 }
             });
 

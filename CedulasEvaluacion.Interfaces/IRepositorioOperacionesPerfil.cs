@@ -1,4 +1,5 @@
 ﻿using CedulasEvaluacion.Entities.Models;
+using CedulasEvaluacion.Entities.MPerfiles;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,6 @@ namespace CedulasEvaluacion.Interfaces
         Task<int> insertarOperacionesPerfil(OperacionesPerfil operacionesPerfil);
         Task<List<OperacionesPerfil>> getOperacionesByPerfil(int perfil);
         Task<int> eliminaOpPerfil(int perfil);
+        Task<PermisosPerfil> GetPermisoModuloByUser(string permiso, string modulo, int usuario);
     }
 }

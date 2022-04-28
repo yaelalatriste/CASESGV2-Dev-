@@ -1,4 +1,4 @@
-﻿@model CedulasEvaluacion.Entities.MMuebles.CedulaMuebles;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Seguimiento a la Cédula del Servicio de Transportación de Bienes Muebles con Folio: " + Model.Folio;
 }
@@ -41,7 +41,7 @@
                     <div class="col-lg-12 mt-3">
                         <div class="card bg-light d-flex flex-fill">
                             <div class="card-header border-bottom-0">
-                                <h2 class="lead mt-4"><b>Inmueble Origen: </b> @Model.inmuebleOrigen.Nombre</h2>
+                                <h2 class="lead mt-4"><b>Inmueble Origen: </b> @Model.inmuebles.Nombre</h2>
                                 <h2 class="lead mt-4 mb-3"><b>Inmueble Destino: </b> @Model.inmuebleDestino.Nombre</h2>
                             </div>
                             <div class="card-body pt-0">
@@ -747,7 +747,7 @@
                         <td><strong>Folio: </strong> @Model.Folio</td>
                         <td><strong>Año: </strong>@Model.Anio</td>
                         <td><strong>Mes: </strong>@Model.Mes</td>
-                        <td><strong>Inmueble Origen: </strong>@Model.inmuebleOrigen.Nombre</td>
+                        <td><strong>Inmueble Origen: </strong>@Model.inmuebles.Nombre</td>
                         <td><strong>Inmueble Destino: </strong>@Model.inmuebleDestino.Nombre</td>
                         <td><strong>Estatus: </strong>@Model.Estatus </td>
                     </tr>

@@ -16,10 +16,12 @@ using System.IO;
 using Microsoft.Reporting.NETCore;
 using CedulasEvaluacion.Entities.MMuebles;
 using CedulasEvaluacion.Entities.MCelular;
+using CedulasEvaluacion.Entities.MConvencional;
+using CedulasEvaluacion.Entities.MFumigacion;
 
 namespace CedulasEvaluacion.Controllers
 {
-    public class ReporteCedulaController:Controller
+    public class CedulasEvaluacionController:Controller
     {
 
         private string [] tiposIncidencia = {"Recoleccion","Entrega","Acuses", "Mal Estado","Extraviadas","Robadas" };
@@ -27,32 +29,40 @@ namespace CedulasEvaluacion.Controllers
                                           "VozDatos", "Diagnostico", "Reparacion"};
         private string[] rCelular = { "altas con entrega de equipo", "altas sin entrega de equipo", "bajas de servicio", "reactivaciones por robo/extravío", "suspensiones por robo/extravío", "cambios de perfil", "switcheos de SIM Card", "cambios de número o región",
                                           "solicitudes de voz y/o datos", "solicitudes de diagnóstico de equipo", "solicitudes de reparación de equipo"};
+        private string[] tiposConv = { "contratacion_instalacion", "cableado", "entregaAparato", "cambioDomicilio", "reubicacion", "identificadorLlamadas", "troncales", "internet",
+                                          "serviciosTelefonia", "cancelacion", "reportesFallas"};
+        private string[] rConv = { "nuevas contrataciones", "cableados interiores para la instalación de líneas telefónicas","entregas de aparatos telefónicos", "cambios de domicilio", 
+            "reubicaciones de lineas telefónicas comerciales en el mismo inmueble", "activaciones para el identificador de llamadas", 
+            "instalaciones de troncales y DID's",
+                                   "solicitudes de instalación de internet", "habilitación de servicios",
+                                          "solicitudes de cancelación de servicios", "reportes de fallas"};
 
 
         private readonly IWebHostEnvironment web;
-        private readonly IRepositorioEvaluacionServicios vCedula;
         
+        private readonly IRepositorioEvaluacionServicios vCedula;        
         private readonly IRepositorioReporteCedula vrCedula;
-        private readonly IRepositorioMensajeria vMensajeria;
-        private readonly IRepositorioIncidenciasMensajeria iMensajeria;
-        private readonly IRepositorioLimpieza vLimpieza;
         private readonly IRepositorioIncidencias iLimpieza;
+        private readonly IRepositorioIncidenciasFumigacion iFumigacion;
+        private readonly IRepositorioIncidenciasMensajeria iMensajeria;
         private readonly IRepositorioIncidenciasMuebles iMuebles;
         private readonly IRepositorioIncidenciasCelular iCelular;
+        private readonly IRepositorioIncidenciasConvencional iConvencional;
 
-        public ReporteCedulaController(IWebHostEnvironment vweb,IRepositorioReporteCedula vvReporte, IRepositorioIncidenciasMensajeria iiMensajeria,
-            IRepositorioMensajeria viMensajeria, IRepositorioLimpieza viLimpieza, IRepositorioIncidencias iiLimpieza, IRepositorioEvaluacionServicios viCedula, 
-            IRepositorioIncidenciasMuebles IiMuebles, IRepositorioIncidenciasCelular iiCelular)
+        public CedulasEvaluacionController(IWebHostEnvironment vweb,IRepositorioReporteCedula vvReporte, IRepositorioIncidenciasMensajeria iiMensajeria,
+            IRepositorioIncidencias iiLimpieza, IRepositorioEvaluacionServicios viCedula, IRepositorioIncidenciasFumigacion iiFumigacion,
+            IRepositorioIncidenciasMuebles IiMuebles, IRepositorioIncidenciasCelular iiCelular,
+            IRepositorioIncidenciasConvencional iiConvencional)
         {
             this.web = vweb;
             this.vCedula = viCedula;
             this.vrCedula = vvReporte;
-            this.vMensajeria = viMensajeria;
-            this.iMensajeria = iiMensajeria;
-            this.vLimpieza = viLimpieza;
             this.iLimpieza = iiLimpieza;
-            this.iMuebles = IiMuebles;
+            this.iFumigacion= iiFumigacion;
+            this.iMensajeria = iiMensajeria;
             this.iCelular = iiCelular;
+            this.iConvencional = iiConvencional;
+            this.iMuebles = IiMuebles;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
 
@@ -231,6 +241,125 @@ namespace CedulasEvaluacion.Controllers
             return File(pdf, "application/pdf");
         }
 
+        [Route("/cedula/fumigacion/{servicio}/{id?}")]
+        public async Task<IActionResult> GeneraCedulaFumigacion(int servicio,int id)
+        {
+            var incidencias = new List<IncidenciasFumigacion>();
+            LocalReport local = new LocalReport();
+            var path = Directory.GetCurrentDirectory() + "\\Reports\\CedulaFumigacion.rdlc";
+            local.ReportPath = path;
+            var cedulas = await vrCedula.getCedulaByServicio(servicio, id);
+            var respuestas = await vCedula.obtieneRespuestas(id);
+            for (int i = 0; i < respuestas.Count; i++)
+            {
+                if (i == 0)
+                {
+                    local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El cierre de mes se efectuó el " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
+                                   " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " + Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".")});
+                }
+                else if (i == 1)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentaron Incidencias en el inmueble, las cuales se describen a continuación: ") });
+                        incidencias = await iFumigacion.GetIncidenciasPregunta(id,respuestas[i].Pregunta);
+                        local.DataSources.Add(new ReportDataSource("IncidenciasFechas", incidencias));
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón incidencias en el inmueble en el mes de evaluación.") });
+                        local.DataSources.Add(new ReportDataSource("IncidenciasFechas", incidencias));
+                    }
+                }
+                else if (i == 2)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentaron incidencias en el inmueble, las cuales se describen a continuación: ") });
+                        incidencias = await iFumigacion.GetIncidenciasPregunta(id,respuestas[i].Pregunta);
+                        local.DataSources.Add(new ReportDataSource("IncidenciasHora", incidencias));
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón incidencias en el inmueble en el mes de evaluación.") });
+                        local.DataSources.Add(new ReportDataSource("IncidenciasHora", incidencias));
+                    }
+                }
+                else if (i == 3)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentaron incidencias en el inmueble, las cuales se describen a continuación: ") });
+                        incidencias = await iFumigacion.GetIncidenciasPregunta(id, respuestas[i].Pregunta);
+                        local.DataSources.Add(new ReportDataSource("IncidenciasFauna", incidencias));
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón incidencias en el inmueble en el mes de evaluación.") });
+                        local.DataSources.Add(new ReportDataSource("IncidenciasFauna", incidencias));
+                    }
+                }
+                else if (i == 4)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con la regulación vigente de los productos.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador cumplió con la regulación vigente de los productos.") });
+                    }
+                }
+                else if (i == 5)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se entregó el reporte de servicios por parte del prestador.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El reporte de servicios se entregó el" +
+                            "el " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
+                                   " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " +
+                                   Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".")});
+                    }
+                }
+                else if (i == 6)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se entregó el listado de personal por parte del prestador.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El reporte de servicios se entregó el listado del personal " +
+                            "el " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
+                                   " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " +
+                                   Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".")});
+                    }
+                }
+                else if (i == 7)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicios no entregó el SUA de su personal, comentó lo siguiente: "
+                            +respuestas[i].Detalles) });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicio entregó el SUA de su personal, la fecha de entrega" +
+                                " fue el " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("dd") +
+                                       " de " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " +
+                                       Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("yyyy") + " correspondiente al mes de " +
+                                       respuestas[i].Detalles.Split("|")[1] + ".") });
+                    }
+                }
+            }
+            local.DataSources.Add(new ReportDataSource("CedulaFumigacion", cedulas));
+            var pdf = local.Render("PDF");
+            return File(pdf, "application/pdf");
+        }
+
         [Route("/cedula/muebles/{servicio}/{id?}")]
         public async Task<IActionResult> GeneraCedulaMuebles(int servicio, int id)
         {
@@ -331,6 +460,33 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaCelular", cedulas));
+            var pdf = local.Render("PDF");
+            return File(pdf, "application/pdf");
+        }
+
+        [Route("/cedula/convencional/{servicio}/{id?}")]
+        public async Task<IActionResult> GeneraCedulaConvencional(int servicio, int id)
+        {
+            var incidencias = new List<IncidenciasConvencional>();
+            LocalReport local = new LocalReport();
+            var path = Directory.GetCurrentDirectory() + "\\Reports\\CedulaConvencional.rdlc";
+            local.ReportPath = path;
+            var cedulas = await vrCedula.getCedulaByServicio(servicio, id);
+            var respuestas = await vCedula.obtieneRespuestas(id);
+            for (int i = 0; i < respuestas.Count; i++)
+            {
+                incidencias = await iConvencional.ListIncidenciasTipoConvencional(id, tiposConv[i]);
+                local.DataSources.Add(new ReportDataSource("Incidencias" + tiposConv[i], incidencias));
+                if (respuestas[i].Respuesta == true)
+                {
+                    local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentarón " + rConv[i] + " en el mes y se describen a continuación: ") });
+                }
+                else
+                {
+                    local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón " + rConv[i] + " en el mes.") });
+                }
+            }
+            local.DataSources.Add(new ReportDataSource("CedulaConvencional", cedulas));
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }

@@ -1,4 +1,5 @@
 ﻿using CedulasEvaluacion.Entities.Models;
+using CedulasEvaluacion.Entities.MPerfiles;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -78,6 +79,40 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
+        public async Task<PermisosPerfil> GetPermisoModuloByUser(string permiso, string modulo, int usuario)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getPermisoModuloByUser", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@usuario", usuario));
+                        cmd.Parameters.Add(new SqlParameter("@modulo", modulo));
+                        cmd.Parameters.Add(new SqlParameter("@permiso", permiso));
+                        var response = new PermisosPerfil();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response = MapToValuePermiso(reader);
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+
         //eliminamos las operaciones por perfil
         public async Task<int> eliminaOpPerfil(int perfil)
         {
@@ -109,6 +144,14 @@ namespace CedulasEvaluacion.Repositories
             return new OperacionesPerfil { 
                 PerfilId = (int)reader["PerfilId"],
                 OperacionId = (int)reader["OperacionId"]
+            };
+        }
+        private  PermisosPerfil MapToValuePermiso(SqlDataReader reader)
+        {
+            return new PermisosPerfil { 
+                Servicio = (int)reader["Servicio"],
+                Modulo = reader["Modulo"].ToString(),
+                Permiso = reader["Permiso"].ToString()
             };
         }
     }
