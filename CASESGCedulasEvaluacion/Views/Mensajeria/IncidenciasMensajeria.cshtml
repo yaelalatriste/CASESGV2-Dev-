@@ -152,7 +152,7 @@
                         <div class="row">
                             <h4 class="mt-2 mb-2">Incidencias de Acuse de Guías</h4>
                             <div class="col-lg-12 mt-3">
-                                <table class="table table-responsive-xl display" style="width:101%">
+                                <table class="table display" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -291,7 +291,7 @@
                         <div class="row">
                             <h4 class="mt-2 mb-2">Incidencias en Guías Robadas</h4>
                             <div class="col-lg-12 mt-3">
-                                <table class="table table-responsive-xl display" style="width:101%">
+                                <table class="table table-responsive-xl" style="width:101%">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -849,8 +849,23 @@
 
                     if (categoria == "Entrega" || categoria == "Recoleccion") {
                         if ($("#fecha_programada").val() != "" && $("#fecha_efectiva").val() != "" && $("#codigo_rastreo").val() != "" &&
-                            $("#numero_guia").val() != "" && $("#tipo_servicio").val() != "" && $("#total_sobrepeso").val() != "") {
-                            return true;
+                            $("#numero_guia").val() != "" && $("#tipo_servicio").val() != "") {
+                            if ($("#tipo_servicio").val() == "Nacional Sobrepeso" && $("#total_sobrepeso").val() == "") {
+                                if ($("#total_sobrepeso").val() == "") {
+                                    $('#total_sobrepeso').addClass('is-invalid');
+                                    $('#error_sobrepeso').css('display', 'block');
+                                }
+                                return false;
+                            }
+                            else if ($("#tipo_servicio").val() == "Internacional Sobrepeso" && $("#total_sobrepeso").val() == "") {
+                                if ($("#total_sobrepeso").val() == "") {
+                                    $('#total_sobrepeso').addClass('is-invalid');
+                                    $('#error_sobrepeso').css('display', 'block');
+                                }
+                                return false;
+                            } else {
+                                return true;
+                            }
                         }
 
                         if ($("#fecha_programada").val() == "") {
@@ -876,11 +891,6 @@
                         if ($("#tipo_servicio").val() == "") {
                             $('#tipo_servicio').addClass('is-invalid');
                             $('#error_tipoServicio').css('display', 'block');
-                        }
-
-                        if ($("#total_sobrepeso").val() == "") {
-                            $('#total_sobrepeso').addClass('is-invalid');
-                            $('#error_sobrepeso').css('display', 'block');
                         }
 
                         return false;
@@ -963,14 +973,26 @@
                     var categoria = $("#categoria").val();
                     var fechaProgramada = $("#fecha_programada").val() != '' ? $("#fecha_programada").val() : '1990-01-01';
                     var fechaEfectiva = $("#fecha_efectiva").val() != '' ? $("#fecha_efectiva").val() : '1990-01-01';
-                    var codigoRastreo = $("#codigo_rastreo").val() != '' ? $("#codigo_rastreo").val()+"" : "";
+                    var codigoRastreo = $("#codigo_rastreo").val() != '' ? $("#codigo_rastreo").val()+"" : 0;
                     var numeroGuia = $("#numero_guia").val() != '' ? $("#numero_guia").val(): "";
                     var tipoServicio = $("#tipo_servicio").val() != '' ? $("#tipo_servicio").val() : "";
                     var sobrepeso = $("#total_sobrepeso").val() != '' ? $("#total_sobrepeso").val() : "";
                     var totalAcuses = $("#acuses_faltantes").val() != '' ? $("#acuses_faltantes").val() : 0;
 
-                    var pregunta = tInci.indexOf(categoria)+1;
+                    if (sobrepeso == "") {
+                        sobrepeso = parseFloat(0);
+                    } else {
+                        sobrepeso = parseFloat(sobrepeso);
+                    }
 
+                    if (totalAcuses  == "") {
+                        totalAcuses = parseInt(0);
+                    } else {
+                        totalAcuses = parseInt(totalAcuses);
+                    }
+
+                    var pregunta = tInci.indexOf(categoria) + 1;
+                    alert(totalAcuses);
                     if (categoria == "") {
                         Swal.fire({
                             'icon': 'error',
@@ -987,7 +1009,7 @@
                                     CedulaMensajeriaId: parseInt(model.id), Pregunta: parseInt(pregunta),
                                     Tipo: categoria, FechaProgramada: fechaProgramada, Sobrepeso: sobrepeso,
                                     FechaEfectiva: fechaEfectiva, CodigoRastreo: parseInt(codigoRastreo), NumeroGuia: numeroGuia,
-                                    TipoServicio: tipoServicio, TotalAcuses: parseInt(totalAcuses)
+                                    TipoServicio: tipoServicio, TotalAcuses: totalAcuses
                                 }).then(res => {
                                     Swal.fire({
                                         'icon': "success",

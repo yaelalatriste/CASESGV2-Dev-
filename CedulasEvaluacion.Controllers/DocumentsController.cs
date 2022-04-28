@@ -1521,12 +1521,11 @@ namespace CedulasEvaluacion.Controllers
                 string strFacturas = "";
                 decimal totalFacturas = 0;
 
-                TrasladoExpedientes cedula = new TrasladoExpedientes();
-                cedula = await vTraslado.CedulaById(id);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula = await vCedula.CedulaById(id);
                 cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
-                cedula.incidencias = await iTraslado.getIncidencias(id);
                 cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedula.RespuestasEncuesta = await vTraslado.obtieneRespuestas(id);
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
                 cedula.facturas = new List<Facturas>();
                 cedula.facturas = await vFacturas.getFacturas(id, 4);
 
@@ -1536,25 +1535,16 @@ namespace CedulasEvaluacion.Controllers
 
                 //Creamos la Tabla
                 Section tablas = document.AddSection();
-
-                if (cedula.RespuestasEncuesta[0].Respuesta == false)
-                {
-                    document.Replace("||Personal||", "El prestador de servicio no cumplió con el personal requerido, ya que fue menor al solicitado, se solicitaron "+ cedula.RespuestasEncuesta[0].Detalles.Split("|")[0] + " personas" +
-                        " y se brindaron" + cedula.RespuestasEncuesta[0].Detalles.Split("|")[1] + " personas.", false, true);
-                }
-                else
-                {
-                    document.Replace("||Personal||", "El prestador de servicio cumplió con el personal requerido.", false, true);
-                }
-
+                cedula.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+                cedula.incidencias.traslado = await iTraslado.getIncidenciasByPregunta(id, 1);
                 //obtenemos el documento con marcas
-                if (cedula.incidencias.Count > 0)
+                if (cedula.incidencias.traslado.Count > 0)
                 {
                     Table tablaActividades = tablas.AddTable(true);
 
-                    String[] cabeceraFechas = { "Fecha de la Incidencia", "Material o Equipo Faltante" };
+                    String[] cabeceraFechas = { "Fecha de la Incidencia", "Personal Solicitado", "Personal Brindado" };
 
-                    tablaActividades.ResetCells(cedula.incidencias.Count + 1, cabeceraFechas.Length);
+                    tablaActividades.ResetCells(cedula.incidencias.traslado.Count + 1, cabeceraFechas.Length);
 
                     TableRow recRow = tablaActividades.Rows[0];
                     recRow.IsHeader = true;
@@ -1579,7 +1569,7 @@ namespace CedulasEvaluacion.Controllers
                         TR.CharacterFormat.TextColor = Color.White;
                     }
 
-                    for (int r = 0; r < cedula.incidencias.Count; r++)
+                    for (int r = 0; r < cedula.incidencias.traslado.Count; r++)
                     {
                         TableRow DataRow = tablaActividades.Rows[r + 1];
                         //Fila Height
@@ -1593,12 +1583,86 @@ namespace CedulasEvaluacion.Controllers
                             Paragraph p2 = DataRow.Cells[c].AddParagraph();
                             if (c == 0)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias[r].FechaIncumplida.ToString("dd/MM/yyyy"));
+                                TR2 = p2.AppendText(cedula.incidencias.traslado[r].FechaIncumplida.ToString("dd/MM/yyyy"));
+                            }
+                            if (c == 1)
+                            {
+                                TR2 = p2.AppendText(cedula.incidencias.traslado[r].PersonalSolicitado+"");
+                            }
+                            if (c == 2)
+                            {
+                                TR2 = p2.AppendText(cedula.incidencias.traslado[r].PersonalBrindado+"");
+                            }
+                            //Formato de celdas
+                            p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                            TR2.CharacterFormat.FontName = "Arial";
+                            TR2.CharacterFormat.FontSize = 9;
+                        }
+                    }
+
+                    BookmarksNavigator marcaActividades = new BookmarksNavigator(document);
+                    marcaActividades.MoveToBookmark("Personal", true, true);
+                    marcaActividades.InsertTable(tablaActividades);
+                    document.Replace("||Personal||", "El personal de servicio no cumplió con la maquinaria, equipo o  herramientas necesarias para prestar el servicio.", false, true);
+                }
+                else
+                {
+                    document.Replace("||Personal||", "El personal de servicio cumplió con la maquinaria, equipo o  herramientas necesarias para prestar el servicio.", false, true);
+                }
+
+                cedula.incidencias.traslado = await iTraslado.getIncidenciasByPregunta(id,3);
+                //obtenemos el documento con marcas
+                if (cedula.incidencias.traslado.Count > 0)
+                {
+                    Table tablaActividades = tablas.AddTable(true);
+
+                    String[] cabeceraFechas = { "Fecha de la Incidencia", "Material o Equipo Faltante" };
+
+                    tablaActividades.ResetCells(cedula.incidencias.traslado.Count + 1, cabeceraFechas.Length);
+
+                    TableRow recRow = tablaActividades.Rows[0];
+                    recRow.IsHeader = true;
+                    recRow.Height = 10;
+
+                    recRow.RowFormat.BackColor = Color.FromArgb(81, 25, 162);
+                    recRow.RowFormat.Borders.BorderType = BorderStyle.Single;
+
+
+                    for (int i = 0; i < cabeceraFechas.Length; i++)
+                    {
+                        //Alineacion de celdas
+                        Paragraph p = recRow.Cells[i].AddParagraph();
+                        tablaActividades.Rows[0].Cells[i].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                        p.Format.HorizontalAlignment = HorizontalAlignment.Center;
+
+                        //Formato de datos
+                        TextRange TR = p.AppendText(cabeceraFechas[i]);
+                        TR.CharacterFormat.FontName = "Arial";
+                        TR.CharacterFormat.FontSize = 9;
+                        TR.CharacterFormat.Bold = true;
+                        TR.CharacterFormat.TextColor = Color.White;
+                    }
+
+                    for (int r = 0; r < cedula.incidencias.traslado.Count; r++)
+                    {
+                        TableRow DataRow = tablaActividades.Rows[r + 1];
+                        //Fila Height
+                        DataRow.Height = 5;
+                        for (int c = 0; c < cabeceraFechas.Length; c++)
+                        {
+                            TextRange TR2 = null;
+                            //Alineacion de Celdas
+                            DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                            //Llenar datos en filas
+                            Paragraph p2 = DataRow.Cells[c].AddParagraph();
+                            if (c == 0)
+                            {
+                                TR2 = p2.AppendText(cedula.incidencias.traslado[r].FechaIncumplida.ToString("dd/MM/yyyy"));
                             }
                             if (c == 1)
                             {
                                 string coments = "";
-                                string [] comentarios = cedula.incidencias[r].Comentarios.Split("|");
+                                string [] comentarios = cedula.incidencias.traslado[r].Comentarios.Split("|");
                                 for (var m = 0;m< comentarios.Length-1;m++)
                                 {
                                     if((m+1) == comentarios.Length - 1)
@@ -5191,8 +5255,8 @@ namespace CedulasEvaluacion.Controllers
         {
 
             ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            Residuos cedulaResiduos = new Residuos();
-            cedulaResiduos = await vResiduos.CedulaById(id);
+            CedulaEvaluacion cedulaResiduos = new CedulaEvaluacion();
+            cedulaResiduos = await vCedula.CedulaById(id);
             cedulaResiduos.usuarios = await vUsuarios.getUserById(cedulaResiduos.UsuarioId);
             cedula = await vDocuments.getDatosActa(id, 7);
             cedula.facturas = new List<Facturas>();

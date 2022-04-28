@@ -94,7 +94,7 @@ namespace CedulasEvaluacion.Controllers
                     return Redirect("/error/cedSend");
                 }
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
-                cedula.inmuebleDestino = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                cedula.inmuebleDestino = await vInmuebles.inmuebleById(cedula.InmuebleDestinoId);
                 cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
                 cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
                 cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);

@@ -6950,6 +6950,11 @@ a.bg-warning:focus, a.bg-warning:hover, button.bg-warning:focus, button.bg-warni
     color: white;
 }
 
+.bg-pagado {
+    background-color: #062F01 !important;
+    color: white;
+}
+
 
 
 /*Fin del fondo para los servicios*/

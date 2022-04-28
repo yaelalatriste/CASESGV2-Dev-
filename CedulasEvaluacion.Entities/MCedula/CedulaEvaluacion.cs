@@ -12,6 +12,7 @@ namespace CedulasEvaluacion.Entities.MCedula
         public int Id { get; set; }
         public int ServicioId { get; set; }
         public int InmuebleId { get; set; }
+        public int Maniobras { get; set; }
         public int InmuebleDestinoId { get; set; }
         public int UsuarioId { get; set; }
         public string Folio { get; set; }

@@ -105,7 +105,6 @@ namespace CedulasEvaluacion.Repositories
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.Add(new SqlParameter("@cedulaMensajeria", incidenciasMensajeria.CedulaMensajeriaId));
-                            cmd.Parameters.Add(new SqlParameter("@path", (Path() + "\\" + incidenciasMensajeria.Folio + "\\" + file)));
                             cmd.Parameters.Add(new SqlParameter("@file", file));
 
                             await sql.OpenAsync();

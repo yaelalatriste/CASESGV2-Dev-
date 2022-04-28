@@ -48,7 +48,7 @@
                             <td>@j</td>
                             <td>@of.Servicio</td>
                             <td>@of.Anio</td>
-                            <td>@of.Anio/@of.NumeroOficio</td>
+                            <td>@of.NumeroOficio/@of.Anio</td>
                             <td>@of.Estatus</td>
                             <td>
                                 @if (@of.Estatus.Equals("En Proceso"))
@@ -57,15 +57,15 @@
                                         <i class="fas fa-pencil text-primary mr-2"></i>
                                     </a>
                                 }
-                                @if (@of.Estatus.Equals("Cancelado") || @of.Estatus.Equals("Enviado a DGPPT") || @of.Estatus.Equals("Pagado"))
+                                @if (@of.Estatus.Equals("Enviado a DGPPT") || @of.Estatus.Equals("Pagada"))
                                 {
-                                    <a href="/financieros/revisar/oficio/@of.Id" data-toggle="tooltip" title='Ver detalles del Oficio "@of.Anio/@of.NumeroOficio"'>
+                                    <a href="/financieros/revisar/@Model.oficio[0].ServicioId/@of.Id" data-toggle="tooltip" title='Ver detalles del Oficio "@of.Anio/@of.NumeroOficio"'>
                                         <i class="fas fa-eye text-primary mr-2"></i>
                                     </a>
                                 }
                                 @if (@of.Estatus.Equals("Enviado a DGPPT"))
                                 {
-                                    <a class="cancelarOficio" href="#" data-id="@of.Id" data-toggle="tooltip" title='Cancelar el Oficio "@of.Anio/@of.NumeroOficio"'>
+                                    <a class="cancelarOficio" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-toggle="tooltip" title='Cancelar el Oficio "@of.Anio/@of.NumeroOficio"'>
                                         <i class="fa-solid fa-ban text-danger mr-2"></i>
                                     </a>
                                 }
@@ -75,6 +75,10 @@
                                     <a class="pagarOficio" href="#" data-id="@of.Id" data-toggle="tooltip" title='Pagar el Oficio "@of.Anio/@of.NumeroOficio"'>
                                         <i class="fa-duotone fa-money-bill-1-wave text-success"></i>
                                     </a>
+                                }
+                                @if (@of.Estatus.Equals("Cancelado"))
+                                {
+                                    <p class="font-weight-bold text-danger">Oficio Cancelado</p>
                                 }
                             </td>
                         </tr>
@@ -97,7 +101,8 @@
                                     <th></th>
                                     @foreach (var est in lestatus)
                                     {
-                                        if (est.Equals("En Proceso") || est.Equals("Enviado a DAS") || est.Equals("Autorizada") || est.Equals("Rechazada"))
+                                        if (est.Equals("En Proceso") || est.Equals("Enviado a DAS") || est.Equals("Autorizada") || est.Equals("Rechazada")
+                                            || est.Equals("Trámite Rechazado"))
                                         {
                                             <th>@est</th>
                                         }
@@ -112,7 +117,7 @@
         </div>
     </div>
     <div class="row col-lg-12">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="card">
                 <div class="card-header bg-gray text-white">
                     <h4>Cédulas en Proceso de CAE</h4>
@@ -125,7 +130,7 @@
                                     <th></th>
                                     @foreach (var est in lestatus)
                                     {
-                                        if (est.Equals("Revisión CAE") || est.Equals("Autorizado CAE") || est.Equals("Trámite Rechazado"))
+                                        if (est.Equals("Revisión CAE") || est.Equals("Autorizado CAE"))
                                         {
                                             <th>@est</th>
                                         }
@@ -138,7 +143,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-header bg-gray text-white">
                     <h4>Cédulas en Proceso de Financieros</h4>
@@ -249,24 +254,54 @@
 
             /*Flujo de Oficio*/
                 $(".cancelarOficio").click(function () {
-                    axios.get("/financieros/cancela/oficio/"+$(this).data('id')).then(response => {
-                        if (response.status == 200) {
-                            Swal.fire({
-                                'icon': 'success',
-                                'title': 'Oficios para Trámite de Pago',
-                                'html': 'Se canceló el oficio correctamente.'
+                    Swal.fire({
+                        'icon': 'warning',
+                        'title': 'Trámite de Oficio',
+                        'html': '¿Está seguro que desea <b>cancelar el oficio con el número: ' + $(this).data('oficio') + '/' + $(this).data('anio') + '?',
+                        'confirmButtonColor': '#3085d6',
+                        'cancelButtonColor': '#d33',
+                        'confirmButtonText': 'Si, cancelar',
+                        'cancelButtonText': 'Cancelar',
+                        'showCancelButton': true
+                    }).then(confirm => {
+                        if (confirm.isConfirmed) {
+                            axios.get("/financieros/cancela/oficio/" + model.oficio[0].servicioId + '/' + $(this).data('id')).then(response => {
+                                if (response.status == 200) {
+                                    Swal.fire({
+                                        'icon': 'success',
+                                        'title': 'Oficios para Trámite de Pago',
+                                        'html': 'Se canceló el oficio correctamente.'
+                                    }).then(function () {
+                                        window.location.reload();
+                                    });
+                                }
                             });
                         }
                     });
                 });
 
                 $(".pagarOficio").click(function () {
-                    axios.get("/financieros/pagar/oficio/" + $(this).data('id')).then(response => {
-                        if (response.status == 200) {
-                            Swal.fire({
-                                'icon': 'success',
-                                'title': 'Oficios para Trámite de Pago',
-                                'html': 'Se pagó el oficio correctamente.'
+                    Swal.fire({
+                        'icon': 'warning',
+                        'title': 'Trámite de Oficio',
+                        'html': '¿Está seguro que desea <b>pagar el oficio con el número: ' + $(this).data('oficio') + '/' + $(this).data('anio')+'?',
+                        'confirmButtonColor': '#3085d6',
+                        'cancelButtonColor': '#d33',
+                        'confirmButtonText': 'Si, pagar',
+                        'cancelButtonText': 'Cancelar',
+                        'showCancelButton': true
+                    }).then(confirm => {
+                        if (confirm.isConfirmed) {
+                            axios.get("/financieros/pagar/oficio/" + model.oficio[0].servicioId + '/' + $(this).data('id')).then(response => {
+                                if (response.status == 200) {
+                                    Swal.fire({
+                                        'icon': 'success',
+                                        'title': 'Oficios para Trámite de Pago',
+                                        'html': 'Se pagó el oficio correctamente.'
+                                    }).then(function () {
+                                        window.location.reload();
+                                    });
+                                }
                             });
                         }
                     });

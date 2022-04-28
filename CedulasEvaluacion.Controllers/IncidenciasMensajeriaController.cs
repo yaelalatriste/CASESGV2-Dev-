@@ -137,7 +137,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/mensajeria/getPlantilla")]
         public IActionResult getPlantilla()
         {
-            string fileName = @"e:\sitios\Cedulas\DocsV2\Plantilla Incidencias.xlsx";
+            string fileName = @"e:\Plantillas CASESGV2\DocsV2\Plantilla Incidencias.xlsx";
             byte[] fileBytes = System.IO.File.ReadAllBytes(fileName);
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, "Plantilla_Incidencias.xlsx");
         }

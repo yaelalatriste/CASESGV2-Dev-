@@ -236,7 +236,7 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-        public async Task<int> CancelarOficio(int id)
+        public async Task<int> CancelarOficio(int id, int servicio)
         {
             try
             {
@@ -246,6 +246,7 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@oficio", id));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
 
                         await sql.OpenAsync();
                         int i = await cmd.ExecuteNonQueryAsync();
@@ -266,7 +267,7 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-        public async Task<int> PagarOficio(int id)
+        public async Task<int> PagarOficio(int id, int servicio)
         {
             try
             {
@@ -276,6 +277,7 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@oficio", id));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
 
                         await sql.OpenAsync();
                         int i = await cmd.ExecuteNonQueryAsync();
@@ -365,7 +367,7 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-        public async Task<int> GetTramiteOficio(int id)
+        public async Task<int> GetTramiteOficio(int id, int servicio)
        {
             int success = -1;
             try
@@ -376,6 +378,7 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@oficio", id));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
 
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();

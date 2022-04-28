@@ -1,11 +1,11 @@
-﻿@model CedulasEvaluacion.Entities.TrasladoExp.TrasladoExpedientes;
+﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Traslado y Maniobras de Expedientes - Folio: " + Model.Folio;
 }
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/trasladoExp/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
+        <a href="/trasladoExp/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -41,7 +41,7 @@
                     <div class="col-lg-12 mt-3">
                         <div class="card bg-light d-flex flex-fill">
                             <div class="card-header border-bottom-0">
-                                <h2 class="lead"><b>Área Evaluada: </b> @Model.AreaEvaluada</h2>
+                                <h2 class="lead"><b>Área Evaluada: </b> @Model.inmuebles.Nombre</h2>
                             </div>
                             <div class="card-body pt-0 mt-4">
                                 <div class="row">
@@ -119,7 +119,7 @@
                                         }
                                         <p class="text-sm">
                                             @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                                                  @Model.RespuestasEncuesta[2].MontoPenalizacion);
+                                                                                      @Model.RespuestasEncuesta[2].MontoPenalizacion);
                                             }
                                             @if (total > 0)
                                             {
@@ -172,12 +172,39 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Fecha de la Incidencia</th>
+                                            <th>Personal Solicitado</th>
+                                            <th>Personal Brindado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ var i = 0;}
+                                        @foreach (var inci in @Model.incidencias.traslado)
+                                        {
+                                            @if (@inci.Pregunta == @Model.RespuestasEncuesta[0].Pregunta)
+                                            {
+                                                i = i + 1;
+                                                <tr>
+                                                    <td>@i</td>
+                                                    <td>@inci.FechaIncumplida.ToString("dd/MM/yyyy")</td>
+                                                    <td>@inci.PersonalSolicitado</td>
+                                                    <td>@inci.PersonalBrindado</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                <strong>Días sin cumplír con el servicio: </strong> @Model.RespuestasEncuesta[0].Detalles <br /><br />
                                 <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)
                             </h5>
                         </div>
@@ -214,51 +241,51 @@
                 </div>
                 @if (@Model.RespuestasEncuesta[1].Respuesta == false)
                 {
-                        <div class="row mt-4">
-                            <div class="row col-lg-12 mt-3">
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <p class="h3 text-justify text-danger">El personal del prestador de servicios no se presento debidamente uniformado, siendo acreedor a una penalización.</p>
-                                </div>
-                                <div class="col-lg-2" style="margin-top: -18px;">
-                                    <div class="small-box bg-warning">
-                                        <div class="icon">
-                                            <i class="fas fa-times-circle text-danger"></i>
-                                        </div>
+                    <div class="row mt-4">
+                        <div class="row col-lg-12 mt-3">
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <p class="h3 text-justify text-danger">El personal del prestador de servicios no se presento debidamente uniformado, siendo acreedor a una penalización.</p>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: -18px;">
+                                <div class="small-box bg-warning">
+                                    <div class="icon">
+                                        <i class="fas fa-times-circle text-danger"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
-                                </h5>
-                            </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5 class="text-danger ml-4">
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
+                            </h5>
                         </div>
+                    </div>
                 }
                 else
                 {
-                        <div class="row mt-4">
-                            <div class="row col-lg-12 mt-3">
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <p class="h3 text-justify text-success">El personal del prestador de servicios se presentó debidamente uniformado, evitando una penalización.</p>
-                                </div>
-                                <div class="col-lg-2" style="margin-top: -18px;">
-                                    <div class="small-box bg-warning">
-                                        <div class="icon">
-                                            <i class="fas fa-check-circle text-success"></i>
-                                        </div>
+                    <div class="row mt-4">
+                        <div class="row col-lg-12 mt-3">
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <p class="h3 text-justify text-success">El personal del prestador de servicios se presentó debidamente uniformado, evitando una penalización.</p>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: -18px;">
+                                <div class="small-box bg-warning">
+                                    <div class="icon">
+                                        <i class="fas fa-check-circle text-success"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12">
-                                <h5 class="text-success ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
-                                </h5>
-                            </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5 class="text-success ml-4">
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
+                            </h5>
                         </div>
+                    </div>
                 }
             </div>
             <div class="tab-pane fade" id="equipo" role="tabpanel" aria-labelledby="profile-tab">
@@ -267,29 +294,31 @@
                 </div>
                 @if (@Model.RespuestasEncuesta[2].Respuesta == false)
                 {
-                        <div class="row mt-4">
-                            <div class="row col-lg-12 mt-3">
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <p class="h3 text-justify text-danger">El personal del prestador de servicios no se presentó con el equipo de seguridad necesario, siendo acreedor a una penalización.</p>
-                                </div>
-                                <div class="col-lg-2" style="margin-top: -18px;">
-                                    <div class="small-box bg-warning">
-                                        <div class="icon">
-                                            <i class="fas fa-times-circle text-danger"></i>
-                                        </div>
+                    <div class="row mt-4">
+                        <div class="row col-lg-12 mt-3">
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <p class="h3 text-justify text-danger">El personal del prestador de servicios no se presentó con el equipo de seguridad necesario, siendo acreedor a una penalización.</p>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: -18px;">
+                                <div class="small-box bg-warning">
+                                    <div class="icon">
+                                        <i class="fas fa-times-circle text-danger"></i>
                                     </div>
                                 </div>
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Fecha de la Incidencia</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @{ var i = 0;}
-                                            @foreach (var inci in @Model.incidencias)
+                            </div>
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Fecha de la Incidencia</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ var i = 0;}
+                                        @foreach (var inci in @Model.incidencias.traslado)
+                                        {
+                                            @if (@inci.Pregunta == @Model.RespuestasEncuesta[2].Pregunta)
                                             {
                                                 i = i + 1;
                                                 <tr>
@@ -298,44 +327,45 @@
                                                     <td>@inci.Comentarios.Replace("|", " ")</td>
                                                 </tr>
                                             }
-                                        </tbody>
-                                    </table>
-                                </div>
+                                         }
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12">
-                                <h5 class="text-danger ml-4">
-                                    <strong>Días sin cumplír con el servicio: </strong> @Model.RespuestasEncuesta[2].Detalles <br /><br />
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
-                                </h5>
-                            </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5 class="text-danger ml-4">
+                                <strong>Días sin cumplír con el servicio: </strong> @Model.RespuestasEncuesta[2].Detalles <br /><br />
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
+                            </h5>
                         </div>
-                                                }
-                                                else
-                                                {
-                        <div class="row mt-4">
-                            <div class="row col-lg-12 mt-3">
-                                <div class="col-lg-9 mt-3 ml-4">
-                                    <p class="h3 text-justify text-success">El personal del prestador de servicios se presentó con el equipo de seguridad necesario, evitando una penalización.</p>
-                                </div>
-                                <div class="col-lg-2" style="margin-top: -18px;">
-                                    <div class="small-box bg-warning">
-                                        <div class="icon">
-                                            <i class="fas fa-check-circle text-success"></i>
-                                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row mt-4">
+                        <div class="row col-lg-12 mt-3">
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <p class="h3 text-justify text-success">El personal del prestador de servicios se presentó con el equipo de seguridad necesario, evitando una penalización.</p>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: -18px;">
+                                <div class="small-box bg-warning">
+                                    <div class="icon">
+                                        <i class="fas fa-check-circle text-success"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12">
-                                <h5 class="text-success ml-4">
-                                    <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
-                                </h5>
-                            </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5 class="text-success ml-4">
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
+                            </h5>
                         </div>
-                                                }
+                    </div>
+                }
             </div>
             <div class="tab-pane fade" id="entregables" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="col-lg-12 mt-3">

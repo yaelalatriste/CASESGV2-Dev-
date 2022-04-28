@@ -415,6 +415,7 @@ namespace CedulasEvaluacion.Repositories
                 UsuarioId = (int)reader["UsuarioId"],
                 InmuebleId = (int)reader["InmuebleId"],
                 InmuebleDestinoId = reader["InmuebleDestinoId"] != DBNull.Value ? (int)reader["InmuebleDestinoId"]:0,
+                Maniobras = reader["Maniobras"] != DBNull.Value ? (int)reader["Maniobras"] :0,
                 Folio = reader["Folio"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Anio = (int)reader["Anio"],

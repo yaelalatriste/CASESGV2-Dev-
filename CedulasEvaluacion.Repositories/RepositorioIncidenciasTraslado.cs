@@ -33,8 +33,8 @@ namespace CedulasEvaluacion.Repositories
                         cmd.Parameters.Add(new SqlParameter("@pregunta", incidenciasTraslado.Pregunta));
                         cmd.Parameters.Add(new SqlParameter("@personalSolicitado", incidenciasTraslado.PersonalSolicitado));
                         cmd.Parameters.Add(new SqlParameter("@personalBrindado", incidenciasTraslado.PersonalBrindado));
-                        cmd.Parameters.Add(new SqlParameter("@incidencias", incidenciasTraslado.IncidenciasEquipo));
                         cmd.Parameters.Add(new SqlParameter("@comentarios", incidenciasTraslado.Comentarios));
+                        cmd.Parameters.Add(new SqlParameter("@incidencias", incidenciasTraslado.IncidenciasEquipo));
                         cmd.Parameters.Add(new SqlParameter("@fechaIncumplida", incidenciasTraslado.FechaIncumplida.Date));
 
                         await sql.OpenAsync();
@@ -60,6 +60,8 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@id", incidenciasTraslado.Id));
+                        cmd.Parameters.Add(new SqlParameter("@cedulaId", incidenciasTraslado.CedulaTrasladoId));
+                        cmd.Parameters.Add(new SqlParameter("@pregunta", incidenciasTraslado.Pregunta));
                         cmd.Parameters.Add(new SqlParameter("@personalSolicitado", incidenciasTraslado.PersonalSolicitado));
                         cmd.Parameters.Add(new SqlParameter("@personalBrindado", incidenciasTraslado.PersonalBrindado));
                         cmd.Parameters.Add(new SqlParameter("@incidencias", incidenciasTraslado.IncidenciasEquipo));

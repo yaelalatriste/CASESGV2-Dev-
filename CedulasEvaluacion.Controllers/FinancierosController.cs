@@ -82,23 +82,23 @@ namespace CedulasEvaluacion.Controllers
             if (success == 1)
             {
                 Oficio oficio = await vFinancieros.GetOficioById(id);
-                //oficio.detalleCedulas = new List<DetalleCedula>();
-                //oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id, servicio);
+                oficio.detalleCedulas = new List<DetalleCedula>();
+                oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id, servicio);
                 oficio.cedulasOficio = new List<DetalleCedula>();
-                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id,servicio);
+                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id, servicio);
                 return View(oficio);
             }
             return Redirect("/error/denied");
         }
 
         [HttpGet]
-        [Route("/financieros/envia/oficio/{id}")]
-        public async Task<IActionResult> TramitarOficio(int id)
+        [Route("/financieros/envia/oficio/{id}/{servicio}")]
+        public async Task<IActionResult> TramitarOficio(int id,int servicio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
-                int tramitado = await vFinancieros.GetTramiteOficio(id);
+                int tramitado = await vFinancieros.GetTramiteOficio(id,servicio);
                 if (tramitado != -1)
                 {
                     return Ok(tramitado);
@@ -109,13 +109,13 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpGet]
-        [Route("/financieros/cancela/oficio/{id}")]
-        public async Task<IActionResult> CancelarOficio(int id)
+        [Route("/financieros/cancela/oficio/{servicio}/{id}")]
+        public async Task<IActionResult> CancelarOficio(int id, int servicio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                int cancelado = await vFinancieros.CancelarOficio(id);
+                int cancelado = await vFinancieros.CancelarOficio(id,servicio);
                 if (cancelado != -1)
                 {
                     return Ok(cancelado);
@@ -126,13 +126,13 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpGet]
-        [Route("/financieros/pagar/oficio/{id}")]
-        public async Task<IActionResult> PagarOficio(int id)
+        [Route("/financieros/pagar/oficio/{servicio}/{id}")]
+        public async Task<IActionResult> PagarOficio(int servicio,int id)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                int cancelado = await vFinancieros.PagarOficio(id);
+                int cancelado = await vFinancieros.PagarOficio(id,servicio);
                 if (cancelado != -1)
                 {
                     return Ok(cancelado);
@@ -295,7 +295,8 @@ namespace CedulasEvaluacion.Controllers
             {
                 foreach (var dt in dashboards)
                 {
-                    if (dt.Estatus.Equals("En Proceso") || dt.Estatus.Equals("Enviado a DAS") || dt.Estatus.Equals("Autorizada") || dt.Estatus.Equals("Rechazada"))
+                    if (dt.Estatus.Equals("En Proceso") || dt.Estatus.Equals("Enviado a DAS") || dt.Estatus.Equals("Autorizada") || dt.Estatus.Equals("Rechazada")
+                        || dt.Estatus.Equals("Trámite Rechazado"))
                     {
                         estatus.Add(dt.Estatus);
                     }
@@ -305,7 +306,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 foreach (var dt in dashboards)
                 {
-                    if (dt.Estatus.Equals("Revisión CAE") || dt.Estatus.Equals("Autorizado CAE") || dt.Estatus.Equals("Trámite Rechazado"))
+                    if (dt.Estatus.Equals("Revisión CAE") || dt.Estatus.Equals("Autorizado CAE"))
                     {
                         estatus.Add(dt.Estatus);
                     }
@@ -315,7 +316,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 foreach (var dt in dashboards)
                 {
-                    if (dt.Estatus.Equals("En Trámite") || dt.Estatus.Equals("Trámite de Pago") || dt.Estatus.Equals("Enviada a DGPPT") || dt.Estatus.Equals("Pagado"))
+                    if (dt.Estatus.Equals("En Trámite") || dt.Estatus.Equals("Trámite de Pago") || dt.Estatus.Equals("Enviada a DGPPT") || dt.Estatus.Equals("Pagada"))
                     {
                         estatus.Add(dt.Estatus);
                     }

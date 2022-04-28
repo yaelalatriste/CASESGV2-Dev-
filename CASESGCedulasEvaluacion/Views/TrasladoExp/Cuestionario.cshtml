@@ -1,18 +1,19 @@
 ﻿@* Cuestionario Traslado Expedientes *@
-@model CedulasEvaluacion.Entities.TrasladoExp.TrasladoExpedientes
+@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
 @{
     ViewData["Title"] = "Cédula de Traslado y Maniobra de Expedientes - Folio: " + Model.Folio;
 }
 
 <div class="container-fluid" id="limpieza">
     <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Facturas" data-placement="top"><i class="fal fa-file-invoice"></i></a>
-    <a href="/trasladoExp/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/trasladoExp/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
             <tr>
                 <td data-toggle="tooltip" title="Folio de evaluación asignado por el sistema" data-placement="top"><strong>Folio: </strong> @Model.Folio</td>
                 <td data-toggle="tooltip" title="Año de evaluación del servicio" data-placement="top"><strong>Año: </strong>@Model.Anio</td>
-                <td><strong data-toggle="tooltip" title="Mes evaluado" data-placement="top">Mes: </strong>@Model.Mes</td>
+                <td><strong data-toggle="tooltip" title="Mes evaluado" data-placement="top">Mes Evaluado: </strong>@Model.Mes</td>
+                <td data-toggle="tooltip" title="Administración/Inmueble evaluado" data-placement="top"><strong>Inmueble: </strong>@Model.inmuebles.Nombre</td>
                 <td data-toggle="tooltip" title="Estatus de la cédula del servicio de Limpieza" data-placement="top"><strong>Estatus: </strong>@Model.Estatus</td>
             </tr>
             <tr>
@@ -1263,14 +1264,10 @@
                         for (let i = 0; i < 3; i++) {
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta != null) {
-                                if (i == 0 && respuesta == "false") {
-                                    respuestas.push({
-                                        CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"),Detalles: ($('#personalSolicitado').val() + "|" + $('#personalBrindado').val())
-                                    });
-                                } else if (i == 1 && respuesta == "false") {
-                                    respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#comentarios").val() });
+                                if (i == 1 && respuesta == "false") {
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: $("#comentarios").val() });
                                 } else {
-                                    respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 }
                             }
                         }
@@ -1300,10 +1297,10 @@
                             let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta != null) {
                                 if (respuesta == "true") {
-                                    respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 } else {
                                     let detalles = $('.detalles' + (i + 1)).val();
-                                    respuestas.push({ CedulaTrasladoId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
+                                    respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: detalles });
                                 }
                             }
                         }
@@ -1352,14 +1349,14 @@
                                 });
                                 return false;
                             } else {
-                                axios.post("/trasladoExp/sendCedula/"+model.id).then(response => {
+                                axios.post("/trasladoExp/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
                                     if (response.status == 200) {
                                         Swal.fire({
                                             'icon': "success",
                                             'title': 'Servicio de Traslado de Expedientes',
                                             'html': "Se envíó la cédula para su revisión correctamente."
                                         }).then(function () {
-                                            window.location.href = "/trasladoExp/index";
+                                            window.location.href = "/trasladoExp/index/"+model.servicioId;
                                         });
                                     } else {
                                         Swal.fire({

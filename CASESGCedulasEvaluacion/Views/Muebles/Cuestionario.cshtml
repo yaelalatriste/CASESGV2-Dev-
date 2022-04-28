@@ -1172,16 +1172,16 @@
                             id = 0;
                         }
 
-                        formData.append("Id", id);
+                        /*formData.append("Id", id);
                         formData.append("CedulaMuebleId", model.id);
                         formData.append("Archivo", file);
                         formData.append("Folio", folio);
                         formData.append("Tipo", tipo);
-                        formData.append("Comentarios", comentarios);
+                        formData.append("Comentarios", comentarios);*/
 
                         if (validaCamposArchivo()) {
                             if (id != 0) {
-                                axios.post('/muebles/adjuntaEntregable', formData, {
+                                axios.post('/muebles/adjuntaEntregable', { Archivo: file, CedulaMuebleId: model.id, Tipo: tipo, Id: parseInt(id), Folio: folio, Comentarios: comentarios }, {
                                     headers: { 'Content-Type': 'multipart/form-data' }
 
                                 }).then(response => {
@@ -1219,9 +1219,10 @@
                             } else {
                                 axios.get('/muebles/buscaEntregable/' + model.id + '/' + tipo).then(exist => {
                                     if (exist.data == 0) {
-                                        axios.post('/muebles/adjuntaEntregable', formData, {
+                                        axios.post('/muebles/adjuntaEntregable', {
+                                            Archivo: file, CedulaMuebleId: model.id, Tipo: tipo, Id: parseInt(id), Folio: folio, Comentarios: comentarios
+                                        }, {
                                             headers: { 'Content-Type': 'multipart/form-data' }
-
                                         }).then(response => {
                                             $('#cerrar_modal_sua').trigger('click');
                                             /*Validamos la pregunta a la que se realizo el anexo de evidencia*/
