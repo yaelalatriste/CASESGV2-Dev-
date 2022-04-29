@@ -79,7 +79,7 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
-        public async Task<PermisosPerfil> GetPermisoModuloByUser(string permiso, string modulo, int usuario)
+        public async Task<PermisosPerfil> GetPermisoModuloByUser(string permiso, int servicio, int usuario)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@usuario", usuario));
-                        cmd.Parameters.Add(new SqlParameter("@modulo", modulo));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
                         cmd.Parameters.Add(new SqlParameter("@permiso", permiso));
                         var response = new PermisosPerfil();
                         await sql.OpenAsync();

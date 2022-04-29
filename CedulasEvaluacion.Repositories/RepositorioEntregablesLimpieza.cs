@@ -46,8 +46,9 @@ namespace CedulasEvaluacion.Repositories
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                string msg = ex.Message;
                 return null;
             }
         }
@@ -561,7 +562,9 @@ namespace CedulasEvaluacion.Repositories
                 Estatus = reader["Estatus"] != DBNull.Value ? reader["Estatus"].ToString() : "",
                 NombreArchivo = reader["Archivo"].ToString(),
                 FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"].ToString()),
-                Comentarios = reader["Comentarios"].ToString()
+                Comentarios = reader["Comentarios"].ToString(),
+                Icono = reader["Icono"].ToString(),
+                Color = reader["Color"].ToString()
             };
         }
         /*Fin de los metodos para obtener los entregables adicionales*/

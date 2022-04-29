@@ -1,4 +1,8 @@
 ﻿@model CedulasEvaluacion.Entities.MCedula.CedulaEvaluacion;
+@inject CedulasEvaluacion.Services.ServicePermisos  sPermisos;
+@{
+    int user = Convert.ToInt32(@User.Claims.ElementAt(0).Value + "");
+}
 @{
     ViewData["Title"] = "Seguimiento a la Cédula del Servicio de Limpieza en Áreas Comunes y Oficinas con Folio: " + Model.Folio;
 }
@@ -204,8 +208,8 @@
                     <div class="col-lg-12">
                         <div class="col-lg-12 mb-3">
                             @*if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Autorizado CAE")) && ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || (@User.Claims.ElementAt(2).Value).Contains("Administrador")))
-                            {*@
-                                <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
+                                {*@
+                            <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
                             @*}*@
                         </div>
                         <h6 class="mt-4"><strong>Entregables Adjuntos</strong></h6>
@@ -261,12 +265,12 @@
                                             tipo = "Memorándum";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
-                                        else if (entre.Tipo.Equals("AlcanceMO")) 
+                                        else if (entre.Tipo.Equals("AlcanceMO"))
                                         {
                                             tipo = "Alcance a Memorándum/Oficio";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
-                                        else if (entre.Tipo.Equals("AlcanceAER")) 
+                                        else if (entre.Tipo.Equals("AlcanceAER"))
                                         {
                                             tipo = "Alcance a Acta E-R";
                                             <td>@Html.DisplayName(tipo)</td>
@@ -278,193 +282,28 @@
                                         }
                                         <td>@entre.NombreArchivo</td>
                                         <td>@entre.FechaCreacion.ToString("dd-MM-yyyy")</td>
-                                        <!--Evaluador-->
-                                        @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
-                                        {
-                                            @if (entre.Estatus.Equals(""))
+                                        <td class="row col-lg-12 justify-content-center">
+                                            <div class="icon @entre.Color font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Rechazado">
+                                                <i class="fas fa-check-circle"></i> @entre.Estatus
+                                            </div>
+                                            @if (await sPermisos.GetPermisosByModulo("autorizar entregables", @Model.ServicioId, @user) != 0)
                                             {
-                                                estatus = true;
-                                                <td class="text-center text-info font-weight-bold">En Revisión</td>
-                                            }
-                                            else if (@entre.Estatus.Equals("Rechazado"))
-                                            {
-                                                @if (!@entre.Tipo.Equals("Memorandum"))
+                                                @if (@entre.Estatus.Equals("Rechazado"))
                                                 {
-                                                    rechazat = true;
+                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
+                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
+                                                        <i class="fas fa-check ml-1"></i>
+                                                    </a>
                                                 }
                                                 else
                                                 {
-                                                    omemo = true;
-                                                }
-
-                                                <td class="row col-lg-12 justify-content-center">
-                                                    <div class="form-row" data-tipo="@entre.Tipo">
-                                                        <div class="icon mr-2 text-danger font-weight-bold" data-toggle="tooltip" title="Entregable Rechazado">
-                                                            <i class="fas fa-times-circle"></i> Rechazado
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            }
-                                            else if (@entre.Estatus.Equals("Autorizado"))
-                                            {
-                                                <td class="row col-lg-12 justify-content-center">
-                                                    <div class="icon text-success font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Autorizado">
-                                                        <i class="fas fa-check-circle"></i> Autorizado
-                                                    </div>
-                                                </td>
-                                            }
-                                        }
-                                        else if ((@User.Claims.ElementAt(2).Value).Contains("CAE"))
-                                        {
-                                            @if (entre.Estatus.Equals("") && memo == false)
-                                            {
-                                                estatus = true;
-                                                <td class="text-center">
-                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
-                                                        <i class="fas fa-check ml-1"></i>
-                                                    </a>
-                                                    <a href="#" class='btn-xs btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
-                                                        <i class="fas fa-times ml-1 mr-1"></i>
-                                                    </a>
-                                                </td>
-                                            }
-                                            else if (@entre.Estatus.Equals("Rechazado"))
-                                            {
-                                                rechazat = true;
-                                                <td class="row col-lg-12 justify-content-center">
-                                                    <div class="form-row" data-tipo="@entre.Tipo">
-                                                        <div class="icon mr-2 text-danger font-weight-bold" data-toggle="tooltip" title="Entregable Rechazado">
-                                                            <i class="fas fa-times-circle"></i> Rechazado
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            }
-                                            else if (@entre.Estatus.Equals("Autorizado"))
-                                            {
-                                                <td class="row col-lg-12 justify-content-center">
-                                                    <div class="icon text-success font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Autorizado">
-                                                        <i class="fas fa-check-circle"></i> Autorizado
-                                                    </div>
-                                                    @if (@Model.Estatus.Equals("Revisión CAE"))
-                                                    {
-                                                        <a href="#" class='btn btn-sm btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                           data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
-                                                            <i class="far fa-times"></i>
-                                                        </a>
-                                                    }
-                                                </td>
-                                            }
-                                            else if (entre.Estatus.Equals(""))
-                                            {
-                                                estatus = true;
-                                                <td class="text-center text-info font-weight-bold">En Revisión</td>
-                                            }
-                                        }
-                                        else if ((@User.Claims.ElementAt(2).Value).Contains("Financieros"))
-                                        {
-                                            <!--Financieros-->
-                                            if (@entre.Estatus.Equals("Autorizado"))
-                                            {
-                                                <td class="row col-lg-12 justify-content-center">
-                                                    <div class="icon text-success font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Autorizado">
-                                                        <i class="fas fa-check-circle"></i> Autorizado
-                                                    </div>
-                                                    @if (@Model.Estatus.Equals("En Trámite"))
-                                                    {
-                                                        <a href="#" class='btn btn-sm btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                           data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
-                                                            <i class="far fa-times"></i>
-                                                        </a>
-                                                    }
-                                                </td>
-                                            }
-                                            else if (@entre.Estatus.Equals("Rechazado"))
-                                            {
-                                                rechazat = true;
-                                                <td class="row col-lg-12 justify-content-center">
-                                                    <div class="form-row" data-tipo="@entre.Tipo">
-                                                        <div class="icon mr-2 text-danger font-weight-bold" data-toggle="tooltip" title="Entregable Rechazado">
-                                                            <i class="fas fa-times-circle"></i> Rechazado
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            }
-                                            else if (entre.Estatus.Equals("") && @Model.Estatus.Equals("En Trámite"))
-                                            {
-                                                estatus = true;
-                                                <td class="text-center">
-                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
-                                                        <i class="fas fa-check ml-1"></i>
-                                                    </a>
-                                                    <a href="#" class='btn-xs btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
-                                                        <i class="fas fa-times ml-1 mr-1"></i>
-                                                    </a>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td class="text-center text-info font-weight-bold">En Revisión</td>
-                                            }
-                                        }
-                                        else if ((@User.Claims.ElementAt(2).Value).Contains("Administrador"))
-                                        {
-                                            @if (entre.Estatus.Equals(""))
-                                            {
-                                                <td class="text-center">
-                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
-                                                        <i class="fas fa-check ml-1"></i>
-                                                    </a>
-                                                    <a href="#" class='btn-xs btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
-                                                        <i class="fas fa-times ml-1 mr-1"></i>
-                                                    </a>
-                                                </td>
-                                            }
-                                            else if (@entre.Estatus.Equals("Autorizado"))
-                                            {
-                                                <td class="row col-lg-12 justify-content-center">
-                                                    <div class="icon text-success font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Autorizado">
-                                                        <i class="fas fa-check-circle"></i> Autorizado
-                                                    </div>
                                                     <a href="#" class='btn btn-sm btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
                                                        data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
                                                         <i class="far fa-times"></i>
                                                     </a>
-                                                </td>
+                                                }
                                             }
-                                            else if (@entre.Estatus.Equals("Rechazado"))
-                                            {
-                                                <td class="row col-lg-12 justify-content-center">
-                                                    <div class="icon text-danger font-weight-bold mt-1 mr-2" data-toggle="tooltip" title="Entregable Rechazado">
-                                                        <i class="fas fa-check-circle"></i> Rechazado
-                                                    </div>
-                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
-                                                        <i class="fas fa-check ml-1"></i>
-                                                    </a>
-                                                </td>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            @if (entre.Estatus.Equals(""))
-                                            {
-                                                <td class="text-center text-info font-weight-bold">En Revisión</td>
-                                            }
-                                            else if (entre.Estatus.Equals("Autorizado"))
-                                            {
-                                                <td class="text-center text-success font-weight-bold">Autorizado</td>
-                                            }
-                                            else if (entre.Estatus.Equals("Rechazado"))
-                                            {
-                                                <td class="text-center text-danger font-weight-bold">Rechazado</td>
-                                            }
-                                        }
+                                        </td>
                                         <td class="text-center">
                                             <a href='#' class='text-center mr-2 view_file' data-id="@entre.Id" data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo"
                                                data-toggle="tooltip" title="Vista Previa de(la) @tipo" data-placement="top">

@@ -96,6 +96,7 @@ namespace CASESGCedulasEvaluacion
 
             //Services
             services.AddTransient<ServiceModulos>();
+            services.AddTransient<ServicePermisos>();
 
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {

@@ -1110,17 +1110,17 @@
                             id = 0;
                         }
 
-                        /*formData.append("Id", id);
+                        formData.append("Id", id);
                         formData.append("CedulaMensajeriaId", model.id);
                         formData.append("Firmado", firmado);
                         formData.append("Archivo", file);
                         formData.append("Folio", folio);
                         formData.append("Tipo", tipo);
-                        formData.append("Comentarios", comentarios);*/
-
+                        formData.append("Comentarios", comentarios);
+                        //{ Archivo: file, CedulaMensajeriaId: model.id, Tipo: tipo, Id: parseInt(id), Folio: folio, Comentarios: comentarios }
                         if (validaCamposArchivo()) {
                             if (id != 0) {
-                                axios.post('/mensajeria/adjuntaEntregable', { Archivo: file, CedulaMensajeriaId: model.id, Tipo: tipo, Id: parseInt(id), Folio: folio, Comentarios: comentarios }, {
+                                axios.post('/mensajeria/adjuntaEntregable', formData, {
                                     headers: { 'Content-Type': 'multipart/form-data' }
 
                                 }).then(response => {
@@ -1158,7 +1158,7 @@
                             } else {
                                 axios.get('/mensajeria/buscaEntregable/' + model.id + '/' + tipo).then(exist => {
                                     if (exist.data == 0) {
-                                        axios.post('/mensajeria/adjuntaEntregable', { Archivo: file, CedulaMensajeriaId: model.id, Tipo: tipo, Id: parseInt(id), Folio: folio, Comentarios: comentarios }, {
+                                        axios.post('/mensajeria/adjuntaEntregable', formData, {
                                             headers: { 'Content-Type': 'multipart/form-data' }
 
                                         }).then(response => {
