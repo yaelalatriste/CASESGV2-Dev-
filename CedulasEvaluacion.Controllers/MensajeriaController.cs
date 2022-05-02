@@ -21,14 +21,14 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioMensajeria vMensajeria;
         private readonly IRepositorioIncidenciasMensajeria viMensajeria;
-        private readonly IRepositorioEntregablesMensajeria veMensajeria;
+        private readonly IRepositorioEntregablesCedula veMensajeria;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vPerfiles;
 
         public MensajeriaController(IRepositorioEvaluacionServicios viCedula, IRepositorioMensajeria iMensajeria, IRepositorioFacturas iFacturas, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
-                                    IRepositorioIncidenciasMensajeria iiMensajeria, IRepositorioEntregablesMensajeria ivMensajeria,
+                                    IRepositorioIncidenciasMensajeria iiMensajeria, IRepositorioEntregablesCedula ivMensajeria,
                                     IRepositorioPerfiles iPerfiles)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
@@ -232,7 +232,7 @@ namespace CedulasEvaluacion.Controllers
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
                 cedMen.historialEntregables = new List<HistorialEntregables>();
-                cedMen.historialEntregables = await veMensajeria.getHistorialEntregables(cedMen.Id);
+                cedMen.historialEntregables = await veMensajeria.getHistorialEntregables(cedMen.Id,cedMen.ServicioId);
                 foreach (var user in cedMen.historialEntregables)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -265,7 +265,7 @@ namespace CedulasEvaluacion.Controllers
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
                 cedMen.historialEntregables = new List<HistorialEntregables>();
-                cedMen.historialEntregables = await veMensajeria.getHistorialEntregables(cedMen.Id);
+                cedMen.historialEntregables = await veMensajeria.getHistorialEntregables(cedMen.Id, cedMen.ServicioId);
                 foreach (var user in cedMen.historialEntregables)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);

@@ -19,7 +19,7 @@ namespace CedulasEvaluacion.Controllers
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioTrasladoExp vTraslado;
-        private readonly IRepositorioEntregablesTrasladoExp vEntregables;
+        private readonly IRepositorioEntregablesCedula vEntregables;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioIncidenciasTraslado iTraslado;
@@ -28,7 +28,7 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioFacturas vFacturas;
 
         public TrasladoExpController(IRepositorioEvaluacionServicios viCedula, IRepositorioTrasladoExp iTraslado, 
-                                     IRepositorioFacturas iFacturas, IRepositorioEntregablesTrasladoExp iVEntregables, 
+                                     IRepositorioFacturas iFacturas, IRepositorioEntregablesCedula iVEntregables, 
                                      IRepositorioUsuarios iVUsuario, IRepositorioInmuebles iVInmueble,
                                      IRepositorioIncidenciasTraslado ivTraslado, IRepositorioPerfiles iPerfiles, IHostingEnvironment environment)
         {

@@ -1111,13 +1111,13 @@
                         }
 
                         formData.append("Id", id);
-                        formData.append("CedulaMensajeriaId", model.id);
-                        formData.append("Firmado", firmado);
+                        formData.append("CedulaEvaluacionId", model.id);
+                        //formData.append("Firmado", firmado);
                         formData.append("Archivo", file);
                         formData.append("Folio", folio);
                         formData.append("Tipo", tipo);
                         formData.append("Comentarios", comentarios);
-                        //{ Archivo: file, CedulaMensajeriaId: model.id, Tipo: tipo, Id: parseInt(id), Folio: folio, Comentarios: comentarios }
+
                         if (validaCamposArchivo()) {
                             if (id != 0) {
                                 axios.post('/mensajeria/adjuntaEntregable', formData, {

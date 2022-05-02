@@ -20,14 +20,14 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioTransporte vTransporte;
         private readonly IRepositorioIncidenciasTransporte iTransporte;
-        private readonly IRepositorioEntregablesTransporte eTransporte;
+        private readonly IRepositorioEntregablesCedula eTransporte;
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
         private readonly IRepositorioFacturas vFacturas;
 
         public TransporteController(IRepositorioEvaluacionServicios viCedula, IRepositorioTransporte iVTransporte, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
-                                    IRepositorioIncidenciasTransporte iiTransporte, IRepositorioEntregablesTransporte eeTransporte,
+                                    IRepositorioIncidenciasTransporte iiTransporte, IRepositorioEntregablesCedula eeTransporte,
                                     IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
@@ -198,7 +198,7 @@ namespace CedulasEvaluacion.Controllers
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
                 cedTran.historialEntregables = new List<HistorialEntregables>();
-                cedTran.historialEntregables = await eTransporte.getHistorialEntregables(cedTran.Id);
+                cedTran.historialEntregables = await eTransporte.getHistorialEntregables(cedTran.Id,cedTran.ServicioId);
                 foreach (var user in cedTran.historialEntregables)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);

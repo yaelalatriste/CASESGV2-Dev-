@@ -1181,7 +1181,7 @@
 
                         if (validaCamposArchivo()) {
                             if (id != 0) {
-                                axios.post('/muebles/adjuntaEntregable', { Archivo: file, CedulaMuebleId: model.id, Tipo: tipo, Id: parseInt(id), Folio: folio, Comentarios: comentarios }, {
+                                axios.post('/muebles/adjuntaEntregable', { Archivo: file, CedulaEvaluacionId: model.id, Tipo: tipo, Id: parseInt(id), Folio: folio, Comentarios: comentarios }, {
                                     headers: { 'Content-Type': 'multipart/form-data' }
 
                                 }).then(response => {
@@ -1220,7 +1220,7 @@
                                 axios.get('/muebles/buscaEntregable/' + model.id + '/' + tipo).then(exist => {
                                     if (exist.data == 0) {
                                         axios.post('/muebles/adjuntaEntregable', {
-                                            Archivo: file, CedulaMuebleId: model.id, Tipo: tipo, Id: parseInt(id), Folio: folio, Comentarios: comentarios
+                                            Archivo: file, CedulaEvaluacionId: model.id, Tipo: tipo, Id: parseInt(id), Folio: folio, Comentarios: comentarios
                                         }, {
                                             headers: { 'Content-Type': 'multipart/form-data' }
                                         }).then(response => {

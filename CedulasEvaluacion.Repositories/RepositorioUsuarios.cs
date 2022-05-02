@@ -112,8 +112,7 @@ namespace CedulasEvaluacion.Repositories
                 Comm.Parameters.Add("@password", SqlDbType.VarChar, 20).Value = password;
                 Comm.Parameters.Add("@nombre", SqlDbType.VarChar, 50).Value = user.nombre_emp;
                 Comm.Parameters.Add("@apellidoPat", SqlDbType.VarChar, 50).Value = user.paterno_emp;
-                if (!String.IsNullOrEmpty(user.materno_emp))
-                    Comm.Parameters.Add("@apellidoMat", SqlDbType.VarChar, 50).Value = user.materno_emp;
+                Comm.Parameters.Add("@apellidoMat", SqlDbType.VarChar, 50).Value = user.materno_emp;
                 Comm.Parameters.Add("@rfc", SqlDbType.VarChar, 14).Value = user.rfc_emp;
                 Comm.Parameters.Add("@curp", SqlDbType.VarChar, 20).Value = user.curp_emp;
                 Comm.Parameters.Add("@cvePuesto", SqlDbType.VarChar, 15).Value = user.cve_puesto;

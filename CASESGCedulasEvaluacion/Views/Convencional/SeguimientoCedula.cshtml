@@ -845,11 +845,11 @@
                         }).then(send => {
                             if (send.value.length > 0) {
                                 axios.post('/telConvencional/entregables/historialEntregable', {
-                                    CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Tipo: tipo,
+                                    CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Tipo: tipo, ServicioId: parseInt(model.servicioId),
                                     Estatus: "Autorizado", Comentarios: send.value
                                 }).then(hist => {
                                     if (hist.status == 200) {
-                                        axios.post('/telConvencional/entregables/autoRecha', { Id: id, Estatus: "Autorizado", CedulaConvencionalId: parseInt(model.id) }).then(response => {
+                                        axios.post('/telConvencional/entregables/autoRecha', { Id: id, Estatus: "Autorizado", CedulaEvaluacionId: parseInt(model.id) }).then(response => {
                                             if (response.status == 200) {
                                                 Swal.fire({
                                                     'icon': 'success',
@@ -911,11 +911,11 @@
                         }).then(send => {
                             if (send.value.length > 0) {
                                 axios.post('/telConvencional/entregables/historialEntregable', {
-                                    CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Tipo: tipo,
+                                    CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Tipo: tipo, ServicioId: parseInt(model.servicioId),
                                     Estatus: "Rechazado", Comentarios: send.value
                                 }).then(hist => {
                                     if (hist.status == 200) {
-                                        axios.post('/telConvencional/entregables/autoRecha', { Id: id, Estatus: "Rechazado", CedulaConvencionalId: model.id }).then(response => {
+                                        axios.post('/telConvencional/entregables/autoRecha', { Id: id, Estatus: "Rechazado", CedulaEvaluacionId: model.id }).then(response => {
                                             if (response.status == 200) {
                                                 Swal.fire({
                                                     'icon': 'success',
@@ -1080,7 +1080,7 @@
                         }
 
                         formData.append("Id", id);
-                        formData.append("CedulaConvencionalId", model.id);
+                        formData.append("CedulaEvaluacionId", model.id);
                         formData.append("FechaPresentacion", fechaPresentacion);
                         formData.append("Archivo", file);
                         formData.append("Folio", folio);

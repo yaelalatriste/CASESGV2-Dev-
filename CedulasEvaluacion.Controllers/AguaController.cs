@@ -20,7 +20,7 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioAgua vAgua;
         private readonly IRepositorioIncidenciasAgua iAgua;
-        private readonly IRepositorioEntregablesAgua eAgua;
+        private readonly IRepositorioEntregablesCedula eAgua;
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
@@ -28,7 +28,7 @@ namespace CedulasEvaluacion.Controllers
         private readonly IHostingEnvironment environment;
 
         public AguaController(IRepositorioEvaluacionServicios viCedula, IRepositorioAgua iVAgua, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
-                                    IRepositorioIncidenciasAgua iiAgua, IRepositorioEntregablesAgua eeAgua,
+                                    IRepositorioIncidenciasAgua iiAgua, IRepositorioEntregablesCedula eeAgua,
                                     IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas, IHostingEnvironment environment)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
@@ -199,7 +199,7 @@ namespace CedulasEvaluacion.Controllers
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
                 cedFum.historialEntregables = new List<HistorialEntregables>();
-                cedFum.historialEntregables = await eAgua.getHistorialEntregables(cedFum.Id);
+                cedFum.historialEntregables = await eAgua.getHistorialEntregables(cedFum.Id,cedFum.ServicioId);
                 foreach (var user in cedFum.historialEntregables)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);

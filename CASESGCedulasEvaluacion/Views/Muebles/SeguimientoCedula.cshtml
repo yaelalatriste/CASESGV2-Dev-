@@ -1034,10 +1034,10 @@
                 }).then(confirm => {
                     if (confirm.isConfirmed) {
                          axios.post('/muebles/entregables/historialEntregable', {
-                                    CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Tipo: tipo, Estatus: "Autorizado", Comentarios: "Se autoriza el entregable"
+                             CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), ServicioId: parseInt(model.servicioId), Tipo: tipo, Estatus: "Autorizado", Comentarios: "Se autoriza el entregable"
                                 }).then(hist => {
                                     if (hist.status == 200) {
-                                        axios.post('/muebles/entregables/autoRecha', { Id: id, Estatus: "Autorizado", CedulaMuebleId: parseInt(model.id) }).then(response => {
+                                        axios.post('/muebles/entregables/autoRecha', { Id: id, Estatus: "Autorizado", CedulaEvaluacionId: parseInt(model.id) }).then(response => {
                                             if (response.status == 200) {
                                                 Swal.fire({
                                                     'icon': 'success',
@@ -1091,11 +1091,11 @@
                         }).then(send => {
                             if (send.value.length > 0) {
                                 axios.post('/muebles/entregables/historialEntregable', {
-                                    CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Tipo: tipo,
+                                    CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Tipo: tipo, ServicioId: parseInt(model.servicioId),
                                     Estatus: "Rechazado", Comentarios: send.value
                                 }).then(hist => {
                                     if (hist.status == 200) {
-                                        axios.post('/muebles/entregables/autoRecha', { Id: id, Estatus: "Rechazado", CedulaMuebleId: model.id }).then(response => {
+                                        axios.post('/muebles/entregables/autoRecha', { Id: id, Estatus: "Rechazado", CedulaEvaluacionId: model.id }).then(response => {
                                             if (response.status == 200) {
                                                 Swal.fire({
                                                     'icon': 'success',
@@ -1317,7 +1317,7 @@
                         }
 
                         formData.append("Id", id);
-                        formData.append("CedulaMuebleId", model.id);
+                        formData.append("CedulaEvaluacionId", model.id);
                         formData.append("Archivo", file);
                         formData.append("Folio", folio);
                         formData.append("Tipo", tipo);

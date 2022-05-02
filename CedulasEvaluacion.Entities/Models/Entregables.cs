@@ -19,6 +19,7 @@ namespace CedulasEvaluacion.Entities.Models
         public int CedulaConvencionalId { get; set; }
         public int CedulaResiduosId { get; set; }
         public int CedulaMuebleId { get; set; }
+        public int CedulaEvaluacionId { get; set; }
         public IFormFile Archivo { get; set; }
         public string NombreArchivo { get; set; }
         public string Estatus { get; set; }
@@ -27,8 +28,8 @@ namespace CedulasEvaluacion.Entities.Models
         public int Tamanio { get; set; }
         public int DiasAtraso { get; set; }
         public string Comentarios{ get; set; }
-        public string Icono { get; set; }
         public string Color { get; set; }
+        public string Icono { get; set; }
         public bool Firmado { get; set; }
         public DateTime FechaCompromiso { get; set; }
         public DateTime FechaPresentacion { get; set; }

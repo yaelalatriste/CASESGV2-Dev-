@@ -12,10 +12,10 @@ namespace CedulasEvaluacion.Controllers
 {
     public class EntregablesLimpiezaController : Controller
     {
-        private readonly IRepositorioEntregables vEntregables;
+        private readonly IRepositorioEntregablesCedula vEntregables;
         private readonly IHostingEnvironment environment;
 
-        public EntregablesLimpiezaController(IRepositorioEntregables iVEntregables, IHostingEnvironment environment)
+        public EntregablesLimpiezaController(IRepositorioEntregablesCedula iVEntregables, IHostingEnvironment environment)
         {
             this.vEntregables = iVEntregables ?? throw new ArgumentNullException(nameof(iVEntregables));
             this.environment = environment;
@@ -28,7 +28,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> adjuntaEntregable([FromForm] Entregables entregables)
         {
             int success = 0;
-            success = await vEntregables.entregableFactura(entregables);
+            success = await vEntregables.adjuntaEntregable(entregables);
             if (success != 0)
             {
                 return Ok();
@@ -166,7 +166,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> eliminaArchivo([FromBody] Entregables entregable)
         {
             int success = 0;
-            success = await vEntregables.eliminaArchivo(entregable);
+            success = await vEntregables.eliminaEntregable(entregable);
             if (success != -1)
             {
                 return Ok();
@@ -191,123 +191,5 @@ namespace CedulasEvaluacion.Controllers
         }
 
         /***************************** FIN Limpieza ****************************/
-
-        /***************************** Limpieza ADICIONALES****************************/
-        [HttpPost]
-        [Route("/limpieza/insertaCapacitacion")]
-        public async Task<IActionResult> insertaCapacitacion([FromBody]RespuestasAdicionales respuestasAdicionales)
-        {
-            int success = 0;
-            success = await vEntregables.insertaCapacitacion(respuestasAdicionales);
-            if (success != -1)
-            {
-                return Ok(success);
-            }
-            return BadRequest();
-        }
-
-        [HttpPost]
-        [Route("/cedLimpieza/adjuntaEntregableBD")]
-        public async Task<IActionResult> adjuntaEntregableBD([FromForm] RespuestasAdicionales respuestasAdicionales)
-        {
-            int success = 0;
-            success = await vEntregables.insertaEntregablesBD(respuestasAdicionales);
-            if (success != -1)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet]
-        [Route("cedLimpieza/getEntregablesBD/{id?}")]
-        public async Task<IActionResult> getEntregablesBDLimpieza(int id)
-         {
-            List<RespuestasAdicionales> entregables = null;
-            entregables = await vEntregables.getEntregablesBDLimpieza(id);
-            string table = "";
-            if (entregables != null)
-            {
-                foreach (var entregable in entregables)
-                {
-                    table += "<tr>" +
-                    "<td>" + entregable.NombreArchivo + "</td>" +
-                    "<td>" + entregable.FechaEntrega.ToString("dd-MM-yyyy") + "</td>" +
-                    "<td>" + entregable.FechaLimite.ToString("dd-MM-yyyy") + "</td>" +
-                    "<td>" + (entregable.Penalizable == true ?"Si":"No") + "</td>" +
-                    "<td>" + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", entregable.MontoPenalizacion) + "</td>" +
-                    "<td>" +
-                        "<a href='#' class='text-center mr-2 view_file' data-id='" + entregable.Id + "' data-file='" + entregable.NombreArchivo +"'>" +
-                        "<i class='fas fa-eye text-success'></i></a>" +
-                        "<a href='#' class='text-center mr-2 update_files' data-id='" + entregable.Id + "' data-coments='" + entregable.Comentarios + "' " +
-                                     "data-prioridad ='" + entregable.Prioridad + "' " +
-                                     "data-file='" + entregable.NombreArchivo + "' data-entrega = '"+ entregable.FechaEntrega.ToString("yyyy-MM-dd") + 
-                                     "' data-limite='"+ entregable.FechaLimite.ToString("yyyy-MM-dd") + "'><i class='fas fa-edit text-primary'></i></a>" +
-                        "<a href='#' class='text-center mr-2 delete_files' data-id='" + entregable.Id + "'><i class='fas fa-times text-danger'></i></a>" +
-                    "</td>" +
-                    "</tr>";
-                }
-                return Ok(table);
-            }
-            return NoContent();
-        }
-
-        [HttpGet]
-        [Route("cedLimpieza/getCapacitacionLimpieza/{id?}")]
-        public async Task<IActionResult> getCapacitacionLimpieza(int id)
-        {
-            RespuestasAdicionales capacitacion = null;
-            capacitacion = await vEntregables.getCapacitacionLimpieza(id);
-
-            if (capacitacion != null)
-            {
-                return Ok(capacitacion);
-            }
-            return NoContent();
-        }
-
-        [HttpPost]
-        [Route("cedLimpieza/eliminaEntregableBD")]
-        public async Task<IActionResult> eliminaEntregableBD([FromBody] RespuestasAdicionales entregable)
-        {
-            int success = 0;
-            success = await vEntregables.eliminaEntregableBD(entregable);
-            if (success != -1)
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpPost]
-        [Route("cedLimpieza/eliminaTodoEntregableBD")]
-        public async Task<IActionResult> eliminaTodoEntregableBD([FromBody] RespuestasAdicionales entregable)
-        {
-            string folio = entregable.Folio;
-            List<RespuestasAdicionales> entregables = null;
-            int success = 0;
-
-            entregables = await vEntregables.getEntregablesBDLimpieza(entregable.Id);
-            foreach (var remove in entregables)
-            {
-                remove.Folio = folio;
-                //success = await vEntregables.eliminaEntregableBD(remove);
-                if (success == -1)
-                {
-                    return NotFound();
-                }
-            }
-            success = await vEntregables.calculaCalificacionEntregableBD(entregable.Id);
-            return Ok();
-        }
-
-
-        /***************************** FIN Limpieza ADICIONALES****************************/
     }
 }

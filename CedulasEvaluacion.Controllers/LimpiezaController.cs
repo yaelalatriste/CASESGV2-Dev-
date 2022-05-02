@@ -28,13 +28,13 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioLimpieza vlimpieza;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioIncidencias vIncidencias;
-        private readonly IRepositorioEntregables vEntregables;
+        private readonly IRepositorioEntregablesCedula vEntregables;
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
 
         public LimpiezaController(IRepositorioEvaluacionServicios viCedula, IRepositorioLimpieza iVLimpieza, IRepositorioInmuebles iVInmueble, IRepositorioIncidencias iIncidencias,
-                                  IRepositorioUsuarios iVUsuario, IRepositorioEntregables iEntregables, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
+                                  IRepositorioUsuarios iVUsuario, IRepositorioEntregablesCedula iEntregables, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vlimpieza = iVLimpieza ?? throw new ArgumentNullException(nameof(iVLimpieza));
@@ -195,16 +195,9 @@ namespace CedulasEvaluacion.Controllers
                 cedLim.usuarios = await vUsuarios.getUserById(cedLim.UsuarioId);
                 cedLim.iEntregables = await vEntregables.getEntregables(cedLim.Id);
                 cedLim.historialEntregables = new List<HistorialEntregables>();
-                cedLim.historialEntregables = await vEntregables.getHistorialEntregables(cedLim.Id);
-                cedLim.facturas = await vFacturas.getFacturas(id, cedLim.ServicioId);//
-                cedLim.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedLim.facturas);
-                cedLim.inmuebles = await vInmuebles.inmuebleById(cedLim.InmuebleId);
-                cedLim.usuarios = await vUsuarios.getUserById(cedLim.UsuarioId);                
-                cedLim.iEntregables = await vEntregables.getEntregables(cedLim.Id);
+                cedLim.historialEntregables = await vEntregables.getHistorialEntregables(cedLim.Id,cedLim.ServicioId);
                 cedLim.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedLim.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedLim.Id);
-                cedLim.historialEntregables = new List<HistorialEntregables>();
-                cedLim.historialEntregables = await vEntregables.getHistorialEntregables(cedLim.Id);
                 foreach (var user in cedLim.historialEntregables)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);

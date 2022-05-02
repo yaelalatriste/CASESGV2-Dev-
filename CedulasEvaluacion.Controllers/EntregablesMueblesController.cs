@@ -12,10 +12,10 @@ namespace CedulasEvaluacion.Controllers
 {
     public class EntregablesMueblesController : Controller
     {
-        private readonly IRepositorioEntregablesMuebles vEntregables;
+        private readonly IRepositorioEntregablesCedula vEntregables;
         private readonly IHostingEnvironment environment;
 
-        public EntregablesMueblesController(IRepositorioEntregablesMuebles iVEntregables, IHostingEnvironment environment)
+        public EntregablesMueblesController(IRepositorioEntregablesCedula iVEntregables, IHostingEnvironment environment)
         {
             this.vEntregables = iVEntregables ?? throw new ArgumentNullException(nameof(iVEntregables));
             this.environment = environment;
@@ -28,7 +28,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> adjuntaEntregable([FromForm] Entregables entregables)
         {
             int success = 0;
-            success = await vEntregables.entregableFactura(entregables);
+            success = await vEntregables.adjuntaEntregable(entregables);
             if (success != 0)
             {
                 return Ok();
@@ -129,7 +129,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> eliminaArchivo([FromBody] Entregables entregable)
         {
             int success = 0;
-            success = await vEntregables.eliminaArchivo(entregable);
+            success = await vEntregables.eliminaEntregable(entregable);
             if (success != -1)
             {
                 return Ok();

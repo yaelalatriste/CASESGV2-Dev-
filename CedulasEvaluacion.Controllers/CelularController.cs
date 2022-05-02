@@ -20,14 +20,14 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioCelular vCelular;
         private readonly IRepositorioIncidenciasCelular iCelular;
-        private readonly IRepositorioEntregablesCelular eCelular;
+        private readonly IRepositorioEntregablesCedula eCelular;
         private readonly IRepositorioPerfilCelular vPCelular;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vPerfiles;
         private readonly IHostingEnvironment environment;
 
-        public CelularController(IRepositorioEvaluacionServicios viCedula, IRepositorioCelular iCelular, IRepositorioIncidenciasCelular ivCelular, IRepositorioEntregablesCelular ieCelular, IRepositorioFacturas iFacturas, 
+        public CelularController(IRepositorioEvaluacionServicios viCedula, IRepositorioCelular iCelular, IRepositorioIncidenciasCelular ivCelular, IRepositorioEntregablesCedula ieCelular, IRepositorioFacturas iFacturas, 
                                  IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, IRepositorioPerfilCelular viPCelular, IHostingEnvironment environment)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
@@ -177,7 +177,7 @@ namespace CedulasEvaluacion.Controllers
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
                 telCel.historialEntregables = new List<HistorialEntregables>();
-                telCel.historialEntregables = await eCelular.getHistorialEntregables(telCel.Id);
+                telCel.historialEntregables = await eCelular.getHistorialEntregables(telCel.Id,telCel.ServicioId);
                 foreach (var user in telCel.historialEntregables)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);

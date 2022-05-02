@@ -7,6 +7,7 @@ namespace CedulasEvaluacion.Entities.Models
     public partial class HistorialEntregables
     {
         public string Servicio { get; set; }
+        public int ServicioId { get; set; }
         public string Tipo { get; set; }
         public int CedulaId { get; set; }
         public int UsuarioId { get; set; }
