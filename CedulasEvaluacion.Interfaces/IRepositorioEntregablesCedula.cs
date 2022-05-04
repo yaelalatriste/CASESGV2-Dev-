@@ -16,6 +16,6 @@ namespace CedulasEvaluacion.Interfaces
         Task<int> capturaHistorial(HistorialEntregables historialEntregables);
         Task<List<HistorialEntregables>> getHistorialEntregables(int id,int servicioId);
         Task<int> apruebaRechazaEntregable(Entregables entregables);
-
+        Task<int> GetFlujoCedula(int cedula, string estatus);
     }
 }

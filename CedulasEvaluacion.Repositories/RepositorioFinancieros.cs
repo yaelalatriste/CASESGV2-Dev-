@@ -51,7 +51,7 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-        public async Task<List<DashboardFinancieros>> GetDetalleServicio(string servicio)
+        public async Task<List<DashboardFinancieros>> GetDetalleServicio(string servicio, int anio)
         {
             try
             {
@@ -61,6 +61,7 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        cmd.Parameters.Add(new SqlParameter("@anio", anio));
                         var response = new List<DashboardFinancieros>();
                         await sql.OpenAsync();
 
@@ -335,7 +336,7 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-        public async Task<int> EliminaCedulasOficio(int oficio,int servicio,int cedula)
+        public async Task<int> EliminaCedulasOficio(int oficio, int servicio, int cedula)
         {
             try
             {
@@ -368,7 +369,7 @@ namespace CedulasEvaluacion.Repositories
             }
         }
         public async Task<int> GetTramiteOficio(int id, int servicio)
-       {
+        {
             int success = -1;
             try
             {
@@ -424,7 +425,7 @@ namespace CedulasEvaluacion.Repositories
                 Fondo = reader["Fondo"].ToString(),
                 Icono = reader["Icono"].ToString(),
                 Total = (int)reader["Total"],
-                ServicioId = (int) reader["ServicioId"]
+                ServicioId = (int)reader["ServicioId"]
             };
         }
         private DetalleCedula MapToValueDetalle(SqlDataReader reader)
@@ -449,9 +450,9 @@ namespace CedulasEvaluacion.Repositories
             return new Oficio
             {
                 Id = (int)reader["Id"],
-                Anio = (int) reader["Anio"],
-                ServicioId = (int) reader["ServicioId"],
-                NumeroOficio = (int) reader["NumeroOficio"],
+                Anio = (int)reader["Anio"],
+                ServicioId = (int)reader["ServicioId"],
+                NumeroOficio = (int)reader["NumeroOficio"],
                 Servicio = reader["Nombre"].ToString(),
                 Estatus = reader["Estatus"].ToString(),
             };

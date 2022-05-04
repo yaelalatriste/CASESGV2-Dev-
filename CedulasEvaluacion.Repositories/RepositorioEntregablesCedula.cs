@@ -185,6 +185,33 @@ namespace CedulasEvaluacion.Repositories
                 return -1;
             }
         }
+        
+        public async Task<int> GetFlujoCedula(int cedula, string estatus)
+        {
+            int id = 0;
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getFlujoCedula", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@total", id)).Direction = ParameterDirection.Output;
+                        cmd.Parameters.Add(new SqlParameter("@cedulaId", cedula));
+                        cmd.Parameters.Add(new SqlParameter("@estatus", estatus));
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+                        id = Convert.ToInt32(cmd.Parameters["@total"].Value);
+                            return id;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return -1;
+            }
+        }
 
         public async Task<int> capturaHistorial(HistorialEntregables historialEntregables)
         {

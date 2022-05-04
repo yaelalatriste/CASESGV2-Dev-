@@ -77,18 +77,18 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
 
-        public DocumentsController(IRepositorioEvaluacionServicios viCedula, IRepositorioFumigacion iVFumigacion, IRepositorioAgua iVAgua, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario, 
+        public DocumentsController(IRepositorioEvaluacionServicios viCedula, IRepositorioFumigacion iVFumigacion, IRepositorioAgua iVAgua, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                     IRepositorioIncidenciasFumigacion iIncidenciasFumigacion, IRepositorioIncidenciasAgua iIncidenciasAgua, IRepositorioIncidenciasResiduos iiResiduos,
                                     IRepositorioResiduos ivResiduos, IRepositorioTransporte ivTransporte, IRepositorioIncidenciasTransporte iiTransporte, IRepositorioIncidenciasTraslado iiTraslado,
                                    IRepositorioEntregables iVEntregables, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioTrasladoExp ivTraslado,
-                                    IRepositorioFacturas iFacturas, IRepositorioCelular iCelular, 
-                                    IRepositorioIncidenciasCelular ivCelular, IRepositorioConvencional iConvencional, IRepositorioIncidenciasConvencional ivConvencional, 
-                                    IRepositorioEntregablesConvencional ieConvencional, IRepositorioDocuments ivDocuments, IRepositorioIncidenciasMuebles iiMuebles, 
+                                    IRepositorioFacturas iFacturas, IRepositorioCelular iCelular,
+                                    IRepositorioIncidenciasCelular ivCelular, IRepositorioConvencional iConvencional, IRepositorioIncidenciasConvencional ivConvencional,
+                                    IRepositorioEntregablesConvencional ieConvencional, IRepositorioDocuments ivDocuments, IRepositorioIncidenciasMuebles iiMuebles,
                                     IRepositorioMuebles iVMuebles, IRepositorioAnalisis ivAnalisis, IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioInmuebles viInmuebles,
                                     IRepositorioFacturas viFacturas, IRepositorioIncidencias iiIncidencias)
         {
 
-            this.vIncidencias = iiIncidencias?? throw new ArgumentNullException(nameof(iiIncidencias));
+            this.vIncidencias = iiIncidencias ?? throw new ArgumentNullException(nameof(iiIncidencias));
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vDocuments = ivDocuments ?? throw new ArgumentNullException(nameof(ivDocuments));
 
@@ -98,29 +98,29 @@ namespace CedulasEvaluacion.Controllers
             this.vResiduos = ivResiduos ?? throw new ArgumentNullException(nameof(ivResiduos));
             this.iResiduos = iiResiduos ?? throw new ArgumentNullException(nameof(iiResiduos));
 
-            this.vTransporte= ivTransporte ?? throw new ArgumentNullException(nameof(ivTransporte));
-            this.iTransporte= iiTransporte ?? throw new ArgumentNullException(nameof(ivTransporte));
+            this.vTransporte = ivTransporte ?? throw new ArgumentNullException(nameof(ivTransporte));
+            this.iTransporte = iiTransporte ?? throw new ArgumentNullException(nameof(ivTransporte));
 
             this.vTraslado = ivTraslado ?? throw new ArgumentNullException(nameof(ivTraslado));
             this.iTraslado = iiTraslado ?? throw new ArgumentNullException(nameof(iiTraslado));
 
-            this.vAgua= iVAgua?? throw new ArgumentNullException(nameof(iVAgua));
+            this.vAgua = iVAgua ?? throw new ArgumentNullException(nameof(iVAgua));
             this.iAgua = iIncidenciasAgua ?? throw new ArgumentNullException(nameof(iIncidenciasAgua));
-            
-            this.vAnalisis= ivAnalisis?? throw new ArgumentNullException(nameof(ivAnalisis));
+
+            this.vAnalisis = ivAnalisis ?? throw new ArgumentNullException(nameof(ivAnalisis));
             this.iAnalisis = iiAnalisis ?? throw new ArgumentNullException(nameof(iiAnalisis));
 
             this.vFumigacion = iVFumigacion ?? throw new ArgumentNullException(nameof(iVFumigacion));
             this.iFumigacion = iIncidenciasFumigacion ?? throw new ArgumentNullException(nameof(iIncidenciasFumigacion));
 
-            this.vMuebles= iVMuebles ?? throw new ArgumentNullException(nameof(iVMuebles));
+            this.vMuebles = iVMuebles ?? throw new ArgumentNullException(nameof(iVMuebles));
             this.iMuebles = iiMuebles ?? throw new ArgumentNullException(nameof(iiMuebles));
 
             this.vConvencional = iConvencional ?? throw new ArgumentNullException(nameof(iConvencional));
             this.iConvencional = ivConvencional ?? throw new ArgumentNullException(nameof(ivConvencional));
             this.eConvencional = ieConvencional ?? throw new ArgumentNullException(nameof(ieConvencional));
 
-            this.vInmuebles= viInmuebles ?? throw new ArgumentNullException(nameof(viInmuebles));
+            this.vInmuebles = viInmuebles ?? throw new ArgumentNullException(nameof(viInmuebles));
 
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));
             this.vEntregables = iVEntregables ?? throw new ArgumentNullException(nameof(iVEntregables));
@@ -870,20 +870,21 @@ namespace CedulasEvaluacion.Controllers
         [Route("/reporte/residuos/{id}")]
         public async Task<IActionResult> CedulaResiduos(int id)
         {
-            int success = await vRepositorioPerfiles.getPermiso(UserId(), moduloAgua(), "cédula");
+            int success = await vRepositorioPerfiles.getPermiso(UserId(), moduloRPBI(), "cédula");
             if (success == 1)
             {
                 string strFacturas = "";
                 decimal totalFacturas = 0;
 
-                Residuos cedula = new Residuos();
-                cedula = await vResiduos.CedulaById(id);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula = await vCedula.CedulaById(id);
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
-                cedula.incidenciasResiduos = await iResiduos.getIncidencias(id);
-                cedula.incidenciasManifiesto= await iResiduos.getIncidenciasTipo(id, "ManifiestoEntrega");
+                cedula.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+                cedula.incidencias.incidenciasResiduos = await iResiduos.getIncidencias(id);
+                cedula.incidencias.incidenciasManifiesto = await iResiduos.getIncidenciasTipo(id, "ManifiestoEntrega");
                 cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedula.RespuestasEncuesta = await vResiduos.obtieneRespuestas(id);
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
                 cedula.facturas = new List<Facturas>();
                 cedula.facturas = await vFacturas.getFacturas(id, 7);
 
@@ -902,22 +903,22 @@ namespace CedulasEvaluacion.Controllers
                 {
                     string fechaProgramada = cedula.RespuestasEncuesta[0].Detalles.Split("|")[0];
                     string fechaRealizada = cedula.RespuestasEncuesta[0].Detalles.Split("|")[1];
-                    document.Replace("||Servicio||", "El servicio no se llevó a cabo en el día programado, la fecha programada era el "+
+                    document.Replace("||Servicio||", "El servicio no se llevó a cabo en el día programado, la fecha programada era el " +
                         Convert.ToDateTime(fechaProgramada).ToString("dd") + " de " +
                         Convert.ToDateTime(fechaProgramada).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " +
-                        Convert.ToDateTime(fechaProgramada).ToString("yyyy") +" y\n el servicio se efectuó el " + Convert.ToDateTime(fechaRealizada).ToString("dd") + " de " +
+                        Convert.ToDateTime(fechaProgramada).ToString("yyyy") + " y\n el servicio se efectuó el " + Convert.ToDateTime(fechaRealizada).ToString("dd") + " de " +
                         Convert.ToDateTime(fechaRealizada).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " +
                         Convert.ToDateTime(fechaRealizada).ToString("yyyy") + ".", false, true);
                 }
 
                 //obtenemos el documento con marcas
-                if (cedula.incidenciasResiduos.Count > 0)
+                if (cedula.incidencias.incidenciasResiduos.Count > 0)
                 {
                     Table tablaActividades = tablas.AddTable(true);
 
                     String[] cabeceraFechas = { "Tipo", "Comentarios" };
 
-                    tablaActividades.ResetCells(cedula.incidenciasResiduos.Count + 1, cabeceraFechas.Length);
+                    tablaActividades.ResetCells(cedula.incidencias.incidenciasResiduos.Count + 1, cabeceraFechas.Length);
 
                     TableRow recRow = tablaActividades.Rows[0];
                     recRow.IsHeader = true;
@@ -942,7 +943,7 @@ namespace CedulasEvaluacion.Controllers
                         TR.CharacterFormat.TextColor = Color.White;
                     }
 
-                    for (int r = 0; r < cedula.incidenciasResiduos.Count; r++)
+                    for (int r = 0; r < cedula.incidencias.incidenciasResiduos.Count; r++)
                     {
                         TableRow DataRow = tablaActividades.Rows[r + 1];
                         //Fila Height
@@ -956,11 +957,11 @@ namespace CedulasEvaluacion.Controllers
                             Paragraph p2 = DataRow.Cells[c].AddParagraph();
                             if (c == 0)
                             {
-                                TR2 = p2.AppendText(cedula.incidenciasResiduos[r].Tipo);
+                                TR2 = p2.AppendText(cedula.incidencias.incidenciasResiduos[r].Tipo);
                             }
                             if (c == 1)
                             {
-                                TR2 = p2.AppendText(cedula.incidenciasResiduos[r].Comentarios);
+                                TR2 = p2.AppendText(cedula.incidencias.incidenciasResiduos[r].Comentarios);
                             }
                             //Formato de celdas
                             p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
@@ -980,17 +981,17 @@ namespace CedulasEvaluacion.Controllers
                 }
 
                 //obtenemos el documento con marcas
-                if (cedula.incidenciasManifiesto.Count > 0)
+                if (cedula.incidencias.incidenciasManifiesto.Count > 0)
                 {
                     Table tablaHoras = tablas.AddTable(true);
                     string coment = "";
                     String[] cabeceraHoras = { "Tipo", "Datos Faltantes" };
 
-                    int filas = cedula.incidenciasManifiesto.ElementAt(0).Comentarios.Split("|").Length-1;
+                    int filas = cedula.incidencias.incidenciasManifiesto.ElementAt(0).Comentarios.Split("|").Length - 1;
 
-                    string[] comentarios = cedula.incidenciasManifiesto.ElementAt(0).Comentarios.Split("|");
+                    string[] comentarios = cedula.incidencias.incidenciasManifiesto.ElementAt(0).Comentarios.Split("|");
 
-                    tablaHoras.ResetCells(filas+1, cabeceraHoras.Length);
+                    tablaHoras.ResetCells(filas + 1, cabeceraHoras.Length);
 
                     TableRow recRow = tablaHoras.Rows[0];
                     recRow.IsHeader = true;
@@ -1036,7 +1037,7 @@ namespace CedulasEvaluacion.Controllers
                                 if (comentarios[r].Equals("DatosTitularMedico"))
                                 {
                                     coment = "Nombre, Sello y Firma del titular del servicio médico";
- }
+                                }
                                 else if (comentarios[r].Equals("ConsultorioBrindaServicio"))
                                 {
                                     coment = "Domicilio del Consultorio que brinda el servicio";
@@ -1183,7 +1184,7 @@ namespace CedulasEvaluacion.Controllers
                 cedula = await vCedula.CedulaById(id);
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
-                cedula.incidencias.transporte = await iTransporte.GetIncidenciasPregunta(id,2);
+                cedula.incidencias.transporte = await iTransporte.GetIncidenciasPregunta(id, 2);
                 cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedula.RespuestasEncuesta = await vTransporte.obtieneRespuestas(id);
                 cedula.facturas = new List<Facturas>();
@@ -1208,7 +1209,7 @@ namespace CedulasEvaluacion.Controllers
                 {
                     Table tablaActividades = tablas.AddTable(true);
 
-                    String[] cabeceraFechas = { "Tipo","Fecha de la Incidencia","Hora Presentada", "Comentarios" };
+                    String[] cabeceraFechas = { "Tipo", "Fecha de la Incidencia", "Hora Presentada", "Comentarios" };
 
                     tablaActividades.ResetCells(cedula.incidencias.transporte.Count + 1, cabeceraFechas.Length);
 
@@ -1257,7 +1258,7 @@ namespace CedulasEvaluacion.Controllers
                             }
                             if (c == 2)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].HoraPresentada+"");
+                                TR2 = p2.AppendText(cedula.incidencias.transporte[r].HoraPresentada + "");
                             }
                             if (c == 3)
                             {
@@ -1587,11 +1588,11 @@ namespace CedulasEvaluacion.Controllers
                             }
                             if (c == 1)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias.traslado[r].PersonalSolicitado+"");
+                                TR2 = p2.AppendText(cedula.incidencias.traslado[r].PersonalSolicitado + "");
                             }
                             if (c == 2)
                             {
-                                TR2 = p2.AppendText(cedula.incidencias.traslado[r].PersonalBrindado+"");
+                                TR2 = p2.AppendText(cedula.incidencias.traslado[r].PersonalBrindado + "");
                             }
                             //Formato de celdas
                             p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
@@ -1610,7 +1611,7 @@ namespace CedulasEvaluacion.Controllers
                     document.Replace("||Personal||", "El personal de servicio cumplió con la maquinaria, equipo o  herramientas necesarias para prestar el servicio.", false, true);
                 }
 
-                cedula.incidencias.traslado = await iTraslado.getIncidenciasByPregunta(id,3);
+                cedula.incidencias.traslado = await iTraslado.getIncidenciasByPregunta(id, 3);
                 //obtenemos el documento con marcas
                 if (cedula.incidencias.traslado.Count > 0)
                 {
@@ -1662,10 +1663,10 @@ namespace CedulasEvaluacion.Controllers
                             if (c == 1)
                             {
                                 string coments = "";
-                                string [] comentarios = cedula.incidencias.traslado[r].Comentarios.Split("|");
-                                for (var m = 0;m< comentarios.Length-1;m++)
+                                string[] comentarios = cedula.incidencias.traslado[r].Comentarios.Split("|");
+                                for (var m = 0; m < comentarios.Length - 1; m++)
                                 {
-                                    if((m+1) == comentarios.Length - 1)
+                                    if ((m + 1) == comentarios.Length - 1)
                                     {
                                         coments += comentarios[m];
                                     }
@@ -1673,7 +1674,7 @@ namespace CedulasEvaluacion.Controllers
                                     {
                                         coments += comentarios[m] + ",";
                                     }
-                                    
+
                                 }
                                 TR2 = p2.AppendText(coments);
                             }
@@ -1807,7 +1808,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea","Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso"};
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades.ResetCells(telCel.altaEntrega.Count + 1, cabeceraActividades.Length);
 
@@ -1846,13 +1847,15 @@ namespace CedulasEvaluacion.Controllers
                         DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
                         //Llenar datos en filas
                         Paragraph p2 = DataRow.Cells[c].AddParagraph();
-                        if (c == 0) { 
-                        
+                        if (c == 0)
+                        {
+
                             TR2 = p2.AppendText(telCel.altaEntrega[r].Linea);
                         }
-                        
-                        if (c == 1) { 
-                        
+
+                        if (c == 1)
+                        {
+
                             TR2 = p2.AppendText(telCel.altaEntrega[r].perfilesCelular.Nombre);
                         }
 
@@ -1868,12 +1871,12 @@ namespace CedulasEvaluacion.Controllers
 
                         if (c == 4)
                         {
-                            TR2 = p2.AppendText(telCel.altaEntrega[r].HorasAtencion+"");
+                            TR2 = p2.AppendText(telCel.altaEntrega[r].HorasAtencion + "");
                         }
 
                         if (c == 5)
                         {
-                            TR2 = p2.AppendText(telCel.altaEntrega[r].HorasRetraso+"");
+                            TR2 = p2.AppendText(telCel.altaEntrega[r].HorasRetraso + "");
                         }
 
                         //Formato de celdas
@@ -1898,7 +1901,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea", "Perfil","Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades.ResetCells(telCel.altasentrega.Count + 1, cabeceraActividades.Length);
 
@@ -1991,7 +1994,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades3 = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea","Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades3.ResetCells(telCel.bajaServicio.Count + 1, cabeceraActividades.Length);
 
@@ -2083,7 +2086,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades3 = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea","Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades3.ResetCells(telCel.reactivacion.Count + 1, cabeceraActividades.Length);
 
@@ -2175,7 +2178,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades3 = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea","Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades3.ResetCells(telCel.suspension.Count + 1, cabeceraActividades.Length);
 
@@ -2268,7 +2271,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades3 = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea","Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades3.ResetCells(telCel.cambioPerfil.Count + 1, cabeceraActividades.Length);
 
@@ -2361,7 +2364,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades3 = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea","Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades3.ResetCells(telCel.switcheoCard.Count + 1, cabeceraActividades.Length);
 
@@ -2454,7 +2457,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades3 = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea","Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades3.ResetCells(telCel.cambioRegion.Count + 1, cabeceraActividades.Length);
 
@@ -2547,7 +2550,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades3 = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea","Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades3.ResetCells(telCel.servicioVozDatos.Count + 1, cabeceraActividades.Length);
 
@@ -2640,7 +2643,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades3 = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea","Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades3.ResetCells(telCel.diagnostico.Count + 1, cabeceraActividades.Length);
 
@@ -2733,7 +2736,7 @@ namespace CedulasEvaluacion.Controllers
 
                 Table tablaActividades3 = tablas.AddTable(true);
 
-                String[] cabeceraActividades = { "Linea","Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
+                String[] cabeceraActividades = { "Linea", "Perfil", "Fecha Solicitud", "Fecha Atención", "Horas Atención", "Horas Retraso" };
 
                 tablaActividades3.ResetCells(telCel.reparacion.Count + 1, cabeceraActividades.Length);
 
@@ -3920,7 +3923,7 @@ namespace CedulasEvaluacion.Controllers
                 CedulaMuebles cedula = new CedulaMuebles();
                 cedula = await vMuebles.CedulaById(id);
                 cedula.inmuebleOrigen = await vInmuebles.inmuebleById(cedula.InmuebleOrigenId);
-                cedula.inmuebleDestino= await vInmuebles.inmuebleById(cedula.InmuebleDestinoId);
+                cedula.inmuebleDestino = await vInmuebles.inmuebleById(cedula.InmuebleDestinoId);
                 cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
                 cedula.iEntregables = await vEntregables.getEntregables(id);
                 cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
@@ -3938,7 +3941,7 @@ namespace CedulasEvaluacion.Controllers
                 if (cedula.RespuestasEncuesta[0].Respuesta == false)
                 {
                     document.Replace("||Horarios||", "El prestador de servicios no cumplió con la fecha y hora solicitada para la prestación del servicio, la fecha en que se solicito fue," +
-                                     Convert.ToDateTime(cedula.RespuestasEncuesta[0].Detalles.Split("|")[0]) +" y la fecha y hora de llegada fue:"+ Convert.ToDateTime(cedula.RespuestasEncuesta[0].Detalles.Split("|")[1])
+                                     Convert.ToDateTime(cedula.RespuestasEncuesta[0].Detalles.Split("|")[0]) + " y la fecha y hora de llegada fue:" + Convert.ToDateTime(cedula.RespuestasEncuesta[0].Detalles.Split("|")[1])
                                      + ".", false, true);
                 }
                 else
@@ -4139,7 +4142,7 @@ namespace CedulasEvaluacion.Controllers
 
                 document.Replace("||Administracion||", cedula.inmuebles.Nombre, false, true);
                 //P1
-                document.Replace("||Cierre||", "El cierre de mes se realizó el día: "+Convert.ToDateTime(cedula.RespuestasEncuesta[0].Detalles).ToString("dd/MM/yyyy")+".", false, true);
+                document.Replace("||Cierre||", "El cierre de mes se realizó el día: " + Convert.ToDateTime(cedula.RespuestasEncuesta[0].Detalles).ToString("dd/MM/yyyy") + ".", false, true);
 
                 //P2
                 if (cedula.RespuestasEncuesta[1].Respuesta == true)
@@ -4148,8 +4151,8 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else
                 {
-                    document.Replace("||FechaProgramada||", "El prestador no llevó a cabo el servicio en la fecha programada, ya que el servicio se programo para el día: "+
-                        cedula.RespuestasEncuesta[1].Detalles.Split("|")[0]+" y se llevó a cabo el día: "+ cedula.RespuestasEncuesta[1].Detalles.Split("|")[1]+".", false, true);
+                    document.Replace("||FechaProgramada||", "El prestador no llevó a cabo el servicio en la fecha programada, ya que el servicio se programo para el día: " +
+                        cedula.RespuestasEncuesta[1].Detalles.Split("|")[0] + " y se llevó a cabo el día: " + cedula.RespuestasEncuesta[1].Detalles.Split("|")[1] + ".", false, true);
                 }
 
                 //P3
@@ -4242,7 +4245,7 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else
                 {
-                    document.Replace("||Recolección||", "El prestador del servicio recolectó un total de "+cedula.RespuestasEncuesta[4].Detalles+" muestras, no cumpliendo "+
+                    document.Replace("||Recolección||", "El prestador del servicio recolectó un total de " + cedula.RespuestasEncuesta[4].Detalles + " muestras, no cumpliendo " +
                         " con el número de muestras minimas de 7.", false, true);
                 }
 
@@ -4258,8 +4261,8 @@ namespace CedulasEvaluacion.Controllers
 
                 if (cedula.RespuestasEncuesta[6].Respuesta == true)
                 {
-                    document.Replace("||Reporte||", "El prestador del servicio entregó el reporte del servicio el día: "+
-                        Convert.ToDateTime(cedula.RespuestasEncuesta[6].Detalles).ToString("dd/MM/yyyy") +".", false, true);
+                    document.Replace("||Reporte||", "El prestador del servicio entregó el reporte del servicio el día: " +
+                        Convert.ToDateTime(cedula.RespuestasEncuesta[6].Detalles).ToString("dd/MM/yyyy") + ".", false, true);
                 }
                 else
                 {
@@ -4367,7 +4370,7 @@ namespace CedulasEvaluacion.Controllers
             document.Replace("|Reviso|", cedula.Reviso, false, true);
             document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cedula.Elaboro.ToLower()), false, true);
             document.Replace("|InmuebleCedula|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Inmueble), false, true);
-            document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC)+"\n", false, true);
+            document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC) + "\n", false, true);
 
             document.Replace("|Folio|", cedula.Folio, false, true);
 
@@ -4375,13 +4378,13 @@ namespace CedulasEvaluacion.Controllers
 
 
             DateTime fechaActual = DateTime.Now;
-            document.Replace("|Dia|", fechaActual.Day+"", false, true);
+            document.Replace("|Dia|", fechaActual.Day + "", false, true);
             document.Replace("|Mes|", fechaActual.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")), false, true);
             document.Replace("|Anio|", fechaActual.Year + "", false, true);
-            document.Replace("|Hora|", fechaActual.Hour+ ":00", false, true);
+            document.Replace("|Hora|", fechaActual.Hour + ":00", false, true);
             document.Replace("|DiaActual|", fechaActual.Day + " de " + fechaActual.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + fechaActual.Year, false, true);
-            document.Replace("|HoraActual|", fechaActual.Hour+ ":00", false, true);
-            document.Replace("|Hora|", fechaActual.Hour+ ":00", false, true);
+            document.Replace("|HoraActual|", fechaActual.Hour + ":00", false, true);
+            document.Replace("|Hora|", fechaActual.Hour + ":00", false, true);
             if ((await vIncidencias.getIncidencias(id)).Count == 0)
             {
                 document.Replace("|Declaraciones|", "Se hace constar que los servicios solicitados fueron atendidos a entera satisfacción del Consejo de la Judicatura Federal conforme se visualiza en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
@@ -4396,13 +4399,14 @@ namespace CedulasEvaluacion.Controllers
             string strNTimbrado = "";
             string strCantidades = "";
             string strCantidadesNota = "";
-            string strTimbrado= "";
+            string strTimbrado = "";
             decimal total = 0, totalNC = 0;
             for (int i = 0; i < cedula.facturas.Count; i++)
             {
                 if ((cedula.facturas.Count - 1) != i && i != 0)
                 {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NC")) {
+                    if (!cedula.facturas[i].comprobante.Serie.Equals("NC"))
+                    {
                         strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "/";
                         strCantidades += Convert.ToInt32(cedula.facturas[i].concepto[0].Cantidad) + "/";
                         strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado + "/";
@@ -4411,7 +4415,7 @@ namespace CedulasEvaluacion.Controllers
                     }
                     else
                     {
-                        strNotas+= cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "/";
+                        strNotas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "/";
                         strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado + "/";
                         strCantidadesNota += Convert.ToInt32(cedula.facturas[i].concepto[0].Cantidad) + "/";
                         totalNC += cedula.facturas[i].comprobante.Total;
@@ -4437,15 +4441,15 @@ namespace CedulasEvaluacion.Controllers
             }
 
             document.Replace("|ImporteIVA|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total), false, true);
-            document.Replace("|CantidadServicios|", strCantidades+"",false, true);
+            document.Replace("|CantidadServicios|", strCantidades + "", false, true);
             document.Replace("|FechaTimbrado|", strTimbrado, false, true);
             document.Replace("|FolioFactura|", strFacturas, false, true);
 
             //Notas de Crédito
             document.Replace("|ImporteNota|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalNC), false, true);
             document.Replace("|CantidadNota|", strCantidadesNota.Equals("") ? "N/A" : strCantidadesNota + "", false, true);
-            document.Replace("|TimbradoNota|", strNTimbrado.Equals("") ? "N/A": strNTimbrado, false, true);
-            document.Replace("|FolioNota|", strNotas.Equals("") ? "N/A":strNotas, false, true);
+            document.Replace("|TimbradoNota|", strNTimbrado.Equals("") ? "N/A" : strNTimbrado, false, true);
+            document.Replace("|FolioNota|", strNotas.Equals("") ? "N/A" : strNotas, false, true);
 
             //Salvar y Lanzar
 
@@ -4628,7 +4632,7 @@ namespace CedulasEvaluacion.Controllers
             document.Replace("|Reviso|", cedula.Reviso, false, true);
             document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cedula.Elaboro.ToLower()), false, true);
             document.Replace("|InmuebleCedula|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Inmueble), false, true);
-            document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC)+"\n", false, true);
+            document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC) + "\n", false, true);
 
             document.Replace("|Folio|", cedula.Folio, false, true);
 
@@ -4706,13 +4710,13 @@ namespace CedulasEvaluacion.Controllers
                             if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
                             {
                                 cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades =  cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
+                                strCantidades = cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
                             }
                             else
                             {
                                 concepto = cedula.facturas[i].concepto[j].Descripcion;
                                 cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades += cantidad + " - " + concepto +"\n";
+                                strCantidades += cantidad + " - " + concepto + "\n";
                             }
                         }
                         else
@@ -4864,7 +4868,7 @@ namespace CedulasEvaluacion.Controllers
                     if (!cedula.facturas[i].receptor.usoCFDI.Equals("G02"))
                     {
                         strFacturas += cedula.facturas[i].comprobante.Folio + "\n";
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy")+ "\n";
+                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
 
                         total += cedula.facturas[i].comprobante.Total;
                     }
@@ -5296,7 +5300,7 @@ namespace CedulasEvaluacion.Controllers
 
             document.Replace("|MesEval|", cedula.Mes, false, true);
 
-            document.Replace("|Medico|", cedulaResiduos.usuarios.nombre_emp +" "+ cedulaResiduos.usuarios.paterno_emp+" "+
+            document.Replace("|Medico|", cedulaResiduos.usuarios.nombre_emp + " " + cedulaResiduos.usuarios.paterno_emp + " " +
                 cedulaResiduos.usuarios.materno_emp, false, true);
 
 
@@ -5674,7 +5678,7 @@ namespace CedulasEvaluacion.Controllers
         {
             return "Transporte_de_Personal";
         }
-        
+
         private string moduloTraslado()
         {
             return "Traslado_de_Expedientes";
@@ -5688,6 +5692,11 @@ namespace CedulasEvaluacion.Controllers
         private string moduloAnalisis()
         {
             return "Análisis_Microbiológicos";
+        }
+
+        private string moduloRPBI()
+        {
+            return "RPBI";
         }
 
         private string moduloFumigacion()

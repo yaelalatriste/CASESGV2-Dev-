@@ -38,9 +38,8 @@ namespace CedulasEvaluacion.Controllers
                 return BadRequest();
             }
         }
-        /*Fin del Metodo para adjuntar los entregables*/
 
-        /*Metodo para obtener las inasistencias*/
+        //Obtiene el body de la tabla para los Entregables
         [HttpGet]
         [Route("cedLimpieza/getEntregables/{id?}")]
         public async Task<IActionResult> getEntregablesLimpieza(int id)
@@ -90,9 +89,8 @@ namespace CedulasEvaluacion.Controllers
             }
             return NoContent();
         }
-        /*FIN del metodo para obtener las inasistencias*/
 
-        /*Obtiene los tipos de entregables que ya fueron adjuntos*/
+        //obtiene el listado de entregables  
         [HttpGet]
         [Route("/cedLimpieza/getListadoEntregablesLimpieza/{id?}")]
         public async Task<IActionResult> getListadoEntregablesLimpieza(int id)
@@ -137,6 +135,7 @@ namespace CedulasEvaluacion.Controllers
             }
         }
 
+        //muestra el archivo en la página HTML
         [HttpGet]
         [Route("cedLimpieza/verArchivo/{folio?}/{nombre?}")]
         public IActionResult archivoProyecto(string folio, string nombre)
@@ -161,6 +160,7 @@ namespace CedulasEvaluacion.Controllers
             return NotFound();
         }
 
+        //Elimina el Archivo
         [HttpPost]
         [Route("cedLimpieza/eliminaArchivo")]
         public async Task<IActionResult> eliminaArchivo([FromBody] Entregables entregable)
@@ -177,6 +177,7 @@ namespace CedulasEvaluacion.Controllers
             }
         }
 
+        //Identifica el entregable para que no se repitan
         [HttpGet]
         [Route("cedLimpieza/buscaEntregable/{id?}/{tipo?}")]
         public async Task<IActionResult> buscaEntregable(int id, string tipo)
@@ -189,6 +190,23 @@ namespace CedulasEvaluacion.Controllers
             }
             return BadRequest();
         }
+
+        /*Flujo para los estatus*/
+        [HttpGet]
+        [Route("/limpieza/flujo/{cedula?}/{estatus?}")]
+        public async Task<IActionResult> GetFlujoCedula(int cedula, string estatus)
+        {
+            int exists = 0;
+            exists = await vEntregables.GetFlujoCedula(cedula, estatus);
+            if (exists != -1)
+            {
+                return Ok(exists);
+            }
+            return BadRequest();
+        }
+        /*Flujo para los estatus*/
+
+
 
         /***************************** FIN Limpieza ****************************/
     }

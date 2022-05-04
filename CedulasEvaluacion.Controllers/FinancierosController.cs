@@ -42,14 +42,16 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpGet]
         [Route("/financieros/detalle/{servicio}")]
-        public async Task<IActionResult> DetalleServicio(string servicio)
+        public async Task<IActionResult> DetalleServicio(string servicio, [FromQuery(Name = "Anio")] int Anio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
                 ModelsFinancieros models = new ModelsFinancieros();
+                models.Anio = Anio;
+                models.Servicio = servicio;
                 models.dashboard = new List<DashboardFinancieros>();
-                models.dashboard = await vFinancieros.GetDetalleServicio(servicio);
+                models.dashboard = await vFinancieros.GetDetalleServicio(servicio, Anio);
                 models.oficio = new List<Oficio>();
                 models.oficio = await vFinancieros.GetOficiosFinancieros(servicio);
                 return View(models);
@@ -66,9 +68,9 @@ namespace CedulasEvaluacion.Controllers
             {
                 Oficio oficio = await vFinancieros.GetOficioById(id);
                 oficio.detalleCedulas = new List<DetalleCedula>();
-                oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id,servicio);
-                oficio.cedulasOficio= new List<DetalleCedula>();
-                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id,servicio);
+                oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id, servicio);
+                oficio.cedulasOficio = new List<DetalleCedula>();
+                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id, servicio);
                 return View(oficio);
             }
             return Redirect("/error/denied");
@@ -93,12 +95,12 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpGet]
         [Route("/financieros/envia/oficio/{id}/{servicio}")]
-        public async Task<IActionResult> TramitarOficio(int id,int servicio)
+        public async Task<IActionResult> TramitarOficio(int id, int servicio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
-                int tramitado = await vFinancieros.GetTramiteOficio(id,servicio);
+                int tramitado = await vFinancieros.GetTramiteOficio(id, servicio);
                 if (tramitado != -1)
                 {
                     return Ok(tramitado);
@@ -115,7 +117,7 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                int cancelado = await vFinancieros.CancelarOficio(id,servicio);
+                int cancelado = await vFinancieros.CancelarOficio(id, servicio);
                 if (cancelado != -1)
                 {
                     return Ok(cancelado);
@@ -127,12 +129,12 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpGet]
         [Route("/financieros/pagar/oficio/{servicio}/{id}")]
-        public async Task<IActionResult> PagarOficio(int servicio,int id)
+        public async Task<IActionResult> PagarOficio(int servicio, int id)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                int cancelado = await vFinancieros.PagarOficio(id,servicio);
+                int cancelado = await vFinancieros.PagarOficio(id, servicio);
                 if (cancelado != -1)
                 {
                     return Ok(cancelado);
@@ -144,12 +146,12 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpGet]
         [Route("/financieros/elimina/cedulasOficio/{oficio}/{servicio}/{cedula}")]
-        public async Task<IActionResult> EliminaCedulasOficio(int oficio,int servicio, int cedula)
+        public async Task<IActionResult> EliminaCedulasOficio(int oficio, int servicio, int cedula)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                int elimina = await vFinancieros.EliminaCedulasOficio(oficio, servicio,cedula);
+                int elimina = await vFinancieros.EliminaCedulasOficio(oficio, servicio, cedula);
                 if (elimina != -1)
                 {
                     return Ok(elimina);
@@ -162,7 +164,7 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("/financieros/inserta/oficio")]
-        public async Task<IActionResult> InsertarOficio([FromBody]Oficio oficio)
+        public async Task<IActionResult> InsertarOficio([FromBody] Oficio oficio)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
@@ -187,26 +189,26 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpGet]
-        [Route("/financieros/generaTabla/{servicio}/{flujo}")]
-        public async Task<IActionResult> generaFilas(string servicio,string flujo)
+        [Route("/financieros/generaTabla/{servicio}/{flujo}/{anio}")]
+        public async Task<IActionResult> generaFilas(string servicio, string flujo, int anio)
         {
-            List<DashboardFinancieros> resultado = await vFinancieros.GetDetalleServicio(servicio); 
+            List<DashboardFinancieros> resultado = await vFinancieros.GetDetalleServicio(servicio, anio);
 
             var meses = obtieneMeses(resultado);
-            var totales = obtieneTotales(resultado,meses);
-            var estatus = obtieneEstatus(resultado,flujo);
+            var totales = obtieneTotales(resultado, meses);
+            var estatus = obtieneEstatus(resultado, flujo);
             var columnas = new List<string>();
             var filas = new List<List<string>>();
             double total = 0;
 
-            for (var i=0; i<meses.Count;i++)
+            for (var i = 0; i < meses.Count; i++)
             {
                 columnas = generaColumnas(estatus);
-                for (var j=0;j<resultado.Count;j++)
+                for (var j = 0; j < resultado.Count; j++)
                 {
                     if (meses[i] == resultado[j].Mes)
                     {
-                        total = (resultado[j].Total * 100.0)/totales[i];
+                        total = (resultado[j].Total * 100.0) / totales[i];
                         if (obtienePosicion(estatus, resultado[j].Estatus) != -1)
                         {
                             columnas[obtienePosicion(estatus, resultado[j].Estatus)] =
@@ -228,15 +230,15 @@ namespace CedulasEvaluacion.Controllers
                 filas.Add(columnas);
             }
 
-             return Ok(filas);
+            return Ok(filas);
         }
 
         public int obtienePosicion(List<string> estatus, string nEstatus)
         {
             int p = -1;
-            for(var i = 0; i < estatus.Count; i++)
+            for (var i = 0; i < estatus.Count; i++)
             {
-                if(estatus.ElementAt(i) == nEstatus)
+                if (estatus.ElementAt(i) == nEstatus)
                 {
                     p = i;
                     return p;
@@ -284,11 +286,11 @@ namespace CedulasEvaluacion.Controllers
             {
                 columnas.Add("<td></td>");
             }
-            
+
             return columnas;
         }
 
-        public List<string> obtieneEstatus(List<DashboardFinancieros> dashboards,string flujo)
+        public List<string> obtieneEstatus(List<DashboardFinancieros> dashboards, string flujo)
         {
             var estatus = new List<string>();
             if (flujo == "Operacion")

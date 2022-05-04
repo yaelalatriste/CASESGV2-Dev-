@@ -16,10 +16,10 @@ namespace CedulasEvaluacion.Services
             this.vPermisos = viPermisos ?? throw new ArgumentNullException(nameof(viPermisos));
         }
 
-        public async Task<PermisosPerfil> GetVModulos(string permiso, string modulo, int usuario)
+        public async Task<int> GetPermisosByModulo(string permiso, int servicio, int usuario)
         {
-            PermisosPerfil modulos = await vPermisos.GetPermisoModuloByUser(permiso,modulo,usuario);
-            return modulos;
+            PermisosPerfil modulos = await vPermisos.GetPermisoModuloByUser(permiso, servicio, usuario);
+            return modulos.Servicio;
         }
     }
 }

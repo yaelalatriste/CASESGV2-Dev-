@@ -6871,6 +6871,10 @@ a.bg-warning:focus, a.bg-warning:hover, button.bg-warning:focus, button.bg-warni
     color: #f1655c !important;
 }
 
+.text-historial {
+    color: #0D4C04!important;
+}
+
 .text-autorizado {
     color: #017E06 !important;
 }
