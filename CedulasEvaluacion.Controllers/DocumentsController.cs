@@ -523,15 +523,16 @@ namespace CedulasEvaluacion.Controllers
                 string strFacturas = "";
                 decimal totalFacturas = 0;
 
-                CedulaAgua cedula = new CedulaAgua();
-                cedula = await vAgua.CedulaById(id);
+                CedulaEvaluacion cedula = new CedulaEvaluacion();
+                cedula = await vCedula.CedulaById(id);
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
                 cedula.iEntregables = await vEntregables.getEntregables(id);
                 cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedula.RespuestasEncuesta = await vAgua.obtieneRespuestas(id);
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
                 cedula.facturas = new List<Facturas>();
                 cedula.facturas = await vFacturas.getFacturas(id, 9);
+                cedula.incidencias = new Entities.MIncidencias.ModelsIncidencias();
 
                 Document document = new Document();
                 var path = @"E:\Plantillas CASESGV2\DocsV2\ReporteAgua.docx";
@@ -547,15 +548,15 @@ namespace CedulasEvaluacion.Controllers
                         Convert.ToDateTime(cedula.RespuestasEncuesta[0].Detalles).ToString("yyyy") + ".", false, true);
                 }
 
-                cedula.incidencias = await iAgua.GetIncidenciasPregunta(id, 2);
+                cedula.incidencias.agua = await iAgua.GetIncidenciasPregunta(id, 2);
                 //obtenemos el documento con marcas
-                if (cedula.incidencias.Count > 0)
+                if (cedula.incidencias.agua.Count > 0)
                 {
                     Table tablaActividades = tablas.AddTable(true);
 
                     String[] cabeceraFechas = { "Tipo", "Fecha Programada", "Fecha Atención", "Comentarios" };
 
-                    tablaActividades.ResetCells(cedula.incidencias.Count + 1, cabeceraFechas.Length);
+                    tablaActividades.ResetCells(cedula.incidencias.agua.Count + 1, cabeceraFechas.Length);
 
                     TableRow recRow = tablaActividades.Rows[0];
                     recRow.IsHeader = true;
@@ -580,9 +581,9 @@ namespace CedulasEvaluacion.Controllers
                         TR.CharacterFormat.TextColor = Color.White;
                     }
 
-                    for (int r = 0; r < cedula.incidencias.Count; r++)
+                    for (int r = 0; r < cedula.incidencias.agua.Count; r++)
                     {
-                        if (cedula.incidencias[r].Pregunta.Equals(2 + ""))
+                        if (cedula.incidencias.agua[r].Pregunta.Equals(2 + ""))
                         {
                             TableRow DataRow = tablaActividades.Rows[r + 1];
                             //Fila Height
@@ -596,19 +597,19 @@ namespace CedulasEvaluacion.Controllers
                                 Paragraph p2 = DataRow.Cells[c].AddParagraph();
                                 if (c == 0)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].Tipo);
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].Tipo);
                                 }
                                 if (c == 1)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].FechaProgramada.ToString("dd/MM/yyyy"));
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].FechaProgramada.ToString("dd/MM/yyyy"));
                                 }
                                 if (c == 2)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].FechaRealizada.ToString("dd/MM/yyyy"));
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].FechaRealizada.ToString("dd/MM/yyyy"));
                                 }
                                 if (c == 3)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].Comentarios);
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].Comentarios);
                                 }
                                 //Formato de celdas
                                 p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
@@ -628,15 +629,15 @@ namespace CedulasEvaluacion.Controllers
                     document.Replace("||Fechas||", "El personal cumplió con las actividades contempladas en el programa de operación, no presentó incidencias en el mes.", false, true);
                 }
 
-                cedula.incidencias = await iAgua.GetIncidenciasPregunta(id, 3);
+                cedula.incidencias.agua = await iAgua.GetIncidenciasPregunta(id, 3);
                 //obtenemos el documento con marcas
-                if (cedula.incidencias.Count > 0)
+                if (cedula.incidencias.agua.Count > 0)
                 {
                     Table tablaHoras = tablas.AddTable(true);
 
                     String[] cabeceraHoras = { "Tipo", "Hora Programada", "Hora Realizada", "Comentarios" };
 
-                    tablaHoras.ResetCells(cedula.incidencias.Count + 1, cabeceraHoras.Length);
+                    tablaHoras.ResetCells(cedula.incidencias.agua.Count + 1, cabeceraHoras.Length);
 
                     TableRow recRow = tablaHoras.Rows[0];
                     recRow.IsHeader = true;
@@ -661,9 +662,9 @@ namespace CedulasEvaluacion.Controllers
                         TR.CharacterFormat.TextColor = Color.White;
                     }
 
-                    for (int r = 0; r < cedula.incidencias.Count; r++)
+                    for (int r = 0; r < cedula.incidencias.agua.Count; r++)
                     {
-                        if (cedula.incidencias[r].Pregunta.Equals(3 + ""))
+                        if (cedula.incidencias.agua[r].Pregunta.Equals(3 + ""))
                         {
                             TableRow DataRow = tablaHoras.Rows[r + 1];
                             //Fila Height
@@ -677,19 +678,19 @@ namespace CedulasEvaluacion.Controllers
                                 Paragraph p2 = DataRow.Cells[c].AddParagraph();
                                 if (c == 0)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].Tipo);
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].Tipo);
                                 }
                                 if (c == 1)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].HoraProgramada + "");
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].HoraProgramada + "");
                                 }
                                 if (c == 2)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].HoraRealizada + "");
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].HoraRealizada + "");
                                 }
                                 if (c == 3)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].Comentarios);
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].Comentarios);
                                 }
                                 //Formato de celdas
                                 p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
@@ -709,15 +710,15 @@ namespace CedulasEvaluacion.Controllers
                     document.Replace("||Horas||", "El personal cumplió con las horas pactadas para la ejecución del servicio, no presentó incidencias en el mes.", false, true);
                 }
 
-                cedula.incidencias = await iAgua.GetIncidenciasPregunta(id, 4);
+                cedula.incidencias.agua = await iAgua.GetIncidenciasPregunta(id, 4);
                 //obtenemos el documento con marcas
-                if (cedula.incidencias.Count > 0)
+                if (cedula.incidencias.agua.Count > 0)
                 {
                     Table tablaFauna = tablas.AddTable(true);
 
                     String[] cabeceraFauna = { "Tipo", "Fecha Realizada", "Fecha Recibida", "Comentarios" };
 
-                    tablaFauna.ResetCells(cedula.incidencias.Count + 1, cabeceraFauna.Length);
+                    tablaFauna.ResetCells(cedula.incidencias.agua.Count + 1, cabeceraFauna.Length);
 
                     TableRow recRow = tablaFauna.Rows[0];
                     recRow.IsHeader = true;
@@ -742,9 +743,9 @@ namespace CedulasEvaluacion.Controllers
                         TR.CharacterFormat.TextColor = Color.White;
                     }
 
-                    for (int r = 0; r < cedula.incidencias.Count; r++)
+                    for (int r = 0; r < cedula.incidencias.agua.Count; r++)
                     {
-                        if (cedula.incidencias[r].Pregunta.Equals(4 + ""))
+                        if (cedula.incidencias.agua[r].Pregunta.Equals(4 + ""))
                         {
                             TableRow DataRow = tablaFauna.Rows[r + 1];
                             //Fila Height
@@ -758,19 +759,19 @@ namespace CedulasEvaluacion.Controllers
                                 Paragraph p2 = DataRow.Cells[c].AddParagraph();
                                 if (c == 0)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].Tipo);
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].Tipo);
                                 }
                                 if (c == 1)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].FechaProgramada.ToString("dd/MM/yyyy"));
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].FechaProgramada.ToString("dd/MM/yyyy"));
                                 }
                                 if (c == 2)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].FechaRealizada.ToString("dd/MM/yyyy"));
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].FechaRealizada.ToString("dd/MM/yyyy"));
                                 }
                                 if (c == 3)
                                 {
-                                    TR2 = p2.AppendText(cedula.incidencias[r].Comentarios);
+                                    TR2 = p2.AppendText(cedula.incidencias.agua[r].Comentarios);
                                 }
                                 //Formato de celdas
                                 p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
