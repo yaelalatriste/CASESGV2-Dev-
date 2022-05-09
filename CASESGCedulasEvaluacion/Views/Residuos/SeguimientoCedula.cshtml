@@ -777,6 +777,42 @@
             $('#error_customFile').css('display', 'none');
             $('#error_comentariosEntre').css('display', 'none');
 
+            /*Ocultar Botones de Acción*/
+                $('.tramitar_cedula').css('display', 'none');
+                $('.tramitar_pago').css('display', 'none');
+                $('.rechazar_tramite').css('display', 'none');
+            /*Fin de Ocultar Botones de Acción*/
+
+
+                if (model.estatus == 'Autorizada') {
+                    axios.get('/entregables/flujo/car/' + model.id + '/' + model.estatus).then(btn => {
+                        console.log(btn);
+                        if (btn.data == 1) {
+                            $('.tramitar_cedula').css('display', 'block');
+                        }
+                        else if (btn.data == 0) {
+                            $('.tramitar_pago').css('display', 'block');
+                        }
+                    });
+                }
+                else if (model.estatus == 'Trámite Rechazado') {
+                    axios.get('/entregables/flujo/car/' + model.id + '/' + model.estatus).then(btn => {
+                        if (btn.data == 0)
+                        {
+                            $('.tramitar_cedula').css('display', 'block');
+                        }
+                    });
+                }
+                else if (model.estatus == 'En Trámite') {
+                    axios.get('/entregables/flujo/car/' + model.id + '/' + model.estatus).then(btn => {
+                        if (btn.data > 0) {
+                            $('.rechazar_tramite').css('display', 'block');
+                        } else {
+                            $('.tramitar_pago').css('display', 'block');
+                        }
+                    });
+                }
+
             /*Tramitar Cedula*/
                 $(document).on('click', '.tramitar_cedula', function () {
                     Swal.fire({

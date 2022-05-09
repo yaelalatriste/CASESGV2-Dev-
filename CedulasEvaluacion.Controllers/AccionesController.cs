@@ -1,19 +1,22 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using CedulasEvaluacion.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CedulasEvaluacion.Controllers
 {
     public class AccionesController : Controller
     {
-
+        private readonly IRepositorioEntregablesCedula vEntregables;
         private readonly IHostingEnvironment environment;
 
-        public AccionesController(IHostingEnvironment environment)
+        public AccionesController(IRepositorioEntregablesCedula eiEntregables, IHostingEnvironment environment)
         {
+            this.vEntregables = eiEntregables ?? throw new ArgumentNullException(nameof(eiEntregables));
             this.environment = environment;
         }
 
@@ -52,5 +55,33 @@ namespace CedulasEvaluacion.Controllers
             }
             return NotFound();
         }
+
+        /*Flujo para los estatus*/
+        [HttpGet]
+        [Route("/entregables/flujo/cae/{cedula?}/{estatus?}")]
+        public async Task<IActionResult> GetFlujoCedulaCAE(int cedula, string estatus)
+        {
+            int exists = 0;
+            exists = await vEntregables.GetFlujoCedulaCAE(cedula, estatus);
+            if (exists != -1)
+            {
+                return Ok(exists);
+            }
+            return BadRequest();
+        }
+        [HttpGet]
+        [Route("/entregables/flujo/car/{cedula?}/{estatus?}")]
+        public async Task<IActionResult> GetFlujoCedulaCAR(int cedula, string estatus)
+        {
+            int exists = 0;
+            exists = await vEntregables.GetFlujoCedulaCAR(cedula, estatus);
+            if (exists != -1)
+            {
+                return Ok(exists);
+            }
+            return BadRequest();
+        }
+
+        /*Flujo para los estatus*/
     }
 }

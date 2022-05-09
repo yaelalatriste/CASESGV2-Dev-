@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CedulasEvaluacion.Interfaces
 {
-    public interface IRepositorioEntregablesCedula
+    public interface IRepositorioAlcancesEntregables
     {
-        /*Metodos para adjuntar archivos*/
         Task<List<Entregables>> getEntregables(int cedula);
         Task<int> adjuntaEntregable(Entregables entregables);//adjuntaEntregable
         Task<int> eliminaEntregable(Entregables entregable);
@@ -16,7 +15,7 @@ namespace CedulasEvaluacion.Interfaces
         Task<int> GetFlujoCedulaCAR(int cedula, string estatus);
         Task<int> buscaEntregable(int id, string tipo);
         Task<int> capturaHistorial(HistorialEntregables historialEntregables);
-        Task<List<HistorialEntregables>> getHistorialEntregables(int id,int servicioId);
+        Task<List<HistorialEntregables>> getHistorialEntregables(int id, int servicioId);
         Task<int> apruebaRechazaEntregable(Entregables entregables);
     }
 }

@@ -29,18 +29,21 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioIncidencias vIncidencias;
         private readonly IRepositorioEntregablesCedula vEntregables;
+        private readonly IRepositorioAlcancesEntregables vAlcances;
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
 
-        public LimpiezaController(IRepositorioEvaluacionServicios viCedula, IRepositorioLimpieza iVLimpieza, IRepositorioInmuebles iVInmueble, IRepositorioIncidencias iIncidencias,
-                                  IRepositorioUsuarios iVUsuario, IRepositorioEntregablesCedula iEntregables, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
+        public LimpiezaController(IRepositorioEvaluacionServicios viCedula, IRepositorioLimpieza iVLimpieza, IRepositorioInmuebles iVInmueble, 
+                                  IRepositorioIncidencias iIncidencias, IRepositorioUsuarios iVUsuario, IRepositorioEntregablesCedula iEntregables, 
+                                  IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas, IRepositorioAlcancesEntregables viAlcances)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vlimpieza = iVLimpieza ?? throw new ArgumentNullException(nameof(iVLimpieza));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vIncidencias = iIncidencias ?? throw new ArgumentNullException(nameof(iIncidencias));
             this.vEntregables = iEntregables ?? throw new ArgumentNullException(nameof(iEntregables));
+            this.vAlcances = viAlcances ?? throw new ArgumentNullException(nameof(viAlcances));
             this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));
             this.vRepositorioPerfiles = iRepositorioPerfiles ?? throw new ArgumentNullException(nameof(iRepositorioPerfiles));
@@ -194,6 +197,8 @@ namespace CedulasEvaluacion.Controllers
                 cedLim.inmuebles = await vInmuebles.inmuebleById(cedLim.InmuebleId);
                 cedLim.usuarios = await vUsuarios.getUserById(cedLim.UsuarioId);
                 cedLim.iEntregables = await vEntregables.getEntregables(cedLim.Id);
+                cedLim.iAlcances = new List<Entregables>();
+                cedLim.iAlcances = await vAlcances.getEntregables(cedLim.Id);
                 cedLim.historialEntregables = new List<HistorialEntregables>();
                 cedLim.historialEntregables = await vEntregables.getHistorialEntregables(cedLim.Id,cedLim.ServicioId);
                 cedLim.RespuestasEncuesta = new List<RespuestasEncuesta>();

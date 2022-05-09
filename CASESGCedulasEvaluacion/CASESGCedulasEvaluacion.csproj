@@ -89,6 +89,9 @@
       <LastGenOutput>DtReporteMensajeria.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Reports\ActaERConvencional.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Reports\CedulaConvencional.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

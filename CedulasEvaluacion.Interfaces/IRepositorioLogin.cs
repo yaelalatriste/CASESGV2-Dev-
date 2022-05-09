@@ -16,5 +16,6 @@ namespace CedulasEvaluacion.Interfaces
         Task<List<Dashboard>> totalCedulas(int user);
         Task<List<Dashboard>> CedulasEstatus(int user, string estatus);
         Task<List<VCedulas>> ConcentradoCedulas(int user, string estatus);
+        Task<List<ResponsablesDAS>> GetResponsablesDAS();
     }
 }

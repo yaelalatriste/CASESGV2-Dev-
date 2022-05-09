@@ -20,10 +20,12 @@ namespace CedulasEvaluacion.Entities.Models
         public int CedulaResiduosId { get; set; }
         public int CedulaMuebleId { get; set; }
         public int CedulaEvaluacionId { get; set; }
+        public int EntregableId { get; set; }
         public IFormFile Archivo { get; set; }
         public string NombreArchivo { get; set; }
         public string Estatus { get; set; }
         public string Tipo { get; set; }
+        public string Entregable { get; set; }
         public string Folio { get; set; }
         public int Tamanio { get; set; }
         public int DiasAtraso { get; set; }

@@ -333,26 +333,23 @@
                     </div>
                 </div>
                 <div class="row col-lg-12 justify-content-end mb-3">
-                    @if (await sPermisos.GetPermisosByModulo("revisar CAE", @Model.ServicioId, @user) != 0 && (Model.Estatus.Equals("Autorizada") ||
-                     @Model.Estatus.Equals("Trámite Rechazado")))
+                    @if (await sPermisos.GetPermisosByModulo("revisar CAE", @Model.ServicioId, @user) != 0)
                     {
                         <button href="" class="btn btn-primary float-right mr-3 revisar_cae"><i class="fas fa-check mr-2"></i>Enviar a Revisión CAE</button>
                     }
-                    @if (await sPermisos.GetPermisosByModulo("autorizar CAE", @Model.ServicioId, @user) != 0 && Model.Estatus.Equals("Revisión CAE"))
+                    @if (await sPermisos.GetPermisosByModulo("autorizar CAE", @Model.ServicioId, @user) != 0)
                     {
                         <button href="" class="btn btn-success float-right mr-3 autorizar_cae"><i class="fas fa-check mr-2"></i>Autorizar Documentación</button>
                     }
-                    @if (await sPermisos.GetPermisosByModulo("rechazar trámite", @Model.ServicioId, @user) != 0 &&
-                      (@Model.Estatus.Equals("Revisión CAE") || Model.Estatus.Equals("En Trámite") || Model.Estatus.Equals("Autorizado CAE")))
+                    @if (await sPermisos.GetPermisosByModulo("rechazar trámite", @Model.ServicioId, @user) != 0)
                     {
                         <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-check mr-2"></i>Rechazar Trámite</button>
                     }
-                    @if (await sPermisos.GetPermisosByModulo("trámitar", @Model.ServicioId, @user) != 0 && (Model.Estatus.Equals("Autorizado CAE")
-                                  || Model.Estatus.Equals("Trámite Rechazado")))
+                    @if (await sPermisos.GetPermisosByModulo("trámitar", @Model.ServicioId, @user) != 0)
                     {
                         <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
                     }
-                    @if (await sPermisos.GetPermisosByModulo("trámitar a pago", @Model.ServicioId, @user) != 0 && Model.Estatus.Equals("En Trámite"))
+                    @if (await sPermisos.GetPermisosByModulo("trámitar a pago", @Model.ServicioId, @user) != 0)
                     {
                         <button href="" class="btn btn-success float-right mr-3 tramitar_pago"><i class="fas fa-check mr-2"></i>Tramitar Pago</button>
                     }
@@ -612,24 +609,25 @@
             $('#error_tipoEntre').css('display', 'none');
             $('#error_customFile').css('display', 'none');
             $('#error_comentariosEntre').css('display', 'none');
-        /*Ocultar Botones de Acción*/
-                $('.tramitar_cedula').css('display', 'none');
-                $('.tramitar_pago').css('display', 'none');
-                $('.rechazar_tramite').css('display', 'none');
-                $('.autorizar_cae').css('display', 'none');
-                $('.revisar_cae').css('display', 'none');
-            /*Fin de Ocultar Botones de Acción*/
 
+            /*Ocultar Botones de Acción*/
+                $('.tramitar_cedula').css('display','none');
+                $('.tramitar_pago').css('display','none');
+                $('.rechazar_tramite').css('display','none');
+                $('.autorizar_cae').css('display','none');
+                $('.revisar_cae').css('display','none');
+            /*Fin de Ocultar Botones de Acción*/          
 
+            /*Condicionales para Liberar los Botones*/
                 if (model.estatus == 'Autorizada') {
-                    axios.get('/limpieza/flujo/' + model.id + '/' + model.estatus).then(btn => {
+                    axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         if (btn.data == 1) {
                             $('.revisar_cae').css('display', 'block');
                         }
                     });
                 }
                 else if (model.estatus == 'Revisión CAE') {
-                    axios.get('/limpieza/flujo/' + model.id + '/' + model.estatus).then(btn => {
+                    axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         if (btn.data > 0) {
                             $('.rechazar_tramite').css('display', 'block');
                         } else if(btn.data == 0){
@@ -638,8 +636,7 @@
                     });
                 }
                 else if (model.estatus == 'Autorizado CAE') {
-                    axios.get('/limpieza/flujo/' + model.id + '/' + model.estatus).then(btn => {
-                        console.log(btn);
+                    axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         if (btn.data == 1) {
                             $('.tramitar_cedula').css('display', 'block');
                         }
@@ -650,7 +647,7 @@
                     });
                 }
                 else if (model.estatus == 'Trámite Rechazado') {
-                    axios.get('/limpieza/flujo/' + model.id + '/' + model.estatus).then(btn => {
+                    axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         console.log(btn);
                         if (btn.data == 1 || btn.data == 3)
                         {
@@ -663,14 +660,18 @@
                     });
                 }
                 else if (model.estatus == 'En Trámite') {
-                    axios.get('/limpieza/flujo/' + model.id + '/' + model.estatus).then(btn => {
+                    axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         if (btn.data > 0) {
                             $('.rechazar_tramite').css('display', 'block');
-                        } else {
+                        } else {    
                             $('.tramitar_pago').css('display', 'block');
                         }
                     });
                 }
+            /*Fin Condicionales para Liberar los Botones*/
+
+
+
         /*Tramitar Cedula*/
             $(document).on('click', '.tramitar_cedula', function () {
                 Swal.fire({

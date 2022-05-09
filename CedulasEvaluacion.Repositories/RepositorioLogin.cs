@@ -123,6 +123,37 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
+        public async Task<List<ResponsablesDAS>> GetResponsablesDAS()
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getResonsablesDAS", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        var response = new List<ResponsablesDAS>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValueResponsables(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+
         public async Task<List<Dashboard>> CedulasEstatus(int user, string estatus)
         {
             try
@@ -288,6 +319,20 @@ namespace CedulasEvaluacion.Repositories
                 Anio = (int)reader["Anio"],
                 Servicio = reader["Servicio"].ToString(),
                 Estatus = reader["Estatus"].ToString()
+            };
+        }
+        
+        private ResponsablesDAS MapToValueResponsables(SqlDataReader reader)
+        {
+            return new ResponsablesDAS()
+            {
+                Id = (int)reader["Id"],
+                Nombre = reader["Nombre"].ToString(),
+                Email = reader["Email"].ToString(),
+                Extension = (int)reader["Extension"],
+                Servicios = reader["Servicios"].ToString(),
+                Puesto = reader["Puesto"].ToString(),
+                Horario = reader["Horario"].ToString(),
             };
         }
     }

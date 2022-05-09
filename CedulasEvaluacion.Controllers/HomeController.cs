@@ -62,7 +62,7 @@ namespace CASESGCedulasEvaluacion.Controllers
 
         [HttpGet("login")]
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl)
+        public async Task<IActionResult> Login(string returnUrl)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (User.Identity.IsAuthenticated)

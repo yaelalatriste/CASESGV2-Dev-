@@ -191,21 +191,6 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        /*Flujo para los estatus*/
-        [HttpGet]
-        [Route("/limpieza/flujo/{cedula?}/{estatus?}")]
-        public async Task<IActionResult> GetFlujoCedula(int cedula, string estatus)
-        {
-            int exists = 0;
-            exists = await vEntregables.GetFlujoCedula(cedula, estatus);
-            if (exists != -1)
-            {
-                return Ok(exists);
-            }
-            return BadRequest();
-        }
-        /*Flujo para los estatus*/
-
 
 
         /***************************** FIN Limpieza ****************************/

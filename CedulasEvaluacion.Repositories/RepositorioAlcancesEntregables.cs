@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace CedulasEvaluacion.Repositories
 {
-    public class RepositorioEntregablesCedula : IRepositorioEntregablesCedula
+    public class RepositorioAlcancesEntregables : IRepositorioAlcancesEntregables
     {
         private readonly string _connectionString;
-        public RepositorioEntregablesCedula(IConfiguration configuration)
+        public RepositorioAlcancesEntregables(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DatabaseConnection");
         }
@@ -26,7 +26,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 using (SqlConnection sql = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("sp_getEntregablesByCedula", sql))
+                    using (SqlCommand cmd = new SqlCommand("sp_getAlcancesCedulaById", sql))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@cedula", cedula));
@@ -71,14 +71,14 @@ namespace CedulasEvaluacion.Repositories
                 {
                     using (SqlConnection sql = new SqlConnection(_connectionString))
                     {
-                        using (SqlCommand cmd = new SqlCommand("sp_insertarActualizarEntregableCedula", sql))
+                        using (SqlCommand cmd = new SqlCommand("sp_insertarActualizarAlcanceCedula", sql))
                         {
                             cmd.CommandType = System.Data.CommandType.StoredProcedure;
                             cmd.Parameters.Add(new SqlParameter("@id", entregables.Id)).Direction = System.Data.ParameterDirection.Output;
                             if (entregables.Id != 0)
                                 cmd.Parameters.Add(new SqlParameter("@ids", entregables.Id));
 
-                            cmd.Parameters.Add(new SqlParameter("@cedulaId", entregables.CedulaEvaluacionId));
+                            cmd.Parameters.Add(new SqlParameter("@entregableId", entregables.EntregableId));
                             cmd.Parameters.Add(new SqlParameter("@tipo", entregables.Tipo));
                             cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + entregables.Archivo.FileName)));
                             cmd.Parameters.Add(new SqlParameter("@tamanio", entregables.Archivo.Length));
@@ -106,7 +106,7 @@ namespace CedulasEvaluacion.Repositories
             long size = archivo.Length;
             string folderCedula = folio;
 
-            string newPath = Directory.GetCurrentDirectory() + "\\Entregables\\" + folderCedula;
+            string newPath = Directory.GetCurrentDirectory() + "\\Alcances\\" + folderCedula;
             if (!Directory.Exists(newPath))
             {
                 Directory.CreateDirectory(newPath);
@@ -140,7 +140,7 @@ namespace CedulasEvaluacion.Repositories
                         await cmd.ExecuteNonQueryAsync();
 
                         string archivo = (cmd.Parameters["@archivo"].Value).ToString();
-                        string newPath = Directory.GetCurrentDirectory() + "\\Entregables\\" + entregable.Folio + "\\" + archivo;
+                        string newPath = Directory.GetCurrentDirectory() + "\\Alcances\\" + entregable.Folio + "\\" + archivo;
                         File.Delete(newPath);
 
                         return 1;
@@ -185,7 +185,7 @@ namespace CedulasEvaluacion.Repositories
                 return -1;
             }
         }
-        
+
         public async Task<int> GetFlujoCedulaCAE(int cedula, string estatus)
         {
             int id = 0;
@@ -202,7 +202,7 @@ namespace CedulasEvaluacion.Repositories
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
                         id = Convert.ToInt32(cmd.Parameters["@total"].Value);
-                            return id;
+                        return id;
                     }
                 }
             }
@@ -348,16 +348,18 @@ namespace CedulasEvaluacion.Repositories
             return new Entregables
             {
                 Id = (int)reader["Id"],
-                CedulaEvaluacionId = (int)reader["CedulaEvaluacionId"],
+                EntregableId = (int)reader["EntregableId"],
                 Tipo = reader["Tipo"].ToString(),
+                Entregable = reader["Entregable"].ToString(),
                 Estatus = reader["Estatus"] != DBNull.Value ? reader["Estatus"].ToString() : "",
                 NombreArchivo = reader["Archivo"].ToString(),
                 FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"].ToString()),
-                Comentarios = reader["Comentarios"].ToString(),
+                Comentarios = reader["Comentarios"] != DBNull.Value ? reader["Comentarios"].ToString(): "",
                 Icono = reader["Icono"].ToString(),
                 Color = reader["Color"].ToString()
             };
         }
+
 
     }
 }

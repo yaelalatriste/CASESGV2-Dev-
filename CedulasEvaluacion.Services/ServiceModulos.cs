@@ -1,4 +1,5 @@
-﻿using CedulasEvaluacion.Entities.MPerfiles;
+﻿using CedulasEvaluacion.Entities.Login;
+using CedulasEvaluacion.Entities.MPerfiles;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
 using System;
@@ -22,5 +23,12 @@ namespace CedulasEvaluacion.Services
             List<VModulosUsuario> modulos = await vRepositorioLogin.getModulosByUser(user);
             return modulos;
         }
+
+        public async Task<List<ResponsablesDAS>> GetResponsablesDAS()
+        {
+            List<ResponsablesDAS> responsables= await vRepositorioLogin.GetResponsablesDAS();
+            return responsables;
+        }
+
     }
 }

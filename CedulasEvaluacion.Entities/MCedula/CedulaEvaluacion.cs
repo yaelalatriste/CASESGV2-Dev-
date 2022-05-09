@@ -32,6 +32,7 @@ namespace CedulasEvaluacion.Entities.MCedula
         public virtual Usuarios usuarios { get; set; }
         public virtual List<Facturas> facturas { get; set; }
         public virtual List<Entregables> iEntregables { get; set; }
+        public virtual List<Entregables> iAlcances { get; set; }
         public List<RespuestasEncuesta> RespuestasEncuesta { get; set; }
         public List<HistorialCedulas> historialCedulas { get; set; }
         public List<HistorialEntregables> historialEntregables { get; set; }

@@ -604,23 +604,23 @@
             $('#error_comentariosEntre').css('display', 'none');
 
             /*Ocultar Botones de Acción*/
-                $('.tramitar_cedula').css('display', 'none');
-                $('.tramitar_pago').css('display', 'none');
-                $('.rechazar_tramite').css('display', 'none');
-                $('.autorizar_cae').css('display', 'none');
-                $('.revisar_cae').css('display', 'none');
-            /*Fin de Ocultar Botones de Acción*/
+                $('.tramitar_cedula').css('display','none');
+                $('.tramitar_pago').css('display','none');
+                $('.rechazar_tramite').css('display','none');
+                $('.autorizar_cae').css('display','none');
+                $('.revisar_cae').css('display','none');
+            /*Fin de Ocultar Botones de Acción*/          
 
-
+            /*Condicionales para Liberar los Botones*/
                 if (model.estatus == 'Autorizada') {
-                    axios.get('/limpieza/flujo/' + model.id + '/' + model.estatus).then(btn => {
+                    axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         if (btn.data == 1) {
                             $('.revisar_cae').css('display', 'block');
                         }
                     });
                 }
                 else if (model.estatus == 'Revisión CAE') {
-                    axios.get('/limpieza/flujo/' + model.id + '/' + model.estatus).then(btn => {
+                    axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         if (btn.data > 0) {
                             $('.rechazar_tramite').css('display', 'block');
                         } else if(btn.data == 0){
@@ -629,8 +629,7 @@
                     });
                 }
                 else if (model.estatus == 'Autorizado CAE') {
-                    axios.get('/limpieza/flujo/' + model.id + '/' + model.estatus).then(btn => {
-                        console.log(btn);
+                    axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         if (btn.data == 1) {
                             $('.tramitar_cedula').css('display', 'block');
                         }
@@ -641,7 +640,7 @@
                     });
                 }
                 else if (model.estatus == 'Trámite Rechazado') {
-                    axios.get('/limpieza/flujo/' + model.id + '/' + model.estatus).then(btn => {
+                    axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         console.log(btn);
                         if (btn.data == 1 || btn.data == 3)
                         {
@@ -654,14 +653,17 @@
                     });
                 }
                 else if (model.estatus == 'En Trámite') {
-                    axios.get('/limpieza/flujo/' + model.id + '/' + model.estatus).then(btn => {
+                    axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         if (btn.data > 0) {
                             $('.rechazar_tramite').css('display', 'block');
-                        } else {
+                        } else {    
                             $('.tramitar_pago').css('display', 'block');
                         }
                     });
                 }
+            /*Fin Condicionales para Liberar los Botones*/
+
+            
             /*Tramitar Cedula*/
                 $(document).on('click', '.tramitar_cedula', function () {
                     Swal.fire({
