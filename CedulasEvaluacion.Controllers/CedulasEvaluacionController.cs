@@ -19,6 +19,7 @@ using CedulasEvaluacion.Entities.MCelular;
 using CedulasEvaluacion.Entities.MConvencional;
 using CedulasEvaluacion.Entities.MFumigacion;
 using CedulasEvaluacion.Entities.MAgua;
+using CedulasEvaluacion.Entities.MResiduos;
 
 namespace CedulasEvaluacion.Controllers
 {
@@ -557,6 +558,86 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaAgua", cedulas));
+            var pdf = local.Render("PDF");
+            return File(pdf, "application/pdf");
+        }
+
+        [Route("/cedula/residuos/{servicio}/{id?}")]
+        public async Task<IActionResult> GeneraCedulaRPBI(int servicio, int id)
+        {
+            var incidencias = new List<IncidenciasResiduos>();
+            LocalReport local = new LocalReport();
+            var path = Directory.GetCurrentDirectory() + "\\Reports\\CedulaResiduos.rdlc";
+            local.ReportPath = path;
+            var cedulas = await vrCedula.getCedulaByServicio(servicio, id);
+            var respuestas = await vCedula.obtieneRespuestas(id);
+            for (int i = 0; i < respuestas.Count; i++)
+            {
+                if (i == 0)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El servicio no se llevó a cabo en el día programado, se llevó a cabo en la fecha " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
+                                   " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " + Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".")});
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El servicio si se llevó a cabo en el día programado.") });
+                    }
+                }
+                else if (i == 1)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de servicio no presentó identificación en todo momento.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de servicio presentó identificación en todo momento.") });
+                    }
+                }
+                else if (i == 2)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "La recolección no se llevó a cabo de acuerdo a las condiciones técnicas descritas en el anexo técnico.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "La recolección se llevó a cabo de acuerdo a las condiciones técnicas descritas en el anexo técnico.") });
+                    }
+                }
+                else if (i == 3)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.DataSources.Add(new ReportDataSource("IncidenciasManifiesto", incidencias));
+                        if (respuestas[i].Respuesta == false)
+                        {
+                            local.SetParameters(new[] { new ReportParameter("pregunta" + respuestas[i].Pregunta, "Faltaron datos en el manifiesto de entrega, los cuales se describen a continuación: ") });
+                            incidencias = await iResiduos.getIncidenciasTipo(id,"ManifiestoEntrega");
+                        }
+                        else
+                        {
+                            local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El manifiesto de entrega se entrego con todos los datos necesarios.") });
+                        }
+                    }
+                }
+                else if (i == 4)
+                {
+                    local.DataSources.Add(new ReportDataSource("IncidenciasResiduos", incidencias));
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + respuestas[i].Pregunta, "Se presentarón incidencias en el mes, las cuales se describen a continuación: ") });
+                        incidencias = await iResiduos.getIncidencias(id);
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón incidencias en el mes.") });
+                    }
+                }
+            }
+            local.DataSources.Add(new ReportDataSource("CedulaResiduos", cedulas));
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }

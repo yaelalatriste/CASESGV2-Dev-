@@ -92,6 +92,9 @@
     <None Update="Reports\ActaERConvencional.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Reports\CedulaResiduos.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Reports\CedulaConvencional.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
