@@ -268,7 +268,7 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-        public async Task<int> PagarOficio(int id, int servicio)
+        public async Task<int> PagarOficio(int id, int servicio, DateTime fecha)
         {
             try
             {
@@ -279,6 +279,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@oficio", id));
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        cmd.Parameters.Add(new SqlParameter("@fechaPagado", fecha));
 
                         await sql.OpenAsync();
                         int i = await cmd.ExecuteNonQueryAsync();
@@ -455,6 +456,7 @@ namespace CedulasEvaluacion.Repositories
                 NumeroOficio = (int)reader["NumeroOficio"],
                 Servicio = reader["Nombre"].ToString(),
                 Estatus = reader["Estatus"].ToString(),
+                FechaPagado = reader["FechaPagado"] != DBNull.Value ? Convert.ToDateTime(reader["FechaPagado"]):Convert.ToDateTime("01/01/0001"),
             };
         }
     }

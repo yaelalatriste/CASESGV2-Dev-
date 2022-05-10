@@ -18,6 +18,7 @@ using CedulasEvaluacion.Entities.MMuebles;
 using CedulasEvaluacion.Entities.MCelular;
 using CedulasEvaluacion.Entities.MConvencional;
 using CedulasEvaluacion.Entities.MFumigacion;
+using CedulasEvaluacion.Entities.MAgua;
 
 namespace CedulasEvaluacion.Controllers
 {
@@ -25,6 +26,7 @@ namespace CedulasEvaluacion.Controllers
     {
 
         private string [] tiposIncidencia = {"Recoleccion","Entrega","Acuses", "Mal Estado","Extraviadas","Robadas" };
+        private string [] incidenciasAgua = {"","Fechas","Horas","Numeral"};
         private string[] tiposCelular = { "Alta_Equipo", "Alta", "Baja", "Reactivacion", "Suspension", "Perfil", "SIM", "CambioNumeroRegion", 
                                           "VozDatos", "Diagnostico", "Reparacion"};
         private string[] rCelular = { "altas con entrega de equipo", "altas sin entrega de equipo", "bajas de servicio", "reactivaciones por robo/extravío", "suspensiones por robo/extravío", "cambios de perfil", "switcheos de SIM Card", "cambios de número o región",
@@ -48,11 +50,15 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioIncidenciasMuebles iMuebles;
         private readonly IRepositorioIncidenciasCelular iCelular;
         private readonly IRepositorioIncidenciasConvencional iConvencional;
+        private readonly IRepositorioIncidenciasAgua iAgua;
+        private readonly IRepositorioIncidenciasResiduos iResiduos;
+        private readonly IRepositorioIncidenciasAnalisis iAnalisis;
+        private readonly IRepositorioIncidenciasTransporte iTransporte;
 
         public CedulasEvaluacionController(IWebHostEnvironment vweb,IRepositorioReporteCedula vvReporte, IRepositorioIncidenciasMensajeria iiMensajeria,
             IRepositorioIncidencias iiLimpieza, IRepositorioEvaluacionServicios viCedula, IRepositorioIncidenciasFumigacion iiFumigacion,
-            IRepositorioIncidenciasMuebles IiMuebles, IRepositorioIncidenciasCelular iiCelular,
-            IRepositorioIncidenciasConvencional iiConvencional)
+            IRepositorioIncidenciasMuebles IiMuebles, IRepositorioIncidenciasCelular iiCelular, IRepositorioIncidenciasAgua iiAgua, IRepositorioIncidenciasResiduos iiResiduos,
+            IRepositorioIncidenciasConvencional iiConvencional, IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioIncidenciasTransporte iiTransporte)
         {
             this.web = vweb;
             this.vCedula = viCedula;
@@ -61,8 +67,12 @@ namespace CedulasEvaluacion.Controllers
             this.iFumigacion= iiFumigacion;
             this.iMensajeria = iiMensajeria;
             this.iCelular = iiCelular;
+            this.iMuebles= IiMuebles;
             this.iConvencional = iiConvencional;
-            this.iMuebles = IiMuebles;
+            this.iAgua = iiAgua;
+            this.iResiduos = iiResiduos;
+            this.iAnalisis = iiAnalisis;
+            this.iTransporte= iiTransporte;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
 
@@ -487,6 +497,66 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaConvencional", cedulas));
+            var pdf = local.Render("PDF");
+            return File(pdf, "application/pdf");
+        }
+
+        [Route("/cedula/agua/{servicio}/{id?}")]
+        public async Task<IActionResult> GeneraCedulaAgua(int servicio, int id)
+        {
+            var incidencias = new List<IncidenciasAgua>();
+            LocalReport local = new LocalReport();
+            var path = Directory.GetCurrentDirectory() + "\\Reports\\CedulaAguaParaBeber.rdlc";
+            local.ReportPath = path;
+            var cedulas = await vrCedula.getCedulaByServicio(servicio, id);
+            var respuestas = await vCedula.obtieneRespuestas(id);
+            for (int i = 0; i < respuestas.Count; i++)
+            {
+                if (i == 0)
+                {
+                    local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El cierre de mes se efectuó el " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
+                                   " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " + Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".")});
+                }
+                else if (i == 1 || i == 2 || i == 3)
+                {
+                    local.DataSources.Add(new ReportDataSource("Incidencias" + incidenciasAgua[i], incidencias));
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + respuestas[i].Pregunta, "Se presentaron Incidencias en el inmueble, las cuales se describen a continuación: ") });
+                        incidencias = await iAgua.GetIncidenciasPregunta(id, respuestas[i].Pregunta);
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón incidencias en el inmueble en el mes de evaluación.") });
+                    }
+                }
+                else if (i == 4)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador cumplió con la regulación vigente de los garrafones.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con la regulación vigente de los garrafones.") });
+                    }
+                }
+                else if (i == 5)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no entregó el reporte de servicio en tiempo y forma.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicio entregó el reporte de servicio en tiempo y forma, la fecha de entrega" +
+                                " fue el " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
+                                       " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " +
+                                       Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".") });
+                    }
+                }
+            }
+            local.DataSources.Add(new ReportDataSource("CedulaAgua", cedulas));
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }

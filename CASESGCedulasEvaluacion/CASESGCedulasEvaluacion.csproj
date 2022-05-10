@@ -98,6 +98,9 @@
     <None Update="Reports\CedulaFumigacion.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Reports\CedulaAguaParaBeber.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Reports\CedulaLimpieza.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

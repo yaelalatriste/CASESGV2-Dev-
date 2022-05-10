@@ -128,13 +128,13 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpGet]
-        [Route("/financieros/pagar/oficio/{servicio}/{id}")]
-        public async Task<IActionResult> PagarOficio(int servicio, int id)
+        [Route("/financieros/pagar/oficio/{servicio}/{id}/{fecha}")]
+        public async Task<IActionResult> PagarOficio(int servicio, int id,DateTime fecha)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                int cancelado = await vFinancieros.PagarOficio(id, servicio);
+                int cancelado = await vFinancieros.PagarOficio(id, servicio,fecha);
                 if (cancelado != -1)
                 {
                     return Ok(cancelado);

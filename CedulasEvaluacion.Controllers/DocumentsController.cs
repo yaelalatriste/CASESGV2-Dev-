@@ -4128,9 +4128,10 @@ namespace CedulasEvaluacion.Controllers
                 cedula = await vCedula.CedulaById(id);
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
+                cedula.incidencias = new Entities.MIncidencias.ModelsIncidencias();
                 cedula.incidencias.analisis = await iAnalisis.GetIncidencias(id);
                 cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedula.RespuestasEncuesta = await vAnalisis.obtieneRespuestas(id);
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
                 cedula.facturas = new List<Facturas>();
                 cedula.facturas = await vFacturas.getFacturas(id, 8);
 

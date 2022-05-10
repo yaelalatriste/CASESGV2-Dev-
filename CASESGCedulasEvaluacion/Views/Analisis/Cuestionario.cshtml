@@ -792,30 +792,28 @@
                 var tipoPregunta = null;
                 for (var i = 0; i < respuestas.length; i++) {
                     tipoPregunta = $('.pregunta' + respuestas[i].pregunta).attr("type");
-                    if (tipoPregunta == "radio") {
-                        $('input:radio[name="pregunta' + respuestas[i].pregunta + '"][value="' + respuestas[i].respuesta + '"]').prop('checked', true);
-                        if (respuestas[i].respuesta == false) {
-                            if (i == 4) {
-                                $(".dPregunta" + (i + 1)).val(respuestas[i].detalles);
-                            }
-                            $("#diviPregunta" + (i + 1)).css('display', 'block');
-                        } else if (respuestas[i].respuesta == true && (i == 5 || i == 6 || i == 1)) {
-                            if(i == 1) {
+                    $('input:radio[name="pregunta' + respuestas[i].pregunta + '"][value="' + respuestas[i].respuesta + '"]').prop('checked', true);
+                    if (i != 0 && tipoPregunta == "radio") {
+                        if (respuestas[i].respuesta == false && respuestas[i].pregunta != 7) {
+                            $("#diviPregunta" + respuestas[i].pregunta).css('display', 'block');
+                            if (respuestas[i].pregunta == 2) {
                                 var fechas = respuestas[i].detalles.split("|");
                                 $("#fecha_programada").val(fechas[0]);
                                 $("#fecha_realizada").val(fechas[1]);
-                            } else if (i == 6) {
-                                $(".dPregunta" + (i + 1)).val(respuestas[i].detalles);
-                            } else if (i ==5) {
+                            } else if (respuestas[i].pregunta == 6) {
                                 var fechas = respuestas[i].detalles.split("|");
                                 $("#fechaRecoleccion").val(fechas[0]);
                                 $("#fechaEntrega").val(fechas[1]);
+                            } else if (respuestas[i].pregunta == 5) {
+                                $(".dPregunta" + respuestas[i].pregunta).val(respuestas[i].detalles);
                             }
-                            $("#diviPregunta" + (i + 1)).css('display', 'block');
+                        } else {
+                            if (respuestas[i].pregunta == 7) {
+                                $("#diviPregunta" + respuestas[i].pregunta).css('display', 'block');
+                                $(".dPregunta" + respuestas[i].pregunta).val(respuestas[i].detalles);
+                            }
                         }
-
-                    }
-                    else if (tipoPregunta == "date") {
+                    } else {
                         $('.pregunta' + respuestas[i].pregunta).val(respuestas[i].detalles);
                     }
                 }
@@ -824,9 +822,13 @@
                 $('.pregunta2').change(function () {
                     let tf = $(this).val();
                     let pr = $(this).data('pregunta');
-                    $("#fecha_programada").val('');
-                    $("#fecha_realizada").val('');
-                    $('#diviPregunta2').css('display', 'block');
+                    if (tf == "true") {
+                        $("#fecha_programada").val('');
+                        $("#fecha_realizada").val('');
+                        $('#diviPregunta2').css('display', 'none');
+                    } else {
+                        $('#diviPregunta2').css('display', 'block');
+                    }
                 });
 
                 $('.pregunta3').change(function () {
@@ -892,8 +894,13 @@
                                     }
                                 });
                             }
+                            else
+                            {
+                                $('#diviPregunta3').css('display', 'none');
+                            }
                         });
-                    } else {
+                    }
+                    else {
                         $('#diviPregunta3').css('display', 'block');
                     }
                 });
@@ -910,16 +917,25 @@
                 });
 
                 $('.pregunta6').change(function () {
-                    $("#fechaRecoleccion").val('');
-                    $("#fechaEntrega    ").val('');
-                    $('#diviPregunta6').css('display', 'block');
+                    if ($(this).val() == "true") {
+                        $("#fechaRecoleccion").val('');
+                        $("#fechaEntrega").val('');
+                        $('#diviPregunta6').css('display', 'none');
+                    } else {
+                        $('#diviPregunta6').css('display', 'block');
+                    }
+                    
                 });
 
                 $('.pregunta7').change(function () {
                     let tf = $(this).val();
                     let pr = $(this).data('pregunta');
-                    $('.dPregunta7').val('');
-                    $('#diviPregunta7').css('display', 'block');
+                    if (tf == "true") {
+                        $('.dPregunta7').val('');
+                        $('#diviPregunta7').css('display', 'block');
+                    } else {
+                        $('#diviPregunta7').css('display', 'none');
+                    }
                 });
 
 
@@ -1575,7 +1591,7 @@
                                         'title': 'Servicio de Análisis Microbiológicos',
                                         'html': "Se envió la cédula para su revisión correctamente."
                                     }).then(function () {
-                                        window.location.href = "/analisis/index";
+                                        window.location.href = "/analisis/index/"+model.servicioId;
                                     });
                                 } else {
                                     Swal.fire({
@@ -1627,7 +1643,7 @@
                             isContinue == true;
                             respuesta = $('input:radio[name="pregunta' + (i + 1) + '"]:checked').val();
                             if (respuesta != "" && i != 0) {
-                                if (i == 1 && ($("#fecha_programada").val() == "" || $("#fecha_realizada").val() == "")) {
+                                if (i == 1 && ($("#fecha_programada").val() == "" || $("#fecha_realizada").val() == "") && respuesta == "false") {
                                     isContinue = false;
                                     break;
                                 } else if (i == 2 && respuesta == "false") {
@@ -1638,10 +1654,10 @@
                                 } else if (i == 4 && $(".dPregunta" + (i + 1)).val() == "" && respuesta == "false") {
                                     isContinue = false;
                                     break;
-                                } else if (i == 5 && ($("#fechaRecoleccion").val() == "" || $("#fechaEntrega").val() == "")) {
+                                } else if (i == 5 && ($("#fechaRecoleccion").val() == "" || $("#fechaEntrega").val() == "") && respuesta == "false") {
                                     isContinue = false;
                                     break;
-                                } else if (i == 6 && $(".dPregunta" + (i + 1)).val() == "") {
+                                } else if (i == 6 && $(".dPregunta" + (i + 1)).val() == "" && respuesta =="true") {
                                     isContinue = false;
                                     break;
                                 }

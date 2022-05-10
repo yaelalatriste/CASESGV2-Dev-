@@ -103,7 +103,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.Parameters.Add(new SqlParameter("@inmueble", cedula.InmuebleId));
                         if(cedula.InmuebleDestinoId != 0)
                             cmd.Parameters.Add(new SqlParameter("@inmuebleDestino", cedula.InmuebleDestinoId));
-                        cmd.Parameters.Add(new SqlParameter("@folio", generaFolio(cedula.InmuebleId, cedula.Mes, await GetFolioCedula(cedula.ServicioId))));
+                        cmd.Parameters.Add(new SqlParameter("@folio", generaFolio(cedula.InmuebleId, cedula.Mes, await GetFolioCedula(cedula.ServicioId),cedula.InmuebleDestinoId)));
                         cmd.Parameters.Add(new SqlParameter("@mes", cedula.Mes));
                         cmd.Parameters.Add(new SqlParameter("@anio", cedula.Anio));
 
@@ -452,10 +452,21 @@ namespace CedulasEvaluacion.Repositories
             };
         }
 
-        private string generaFolio(int inmuebleId, string mes, string servicio)
+        private string generaFolio(int inmuebleId, string mes, string servicio, int destino)
         {
             string date = DateTime.Now.ToString("yyyy");
-            return inmuebleId < 9 ? servicio + "-0" + inmuebleId + "-" + date + convertirMes(mes) : servicio + "-" + inmuebleId + "-" + date + convertirMes(mes);
+            string inmueble = "";
+            string inmuebleD = "";
+            if (destino != 0)
+            {
+                inmueble = inmuebleId < 9 ? "-O0" + inmuebleId: "-O"+inmuebleId+"";
+                inmuebleD = destino < 9 ? "-D0" + destino : "-D" + destino + "";
+                return servicio + inmueble + inmuebleD + "-" + date + convertirMes(mes);
+            }
+            else
+            {
+                return inmuebleId < 9 ? servicio + "-0" + inmuebleId + "-" + date + convertirMes(mes) : servicio + "-" + inmuebleId + "-" + date + convertirMes(mes);
+            }            
         }
 
         private string convertirMes(string mes)
