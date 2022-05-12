@@ -44,6 +44,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/muebles/index/{servicio?}")]
         public async Task<IActionResult> Index(int servicio)
         {
+            return Redirect("/casesg");
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
@@ -59,6 +60,7 @@ namespace CedulasEvaluacion.Controllers
         [HttpGet]
         public async Task<IActionResult> NuevaCedula(int servicio)
         {
+            return Redirect("/casesg");
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
@@ -85,22 +87,24 @@ namespace CedulasEvaluacion.Controllers
         [Route("/muebles/evaluacion/{id?}")]
         public async Task<IActionResult> Cuestionario(int id)
         {
-            int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "actualizar");
-            if (success == 1)
-            {
-                CedulaEvaluacion cedula = await vCedula.CedulaById(id);
-                if (cedula.Estatus.Equals("Enviado a DAS"))
-                {
-                    return Redirect("/error/cedSend");
-                }
-                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
-                cedula.inmuebleDestino = await vInmuebles.inmuebleById(cedula.InmuebleDestinoId);
-                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
-                cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
-                cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
-                return View(cedula);
-            }
-            return Redirect("/error/denied");
+            return Redirect("/casesg");
+             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "actualizar");
+             if (success == 1)
+             {
+                 CedulaEvaluacion cedula = await vCedula.CedulaById(id);
+                 if (cedula.Estatus.Equals("Enviado a DAS"))
+                 {
+                     return Redirect("/error/cedSend");
+                 }
+                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                 cedula.inmuebleDestino = await vInmuebles.inmuebleById(cedula.InmuebleDestinoId);
+                 cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
+                 cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
+                 cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
+                 return View(cedula);
+             }
+             return Redirect("/error/denied");
+            
         }
 
         [HttpPost]
@@ -139,6 +143,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/muebles/revision/{id}")]
         public async Task<IActionResult> RevisarCedula(int id)
         {
+            return Redirect("/casesg");
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
@@ -176,6 +181,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/muebles/seguimiento/{id}")]
         public async Task<IActionResult> SeguimientoCedula(int id)
         {
+            return Redirect("/casesg");
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {

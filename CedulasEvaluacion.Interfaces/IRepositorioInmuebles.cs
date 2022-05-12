@@ -17,5 +17,8 @@ namespace CedulasEvaluacion.Interfaces
         Task<int> deleteAdmin(int id);
         Task<List<Inmueble>> getInmueblesByAdmin(int id);
         Task<List<Inmueble>> getInmueblesAEvaluar(int user);
+        Task<int> insertaDireccionBM(Inmueble inmueble);        
+        Task<List<Inmueble>> getEstadosRM();
+        Task<List<Inmueble>> getDireccionesAlternasBM();
     }
 }

@@ -110,6 +110,30 @@ namespace CASESGCedulasEvaluacion.Controllers
             return BadRequest();
         }
 
+        //Peticion POST para agregar direcciones personalizadas
+        [HttpPost]
+        [Route("/inmuebles/nuevaDireccion")]
+        public async Task<ActionResult<IEnumerable>> insertaDireccionBM(Inmueble inmueble)
+        {
+            int direccion = await vInmuebles.insertaDireccionBM(inmueble);
+            if (direccion != 0)
+            {
+                return Ok(direccion);
+            }
+            return BadRequest();
+        }
+
+        //Peticion GET Administraciones
+        [HttpGet]
+        [Route("/inmuebles/getDireccionesBM")]
+        public async Task<ActionResult<IEnumerable>> getDireccionesBM()
+        {
+            List<Inmueble> resultado = new List<Inmueble>();
+            resultado = await vInmuebles.getDireccionesAlternasBM();
+            return Ok(resultado);
+        }
+
+
         //Peticion GET para eliminar una administracion
         [HttpGet("/delete/administrator/{id?}")]
         public async Task<ActionResult<IEnumerable>> delete(int id)
@@ -139,6 +163,20 @@ namespace CASESGCedulasEvaluacion.Controllers
             List<Inmueble> inmueble = null;
             inmueble = await vInmuebles.getInmueblesByAdmin(admin);
             if (inmueble != null) {
+                return Ok(inmueble);
+            }
+            return BadRequest();
+        }
+
+        //Peticion GET para traer los inmuebles por administracion
+        [HttpGet]
+        [Route("/inmuebles/getEstadosRM")]
+        public async Task<IActionResult> getEstadosRM()
+        {
+            List<Inmueble> inmueble = null;
+            inmueble = await vInmuebles.getEstadosRM();
+            if (inmueble != null)
+            {
                 return Ok(inmueble);
             }
             return BadRequest();

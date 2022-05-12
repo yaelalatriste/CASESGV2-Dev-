@@ -11,6 +11,7 @@ namespace CedulasEvaluacion.Entities.Models
         public int Clave { get; set; }
         public string Nombre { get; set; }
         public string Direccion { get; set; }
+        public string Estado { get; set; }
         public int Tipo { get; set; }
         public DateTime? FechaInicioVigencia { get; set; }
         public DateTime? FechaFinVigencia { get; set; }

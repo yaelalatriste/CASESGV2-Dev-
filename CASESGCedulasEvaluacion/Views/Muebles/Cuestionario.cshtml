@@ -150,7 +150,7 @@
                         <div class="tab-content" id="myTabContent">
                             @* Pregunta 1 *@
                             <div class="tab-pane fade mt-2 ml-3 show active" id="pregunta_1" role="tabpanel" aria-labelledby="home-tab">
-                                <p class="text-black h5">1. ¿El prestador de servicio se presentó en el horario previamente requerido por la "Administración" para llevar a cabo el servicio?</p>
+                                <p class="text-black h5">1. ¿El prestador de servicios se presentó en el horario previamente requerido por la "Administración" para llevar a cabo el servicio?</p>
                                 <div class="icheck-success d-inline">
                                     <input type="radio" name="pregunta1" value="true" id="radioSuccess1" class="pregunta1">
                                     <label for="radioSuccess1">Si</label>
@@ -162,11 +162,11 @@
                                 <div class="form-row col-lg-12 mt-3" id="diviPregunta1">
                                     <div class="form-row">
                                         <div class="col col-lg-2">
-                                            <label for="fechaCierre">Fecha Solicitada</label>
+                                            <label for="fechaCierre">Fecha y Hora Solicitada</label>
                                             <input type="datetime-local" name="meeting-time" id="fecha_solicitada" class="form-control">
                                         </div>
                                         <div class="col-lg-2">
-                                            <label for="fechaCierre">Fecha Llegada</label>
+                                            <label for="fechaCierre">Fecha y Hora de Llegada</label>
                                             <input type="datetime-local" name="meeting-time" id="fecha_llegada" class="form-control">
                                         </div>
                                     </div>
@@ -175,7 +175,7 @@
                             @* Fin de la Pregunta 1 *@
                             @* Pregunta 2 *@
                             <div class="tab-pane fade mt-2 ml-3" id="pregunta_2" role="tabpanel" aria-labelledby="profile-tab">
-                                <p class="text-black h5">2. ¿El prestador del servicio se presentó con la maquinaria, equipo y herramientas necesarias para prestar el servicio?</p>
+                                <p class="text-black h5">2. ¿El prestador de servicios se presentó con la maquinaria, equipo y herramientas necesarias para prestar el servicio?</p>
                                 <div class="icheck-success d-inline">
                                     <input type="radio" name="pregunta2" value="true" id="radioSuccess3" class="pregunta2">
                                     <label for="radioSuccess3">Si</label>
@@ -192,7 +192,7 @@
                             @* Fin de la Pregunta 2 *@
                             @* Pregunta 3 *@
                             <div class="tab-pane fade mt-2 ml-3" id="pregunta_3" role="tabpanel" aria-labelledby="contact-tab">
-                                <p class="text-black h5">3. ¿El prestador del servicio se presentó con la unidad de transporte solicitada para proporcionar el servicio?</p>
+                                <p class="text-black h5">3. ¿El prestador de servicios se presentó con la unidad de transporte solicitada para proporcionar el servicio?</p>
                                 <div class="icheck-success d-inline">
                                     <input type="radio" name="pregunta3" value="true" id="radioSuccess6" class="pregunta3">
                                     <label for="radioSuccess6">Si</label>
@@ -224,12 +224,11 @@
                                 </div>
                                 <div class="form-row col-lg-12 mt-3" id="diviPregunta4">
                                     <div class="form-row">
-                                        <div class="col col-lg-1">
+                                        <div class="col col-lg-2">
                                             <label for="peronsalSol">Personal Solicitado</label>
                                             <input type="number" id="personalSolicitado" class="form-control">
                                         </div>
-                                        <div class="col-lg-1">
-                                            <label for="personalBrin">Personal Brindado</label>
+                                        <div class="col-lg-2">
                                             <input type="number" id="personalBrindado" class="form-control">
                                         </div>
                                     </div>
@@ -238,7 +237,7 @@
                             @* Fin de la Pregunta 4 *@
                             @* Pregunta 5 *@
                             <div class="tab-pane fade mt-2 ml-3" id="pregunta_5" role="tabpanel" aria-labelledby="contact-tab">
-                                <p class="text-black h5">5.¿El prestador de servicio cumplió con el tiempo de respuesta a la solicitud del servicio que le fue requerido?</p>
+                                <p class="text-black h5">5.¿El prestador de servicios cumplió con el tiempo de respuesta a la solicitud del servicio que le fue requerido?</p>
                                 <div class="icheck-success d-inline">
                                     <input type="radio" name="pregunta5" value="true" id="radioSuccess12" class="pregunta5">
                                     <label for="radioSuccess12">Si</label>
@@ -431,7 +430,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-3" id="divFechaSolicitud">
-                        <label for="fechaSolicitud">Fecha Solicitud: </label>
+                        <label for="fechaSolicitud">Fecha y Hora de Solicitud: </label>
                         <input type="datetime-local" name="meeting-time" id="fechaSolicitud" class="form-control">
                         <div class="col-sm-12" id="error_fechaSolicitud">
                             <small id="dateHelp" class="text-danger">
@@ -440,7 +439,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-3" id="divFechaRespuesta">
-                        <label for="fechaRealizada">Fecha Respuesta: </label>
+                        <label for="fechaRealizada">Fecha y Hora de Respuesta: </label>
                         <input type="datetime-local" name="meeting-time" id="fechaRespuesta" class="form-control">
                         <div class="col-sm-12" id="error_fechaRespuesta">
                             <small id="dateHelp" class="text-danger">

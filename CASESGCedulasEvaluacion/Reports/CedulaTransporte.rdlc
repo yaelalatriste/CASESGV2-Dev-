@@ -18,7 +18,7 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="CedulaResiduos">
+    <DataSet Name="CedulaTransporte">
       <Query>
         <DataSourceName>DtCedulaLimpieza</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
@@ -82,7 +82,7 @@
         <rd:TableAdapterName>sp_generaCedulaByServicioTableAdapter</rd:TableAdapterName>
       </rd:DataSetInfo>
     </DataSet>
-    <DataSet Name="IncidenciasResiduos">
+    <DataSet Name="IncidenciasPregunta2">
       <Query>
         <DataSourceName>DtCedulaLimpieza</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
@@ -92,13 +92,25 @@
           <DataField>Id</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="CedulaResiduosId">
-          <DataField>CedulaResiduosId</DataField>
+        <Field Name="CedulaTransporteId">
+          <DataField>CedulaTransporteId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="Tipo">
           <DataField>Tipo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Pregunta">
+          <DataField>Pregunta</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FechaIncidencia">
+          <DataField>FechaIncidencia</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="HoraPresentada">
+          <DataField>HoraPresentada</DataField>
+          <rd:TypeName>System.TimeSpan</rd:TypeName>
         </Field>
         <Field Name="Comentarios">
           <DataField>Comentarios</DataField>
@@ -108,13 +120,13 @@
       <rd:DataSetInfo>
         <rd:DataSetName>DtGeneraCedulaByServicio</rd:DataSetName>
         <rd:SchemaPath>D:\CASESGV2\CASESGV2(Git Desarrollo)\CASESGCedulasEvaluacion\DtGeneraCedulaByServicio.xsd</rd:SchemaPath>
-        <rd:TableName>sp_getIncidenciasByTipoResiduos</rd:TableName>
+        <rd:TableName>sp_getIncidenciasTransporteByPregunta</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
-        <rd:TableAdapterName>sp_getIncidenciasByTipoResiduosTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterName>sp_getIncidenciasTransporteByPreguntaTableAdapter</rd:TableAdapterName>
       </rd:DataSetInfo>
     </DataSet>
-    <DataSet Name="IncidenciasManifiesto">
+    <DataSet Name="IncidenciasPregunta5">
       <Query>
         <DataSourceName>DtGeneraCedulaByServicio</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
@@ -124,13 +136,25 @@
           <DataField>Id</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="CedulaResiduosId">
-          <DataField>CedulaResiduosId</DataField>
+        <Field Name="CedulaTransporteId">
+          <DataField>CedulaTransporteId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="Tipo">
           <DataField>Tipo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Pregunta">
+          <DataField>Pregunta</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FechaIncidencia">
+          <DataField>FechaIncidencia</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="HoraPresentada">
+          <DataField>HoraPresentada</DataField>
+          <rd:TypeName>System.TimeSpan</rd:TypeName>
         </Field>
         <Field Name="Comentarios">
           <DataField>Comentarios</DataField>
@@ -140,10 +164,54 @@
       <rd:DataSetInfo>
         <rd:DataSetName>DtGeneraCedulaByServicio</rd:DataSetName>
         <rd:SchemaPath>D:\CASESGV2\CASESGV2(Git Desarrollo)\CASESGCedulasEvaluacion\DtGeneraCedulaByServicio.xsd</rd:SchemaPath>
-        <rd:TableName>sp_getIncidenciasByTipoResiduos</rd:TableName>
+        <rd:TableName>sp_getIncidenciasTransporteByPregunta</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
-        <rd:TableAdapterName>sp_getIncidenciasByTipoResiduosTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterName>sp_getIncidenciasTransporteByPreguntaTableAdapter</rd:TableAdapterName>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="IncidenciasPregunta6">
+      <Query>
+        <DataSourceName>DtGeneraCedulaByServicio</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Id">
+          <DataField>Id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CedulaTransporteId">
+          <DataField>CedulaTransporteId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Tipo">
+          <DataField>Tipo</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Pregunta">
+          <DataField>Pregunta</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FechaIncidencia">
+          <DataField>FechaIncidencia</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="HoraPresentada">
+          <DataField>HoraPresentada</DataField>
+          <rd:TypeName>System.TimeSpan</rd:TypeName>
+        </Field>
+        <Field Name="Comentarios">
+          <DataField>Comentarios</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>DtGeneraCedulaByServicio</rd:DataSetName>
+        <rd:SchemaPath>D:\CASESGV2\CASESGV2(Git Desarrollo)\CASESGCedulasEvaluacion\DtGeneraCedulaByServicio.xsd</rd:SchemaPath>
+        <rd:TableName>sp_getIncidenciasTransporteByPregunta</rd:TableName>
+        <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
+        <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
+        <rd:TableAdapterName>sp_getIncidenciasTransporteByPreguntaTableAdapter</rd:TableAdapterName>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
@@ -158,7 +226,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Cédula Automatizada para la Supervisión y Evaluación del Servicio de Recolección y Disposición Final de Residuos Biológico-Infecciosos</Value>
+                    <Value>Cédula Automatizada para la Supervisión y Evaluación del Transporte para Servidores Públicos</Value>
                     <Style>
                       <FontSize>11pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -326,7 +394,7 @@
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>CedulaResiduos</DataSetName>
+            <DataSetName>CedulaTransporte</DataSetName>
             <Top>1.63481cm</Top>
             <Left>1.80988cm</Left>
             <Height>0.6cm</Height>
@@ -919,7 +987,7 @@
                 <TablixMember />
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>CedulaResiduos</DataSetName>
+            <DataSetName>CedulaTransporte</DataSetName>
             <Top>2.4546cm</Top>
             <Left>1.36135cm</Left>
             <Height>3.08792cm</Height>
@@ -972,7 +1040,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>1.- ¿El servicio se llevó a cabo en el día programado?</Value>
+                    <Value>1.- ¿Cuándo se establecio el cierre de mes?</Value>
                     <Style>
                       <FontWeight>Bold</FontWeight>
                     </Style>
@@ -1034,7 +1102,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>2.- ¿El personal de servicio presentó identificación en todo momento? </Value>
+                    <Value>2.- ¿El servicio se proporciono de acuerdo con los recorridos y horarios establecidos en las rutas del programa de operación? </Value>
                     <Style>
                       <FontWeight>Bold</FontWeight>
                     </Style>
@@ -1096,7 +1164,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>3.- ¿La recolección se llevó a cabo con las condiciones técnicas descritas en el anexo técnico? </Value>
+                    <Value>3.- ¿Se llevó a cabo el registro diario de los servidores públicos que hicieron uso del servicio? </Value>
                     <Style>
                       <FontWeight>Bold</FontWeight>
                     </Style>
@@ -1106,8 +1174,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox37</rd:DefaultName>
-            <Top>9.3659cm</Top>
-            <Left>1.57713cm</Left>
+            <Top>10.66765cm</Top>
+            <Left>1.64063cm</Left>
             <Height>0.6cm</Height>
             <Width>16.39578cm</Width>
             <ZIndex>8</ZIndex>
@@ -1136,8 +1204,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox59</rd:DefaultName>
-            <Top>10.0294cm</Top>
-            <Left>1.60577cm</Left>
+            <Top>11.33115cm</Top>
+            <Left>1.66927cm</Left>
             <Height>0.6cm</Height>
             <Width>16.39578cm</Width>
             <ZIndex>9</ZIndex>
@@ -1166,8 +1234,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox59</rd:DefaultName>
-            <Top>11.5518cm</Top>
-            <Left>1.61636cm</Left>
+            <Top>12.85355cm</Top>
+            <Left>1.67986cm</Left>
             <Height>0.6cm</Height>
             <Width>16.39578cm</Width>
             <ZIndex>10</ZIndex>
@@ -1188,7 +1256,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>4.- ¿Se entregó el manifiesto de entrega, transporte y recepción de residuos peligrosos con los datos necesarios?</Value>
+                    <Value>4.- ¿La ocupación promedio registrada durante el mes que evalúa; fue igual o mayor al 50% de la capacidad de los autobuses contratados?</Value>
                     <Style>
                       <FontWeight>Bold</FontWeight>
                     </Style>
@@ -1198,8 +1266,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox37</rd:DefaultName>
-            <Top>10.786cm</Top>
-            <Left>1.64064cm</Left>
+            <Top>12.08775cm</Top>
+            <Left>1.70414cm</Left>
             <Height>0.6cm</Height>
             <Width>16.39578cm</Width>
             <ZIndex>11</ZIndex>
@@ -1228,7 +1296,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox59</rd:DefaultName>
-            <Top>14.23389cm</Top>
+            <Top>14.45614cm</Top>
             <Left>1.65869cm</Left>
             <Height>0.6cm</Height>
             <Width>16.39578cm</Width>
@@ -1250,7 +1318,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>5.- ¿ El prestador  del  servicio  cumplió con la regulación vigente y con la  fecha  de  caducidad respecto de los garrafones que entregó en los inmuebles? (Revisar la fecha de caducidad de los garrafones)</Value>
+                    <Value>5.- ¿El personal de la empresa supervisó la prestación del servicio y cuenta con sistema de comunicación con el fin de garantizar la continuidad del servicio?</Value>
                     <Style>
                       <FontWeight>Bold</FontWeight>
                     </Style>
@@ -1260,7 +1328,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox37</rd:DefaultName>
-            <Top>13.43281cm</Top>
+            <Top>13.65506cm</Top>
             <Left>1.69044cm</Left>
             <Height>0.6cm</Height>
             <Width>16.39578cm</Width>
@@ -1298,7 +1366,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Tipo</Value>
+                                  <Value>Fecha de la Incidencia</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>White</Color>
@@ -1335,7 +1403,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Datos Faltantes</Value>
+                                  <Value>Comentarios</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>White</Color>
@@ -1458,9 +1526,9 @@
             <RepeatColumnHeaders>true</RepeatColumnHeaders>
             <RepeatRowHeaders>true</RepeatRowHeaders>
             <KeepTogether>true</KeepTogether>
-            <DataSetName>IncidenciasManifiesto</DataSetName>
-            <Top>12.10228cm</Top>
-            <Left>1.96863cm</Left>
+            <DataSetName>IncidenciasPregunta5</DataSetName>
+            <Top>15.16197cm</Top>
+            <Left>1.80988cm</Left>
             <Height>1.2cm</Height>
             <Width>16.08584cm</Width>
             <ZIndex>14</ZIndex>
@@ -1512,8 +1580,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>16.88718cm</Top>
-            <Left>1.04946cm</Left>
+            <Top>19.41601cm</Top>
+            <Left>1.39566cm</Left>
             <Height>1.43058cm</Height>
             <Width>5.62214cm</Width>
             <ZIndex>15</ZIndex>
@@ -1566,8 +1634,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>16.87642cm</Top>
-            <Left>6.62453cm</Left>
+            <Top>19.40525cm</Top>
+            <Left>6.97073cm</Left>
             <Height>1.43058cm</Height>
             <Width>5.62214cm</Width>
             <ZIndex>16</ZIndex>
@@ -1620,8 +1688,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>16.88819cm</Top>
-            <Left>12.56842cm</Left>
+            <Top>19.41702cm</Top>
+            <Left>12.91462cm</Left>
             <Height>1.43058cm</Height>
             <Width>5.62214cm</Width>
             <ZIndex>17</ZIndex>
@@ -1658,7 +1726,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Tipo</Value>
+                                  <Value>Fecha de la Incidencia</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>White</Color>
@@ -1818,12 +1886,346 @@
             <RepeatColumnHeaders>true</RepeatColumnHeaders>
             <RepeatRowHeaders>true</RepeatRowHeaders>
             <KeepTogether>true</KeepTogether>
-            <DataSetName>IncidenciasResiduos</DataSetName>
-            <Top>15.01028cm</Top>
+            <DataSetName>IncidenciasPregunta2</DataSetName>
+            <Top>18.05939cm</Top>
             <Left>1.80988cm</Left>
             <Height>1.2cm</Height>
             <Width>16.08584cm</Width>
             <ZIndex>18</ZIndex>
+            <Visibility>
+              <Hidden>=IIF(CountRows()&gt;0,false,true)</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Textbox Name="Textbox66">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!pregunta6.Value</Value>
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox59</rd:DefaultName>
+            <Top>17.283cm</Top>
+            <Left>1.69044cm</Left>
+            <Height>0.6cm</Height>
+            <Width>16.39578cm</Width>
+            <ZIndex>19</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox42">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>6.- ¿El personal operador del servicio es cortés, amable y porta uniforme con logotipo de la empresa y su gafete de identificación?</Value>
+                    <Style>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox37</rd:DefaultName>
+            <Top>16.48192cm</Top>
+            <Left>1.72219cm</Left>
+            <Height>0.6cm</Height>
+            <Width>16.39578cm</Width>
+            <ZIndex>20</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Tablix Name="Tablix10">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>5.07931cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.83562cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>7.19948cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox71">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Fecha de la Incidencia</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox44</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Indigo</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox11">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Hora de la Incidencia</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Indigo</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox20">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Comentarios</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox15</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Indigo</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="FechaProgramada7">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Tipo.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>FechaProgramada</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox12">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox12</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox49">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Comentarios.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox44</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                  <RepeatOnNewPage>true</RepeatOnNewPage>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Detalles7" />
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <RepeatColumnHeaders>true</RepeatColumnHeaders>
+            <RepeatRowHeaders>true</RepeatRowHeaders>
+            <KeepTogether>true</KeepTogether>
+            <DataSetName>IncidenciasPregunta5</DataSetName>
+            <Top>9.32023cm</Top>
+            <Left>1.83423cm</Left>
+            <Height>1.2cm</Height>
+            <Width>16.11441cm</Width>
+            <ZIndex>21</ZIndex>
             <Visibility>
               <Hidden>=IIF(CountRows()&gt;0,false,true)</Hidden>
             </Visibility>
@@ -2009,6 +2411,10 @@
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
+    <ReportParameter Name="pregunta6">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
@@ -2039,6 +2445,11 @@
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>1</RowIndex>
           <ParameterName>pregunta5</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>pregunta6</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>

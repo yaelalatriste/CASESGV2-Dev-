@@ -83,6 +83,37 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
+        public async Task<List<Inmueble>> getDireccionesAlternasBM()
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getDireccionesAlternasBM", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        var response = new List<Inmueble>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValue(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+
         //obtenemos una administración por ID
         public async Task<Inmueble> inmuebleById(int id)
         {
@@ -169,6 +200,37 @@ namespace CedulasEvaluacion.Repositories
         }
 
         //Actualizamos nuevas Administraciones
+        public async Task<int> insertaDireccionBM(Inmueble inmueble)
+        {
+            int id = 0;
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_insertaDireccionesAMuebles", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", inmueble.Id)).Direction = System.Data.ParameterDirection.Output;
+                        cmd.Parameters.Add(new SqlParameter("@direccion", inmueble.Direccion));
+                        cmd.Parameters.Add(new SqlParameter("@nombre", inmueble.Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@estado", inmueble.Estado));
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+
+                        id = Convert.ToInt32(cmd.Parameters["@id"].Value);
+
+                        return id;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return -1;
+            }
+        }
+
+        //Actualizamos nuevas Administraciones
         public async Task<int> deleteAdmin(int id)
         {
             try
@@ -188,6 +250,37 @@ namespace CedulasEvaluacion.Repositories
             catch (Exception)
             {
                 return -1;
+            }
+        }
+
+        //listado de estados de la República Mexicana
+        public async Task<List<Inmueble>> getEstadosRM()
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getEstadosRM", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        var response = new List<Inmueble>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValueRM(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
@@ -259,12 +352,20 @@ namespace CedulasEvaluacion.Repositories
         {
             return new Inmueble()
             {
-                Id = (int)reader["Id"],
-                AdministracionId = (int)reader["AdministracionId"],
-                Clave = (int)reader["Clave"],
-                Nombre = reader["Nombre"].ToString(),
-                Direccion = reader["Direccion"].ToString(),
-                Tipo = (int)reader["Tipo"],
+                Id = reader["Id"] != DBNull.Value ? (int)reader["Id"]:0,
+                AdministracionId = reader["AdministracionId"] != DBNull.Value ? (int)reader["AdministracionId"]: 0,
+                Clave = reader["Clave"] != DBNull.Value ? (int)reader["Clave"]:0,
+                Nombre = reader["Nombre"] != DBNull.Value ? reader["Nombre"].ToString():"",
+                Direccion = reader["Direccion"] != DBNull.Value ? reader["Direccion"].ToString():"",
+                Tipo = reader["Tipo"] != DBNull.Value ? (int)reader["Tipo"]:0,
+            };
+        }
+
+        private Inmueble MapToValueRM(SqlDataReader reader)
+        {
+            return new Inmueble()
+            {
+                Estado = reader["Estado"].ToString(),
             };
         }
 
