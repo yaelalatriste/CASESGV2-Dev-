@@ -214,8 +214,8 @@ namespace CedulasEvaluacion.Repositories
                 CedulaMuebleId = (int)reader["CedulaMuebleId"],
                 Tipo = reader["Tipo"].ToString(),
                 Pregunta = reader["Pregunta"].ToString(),
-                FechaSolicitud = reader["FechaSolicitud"] != DBNull.Value ? Convert.ToDateTime(reader["FechaSolicitud"]) : DateTime.Now,
-                FechaRespuesta = reader["FechaRespuesta"] != DBNull.Value ? Convert.ToDateTime(reader["FechaRespuesta"]) : DateTime.Now,
+                FechaSolicitud = reader["FechaSolicitud"] != DBNull.Value ? Convert.ToDateTime(reader["FechaSolicitud"]) : Convert.ToDateTime("01/01/1990"),
+                FechaRespuesta = reader["FechaRespuesta"] != DBNull.Value ? Convert.ToDateTime(reader["FechaRespuesta"]) : Convert.ToDateTime("01/01/1990"),
                 Comentarios = reader["Comentarios"] != DBNull.Value ? reader["Comentarios"].ToString() : ""
             };
         }

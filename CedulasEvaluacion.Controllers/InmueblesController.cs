@@ -29,7 +29,7 @@ namespace CASESGCedulasEvaluacion.Controllers
         }
 
         //Listado de todos las Administraciones
-        [Route("/inmuebles/administraciones")]
+        [Route("/inmuebles/index")]
         public async Task<ActionResult<IEnumerable>> Index()
         {
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(),"ver");

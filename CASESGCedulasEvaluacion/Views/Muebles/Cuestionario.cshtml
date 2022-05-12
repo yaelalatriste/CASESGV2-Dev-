@@ -188,6 +188,10 @@
                                     <input type="radio" name="pregunta2" value="N/A" id="radioSuccess5" class="pregunta2">
                                     <label for="radioSuccess5">N/A</label>
                                 </div>
+                                <div class="row col-lg-12 mt-3" id="diviPregunta2">
+                                    <button type='button' class='btn btn-primary mr-2 addIncidencias' data-pregunta="2">Capturar Incidencia</button>
+                                    <button type='button' class='btn btn-primary viewIncidencias' data-pregunta="2">Consultar Incidencias</button>
+                                </div>
                             </div>
                             @* Fin de la Pregunta 2 *@
                             @* Pregunta 3 *@
@@ -416,7 +420,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="id_incidencia" />
-                <input type="hidden" id="pregunta" />
+                <input type="text" id="pregunta" />
                 <div class="row">
                     <div class="form-group col-md-3" id="divCategoria">
                         <label for="fechaSolicitud">Prioridad: </label>
@@ -425,6 +429,18 @@
                             <option value="Urgente">Urgente</option>
                             <option value="Media">Media</option>
                             <option value="Baja">Baja</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3" id="divCategoria2">
+                        <label for="fechaSolicitud">Tipo de Incidencia: </label>
+                        <select id="categoria" class="form-control">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Fajas">Fajas</option>
+                            <option value="Guantes">Guantes</option>
+                            <option value="Zapatos de Seguridad">Zapatos de Seguridad</option>
+                            <option value="Diablitos">Diablitos</option>
+                            <option value="Careta">Careta</option>
+                            <option value="Cubrebocas">Cubrebocas</option>
                         </select>
                     </div>
                 </div>
@@ -444,6 +460,15 @@
                         <div class="col-sm-12" id="error_fechaRespuesta">
                             <small id="dateHelp" class="text-danger">
                                 Por favor capture la Fecha de Respuesta
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3" id="divFechaS">
+                        <label for="fechaSolicitud">Fecha de Solicitud: </label>
+                        <input type="date" id="fechaSolicitud2" class="form-control">
+                        <div class="col-sm-12" id="error_fechaSolicitud2">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor capture la Fecha de Solicitud
                             </small>
                         </div>
                     </div>
@@ -484,16 +509,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <table class="table table-responsive-xl">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Prioridad</th>
-                                    <th>Fecha y Hora de Solicitud</th>
-                                    <th>Fecha y Hora de Respuesta</th>
-                                    <th>Comentarios</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
+                            <thead id="th_incidencias"></thead>
                             <tbody id="tbl_incidencias"></tbody>
                         </table>
                     </div>
@@ -624,6 +640,7 @@
 
             /*Detalles de Incidencias*/
                 $('#diviPregunta1').css('display', 'none');
+                $('#diviPregunta2').css('display', 'none');
                 $('#diviPregunta4').css('display', 'none');
                 $('#diviPregunta5').css('display', 'none');
 
@@ -642,10 +659,12 @@
 
             /*Componentes de Incidencias*/
                 $('#divCategoria').css('display', 'none');
+                $('#divCategoria2').css('display', 'none');
                 $('#divFechaSolicitud').css('display', 'none');
                 $('#divFechaRespuesta').css('display', 'none');
                 $('#divInciComentarios').css('display', 'none');
                 $('#error_fechaSolicitud').css('display', 'none');
+                $('#error_fechaSolicitud2').css('display', 'none');
                 $('#error_fechaRespuesta').css('display', 'none');
                 $('#error_inciComentarios').css('display', 'none');
             /*Fin Componentes de Incidencias*/
@@ -872,7 +891,8 @@
 
             /******************************* FIN Agregar/Cambiar Facturas **********************************/
             /******************************* Editar Cuestionario (Revisar para Depurar) ******************************************/
-            if (model.estatus == "Enviado a DAS" && model.mes == "Enero") {
+            if (model.estatus == "Enviado a DAS" && model.mes == "Enero")
+            {
                 Swal.fire({
                     'icon': 'info',
                     'title': 'Servicio de Bienes Muebles',
@@ -888,8 +908,9 @@
                         }
                     }
                 });
-
-            } else {
+            }
+            else
+            {
                 for (var i = 0; i < respuestas.length; i++) {
                     if (respuestas[i].detalles == "N/A") {
                         $('input:radio[name="pregunta' + respuestas[i].pregunta + '"][value="N/A"]').prop('checked', true);
@@ -907,8 +928,10 @@
                         $('#personalSolicitado').val(personal[0]);
                         $('#personalBrindado').val(personal[1]);
                         $('#diviPregunta4').css('display', 'block');
-                    } else if (i == 4) {
+                    } else if (respuestas[i].pregunta == 5 && respuestas[i].respuesta == false) {
                         $('#diviPregunta5').css('display', 'block');
+                    } else if (respuestas[i].pregunta == 2 && respuestas[i].respuesta == false) {
+                        $('#diviPregunta2').css('display', 'block');
                     }
                 }
             }
@@ -917,6 +940,15 @@
                 $('.pregunta1').change(function () {
                     let tf = $(this).val();
                     $('#diviPregunta1').css('display', 'block');
+                });
+
+                $('.pregunta2').change(function(){
+                    let tf = $(this).val();
+                    if (tf == "false") {
+                        $('#diviPregunta2').css('display', 'block');
+                    } else {
+                        $('#diviPregunta2').css('display', 'none');
+                    }
                 });
 
                 $('.pregunta4').change(function () {
@@ -969,19 +1001,52 @@
                     $('#categoria').val('');
                     $('#pregunta').val('');
                     $('#fechaSolicitud').val('');
+                    $('#fechaSolicitud2').val('');
                     $('#fechaRespuesta').val('');
                     $('#inciComentarios').val('');
                     let pregunta = $(this).data('pregunta');
                     muestraInputs(pregunta);
-                    $("#pregunta").val(pregunta+"");
+                    $("#pregunta").val(pregunta + "");
+                    if (pregunta == 2) {
+                        $('#divFechaSolicitud').css('display', 'none');
+                        $('#divFechaS').css('display', 'block');
+                        $('#divCategoria2').css('display', 'block');
+                        $('#divCategoria').css('display', 'none');
+                        $('#divFechaRespuesta').css('display', 'none');
+                    } else {
+                        $('#divFechaSolicitud').css('display', 'block');
+                        $('#divFechaS').css('display', 'none');
+                        $('#divCategoria').css('display', 'block');
+                        $('#divCategoria2').css('display', 'none');
+                        $('#divFechaRespuesta').css('display', 'block');
+                    }
                     $("#id_incidencia").val("");
                     $("#modal-incidencias").modal('show');
                 });
 
                 $(".viewIncidencias").click(function () {
                     let pregunta = $(this).data('pregunta');
+                    let cabecera = "";
+                    if (pregunta == 5) {
+                        cabecera = "<tr>" +
+                            "<th>#</th>" +
+                            "<th>Prioridad</th>" +
+                            "<th>Fecha y Hora de Solicitud</th>" +
+                            "<th>Fecha y Hora de Respuesta</th>" +
+                            "<th>Comentarios</th>" +
+                            "<th>Acciones</th>" +
+                            "</tr>";
+                    } else {
+                        cabecera = "<tr>" +
+                            "<th>#</th>" +
+                            "<th>Prioridad</th>" +
+                            "<th>Fecha y Hora de Solicitud</th>" +
+                            "<th>Comentarios</th>" +
+                            "<th>Acciones</th>" +
+                            "</tr>";
+                    }
                     axios.get('/muebles/tablaIncidencias/' + model.id + '/' + pregunta).then(table => {
-
+                        $("#th_incidencias").html(cabecera);
                         $("#tbl_incidencias").html(table.data);
                     }).catch(error => {
                         Swal.fire({
@@ -995,18 +1060,31 @@
 
                 function validaIncidencias() {
                     let tipo = $('#categoria').val();
+                    let pregunta = $('#pregunta').val();
                     let fechaSolicitud = $('#fechaSolicitud').val();
                     let fechaRespuesta = $('#fechaRespuesta').val();
+
+                    let fechaS = $('#fechaSolicitud2').val();
+                    
                     let comentarios = $('#inciComentarios').val();
-                    if (fechaSolicitud == '') {
+                    if (fechaSolicitud == '' && pregunta == 5) {
                         $('#fechaSolicitud').addClass('is-invalid');
                         $('#error_fechaSolicitud').css('display', 'block');
                     }
-                    if (fechaRespuesta == '') {
+                    if (fechaRespuesta == '' && pregunta == 5) {
                         $('#fechaRespuesta').addClass('is-invalid');
                         $('#error_fechaRespuesta').css('display', 'block');
                     }
-                    if (fechaSolicitud != '' && fechaRespuesta != '') {
+                    if (fechaSolicitud != '' && fechaRespuesta != '' && pregunta == 5) {
+                        return true;
+                    }
+
+                    if (fechaS == '' && pregunta == 2) {
+                        $('#fechaSolicitud2').addClass('is-invalid');
+                        $('#error_fechaSolicitud2').css('display', 'block');
+                    }
+                   
+                    if (fechaS != '' && pregunta == 2) {
                         return true;
                     }
                     return false;
@@ -1025,7 +1103,13 @@
                         id = 0;
                     }
 
+
                     if (validaIncidencias()) {
+                        if (pregunta == 2) {
+                            fechaSolicitud = $('#fechaSolicitud2').val();
+                            fechaRespuesta = "01/01/1990";
+                            tipo = $("#categoria2").val();
+                        }
                         if (id == 0) {
                             axios.post("/muebles/inserta/incidencia", {
                                 Id: parseInt(id), CedulaMuebleId: parseInt(model.id), Tipo: tipo, Pregunta: parseInt(pregunta),
@@ -1095,6 +1179,42 @@
                     $('#divFechaRespuesta').css('display', 'block');
                     $('#divInciComentarios').css('display', 'block');
                     $("#modal-incidencias").modal('show');
+                });
+
+                $(document).on("click", ".delete_incidencia", function(){
+                    var id = $(this).data("id");
+                    
+                    Swal.fire({
+                            'icon': 'warning',
+                            'title': 'Servicio de Transportación de Bienes Muebles',
+                            'html': '¿Está seguro de eliminar la incidencia?',
+                            'confirmButtonColor': '#3085d6',
+                            'cancelButtonColor': '#d33',
+                            'confirmButtonText': 'Si, eliminar incidencia',
+                            'cancelButtonText': 'Cancelar',
+                            'showCancelButton': true
+                        }).then(response => {
+                            if (response.isConfirmed) {
+                                axios.get("/muebles/incidencia/eliminar/"+id).then(response => {
+                                    if (response.status == 200) {
+                                        Swal.fire(
+                                            'Servicio de Transportación de Bienes Muebles',
+                                            'La incidencia fue eliminada con éxito.',
+                                            'success'
+                                        ).then(function () {
+                                            window.location.reload();
+                                        });
+                                    }
+                                }).catch(error => {
+                                    Swal.fire(
+                                        'Servicio de Transportación de Bienes Muebles',
+                                        'No se pudo eliminar la incidencia del servicio de fumigación. Contacta a tu Administrador.',
+                                        'error'
+                                    );
+                                });
+                            }
+                        });
+
                 });
             /******************************* FIN Incidencias Fumigación **********************************/
 

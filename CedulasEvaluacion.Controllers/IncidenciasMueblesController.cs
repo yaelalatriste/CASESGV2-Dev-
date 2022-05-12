@@ -40,21 +40,40 @@ namespace CedulasEvaluacion.Controllers
                 int i = 0;
                 foreach (var inc in incidencias)
                 {
-                    tbody +=
-                     "<tr>" +
-                         "<td>" + (i + 1) + "</td>" +
-                         "<td>" + inc.Tipo + "</td>" +
-                         "<td>" + inc.FechaSolicitud + "</td>" +
-                         "<td>" + inc.FechaRespuesta + "</td>" +
-                         "<td>" + inc.Comentarios + "</td>" +
-                         "<td>" +
-                             "<a href='#' class='text-center mr-2 update_incidencia' data-id='" + inc.Id + "' data-tipo='" + inc.Tipo + "' data-fechareal='" + inc.FechaRespuesta.ToString("yyyy-MM-ddTHH:mm") + "'" +
-                             " data-fechaprog='" + inc.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm") + "' data-coment='" + inc.Comentarios + "'>" +
-                                 "<i class='fas fa-edit text-primary'></i>" +
-                             "</a>" +
-                             "<a href='#' class='text-center mr-2 delete_incidencia' data-id='" + inc.Id + "'><i class='fas fa-times text-danger'></i></a>" +
-                         "</td>" +
-                     "</tr>";
+                    if (pregunta == 5) {
+                        tbody +=
+                         "<tr>" +
+                             "<td>" + (i + 1) + "</td>" +
+                             "<td>" + inc.Tipo + "</td>" +
+                             "<td>" + inc.FechaSolicitud + "</td>" +
+                             "<td>" + inc.FechaRespuesta + "</td>" +
+                             "<td>" + inc.Comentarios + "</td>" +
+                             "<td>" +
+                                 "<a href='#' class='text-center mr-2 update_incidencia' data-id='" + inc.Id + "' data-tipo='" + inc.Tipo + "' data-fechareal='" + inc.FechaRespuesta.ToString("yyyy-MM-ddTHH:mm") + "'" +
+                                 " data-fechaprog='" + inc.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm") + "' data-coment='" + inc.Comentarios + "'>" +
+                                     "<i class='fas fa-edit text-primary'></i>" +
+                                 "</a>" +
+                                 "<a href='#' class='text-center mr-2 delete_incidencia' data-id='" + inc.Id + "'><i class='fas fa-times text-danger'></i></a>" +
+                             "</td>" +
+                         "</tr>";
+                    }
+                    else
+                    {
+                        tbody +=
+                         "<tr>" +
+                             "<td>" + (i + 1) + "</td>" +
+                             "<td>" + inc.Tipo + "</td>" +
+                             "<td>" + inc.FechaSolicitud + "</td>" +
+                             "<td>" + inc.Comentarios + "</td>" +
+                             "<td>" +
+                                 "<a href='#' class='text-center mr-2 update_incidencia' data-id='" + inc.Id + "' data-tipo='" + inc.Tipo + "' data-fechareal='" + inc.FechaRespuesta.ToString("yyyy-MM-ddTHH:mm") + "'" +
+                                 " data-fechaprog='" + inc.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm") + "' data-coment='" + inc.Comentarios + "'>" +
+                                     "<i class='fas fa-edit text-primary'></i>" +
+                                 "</a>" +
+                                 "<a href='#' class='text-center mr-2 delete_incidencia' data-id='" + inc.Id + "'><i class='fas fa-times text-danger'></i></a>" +
+                             "</td>" +
+                         "</tr>";
+                    }
                 }
                 return Ok(tbody);
             }
@@ -90,6 +109,17 @@ namespace CedulasEvaluacion.Controllers
             if (success != -1)
             {
                 return Ok(success);
+            }
+            return BadRequest();
+        }
+
+        [Route("/muebles/incidencia/eliminar/{id?}")]
+        public async Task<IActionResult> EliminaIncidencia(int id)
+        {
+            int excel = await iMuebles.EliminaIncidencia(id);
+            if (excel != -1)
+            {
+                return Ok(excel);
             }
             return BadRequest();
         }

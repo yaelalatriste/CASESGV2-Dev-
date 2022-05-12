@@ -2692,6 +2692,7 @@ a.btn.disabled, fieldset:disabled a.btn {
     box-shadow: none !important;
 }
 
+
 .btn-primary:hover {
     color: #fff;
     background-color: #0069d9;
@@ -10427,6 +10428,10 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
 
 .text-primary {
     color: #007bff !important
+}
+
+.text-cjf{
+    color: #24135F !important;
 }
 
 a.text-primary:focus, a.text-primary:hover {

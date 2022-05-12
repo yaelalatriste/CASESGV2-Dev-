@@ -666,6 +666,11 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox13</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Febrero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Marzo"),false,true)</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -679,6 +684,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -702,6 +708,11 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Facturas</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Febrero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Marzo"),false,true)</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -726,6 +737,7 @@
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -841,6 +853,11 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox13</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Febrero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Marzo"),false,true)</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -854,6 +871,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -879,6 +897,11 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>MontosFacturas</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Febrero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Marzo"),false,true)</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -903,6 +926,7 @@
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />

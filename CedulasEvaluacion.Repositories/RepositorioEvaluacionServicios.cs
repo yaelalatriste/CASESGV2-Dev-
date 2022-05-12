@@ -29,8 +29,8 @@ namespace CedulasEvaluacion.Repositories
                 {
                     using (SqlCommand cmd = new SqlCommand("sp_buscaCedulaRegistrada", sql))
                     {
-                        cmd.Parameters.Add(new SqlParameter("@servicioId", servicio));
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@servicioId", servicio));
                         cmd.Parameters.Add(new SqlParameter("@anio", anio));
                         cmd.Parameters.Add(new SqlParameter("@mes", mes));
                         cmd.Parameters.Add(new SqlParameter("@inmueble", inmueble));

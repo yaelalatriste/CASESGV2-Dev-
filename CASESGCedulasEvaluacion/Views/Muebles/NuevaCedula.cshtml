@@ -132,6 +132,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row col-lg-12 mt-3">
+                    <div class="col-lg-6  text-cjf" id="divDOrigen">
+                        
+                    </div>
+                    <div class="col-lg-6 mt-1 text-success" id="divDDestino">
+                        
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-footer">
@@ -214,8 +222,10 @@
                         $('#select_inmuebleOrigen').prop("disabled", false);
                         axios.get('/inmuebles/getInmuebles').then(response => {
                             response = response.data;
+                            console.log(response);
                             response.forEach(function (inm) {
-                                optionsInmueble += "<option value=" + inm.id + ">" + inm.nombre + "</option>"
+                                optionsInmueble += "<option value=" + inm.id + " data-direccion='" + inm.direccion + "'" +
+                                    " data-nombre='" + inm.nombre+ "'>" + inm.nombre + "</option>"
                             });
                             $("#select_inmuebleOrigen").html(optionsInmueble);
                         });
@@ -228,13 +238,16 @@
                         $('#nombreOrigen').val("");
                         $('#direccionOrigen').val("");
                         $('#sl_estadosOrigen').val("");
-                    } else {
-                        let direcciones = "<option value=''>Seleccione el Inmueble</option>";
+                    }
+                    else
+                    {
+                        let direcciones = "<option value=''>Seleccione la Dirección</option>";
+                        $("#divDOrigen").html("");
                         axios.get('/inmuebles/getDireccionesBM').then(response => {
                             response = response.data;
                             console.log(response);
                             response.forEach(function (dir) {
-                                direcciones += "<option value=" + dir.id + ">" + dir.nombre+ "</option>"
+                                direcciones += "<option value=" + dir.id + " data-direccion='"+dir.direccion+"'>" + dir.nombre+ "</option>"
                             });
                             $("#select_direccionO").html(direcciones);
                         });
@@ -252,7 +265,41 @@
                 });
 
                 $("#select_inmuebleOrigen").change(function () {
-                     $("#divDestino").css("display", "block");
+                    var origen = $(this).find(':selected').attr('data-direccion');
+                    var inmueble = $(this).find(':selected').attr('data-nombre');
+                    $("#divDOrigen").html("<strong>Inmueble: </strong> <p>" + inmueble +"</p>"+"<strong>Dirección de Origen: </strong> <p>"+origen+"</p>");
+                    $("#divDestino").css("display", "block");
+                });
+
+                $("#select_inmuebleDestino").change(function () {
+                    var destino = $(this).find(':selected').attr('data-direccion');
+                    var inmueble = $(this).find(':selected').attr('data-nombre');
+                    $("#divDDestino").html("<strong>Inmueble: </strong> <p>" + inmueble + "</p>" + "<strong>Dirección de Destino: </strong> <p>" + destino + "</p>");
+                });
+
+                $("#select_direccionD").change(function () {
+                    var destino = $(this).find(':selected').attr('data-direccion');
+                    var inmueble = "Dirección Particular";
+                    $("#divDDestino").html("<strong>Inmueble: </strong> <p>" + inmueble +"</p>"+"<strong>Dirección de Destino: </strong> <p>"+destino+"</p>");
+                    $("#divDestino").css("display", "block");
+                });
+
+                $("#select_direccionO").change(function () {
+                    var origen = $(this).find(':selected').attr('data-direccion');
+                    var inmueble = "Dirección Particular";
+                    $("#divDOrigen").html("<strong>Inmueble: </strong> <p>" + inmueble + "</p>" + "<strong>Dirección de Destino: </strong> <p>" + origen + "</p>");
+                });
+
+                 $("#direccionOrigen").change(function () {
+                     var origen = $(this).val();
+                    var inmueble = "Dirección Particular";
+                    $("#divDOrigen").html("<strong>Inmueble: </strong> <p>" + inmueble + "</p>" + "<strong>Dirección de Destino: </strong> <p>" + origen + "</p>");
+                });
+
+                 $("#direccionDestino").change(function () {
+                    var destino = $(this).val();
+                    var inmueble = "Dirección Particular";
+                    $("#divDDestino").html("<strong>Inmueble: </strong> <p>" + inmueble + "</p>" + "<strong>Dirección de Destino: </strong> <p>" + destino + "</p>");
                 });
 
                 $(".nuevo_origen").change(function(){
@@ -299,13 +346,12 @@
                         axios.get('/inmuebles/getInmuebles').then(response => {
                             response = response.data;
                             response.forEach(function (inm) {
-                                optionsInmueble += "<option value=" + inm.id + ">" + inm.nombre + "</option>"
-                            });
+                                optionsInmueble += "<option value=" + inm.id + " data-direccion='" + inm.direccion + "'" +
+                                    " data-nombre='" + inm.nombre + "'>" + inm.nombre + "</option>"                            });
                             $("#select_inmuebleDestino").html(optionsInmueble);
                         });
                         $("#divInmuebleDestino").css("display", "block");
                         $("#divDestinoAlterno").css("display", "none");
-                        $("#divCapturaOrigen").css("display", "none");
                         $(".nuevo_destino").parent().removeClass("btn-success");
                         $(".nuevo_destino").parent().addClass("btn-danger off");
                         $(".nuevo_destino").prop("checked", false);
@@ -315,12 +361,13 @@
                     }
                     else
                     {
-                        let direcciones = "<option value=''>Seleccione el Inmueble</option>";
+                        let direcciones = "<option value=''>Seleccione la Dirección</option>";
+                        $("#divDDestino").html("");
                         axios.get('/inmuebles/getDireccionesBM').then(response => {
                             response = response.data;
                             console.log(response);
                             response.forEach(function (dir) {
-                                direcciones += "<option value=" + dir.id + ">" + dir.nombre + "</option>"
+                                direcciones += "<option value=" + dir.id + " data-direccion='"+dir.direccion+"'>" + dir.nombre + "</option>"
                             });
                             $("#select_direccionD").html(direcciones);
                         });
@@ -350,7 +397,6 @@
                         let direcciones = "<option value=''>Seleccione el Inmueble</option>";
                         axios.get('/inmuebles/getDireccionesBM').then(response => {
                             response = response.data;
-                            console.log(response);
                             response.forEach(function (dir) {
                                 direcciones += "<option value=" + dir.id + ">" + dir.nombre + "</option>"
                             });

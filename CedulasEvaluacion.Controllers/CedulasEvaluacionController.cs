@@ -399,6 +399,8 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else if (i == 1)
                 {
+                    incidencias = await iMuebles.GetIncidenciasPregunta(id, (i + 1));
+                    local.DataSources.Add(new ReportDataSource("IncidenciasPregunta2", incidencias));
                     if (respuestas[i].Respuesta == false)
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con la maquinaria, equipo y herramientas para la prestación del servicio.") });

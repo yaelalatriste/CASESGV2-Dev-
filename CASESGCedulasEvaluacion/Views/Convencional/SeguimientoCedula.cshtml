@@ -285,27 +285,17 @@
                     </div>
                 </div>
                 <div class="row col-lg-12 justify-content-end mb-3">
-                    @if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || @User.Claims.ElementAt(2).Value.Equals("Administrador") || @User.Claims.ElementAt(2).Value.Contains("Telefonía Convencional"))
+                    @if (await sPermisos.GetPermisosByModulo("rechazar trámite", @Model.ServicioId, @user) != 0)
                     {
-                        @if (cedula == true && @Model.Estatus.Equals("Autorizada"))
-                        {
-                            <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
-                        }
-                        else if (@Model.Estatus.Equals("Trámite Rechazado") && rechazat == false)
-                        {
-                            <button href="" class="btn btn-info float-right mr-3 tramitar_cedula" data-memo="@memo" data-rechazado="@rechazat"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
-                        }
+                        <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-check mr-2"></i>Rechazar Trámite</button>
                     }
-                    else if (@User.Claims.ElementAt(2).Value.Contains("Financieros") || @User.Claims.ElementAt(2).Value.Equals("Administrador"))
+                    @if (await sPermisos.GetPermisosByModulo("trámitar", @Model.ServicioId, @user) != 0)
                     {
-                        @if (rechazat == false && estatus == false && @Model.Estatus.Equals("En Trámite"))
-                        {
-                            <button href="" class="btn btn-success float-right mr-3 tramitar_pago"><i class="fas fa-check mr-2"></i>Tramitar Pago</button>
-                        }
-                        else if (rechazat == true && !@Model.Estatus.Equals("Trámite Rechazado"))
-                        {
-                            <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-times mr-2"></i>Rechazar Trámite</button>
-                        }
+                        <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
+                    }
+                    @if (await sPermisos.GetPermisosByModulo("trámitar a pago", @Model.ServicioId, @user) != 0)
+                    {
+                        <button href="" class="btn btn-success float-right mr-3 tramitar_pago"><i class="fas fa-check mr-2"></i>Tramitar Pago</button>
                     }
                 </div>
             </div>
