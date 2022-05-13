@@ -336,7 +336,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>CedulaLimpieza</DataSetName>
-            <Top>1.63481cm</Top>
+            <Top>1.38081cm</Top>
             <Left>1.80988cm</Left>
             <Height>0.6cm</Height>
             <Width>16.10474cm</Width>
@@ -666,11 +666,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox13</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),false,true)
-=IIF(Fields!Mes.Value.Equals("Febrero"),false,true)
-=IIF(Fields!Mes.Value.Equals("Marzo"),false,true)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -684,7 +679,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -708,11 +702,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Facturas</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),false,true)
-=IIF(Fields!Mes.Value.Equals("Febrero"),false,true)
-=IIF(Fields!Mes.Value.Equals("Marzo"),false,true)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -737,7 +726,6 @@
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -853,11 +841,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox13</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),false,true)
-=IIF(Fields!Mes.Value.Equals("Febrero"),false,true)
-=IIF(Fields!Mes.Value.Equals("Marzo"),false,true)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -871,7 +854,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -897,11 +879,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>MontosFacturas</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),false,true)
-=IIF(Fields!Mes.Value.Equals("Febrero"),false,true)
-=IIF(Fields!Mes.Value.Equals("Marzo"),false,true)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -926,7 +903,181 @@
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
-                        <rd:Selected>true</rd:Selected>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox11">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Folio:</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Indigo</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Folio1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Folio.Value</Value>
+                                  <Style>
+                                    <Color>#a31515</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Folio1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox19">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Mes Evaluado</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox19</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Indigo</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Mes1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Mes.Value</Value>
+                                  <Style>
+                                    <Color>#a31515</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Mes1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -948,14 +1099,33 @@
               <TablixMembers>
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
-                <TablixMember />
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Febrero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Marzo"),false,true)</Hidden>
+                  </Visibility>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Febrero"),false,true)
+=IIF(Fields!Mes.Value.Equals("Marzo"),false,true)</Hidden>
+                  </Visibility>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(Fields!Mes.Value.Equals("Enero"),true,false)
+=IIF(Fields!Mes.Value.Equals("Febrero"),true,false)
+=IIF(Fields!Mes.Value.Equals("Marzo"),true,false)</Hidden>
+                  </Visibility>
+                </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>CedulaLimpieza</DataSetName>
-            <Top>2.4546cm</Top>
+            <Top>2.0736cm</Top>
             <Left>1.36135cm</Left>
-            <Height>3.08792cm</Height>
+            <Height>3.68792cm</Height>
             <Width>17.75167cm</Width>
             <ZIndex>2</ZIndex>
             <Style>
@@ -983,7 +1153,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox36</rd:DefaultName>
-            <Top>5.72466cm</Top>
+            <Top>5.81991cm</Top>
             <Left>6.51457cm</Left>
             <Height>0.6cm</Height>
             <Width>6.38938cm</Width>
@@ -1640,7 +1810,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!FechaIncidencia.Value</Value>
+                                  <Value>=Format(Fields!FechaIncidencia.Value,"dd/MM/yyyy")</Value>
                                   <Style>
                                     <Format>d</Format>
                                   </Style>
@@ -1914,7 +2084,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!FechaIncidencia.Value</Value>
+                                  <Value>=Format(Fields!FechaIncidencia.Value,"dd/MM/yyyy")</Value>
                                   <Style>
                                     <Format>d</Format>
                                   </Style>
@@ -2009,6 +2179,17 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
+                    <Value />
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
                     <Value>_________________________</Value>
                     <Style />
                   </TextRun>
@@ -2019,9 +2200,9 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>19.58593cm</Top>
+            <Top>19.55418cm</Top>
             <Left>0.98596cm</Left>
-            <Height>1.43058cm</Height>
+            <Height>1.801cm</Height>
             <Width>5.62214cm</Width>
             <ZIndex>20</ZIndex>
             <Style>
@@ -2063,6 +2244,17 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
+                    <Value />
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
                     <Value>_________________________</Value>
                     <Style />
                   </TextRun>
@@ -2073,9 +2265,9 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>19.57517cm</Top>
+            <Top>19.54342cm</Top>
             <Left>6.56103cm</Left>
-            <Height>1.43058cm</Height>
+            <Height>1.801cm</Height>
             <Width>5.62214cm</Width>
             <ZIndex>21</ZIndex>
             <Style>
@@ -2117,6 +2309,17 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
+                    <Value />
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
                     <Value>_________________________</Value>
                     <Style />
                   </TextRun>
@@ -2127,9 +2330,9 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>19.58694cm</Top>
+            <Top>19.55519cm</Top>
             <Left>12.50492cm</Left>
-            <Height>1.43058cm</Height>
+            <Height>1.801cm</Height>
             <Width>5.62214cm</Width>
             <ZIndex>22</ZIndex>
             <Style>
@@ -2142,8 +2345,189 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Tablix Name="Tablix5">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>3.74354cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>7.3612cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.5cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.5cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox26">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>NOTA: Esta cédula no cuenta con ningún valor ya que aún no está AUTORIZADA por parte de la Dirección de Administración de Servicios.</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>Firebrick</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox26</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>=IIF(Fields!Estatus.Value.Equals("Rechazada"),true,false)
+=IIF(Fields!Estatus.Value.Equals("Enviado a DAS"),true,false)</Hidden>
+                          </Visibility>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>4</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="Detalles2" />
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>CedulaLimpieza</DataSetName>
+            <Top>0.69684cm</Top>
+            <Left>1.8439cm</Left>
+            <Height>0.6cm</Height>
+            <Width>16.10474cm</Width>
+            <ZIndex>23</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Tablix Name="Tablix6">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>3.74354cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>7.3612cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.5cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.5cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox27">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>NOTA: Esta cédula no cuenta con ningún valor ya que aún no está AUTORIZADA por parte de la Dirección de Administración de Servicios.</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>Firebrick</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox26</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>4</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="Detalles3" />
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>CedulaLimpieza</DataSetName>
+            <Top>20.10418cm</Top>
+            <Left>1.80467cm</Left>
+            <Height>0.6cm</Height>
+            <Width>16.10474cm</Width>
+            <ZIndex>24</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <Color>Red</Color>
+            </Style>
+          </Tablix>
         </ReportItems>
-        <Height>8.27461in</Height>
+        <Height>8.42045in</Height>
         <Style />
       </Body>
       <Width>7.52481in</Width>
@@ -2264,7 +2648,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalPages</rd:DefaultName>
-              <Top>1.58383cm</Top>
+              <Top>1.58382cm</Top>
               <Left>13.80868cm</Left>
               <Height>0.6cm</Height>
               <Width>5cm</Width>

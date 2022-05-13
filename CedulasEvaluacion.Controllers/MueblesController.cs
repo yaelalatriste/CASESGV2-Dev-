@@ -44,7 +44,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/muebles/index/{servicio?}")]
         public async Task<IActionResult> Index(int servicio)
         {
-            return Redirect("/casesg");
+            //return Redirect("/casesg");
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
@@ -60,7 +60,7 @@ namespace CedulasEvaluacion.Controllers
         [HttpGet]
         public async Task<IActionResult> NuevaCedula(int servicio)
         {
-            return Redirect("/casesg");
+            //return Redirect("/casesg");
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
@@ -87,12 +87,12 @@ namespace CedulasEvaluacion.Controllers
         [Route("/muebles/evaluacion/{id?}")]
         public async Task<IActionResult> Cuestionario(int id)
         {
-            return Redirect("/casesg");
+            //return Redirect("/casesg");
              int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "actualizar");
              if (success == 1)
              {
                  CedulaEvaluacion cedula = await vCedula.CedulaById(id);
-                 if (cedula.Estatus.Equals("Enviado a DAS"))
+                 if (cedula.Estatus.Equals("Enviado a DAS") && isEvaluate() == true)
                  {
                      return Redirect("/error/cedSend");
                  }
@@ -143,7 +143,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/muebles/revision/{id}")]
         public async Task<IActionResult> RevisarCedula(int id)
         {
-            return Redirect("/casesg");
+            //return Redirect("/casesg");
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
@@ -181,7 +181,7 @@ namespace CedulasEvaluacion.Controllers
         [Route("/muebles/seguimiento/{id}")]
         public async Task<IActionResult> SeguimientoCedula(int id)
         {
-            return Redirect("/casesg");
+            //return Redirect("/casesg");
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
@@ -252,6 +252,15 @@ namespace CedulasEvaluacion.Controllers
         private string modulo()
         {
             return "Bienes_Muebles";
+        }
+
+        private bool isEvaluate()
+        {
+            if ((@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

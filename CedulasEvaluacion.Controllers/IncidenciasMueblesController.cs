@@ -50,7 +50,7 @@ namespace CedulasEvaluacion.Controllers
                              "<td>" + inc.Comentarios + "</td>" +
                              "<td>" +
                                  "<a href='#' class='text-center mr-2 update_incidencia' data-id='" + inc.Id + "' data-tipo='" + inc.Tipo + "' data-fechareal='" + inc.FechaRespuesta.ToString("yyyy-MM-ddTHH:mm") + "'" +
-                                 " data-fechaprog='" + inc.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm") + "' data-coment='" + inc.Comentarios + "'>" +
+                                 " data-fechaprog='" + inc.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm") + "' data-coment='" + inc.Comentarios + "' data-pregunta='"+inc.Pregunta+"'>" +
                                      "<i class='fas fa-edit text-primary'></i>" +
                                  "</a>" +
                                  "<a href='#' class='text-center mr-2 delete_incidencia' data-id='" + inc.Id + "'><i class='fas fa-times text-danger'></i></a>" +
@@ -63,11 +63,11 @@ namespace CedulasEvaluacion.Controllers
                          "<tr>" +
                              "<td>" + (i + 1) + "</td>" +
                              "<td>" + inc.Tipo + "</td>" +
-                             "<td>" + inc.FechaSolicitud + "</td>" +
+                             "<td>" + inc.FechaSolicitud.ToString("dd/MM/yyyy") + "</td>" +
                              "<td>" + inc.Comentarios + "</td>" +
                              "<td>" +
-                                 "<a href='#' class='text-center mr-2 update_incidencia' data-id='" + inc.Id + "' data-tipo='" + inc.Tipo + "' data-fechareal='" + inc.FechaRespuesta.ToString("yyyy-MM-ddTHH:mm") + "'" +
-                                 " data-fechaprog='" + inc.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm") + "' data-coment='" + inc.Comentarios + "'>" +
+                                 "<a href='#' class='text-center mr-2 update_incidencia' data-id='" + inc.Id + "' data-tipo='" + inc.Tipo + "'" +
+                                 " data-fechaprog='" + inc.FechaSolicitud.ToString("yyyy-MM-dd") + "' data-coment='" + inc.Comentarios + "' data-pregunta='" + inc.Pregunta + "'>" +
                                      "<i class='fas fa-edit text-primary'></i>" +
                                  "</a>" +
                                  "<a href='#' class='text-center mr-2 delete_incidencia' data-id='" + inc.Id + "'><i class='fas fa-times text-danger'></i></a>" +
@@ -120,6 +120,29 @@ namespace CedulasEvaluacion.Controllers
             if (excel != -1)
             {
                 return Ok(excel);
+            }
+            return BadRequest();
+        }
+
+        /*Elimina todas las incidencias*/
+        [Route("/muebles/eliminaIncidencias/{id?}/{pregunta?}")]
+        public async Task<IActionResult> EliminaTodaIncidencia(int id, int pregunta)
+        {
+            int excel = await iMuebles.EliminaTodaIncidencia(id, pregunta);
+            if (excel != -1)
+            {
+                return Ok(excel);
+            }
+            return BadRequest();
+        }
+
+        [Route("/muebles/totalIncidencia/{id?}/{pregunta?}")]
+        public async Task<IActionResult> IncidenciasTipo(int id, int pregunta)
+        {
+            int total = ((List<IncidenciasMuebles>)await iMuebles.GetIncidenciasPregunta(id, pregunta)).Count;
+            if (total != -1)
+            {
+                return Ok(total);
             }
             return BadRequest();
         }

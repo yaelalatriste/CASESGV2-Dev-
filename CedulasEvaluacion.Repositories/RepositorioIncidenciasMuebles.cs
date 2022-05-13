@@ -82,8 +82,7 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
-        public async Task<int> IncidenciasMuebles(IncidenciasMuebles incidenciasMuebles)    
+        public async Task<int> IncidenciasMuebles(IncidenciasMuebles incidenciasMuebles)
         {
             int id = 0;
             try

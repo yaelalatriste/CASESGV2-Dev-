@@ -155,7 +155,7 @@
             </div>
         </div>
         <div class="row col-lg-12">
-            <div class="col-lg-5">
+            <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header bg-gray text-white">
                         <h4>Cédulas en Proceso de CAE</h4>
@@ -181,7 +181,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7">
+            <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header bg-gray text-white">
                         <h4>Cédulas en Proceso de Financieros</h4>
@@ -194,7 +194,7 @@
                                         <th></th>
                                         @foreach (var est in lestatus)
                                         {
-                                            if (est.Equals("En Trámite") || est.Equals("Trámite de Pago") || est.Equals("Enviada a DGPPT") || est.Equals("Pagado"))
+                                            if (est.Equals("En Trámite") || est.Equals("Trámite de Pago") || est.Equals("Enviada a DGPPT") || est.Equals("Pagada"))
                                             {
                                                 <th>@est</th>
                                             }

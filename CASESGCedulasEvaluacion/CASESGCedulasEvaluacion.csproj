@@ -95,6 +95,9 @@
     <None Update="Reports\CedulaAnalisis.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Reports\CedulaTraslado.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Reports\CedulaTransporte.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

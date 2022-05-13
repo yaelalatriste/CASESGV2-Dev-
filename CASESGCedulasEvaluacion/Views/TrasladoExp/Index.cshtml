@@ -86,7 +86,7 @@
                             }
                             @if (item.Estatus.Equals("Enviado a DAS") || item.Estatus.Equals("Autorizada") || item.Estatus.Equals("Rechazada"))
                             {
-                                <a href="/reporte/trasladoExp/@item.Id" class="text-center pdf ml-2">
+                                <a href="/cedula/trasladoExp/@item.ServicioId/@item.Id" class="text-center pdf ml-2">
                                     @if (item.Estatus.Equals("Autorizada"))
                                     {
                                         <i class="fal fa-file-pdf text-success"></i>

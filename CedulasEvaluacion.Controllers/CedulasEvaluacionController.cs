@@ -22,6 +22,7 @@ using CedulasEvaluacion.Entities.MAgua;
 using CedulasEvaluacion.Entities.MResiduos;
 using CedulasEvaluacion.Entities.MAnalisis;
 using CedulasEvaluacion.Entities.MTransporte;
+using CedulasEvaluacion.Entities.TrasladoExp;
 
 namespace CedulasEvaluacion.Controllers
 {
@@ -57,9 +58,10 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioIncidenciasResiduos iResiduos;
         private readonly IRepositorioIncidenciasAnalisis iAnalisis;
         private readonly IRepositorioIncidenciasTransporte iTransporte;
+        private readonly IRepositorioIncidenciasTraslado iTraslado;
 
         public CedulasEvaluacionController(IWebHostEnvironment vweb,IRepositorioReporteCedula vvReporte, IRepositorioIncidenciasMensajeria iiMensajeria,
-            IRepositorioIncidencias iiLimpieza, IRepositorioEvaluacionServicios viCedula, IRepositorioIncidenciasFumigacion iiFumigacion,
+            IRepositorioIncidencias iiLimpieza, IRepositorioEvaluacionServicios viCedula, IRepositorioIncidenciasFumigacion iiFumigacion, IRepositorioIncidenciasTraslado iiTraslado,
             IRepositorioIncidenciasMuebles IiMuebles, IRepositorioIncidenciasCelular iiCelular, IRepositorioIncidenciasAgua iiAgua, IRepositorioIncidenciasResiduos iiResiduos,
             IRepositorioIncidenciasConvencional iiConvencional, IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioIncidenciasTransporte iiTransporte)
         {
@@ -76,6 +78,7 @@ namespace CedulasEvaluacion.Controllers
             this.iResiduos = iiResiduos;
             this.iAnalisis = iiAnalisis;
             this.iTransporte= iiTransporte;
+            this.iTraslado= iiTraslado;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
 
@@ -448,6 +451,60 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaMuebles", cedulas));
+            var pdf = local.Render("PDF");
+            return File(pdf, "application/pdf");
+        }
+
+        [Route("/cedula/trasladoExp/{servicio}/{id?}")]
+        public async Task<IActionResult> GeneraCedulaTraslado(int servicio, int id)
+        {
+            var incidencias = new List<IncidenciasTraslado>();
+            LocalReport local = new LocalReport();
+            var path = Directory.GetCurrentDirectory() + "\\Reports\\CedulaTraslado.rdlc";
+            local.ReportPath = path;
+            var cedulas = await vrCedula.getCedulaByServicio(servicio, id);
+            var respuestas = await vCedula.obtieneRespuestas(id);
+            for (int i = 0; i < respuestas.Count; i++)
+            {
+                if (i == 0)
+                {
+                    incidencias = await iTraslado.getIncidenciasByPregunta(id, (i + 1));
+                    local.DataSources.Add(new ReportDataSource("IncidenciasPregunta1", incidencias));
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal no se presentó el personal solicitado para prestar el servicio, a continuación se describe la incidencia: ") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal se presentó el personal solicitado para prestar el servicio.") });
+                    }
+                }
+                else if (i == 1)
+                {
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal no se presentó debidamente uniformado e identificado al prestar el servicio.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal se presentó debidamente uniformado e identificado al prestar el servicio.") });
+                    }
+                }
+                else if (i == 2)
+                {
+                    incidencias = await iTraslado.getIncidenciasByPregunta(id, (i + 1));
+                    local.DataSources.Add(new ReportDataSource("IncidenciasPregunta3", incidencias));
+                    if (respuestas[i].Respuesta == false)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal no se presentó debidamente uniformado e identificado al prestar el servicio.") });
+                    }
+                    else
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal se presentó debidamente uniformado e identificado al prestar el servicio.") });
+                    }
+                }
+            }
+            local.DataSources.Add(new ReportDataSource("CedulaTraslado", cedulas));
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }
