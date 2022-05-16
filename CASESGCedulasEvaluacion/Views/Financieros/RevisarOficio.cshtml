@@ -13,6 +13,7 @@
                 <td data-toggle="tooltip" title="Año del Oficio" data-placement="top"><strong>Año: </strong>@Model.Anio</td>
                 <td><strong data-toggle="tooltip" title="Servicio Evaluado" data-placement="top">Servicio: </strong>@Model.Servicio</td>
                 <td data-toggle="tooltip" title="Estatus del Oficio para Trámite" data-placement="top"><strong>Estatus: </strong>@Model.Estatus</td>
+                <td data-toggle="tooltip" title="Monto total del Oficio" data-placement="top"><strong>Monto total del Oficio: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.TotalOficio)</td>
             </tr>
         </table>
     </div>
@@ -91,7 +92,7 @@
             $("#tblOficio").DataTable({
                 paging: true,
                 bLengthChange: false,
-                pageLength: 10,
+                pageLength: 100,
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
                 },

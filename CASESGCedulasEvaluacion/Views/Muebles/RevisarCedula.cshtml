@@ -232,12 +232,12 @@
                 <div class="col-lg-12 h3 mt-4">
                     Equipo y Herramientas
                 </div>
-                @if (@Model.RespuestasEncuesta[1].Respuesta == false)
+                @if (@Model.RespuestasEncuesta[1].Respuesta == false && @Model.RespuestasEncuesta[1].Detalles != "N/A")
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">
+                                <p class="h3 text-justify text-danger">
                                     El prestador de servicios no cumplió con la maquinaria, equipo y herramientas necesarias para prestar el servicio, siendo acreedor a una penalización correspondiente.
                                 </p>
                             </div>
@@ -292,14 +292,14 @@
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">
-                                    El prestador de servicios no cumplió con la de transporte solicitada para prestar el servicio, siendo acreedor a una penalización correspondiente.
+                                <p class="h3 text-justify text-danger">
+                                    El prestador de servicios no cumplió con la unidad de transporte solicitada para prestar el servicio, siendo acreedor a una penalización correspondiente.
                                 </p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
                                     <div class="icon">
-                                        <i class="fas fa-check-circle text-success"></i>
+                                        <i class="fas fa-times-circle text-danger"></i>
                                     </div>
                                 </div>
                             </div>
@@ -307,7 +307,7 @@
                     </div>
                     <div class="row mt-4">
                         <div class="col-lg-12">
-                            <h5 class="text-success ml-4">
+                            <h5 class="text-danger ml-4">
                                 <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
                             </h5>
                         </div>
@@ -318,7 +318,7 @@
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">El prestador de servicios no cumplió con la de transporte solicitada para prestar el servicio, evitando la penalización correspondiente.</p>
+                                <p class="h3 text-justify text-success">El prestador de servicios cumplió con la de transporte solicitada para prestar el servicio, evitando la penalización correspondiente.</p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -350,8 +350,8 @@
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
                                 <p class="h3 text-justify text-danger">
-                                    El prestador de servicios no presentó el personal solicitado para prestar el servicio, ya que se solicitarón <strong>@pSolicitadas personas </strong>
-                                    y se presentarón <strong>@pBrindadas personas </strong>, siendo acreedor a una penalización.
+                                    El prestador de servicios no presentó el personal solicitado para prestar el servicio, ya que se solicitarón <strong>@pSolicitadas persona(s) </strong>
+                                    y se presentarón <strong>@pBrindadas persona(s)</strong>, siendo acreedor a una penalización.
                                 </p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
@@ -513,9 +513,9 @@
                                         {
                                             <td>Nota de Crédito</td>
                                         }
-                                        else if (entre.Tipo.Equals("Reporte(s)"))
+                                        else if (entre.Tipo.Equals("SEPLE"))
                                         {
-                                            <td>Reporte(s)</td>
+                                            <td>SEPLE</td>
                                         }
                                         else if (entre.Tipo.Equals("HojaEvidencia"))
                                         {
@@ -528,6 +528,10 @@
                                         else if (entre.Tipo.Equals("HojaCotizacion"))
                                         {
                                             <td>Hoja de Cotización</td>
+                                        }
+                                        else if (entre.Tipo.Equals("ListadoMuebles"))
+                                        {
+                                            <td>Listado de Muebles</td>
                                         }
                                         else if (entre.Tipo.Equals("Memorandum"))
                                         {

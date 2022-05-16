@@ -94,7 +94,7 @@
                             }
                             @if (!item.Estatus.Equals("En Proceso"))
                             {
-                                <a href="/cedula/residuos/@item.ServicioId/@item.Id" target="_blank" class="text-center pdf ml-2" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
                                     @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
                                     {
                                         <i class="fal fa-file-pdf text-success"></i>
@@ -132,6 +132,24 @@
                 },
             });
 
+            $('.btn_pdf').click(function () {
+                let id = $(this).data('id');
+                let servicio = $(this).data('servicio');
+                let estatus = $(this).data('estatus');
+                if (estatus == 'Autorizada') {
+                    Swal.fire({
+                        'icon': 'info',
+                        'title': 'Servicio de RPBI',
+                        'html': '<p style="text-align: justify">La cédula de evaluación ya fue autorizada, no olvide firmarla electrónicamente y ' +
+                            'posteriormente <strong>subirla en el sistema CASESGV2 en el apartado de "Seguimiento a la Cédula"</strong>, si tiene alguna duda por favor' +
+                            'comunicate a la ext. 2574 o 2635. </p>'
+                    }).then(function () {
+                        window.open('/cedula/residuos/' + servicio + '/' + id, '_blank');
+                    });
+                } else {
+                    window.open('/cedula/residuos/' + servicio + '/' + id, '_blank');
+                }
+            });
 
         });
     </script>

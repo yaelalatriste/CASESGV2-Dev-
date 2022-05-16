@@ -43,7 +43,7 @@ namespace CedulasEvaluacion.Controllers
         /*Metodo para obtener las inasistencias*/
         [HttpGet]
         [Route("/muebles/getEntregables/{id?}")]
-        public async Task<IActionResult> getEntregablesLimpieza(int id)
+        public async Task<IActionResult> getEntregablesMuebles(int id)
         {
             List<Entregables> entregables = null;
             entregables = await vEntregables.getEntregables(id);
@@ -69,6 +69,22 @@ namespace CedulasEvaluacion.Controllers
                     {
                         tipo = "Hoja de Evidencia";
                     }
+                    else if (entregable.Tipo.Trim().Equals("HojaCotizacion"))
+                    {
+                        tipo = "Hoja de Cotización";
+                    }
+                    else if (entregable.Tipo.Trim().Equals("ListadoMuebles"))
+                    {
+                        tipo = "Listado de Muebles";
+                    }
+                    else if (entregable.Tipo.Trim().Equals("Cedula_Firmada"))
+                    {
+                        tipo = "Cédula Firmada";
+                    }
+                    else if (entregable.Tipo.Trim().Equals("Memorandum"))
+                    {
+                        tipo = "Memorándum";
+                    }
                     else
                     {
                         tipo = entregable.Tipo;
@@ -82,7 +98,7 @@ namespace CedulasEvaluacion.Controllers
                         "<i class='fas fa-eye text-success'></i></a>" +
                         "<a href='#' class='text-center mr-2 update_files' data-id='" + entregable.Id + "' data-coments='" + entregable.Comentarios + "' data-file='" + entregable.NombreArchivo + "'" +
                             "data-tipo='" + entregable.Tipo + "'><i class='fas fa-edit text-primary'></i></a>" +
-                        "<a href='#' class='text-center mr-2 delete_files' data-id='" + entregable.Id + "' data-tipo='" + entregable.Tipo + "'><i class='fas fa-times text-danger'></i></a>" +
+                        "<a href='#' class='text-center mr-2 delete_files' data-id='" + entregable.Id + "' data-tipo='" + entregable.Tipo + "'data-tipor='" + tipo + "'><i class='fas fa-times text-danger'></i></a>" +
                     "</td>" +
                     "</tr>";
                 }

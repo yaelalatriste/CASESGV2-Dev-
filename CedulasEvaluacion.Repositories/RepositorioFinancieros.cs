@@ -452,10 +452,12 @@ namespace CedulasEvaluacion.Repositories
             {
                 Id = (int)reader["Id"],
                 Anio = (int)reader["Anio"],
-                ServicioId = (int)reader["ServicioId"],
+                ServicioId = reader["ServicioId"] != DBNull.Value ? (int)reader["ServicioId"]:0,
                 NumeroOficio = (int)reader["NumeroOficio"],
                 Servicio = reader["Nombre"].ToString(),
                 Estatus = reader["Estatus"].ToString(),
+                SubtotalOficio = reader["SubtotalOficio"] != DBNull.Value ? Convert.ToDecimal(reader["SubtotalOficio"]):0,
+                TotalOficio = reader["TotalOficio"] != DBNull.Value ? Convert.ToDecimal(reader["TotalOficio"]) : 0,
                 FechaPagado = reader["FechaPagado"] != DBNull.Value ? Convert.ToDateTime(reader["FechaPagado"]):Convert.ToDateTime("01/01/0001"),
             };
         }

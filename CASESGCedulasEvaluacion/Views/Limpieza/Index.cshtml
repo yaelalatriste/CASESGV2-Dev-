@@ -95,7 +95,7 @@
                             }
                             @if (!item.Estatus.Equals("En Proceso"))
                             {
-                                <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
                                     @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
                                     {
                                         <i class="fal fa-file-pdf text-success"></i>
@@ -138,17 +138,19 @@
             $('.btn_pdf').click(function () {
                 let id = $(this).data('id');
                 let estatus = $(this).data('estatus');
+                let servicio = $(this).data('servicio');
                 if (estatus == 'Autorizada') {
                     Swal.fire({
                         'icon': 'info',
                         'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
-                        'html': '<p style="text-align: justify">Tu cédula de evaluación ya fue autorizada, no olvides firmarla electrónicamente y posteriormente <strong>enviarla a la DAS a través del CASESG, de lo ' +
-                            'contrario no se recibirá la documentación en físico. <br><br>Para más información comunicate a la ext. 2574 o 2635. </strong></p>'
+                        'html': '<p style="text-align: justify">La cédula de evaluación ya fue autorizada, no olvide firmarla electrónicamente y ' +
+                            'posteriormente <strong>subirla en el sistema CASESGV2 en el apartado de "Seguimiento a la Cédula"</strong>, si tiene alguna duda por favor' +
+                            'comunicate a la ext. 2574 o 2635. </p>'
                     }).then(function () {
-                        window.open('/cedula/limpieza/' + id, '_blank');
+                        window.open('/cedula/limpieza/'+servicio+'/' + id, '_blank');
                     });
                 } else {
-                    window.open('/cedula/limpieza/' + id, '_blank');
+                    window.open('/cedula/limpieza/' + servicio + '/' + id, '_blank');
                 }
             });
 

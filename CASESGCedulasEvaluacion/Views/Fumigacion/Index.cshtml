@@ -139,19 +139,20 @@
 
             $('.btn_pdf').click(function () {
                 let id = $(this).data('id');
-                let estatus = $(this).data('estatus');
                 let servicio = $(this).data('servicio');
+                let estatus = $(this).data('estatus');
                 if (estatus == 'Autorizada') {
                     Swal.fire({
                         'icon': 'info',
                         'title': 'Servicio de Fumigación y Fauna Nociva',
-                        'html': '<p style="text-align: justify">Tu cédula de evaluación ya fue autorizada, no olvides firmarla electrónicamente y posteriormente <strong>enviarla a la DAS a través del CASESG, de lo ' +
-                            'contrario no se recibirá la documentación en físico. <br><br>Para más información comunicate a la ext. 2574 o 2635. </strong></p>'
+                        'html': '<p style="text-align: justify">La cédula de evaluación ya fue autorizada, no olvide firmarla electrónicamente y ' +
+                            'posteriormente <strong>subirla en el sistema CASESGV2 en el apartado de "Seguimiento a la Cédula"</strong>, si tiene alguna duda por favor' +
+                            'comunicate a la ext. 2574 o 2635. </p>'
                     }).then(function () {
-                        window.open("/cedula/fumigacion/" + servicio + "/" + id, '_blank');
+                        window.open('/cedula/fumigacion/' + servicio + '/' + id, '_blank');
                     });
                 } else {
-                    window.open("/cedula/fumigacion/" + servicio+ "/" + id, '_blank');
+                    window.open('/cedula/fumigacion/' + servicio + '/' + id, '_blank');
                 }
             });
 

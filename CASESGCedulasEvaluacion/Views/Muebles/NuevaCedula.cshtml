@@ -280,26 +280,26 @@
                 $("#select_direccionD").change(function () {
                     var destino = $(this).find(':selected').attr('data-direccion');
                     var inmueble = "Dirección de Destino"
-                    $("#divDDestino").html("<strong>" + inmueble + ": </strong> <p>" + $("#sl_destino").find(':selected').text() +"</p>"+"<strong>Dirección de Destino: </strong> <p>"+destino+"</p>");
+                    $("#divDDestino").html("<strong>" + inmueble + ": </strong> <p>" + $(this).find(':selected').text() +"</p>"+"<strong>Dirección de Destino: </strong> <p>"+destino+"</p>");
                     $("#divDestino").css("display", "block");
                 });
 
                 $("#select_direccionO").change(function () {
                     var origen = $(this).find(':selected').attr('data-direccion');
                     var inmueble = "Dirección de Origen";
-                    $("#divDOrigen").html("<strong>" + inmueble + ": </strong> <p>" + $("#sl_origen").find(':selected').text() + "</p>" + "<strong>Dirección de Origen: </strong> <p>" + origen + "</p>");
+                    $("#divDOrigen").html("<strong>" + inmueble + ": </strong> <p>" + $(this).find(':selected').text() + "</p>" + "<strong>Dirección de Origen: </strong> <p>" + origen + "</p>");
                 });
 
                  $("#direccionOrigen").change(function () {
                      var origen = $(this).val();
                     var inmueble = "Dirección de Origen";
-                     $("#divDOrigen").html("<strong>" + inmueble + ": </strong> <p>" + $("#sl_origen").find(':selected').text() + "</p>" + "<strong>Dirección de Origen: </strong> <p>" + origen + "</p>");
+                     $("#divDOrigen").html("<strong>" + inmueble + ": </strong> <p>" + $("#nombreOrigen").val() + "</p>" + "<strong>Dirección de Origen: </strong> <p>" + origen + "</p>");
                 });
 
                  $("#direccionDestino").change(function () {
                     var destino = $(this).val();
                     var inmueble = "Dirección Destino";
-                     $("#divDDestino").html("<strong>" + inmueble + ": </strong> <p>" + $("#sl_destino").find(':selected').text() + "</p>" + "<strong>Dirección de Destino: </strong> <p>" + destino + "</p>");
+                     $("#divDDestino").html("<strong>" + inmueble + ": </strong> <p>" + $("#nombreDestino").val() + "</p>" + "<strong>Dirección de Destino: </strong> <p>" + destino + "</p>");
                 });
 
                 $(".nuevo_origen").change(function(){
@@ -526,6 +526,16 @@
                     return false;
                 }
 
+                if (mes == "") {
+                    Swal.fire({
+                        'icon': "error",
+                        'title': 'Servicio de Transportación de Bienes',
+                        'html': 'Por favor seleccione el mes correspondiente.'
+                    });
+
+                    return false;
+                }
+
                 if ((inmuebleOrigen == null && origen == 1) || (inmuebleOrigen == "" && origen == 1))
                 {
                     Swal.fire({
@@ -588,14 +598,14 @@
                     }
                 }
 
-                if (mes == "") {
-                    Swal.fire({
-                        'icon': "error",
-                        'title': 'Servicio de Transportación de Bienes',
-                        'html': 'Por favor seleccione el mes correspondiente.'
-                    });
+                if (nuevoO == 1) {
+                    if (estadosD.indexOf("CDMX") || estadosD.indexOf("Ciudad de México")) {
 
-                    return false;
+                    }
+                } else if (nuevoD == 1) {
+                    if (estadosD.indexOf("CDMX") || estadosD.indexOf("Ciudad de México")) {
+
+                    }
                 }
 
                 return true;

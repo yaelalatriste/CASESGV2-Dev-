@@ -245,18 +245,22 @@
                                         }
                                         else if (entre.Tipo.Equals("Memorandum"))
                                         {
-                                            memo = true;
                                             tipo = "Memorándum";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
-                                        else if (entre.Tipo.Equals("AlcanceMO"))
+                                        else if (entre.Tipo.Trim().Equals("HojaEvidencia"))
                                         {
-                                            tipo = "Alcance a Memorándum/Oficio";
+                                            tipo = "Hoja de Evidencia";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
-                                        else if (entre.Tipo.Equals("AlcanceAER"))
+                                        else if (entre.Tipo.Trim().Equals("HojaCotizacion"))
                                         {
-                                            tipo = "Alcance a Acta E-R";
+                                            tipo = "Hoja de Cotización";
+                                            <td>@Html.DisplayName(tipo)</td>
+                                        }
+                                        else if (entre.Tipo.Trim().Equals("ListadoMuebles"))
+                                        {
+                                            tipo = "Listado de Muebles";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
                                         else

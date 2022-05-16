@@ -156,14 +156,14 @@ namespace CedulasEvaluacion.Controllers
             return File(pdf,"application/pdf");
         }
 
-        [Route("/cedula/limpieza/{id?}")]
-        public async Task<IActionResult> GeneraCedulaLimpieza(int id)
+        [Route("/cedula/limpieza/{servicio}/{id?}")]
+        public async Task<IActionResult> GeneraCedulaLimpieza(int servicio, int id)
         {
             var incidencias = new List<VIncidenciasLimpieza>();
             LocalReport local = new LocalReport();
             var path = Directory.GetCurrentDirectory() + "\\Reports\\CedulaLimpieza.rdlc";
             local.ReportPath = path;
-            var cedulas = await vrCedula.getReporteLimpieza(id);
+            var cedulas = await vrCedula.getCedulaByServicio(servicio, id);
             var respuestas = await vCedula.obtieneRespuestas(id);
             for (int i = 0; i < respuestas.Count; i++)
             {
@@ -176,13 +176,13 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentaron Incidencias en el inmueble, las cuales se describen a continuación: ") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentaron incidencias en el inmueble, las cuales se describen a continuación: ") });
                         incidencias = await iLimpieza.getIncidencias(id);
                         local.DataSources.Add(new ReportDataSource("IncidenciasPO", incidencias));
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón incidencias en el inmueble en el mes de evaluación.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentaron incidencias en el inmueble en el mes de evaluación.") });
                         local.DataSources.Add(new ReportDataSource ("IncidenciasPO", incidencias));
                     }
                 }
@@ -207,7 +207,7 @@ namespace CedulasEvaluacion.Controllers
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón incidencias en el inmueble en el mes de evaluación.")});
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentaron incidencias en el inmueble en el mes de evaluación.")});
                         local.DataSources.Add(new ReportDataSource("IncidenciasEquipo", incidencias));
                     }
                 }
@@ -404,7 +404,7 @@ namespace CedulasEvaluacion.Controllers
                 {
                     incidencias = await iMuebles.GetIncidenciasPregunta(id, (i + 1));
                     local.DataSources.Add(new ReportDataSource("IncidenciasPregunta2", incidencias));
-                    if (respuestas[i].Respuesta == false)
+                    if (respuestas[i].Respuesta == false && respuestas[i].Detalles != "N/A")
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con la maquinaria, equipo y herramientas para la prestación del servicio.") });
                         
@@ -429,7 +429,8 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con el personal necesario para realizar la prestación del servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con el personal necesario para realizar la prestación del servicio, se solicitaron "+
+                            respuestas[i].Detalles.Split("|")[0]+" persona(s) y se nos brindaron "+respuestas[i].Detalles.Split("|")[1]+" persona(s) para efectuar el servicio.") });
                     }
                     else
                     {

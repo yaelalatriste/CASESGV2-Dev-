@@ -979,6 +979,7 @@
                         $('#fecha_llegada').val(fechas[1]);
                         $('#diviPregunta1').css('display', 'block');
                     } else if (i == 3 && respuestas[i].respuesta == false) {
+                        $('#diviPregunta4').css('display', 'block');
                         var personal = respuestas[i].detalles.split("|");
                         if (personal[0] == "" && personal[1] == "") {
                             $('.personalSolicitado').val(0);
@@ -1020,7 +1021,7 @@
                                     'icon': 'warning',
                                     'title': 'Servicio de Transportación de Bienes Muebles',
                                     'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" o de "NO" a "N/A" ' +
-                                        '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
+                                        '<strong>se borrarán todas las incidencias. ¿Desea continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
                                     'confirmButtonText': 'Si, deseo continuar',
@@ -1045,7 +1046,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Transportación de Bienes Muebles',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta2"][value="true"]').prop('checked', true);
                                                         $('#diviPregunta2').css('display', 'none');
@@ -1076,6 +1077,8 @@
                 $('.pregunta4').change(function () {
                     let tf = $(this).val();
                     if (tf == "false") {
+                        $('.personalSolicitado').val(0);
+                        $('.personalBrindado').val(0);
                         $('#diviPregunta4').css('display', 'block');
                     } else if (tf == "true" || tf == "N/A") {
                         $(".personalSolicitado").val("");
@@ -1096,7 +1099,7 @@
                                     'icon': 'warning',
                                     'title': 'Servicio de Transportación de Bienes Muebles',
                                     'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
-                                        '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
+                                        '<strong>se borrarán todas las incidencias. ¿Desea continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
                                     'confirmButtonText': 'Si, deseo continuar',
@@ -1121,7 +1124,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Transportación de Bienes Muebles',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta5"][value="true"]').prop('checked', true);
                                                         $('#diviPregunta5').css('display', 'none');
@@ -1218,7 +1221,7 @@
                         cabecera = "<tr>" +
                             "<th>#</th>" +
                             "<th>Tipo</th>" +
-                            "<th>Fecha y Hora de Solicitud</th>" +
+                            "<th>Fecha de la Solicitud</th>" +
                             "<th>Comentarios</th>" +
                             "<th>Acciones</th>" +
                             "</tr>";
@@ -1266,11 +1269,11 @@
                         $('#error_fechaRespuesta').css('display', 'block');
                     }
 
-                    if (fechaSolicitud > fechaRespuesta && pregunta == 5) {
+                    if (fechaSolicitud >= fechaRespuesta && pregunta == 5) {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de Transportación de Bienes Muebles',
-                            'html': 'La <strong>Fecha y Hora de Solicitud</strong> no puede ser mayor a la <strong>Fecha y Hora de Respuesta</strong>'
+                            'html': 'La <strong>Fecha y Hora de Solicitud</strong> no puede ser mayor o igual a la <strong>Fecha y Hora de Respuesta</strong>'
                         });
                         return false;
                     }
@@ -1681,11 +1684,11 @@
                 /*Elimina entregables*/
                    $(document).on("click", ".delete_files", function () {
                         let id = $(this).data('id');
-                        let tipo = $(this).data('tipo');
+                        let tipo = $(this).data('tipor');
                         Swal.fire({
                             'icon': 'warning',
                             'title': 'Servicio de Transportación de Bienes Muebles',
-                            'text': '¿Está seguro de eliminar el archivo relacionado a "'+tipo+'"?',
+                            'html': '¿Está seguro de eliminar el archivo: <b>"'+tipo+'"</b>?',
                             'confirmButtonColor': '#3085d6',
                             'cancelButtonColor': '#d33',
                             'confirmButtonText': 'Si, Eliminar Archivo',
@@ -1985,9 +1988,15 @@
                             break;
                         }else if (i == 0 && $("#fecha_solicitada").val() == "" && $("#fecha_llegada").val() == "") {
                             break;
-                        } else if (i == 0 && $("#fecha_solicitada").val() > $("#fecha_llegada").val()) {
+                        } else if (i == 0 && $("#fecha_solicitada").val() > $("#fecha_llegada").val() && respuesta == "false") {
+                            break;
+                        } else if (i == 0 && respuesta == "true" && $("#fecha_solicitada").val() != $("#fecha_llegada").val()) {
                             break;
                         } else if (i == 3 && $(".personalSolicitado").val() == "" && $(".personalBrindado").val() == "" && respuesta == "false") {
+                            break;
+                        } else if (i == 3 && $(".personalSolicitado").val() == 0 && respuesta == "false") {
+                            break;
+                        } else if (i == 3 && $(".personalSolicitado").val() == $(".personalBrindado").val()  && respuesta == "false") {
                             break;
                         } else if (i == 3 && $(".personalSolicitado").val() < $(".personalBrindado").val() && respuesta == "false"){
                             break;
@@ -2006,14 +2015,21 @@
                             'html': 'No ha contestado la <strong>Pregunta ' + (i + 1) + '</strong>'
                         });
                     } else if (i == 0) {
-                        if ($("#fecha_solicitada").val() > $("#fecha_llegada").val()) {
+                        if ($("#fecha_solicitada").val() >= $("#fecha_llegada").val() && respuesta == false) {
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Servicio de Transportación de Bienes Muebles',
-                                'html': 'La <strong>Fecha y Hora de Solicitud</strong> no puede ser mayor a la <strong>Fecha y Hora de Llegada</strong> en ' +
+                                'html': 'La <strong>Fecha y Hora de Solicitud</strong> no puede ser mayor o igual a la <strong>Fecha y Hora de Llegada</strong> en ' +
                                     'la <strong>Pregunta ' + (i + 1) + '</strong>'
                             });
-                        } else {
+                        } else if (respuesta == "true" && $("#fecha_solicitada").val() != $("#fecha_llegada").val()) {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Servicio de Transportación de Bienes Muebles',
+                                'html': 'La <strong>Fecha y Hora de Solicitud</strong> tiene que ser igual a la <strong>Fecha y Hora de Llegada</strong> en ' +
+                                    'la <strong>Pregunta ' + (i + 1) + '</strong>'
+                            });
+                        } else if(respuesta == "" || respuesta == null) {
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Servicio de Transportación de Bienes Muebles',
@@ -2025,13 +2041,25 @@
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Servicio de Transportación de Bienes Muebles',
-                                'html': 'El <strong>Personal Proporcionado</strong> no puede ser mayor al <strong>Personal Solicitado</strong> en la <strong>Pregunta ' + (i + 1) + '</strong>'
+                                'html': 'El <strong>Personal Proporcionado</strong> no puede ser mayor al <strong>Personal Proporcionado</strong> en la <strong>Pregunta ' + (i + 1) + '</strong>'
+                            });
+                        } else if ($(".personalBrindado").val() == 0 && $(".personalSolicitado").val() == 0) {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Servicio de Transportación de Bienes Muebles',
+                                'html': 'El <strong>Personal Proporcionado</strong> y el <strong>Personal Proporcionado</strong> no pueden ser igual a <b>cero</b> en la <strong>Pregunta ' + (i + 1) + '</strong>'
+                            });
+                        } else if ($(".personalBrindado").val() == $(".personalSolicitado").val() && respuesta == "false") {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Servicio de Transportación de Bienes Muebles',
+                                'html': 'El <strong>Personal Solicitado</strong> y el <strong>Personal Proporcionado</strong> no pueden ser iguales si ha seleccionado que <strong>no cumplió con el personal solicitado</strong>'
                             });
                         } else {
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Servicio de Transportación de Bienes Muebles',
-                                'html': 'No ha capturado el personal solicitado y requerido en la <strong>Pregunta ' + (i + 1) + '</strong>'
+                                'html': 'No ha capturado el <strong>Personal Solicitado</strong> y el <strong>Personal Proporcionado</strong> en la <strong>Pregunta ' + (i + 1) + '</strong>'
                             });
                         }
                     } else if ((i == 4 || i == 1) && isContinue == false) {
