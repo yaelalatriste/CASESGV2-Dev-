@@ -82,14 +82,14 @@ namespace CedulasEvaluacion.Controllers
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
 
-        [Route("/cedula/mensajeria/{id?}")]
-        public async Task<IActionResult> GeneraCedula(int id)
+        [Route("/cedula/mensajeria/{servicio}/{id?}")]
+        public async Task<IActionResult> GeneraCedulaMensajeria(int servicio, int id)
         {
             var incidencias = new List<IncidenciasMensajeria>();
             LocalReport local = new LocalReport();
             var path = Directory.GetCurrentDirectory()+ "\\Reports\\CedulaMensajeria.rdlc";
             local.ReportPath = path;
-            var cedulas = await vrCedula.getReporteMensajeria(id);
+            var cedulas = await vrCedula.getCedulaByServicio(servicio, id);
             var respuestas = await vCedula.obtieneRespuestas(id);
             for (int i = 0; i < respuestas.Count; i++)
             {
@@ -99,6 +99,7 @@ namespace CedulasEvaluacion.Controllers
                     tiposIncidencia[i] = tiposIncidencia[i] == "Mal Estado" ? "MalEstado" : tiposIncidencia[i];
                     local.DataSources.Add(new ReportDataSource("Incidencias" + tiposIncidencia[i], incidencias));
                 }
+
                 if (i < 2)
                 {
                     if (respuestas[i].Respuesta == false)
@@ -174,16 +175,15 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else if (i == 1)
                 {
+                    incidencias = await iLimpieza.getIncidencias(id);
+                    local.DataSources.Add(new ReportDataSource("IncidenciasPO", incidencias));
                     if (respuestas[i].Respuesta == false)
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentaron incidencias en el inmueble, las cuales se describen a continuación: ") });
-                        incidencias = await iLimpieza.getIncidencias(id);
-                        local.DataSources.Add(new ReportDataSource("IncidenciasPO", incidencias));
                     }
                     else
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentaron incidencias en el inmueble en el mes de evaluación.") });
-                        local.DataSources.Add(new ReportDataSource ("IncidenciasPO", incidencias));
                     }
                 }
                 else if (i == 2)
@@ -199,16 +199,15 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else if (i == 3)
                 {
+                    incidencias = await iLimpieza.getIncidenciasEquipo(id);
+                    local.DataSources.Add(new ReportDataSource("IncidenciasEquipo", incidencias));
                     if (respuestas[i].Respuesta == false)
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentaron incidencias en el inmueble, las cuales se describen a continuación: ")});
-                        incidencias = await iLimpieza.getIncidenciasEquipo(id);
-                        local.DataSources.Add(new ReportDataSource("IncidenciasEquipo", incidencias));
                     }
                     else
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentaron incidencias en el inmueble en el mes de evaluación.")});
-                        local.DataSources.Add(new ReportDataSource("IncidenciasEquipo", incidencias));
                     }
                 }
                 else if (i == 4)
@@ -582,11 +581,11 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else if (i == 1 || i == 2 || i == 3)
                 {
+                    incidencias = await iAgua.GetIncidenciasPregunta(id, respuestas[i].Pregunta);
                     local.DataSources.Add(new ReportDataSource("Incidencias" + incidenciasAgua[i], incidencias));
                     if (respuestas[i].Respuesta == false)
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + respuestas[i].Pregunta, "Se presentaron Incidencias en el inmueble, las cuales se describen a continuación: ") });
-                        incidencias = await iAgua.GetIncidenciasPregunta(id, respuestas[i].Pregunta);
                     }
                     else
                     {
@@ -672,11 +671,11 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else if (i == 3)
                 {
+                    incidencias = await iResiduos.getIncidenciasTipo(id, "ManifiestoEntrega");
                     local.DataSources.Add(new ReportDataSource("IncidenciasManifiesto", incidencias));
                     if (respuestas[i].Respuesta == false)
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Faltaron datos en el manifiesto de entrega, los cuales se describen a continuación: ") });
-                        incidencias = await iResiduos.getIncidenciasTipo(id, "ManifiestoEntrega");
                     }
                     else
                     {
@@ -685,11 +684,11 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else if (i == 4)
                 {
+                    incidencias = await iResiduos.getIncidencias(id);
                     local.DataSources.Add(new ReportDataSource("IncidenciasResiduos", incidencias));
                     if (respuestas[i].Respuesta == false)
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentarón incidencias en el mes, las cuales se describen a continuación: ") });
-                        incidencias = await iResiduos.getIncidencias(id);
                     }
                     else
                     {

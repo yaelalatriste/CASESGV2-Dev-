@@ -631,7 +631,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Tipo.Value</Value>
+                                  <Value>=Replace(Fields!Tipo.Value, "ManifiestoEntrega", "Manifiesto de Entrega")</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -664,7 +664,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Comentarios.Value</Value>
+                                  <Value>=Replace(Fields!Comentarios.Value, "|", System.Environment.NewLine)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -777,7 +777,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>16.88718cm</Top>
+            <Top>16.37918cm</Top>
             <Left>1.04946cm</Left>
             <Height>1.43058cm</Height>
             <Width>5.62214cm</Width>
@@ -842,7 +842,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>16.87642cm</Top>
+            <Top>16.36842cm</Top>
             <Left>6.62453cm</Left>
             <Height>1.43058cm</Height>
             <Width>5.62214cm</Width>
@@ -907,7 +907,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>16.88819cm</Top>
+            <Top>16.38019cm</Top>
             <Left>12.56842cm</Left>
             <Height>1.43058cm</Height>
             <Width>5.62214cm</Width>
@@ -2208,7 +2208,6 @@
                           </Style>
                         </Textbox>
                         <ColSpan>4</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -2234,7 +2233,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>CedulaResiduos</DataSetName>
-            <Top>17.43018cm</Top>
+            <Top>16.92218cm</Top>
             <Left>1.98148cm</Left>
             <Height>0.6cm</Height>
             <Width>16.10474cm</Width>
@@ -2246,7 +2245,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>7.3094in</Height>
+        <Height>7.13232in</Height>
         <Style />
       </Body>
       <Width>7.77728in</Width>

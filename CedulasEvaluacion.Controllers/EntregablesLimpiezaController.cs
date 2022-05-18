@@ -90,6 +90,51 @@ namespace CedulasEvaluacion.Controllers
             return NoContent();
         }
 
+        [HttpGet]
+        [Route("/limpieza/getAlcances/{id?}")]
+        public async Task<IActionResult> getAlcancesEntregables(int id)
+        {
+            List<Entregables> entregables = null;
+            entregables = await vEntregables.GetAlcancesEntregable(id);
+            string table = "";
+            int i = 0;
+            string tipo = "";
+            if (entregables != null)
+            {
+                foreach (var entregable in entregables)
+                {
+                    i++;
+                    if (entregable.Tipo.Equals("AlcanceMO"))
+                    {
+                        tipo = "Alcance a Memorandum";
+                    }
+                    else if (entregable.Tipo.Equals("AlcanceAER"))
+                    {
+                        tipo = "Alcance a Acta Entrega Recepción";
+                    }
+                    else
+                    {
+                        tipo = entregable.Tipo;
+                    }
+                    table += "<tr>" +
+                    "<td>" + i + "</td>" +
+                    "<td>" + tipo + "</td>" +
+                    "<td>" + entregable.NombreArchivo + "</td>" +
+                    "<td>" + entregable.FechaCreacion.ToString("dd/MM/yyyy") + "</td>" +
+                    "<td>" + (entregable.FechaActualizacion.ToString("dd/MM/yyyy").Equals("01/01/1990") ? "-":entregable.FechaActualizacion.ToString("dd/MM/yyyy")) + "</td>" +
+                    "<td>" +
+                        "<a href='#' class='text-center mr-2 view_alcance' data-id='" + entregable.Id + "' data-file='" + entregable.NombreArchivo + "' data-tipo ='" + tipo + "'>" +
+                        "<i class='fas fa-eye text-success'></i></a>" +
+                        "<a href='#' class='text-center mr-2 update_alcance' data-id='" + entregable.Id + "' data-coments='" + entregable.Comentarios + "' data-file='" + entregable.NombreArchivo + "'" +
+                            "data-tipo='" + entregable.Tipo + "'><i class='fas fa-edit text-primary'></i></a>" +
+                    "</td>" +
+                    "</tr>";
+                }
+                return Ok(table);
+            }
+            return NoContent();
+        }
+
         //obtiene el listado de entregables  
         [HttpGet]
         [Route("/cedLimpieza/getListadoEntregablesLimpieza/{id?}")]

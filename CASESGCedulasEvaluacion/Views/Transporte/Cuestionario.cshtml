@@ -5,7 +5,7 @@
 
 <div class="container-fluid" id="limpieza">
     <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Facturas" data-placement="top"><i class="fal fa-file-invoice"></i></a>
-    <a href="/transporte/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Transporte" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/transporte/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Transporte" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
             <tr>
@@ -417,8 +417,6 @@
                             <option value="Factura">Factura</option>
                             <option value="SAT">Validación del SAT</option>
                             <option value="NotaCredito">Nota de Crédito</option>
-                            <option value="Reporte(s)">Reporte(s) de Guías</option>
-                            <option value="Escritos">Escrito(s) ante Estafeta</option>
                         </select>
                         <div class="col-sm-12" id="error_tipoEntre">
                             <small id="dateHelp" class="text-danger">
@@ -1349,7 +1347,7 @@
                         }
 
                         formData.append("Id", id);
-                        formData.append("CedulaEntregableId", model.id);
+                        formData.append("CedulaEvaluacionId", model.id);
                         formData.append("Archivo", file);
                         formData.append("Folio", folio);
                         formData.append("Tipo", tipo);

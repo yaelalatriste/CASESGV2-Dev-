@@ -1539,7 +1539,7 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("|Estado|", "en " + cedula.Estado, false, true);
             }
 
-            document.Replace("|InmuebleP|", cedula.InmuebleC, false, true);
+            document.Replace("|InmuebleP|", cedula.Inmueble, false, true);
             document.Replace("|DomicilioInmueble|", cedula.Direccion, false, true);
             document.Replace("|ResponsableInmueble|", cedula.Administrador, false, true);
             document.Replace("|Reviso|", cedula.Reviso, false, true);

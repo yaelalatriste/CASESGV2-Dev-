@@ -95,6 +95,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.BigInt)).Direction = ParameterDirection.Output;
                         cmd.Parameters.Add(new SqlParameter("@cedulaResiduos", incidenciasResiduos.CedulaResiduosId));
                         cmd.Parameters.Add(new SqlParameter("@tipo", incidenciasResiduos.Tipo));
+                        cmd.Parameters.Add(new SqlParameter("@pregunta", incidenciasResiduos.Pregunta));
                         cmd.Parameters.Add(new SqlParameter("@comentarios", incidenciasResiduos.Comentarios));
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();

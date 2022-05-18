@@ -1,6 +1,7 @@
 ﻿@* Principal de Residuos *@
 @model IEnumerable<CedulasEvaluacion.Entities.Vistas.VCedulas>
 @{
+    var i = 0;
     ViewData["Title"] = "Servicio de Recolección y Disposición Final de Residuos Biológico-Infecciosos";
 }
 <div class="row" id="Prrueba">
@@ -21,9 +22,10 @@
             <tbody>
                 @foreach (var item in Model)
                 {
+                    i++;
                     <tr>
 
-                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                        <td>@i</td>
                        @if (item.Estatus.Equals("Enviado a DAS"))
                         {
                             <td class="text-enviadoDAS" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
@@ -141,8 +143,8 @@
                         'icon': 'info',
                         'title': 'Servicio de RPBI',
                         'html': '<p style="text-align: justify">La cédula de evaluación ya fue autorizada, no olvide firmarla electrónicamente y ' +
-                            'posteriormente <strong>subirla en el sistema CASESGV2 en el apartado de "Seguimiento a la Cédula"</strong>, si tiene alguna duda por favor' +
-                            'comunicate a la ext. 2574 o 2635. </p>'
+                            'posteriormente <strong>subirla en el sistema CASESGV2 en el apartado de "Seguimiento a la Cédula"</strong>, si tiene alguna duda por favor ' +
+                            'comuníquese a la ext. 2574 o 2635. </p>'
                     }).then(function () {
                         window.open('/cedula/residuos/' + servicio + '/' + id, '_blank');
                     });

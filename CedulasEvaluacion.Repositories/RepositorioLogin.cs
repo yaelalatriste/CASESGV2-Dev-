@@ -284,7 +284,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 Estatus = reader["Estatus"].ToString(),
                 Servicio = reader["Servicio"].ToString(),
-                Fondo = reader["Fondo"].ToString(),
+                Fondo = reader["Fondo"] != DBNull.Value ? reader["Fondo"].ToString():"",
                 Icono = reader["Icono"].ToString(),
                 Total = (int)reader["Total"]
             };

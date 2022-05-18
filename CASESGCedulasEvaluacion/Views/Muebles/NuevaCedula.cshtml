@@ -312,7 +312,7 @@
                             response = response.data;
                             console.log(response);
                             response.forEach(function (eddos) {
-                                estados += "<option value=" + eddos.estado + ">" + eddos.estado+ "</option>"
+                                estados += "<option value='" + eddos.estado + "'>" + eddos.estado+ "</option>"
                             });
                             $("#divCapturaOrigen").css("display", "block");
                             $("#sl_estadosOrigen").html(estados);
@@ -325,7 +325,7 @@
                             response = response.data;
                             console.log(response);
                             response.forEach(function (dir) {
-                                direcciones += "<option value=" + dir.id + ">" + dir.nombre + "</option>"
+                                direcciones += "<option value='" + dir.id + "'>" + dir.nombre + "</option>"
                             });
                             $("#select_direccionO").html(direcciones);
                         });
@@ -386,7 +386,7 @@
                             response = response.data;
                             console.log(response);
                             response.forEach(function (eddos) {
-                                estados += "<option value=" + eddos.estado + ">" + eddos.estado+ "</option>"
+                                estados += "<option value='" + eddos.estado + "'>" + eddos.estado+ "</option>"
                             });
                             $("#divCapturaDestino").css("display", "block");
                             $("#sl_estadosDestino").html(estados);
@@ -398,7 +398,7 @@
                         axios.get('/inmuebles/getDireccionesBM').then(response => {
                             response = response.data;
                             response.forEach(function (dir) {
-                                direcciones += "<option value=" + dir.id + ">" + dir.nombre + "</option>"
+                                direcciones += "<option value='" + dir.id + "'>" + dir.nombre + "</option>"
                             });
                             $("#select_direccionD").html(direcciones);
                         });
@@ -453,6 +453,20 @@
                 var estadosO = $('#sl_estadosOrigen').val();
 
                 if (isContinue == true) {
+
+                    /*Validacion de estados*/
+                    if (nOrigen == true && nDestino == true) {
+                        //validamos que en el origen sea CDMX
+                        if (estadosO != "Ciudad de México" && estadosD != "Ciudad de México") {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Servicio de Bienes Muebles',
+                                'html': 'El estado de origen o destino de la cédula debe de ser <b>Ciudad de México</b>.'
+                            });
+                            return false;
+                        }
+                    }
+
                     if (origen == 1) {
                         inmuebleOrigen = $('#select_inmuebleOrigen').val()
                     } else if (nOrigen == true) {
@@ -595,16 +609,6 @@
                         });
 
                         return false;
-                    }
-                }
-
-                if (nuevoO == 1) {
-                    if (estadosD.indexOf("CDMX") || estadosD.indexOf("Ciudad de México")) {
-
-                    }
-                } else if (nuevoD == 1) {
-                    if (estadosD.indexOf("CDMX") || estadosD.indexOf("Ciudad de México")) {
-
                     }
                 }
 

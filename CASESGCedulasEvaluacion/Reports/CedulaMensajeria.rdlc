@@ -2111,7 +2111,7 @@
             <RepeatColumnHeaders>true</RepeatColumnHeaders>
             <RepeatRowHeaders>true</RepeatRowHeaders>
             <KeepTogether>true</KeepTogether>
-            <DataSetName>IncidenciasExtraviadas</DataSetName>
+            <DataSetName>IncidenciasMalEstado</DataSetName>
             <Top>15.357cm</Top>
             <Left>1.77087cm</Left>
             <Height>1.2cm</Height>
@@ -2163,7 +2163,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>4.- Se presentaron paquetes extraviados</Value>
+                    <Value>4.- Se presentaron paquetes mal estado</Value>
                     <Style>
                       <FontWeight>Bold</FontWeight>
                     </Style>
@@ -2445,7 +2445,7 @@
             <RepeatColumnHeaders>true</RepeatColumnHeaders>
             <RepeatRowHeaders>true</RepeatRowHeaders>
             <KeepTogether>true</KeepTogether>
-            <DataSetName>IncidenciasMalEstado</DataSetName>
+            <DataSetName>IncidenciasExtraviadas</DataSetName>
             <Top>17.82453cm</Top>
             <Left>1.73912cm</Left>
             <Height>1.2cm</Height>
@@ -2497,7 +2497,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>5.- Se presentaron paquetes en mal estado</Value>
+                    <Value>5.- Se presentaron paquetes en extraviados</Value>
                     <Style>
                       <FontWeight>Bold</FontWeight>
                     </Style>
@@ -3169,7 +3169,6 @@
                           </Style>
                         </Textbox>
                         <ColSpan>4</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />

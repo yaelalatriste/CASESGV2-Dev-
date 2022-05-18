@@ -311,6 +311,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="id_manifiesto" />
+                <input type="hidden" id="pregunta" />
                 <p>Por favor marque los datos que NO contiene el Manifiesto de Entrega</p>
                 <div class="row col-lg-12">
                     <div class="col-lg-4 mt-3" style="text-align: justify">
@@ -401,6 +402,7 @@
                     <div class="col-lg-12">
                         <div class="form-row">
                             <input type="hidden" id="incidenciaIdPregunta5" />
+                            <input type="hidden" id="pregunta" />
                             <div class="form-group col-md-4">
                                 <label for="tipoIncidencia">Tipo: </label>
                                 <select id="tipo_incidencia" class="form-control">
@@ -960,10 +962,7 @@
                                         'title': 'Servicio de RPBI',
                                         'html': 'La incidencia fue eliminada con éxito.',
                                     }).then(function () {
-                                        axios.get('/residuos/getIncidenciasPregunta4/' + model.id + "/ManifiestoEntrega").then(response => {
-                                            $("#bodyPregunta4").html(response.data);
-                                            $("#addPregunta4").css('display','block');
-                                        });
+                                        window.location.reload();
                                     });
                                 }
                             }).catch(error => {
@@ -1000,7 +999,7 @@
                             guardaCedula();
                         } else {
                             axios.post('/residuos/incidencia', {
-                                CedulaResiduosId: model.id, Tipo: "ManifiestoEntrega", Comentarios: coments
+                                CedulaResiduosId: model.id, Tipo: "ManifiestoEntrega", Comentarios: coments, Pregunta: parseInt(4)
                             }).then(res => {
                                 Swal.fire({
                                     'icon': 'success',
@@ -1141,7 +1140,7 @@
                             });
                         } else {
                             axios.post('/residuos/incidencia', {
-                                CedulaResiduosId: model.id, Tipo: tipo, Comentarios: comentarios
+                                CedulaResiduosId: model.id, Tipo: tipo, Comentarios: comentarios, Pregunta: parseInt(5)
                             }).then(res => {
                                 Swal.fire({
                                     'icon': 'success',

@@ -209,7 +209,7 @@
                     <div class="col-lg-12">
                         <div class="col-lg-12 mb-3">
                             @*if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Autorizado CAE")) && ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || (@User.Claims.ElementAt(2).Value).Contains("Administrador")))
-                        {*@
+                                {*@
                             <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
                             @*}*@
                         </div>
@@ -315,8 +315,8 @@
                                                 <i class='fas fa-eye text-success'></i>
                                             </a>
                                             @if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite Rechazado") ||
-                                              @Model.Estatus.Equals("Autorizado CAE")) ||
-                                               (@User.Claims.ElementAt(2).Value).Equals("Administrador"))
+                                           @Model.Estatus.Equals("Autorizado CAE")) ||
+                                            (@User.Claims.ElementAt(2).Value).Equals("Administrador"))
                                             {
                                                 @if (!entre.Estatus.Equals("Autorizado"))
                                                 {
@@ -327,139 +327,9 @@
                                                     </a>
                                                 }
                                             }
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="row col-lg-12 justify-content-end mb-3">
-                    @if (await sPermisos.GetPermisosByModulo("revisar CAE", @Model.ServicioId, @user) != 0)
-                    {
-                        <button href="" class="btn btn-primary float-right mr-3 revisar_cae"><i class="fas fa-check mr-2"></i>Enviar a Revisión CAE</button>
-                    }
-                    @if (await sPermisos.GetPermisosByModulo("autorizar CAE", @Model.ServicioId, @user) != 0)
-                    {
-                        <button href="" class="btn btn-success float-right mr-3 autorizar_cae"><i class="fas fa-check mr-2"></i>Autorizar Documentación</button>
-                    }
-                    @if (await sPermisos.GetPermisosByModulo("rechazar trámite", @Model.ServicioId, @user) != 0)
-                    {
-                        <button href="" class="btn btn-danger float-right mr-3 rechazar_tramite"><i class="fas fa-check mr-2"></i>Rechazar Trámite</button>
-                    }
-                    @if (await sPermisos.GetPermisosByModulo("trámitar", @Model.ServicioId, @user) != 0)
-                    {
-                        <button href="" class="btn btn-info float-right mr-3 tramitar_cedula"><i class="fas fa-check mr-2"></i>Enviar a Trámite</button>
-                    }
-                    @if (await sPermisos.GetPermisosByModulo("trámitar a pago", @Model.ServicioId, @user) != 0)
-                    {
-                        <button href="" class="btn btn-success float-right mr-3 tramitar_pago"><i class="fas fa-check mr-2"></i>Tramitar Pago</button>
-                    }
-                </div>
-            </div>
-            <div class="tab-pane fade" id="alcances_entregables" role="tabpanel" aria-labelledby="contact-tab">
-                <div class="col-lg-12 h3 mt-4">
-                    Alcances a Entregables
-                </div>
-                <div class="row col-lg-12">
-                    <div class="col-lg-8">
-                        <p class="h6">El usuario adjuntó los siguientes Alcances.</p>
-                    </div>
-                </div>
-                <div class="row col-lg-12 mt-1 h6">
-                    <div class="col-lg-12">
-                        <div class="col-lg-12 mb-3">
-                            @*if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Autorizado CAE")) && ((@User.Claims.ElementAt(2).Value).Contains("Evaluador") || (@User.Claims.ElementAt(2).Value).Contains("Administrador")))
-                        {*@
-                            <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
-                            @*}*@
-                        </div>
-                        <h6 class="mt-4"><strong>Entregables Adjuntos</strong></h6>
-                        <table class="table" id="tableEntregables">
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Nombre</th>
-                                    <th>Fecha de Creación</th>
-                                    <th class="text-center">Estatus</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var entre in @Model.iAlcances)
-                                {
-                                    <tr>
-                                        @if (entre.Tipo.Equals("AlcanceMO"))
-                                        {
-                                            tipo = "Alcance a Memorándum/Oficio";
-                                            <td>@Html.DisplayName(tipo)</td>
-                                        }
-                                        else if (entre.Tipo.Equals("AlcanceAER"))
-                                        {
-                                            tipo = "Alcance a Acta E-R";
-                                            <td>@Html.DisplayName(tipo)</td>
-                                        }
-                                        else
-                                        {
-                                            tipo = @entre.Tipo;
-                                            <td>@entre.Tipo</td>
-                                        }
-                                        <td>@entre.NombreArchivo</td>
-                                        <td>@entre.FechaCreacion.ToString("dd-MM-yyyy")</td>
-                                        <td class="text-center @entre.Color font-weight-bold">
-                                            @if (await sPermisos.GetPermisosByModulo("autorizar entregables", @Model.ServicioId, @user) != 0)
-                                            {
-                                                @if (@entre.Estatus.Equals("Rechazado"))
-                                                {
-                                                    @Html.Raw(@entre.Icono) @entre.Estatus
-                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
-                                                        <i class="fas fa-check ml-1"></i>
-                                                    </a>
-                                                }
-                                                else if (@entre.Estatus.Equals("Autorizado"))
-                                                {
-                                                    @Html.Raw(@entre.Icono) @entre.Estatus
-                                                    <a href="#" class='btn btn-sm btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
-                                                        <i class="far fa-times"></i>
-                                                    </a>
-                                                }
-                                                else
-                                                {
-                                                    <a href="#" class='btn-xs btn-success mr-2 success_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Autorizar @tipo" data-placement="top">
-                                                        <i class="fas fa-check ml-1"></i>
-                                                    </a>
-                                                    <a href="#" class='btn btn-sm btn-danger mr-2 failed_entregable' data-id="@entre.Id" data-tipo="@tipo"
-                                                       data-toggle="tooltip" title="Rechazar @tipo" data-placement="top">
-                                                        <i class="far fa-times"></i>
-                                                    </a>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                @Html.Raw(@entre.Icono) @entre.Estatus
-                                            }
-                                        </td>
-                                        <td class="text-center">
-                                            <a href='#' class='text-center mr-2 view_file' data-id="@entre.Id" data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo"
-                                               data-toggle="tooltip" title="Vista Previa de(la) @tipo" data-placement="top">
-                                                <i class='fas fa-eye text-success'></i>
+                                            <a href='#' class='text-center mr-2 view_alcances' data-id="@entre.Id" data-toggle="tooltip" title="Visualizar Alcances" data-placement="top">
+                                                <i class="fa-solid fa-paperclip text-primary"></i>
                                             </a>
-                                            @if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite Rechazado") ||
-                                              @Model.Estatus.Equals("Autorizado CAE")) ||
-                                               (@User.Claims.ElementAt(2).Value).Equals("Administrador"))
-                                            {
-                                                @if (!entre.Estatus.Equals("Autorizado"))
-                                                {
-                                                    <a href='#' class="text-center mr-2 update_files" data-id="@entre.Id" data-coments="@entre.Comentarios"
-                                                       data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo" data-toggle="tooltip" title="Actualizar @entre.Tipo"
-                                                       data-placement="top">
-                                                        <i class='fas fa-check-circle text-primary'></i>
-                                                    </a>
-                                                }
-                                            }
                                         </td>
                                     </tr>
                                 }
@@ -741,6 +611,40 @@
 </div>
 @*Fin Modal para ver Adjuntos*@
 
+@* Modal para la ver los Alcances *@
+<div class="modal fade" id="modal_alcances">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white" id="title_alcances">Alcances al Entregable</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="tbl_alcances">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tipo de Alcance </th>
+                            <th>Archivo</th>
+                            <th>Creado</th>
+                            <th>Actualizado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body_alcances"></tbody>
+                </table>
+            </div>
+            <div class="row" id="viewAlcance">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@*Fin Modal para ver los Alcances*@
+
 
 <style>
     #view_pdf {
@@ -794,6 +698,17 @@
                 },
             });
 
+            $(".view_alcances").click(function () {
+                axios.get("/limpieza/getAlcances/" + $(this).data('id')).then(response => {
+                    console.log(response);
+                    if (response.data == null || response.data == "") {
+                        $('#body_alcances').html(response.data);
+                    }
+                    $('#body_alcances').html(response.data);
+                });
+                $("#modal_alcances").modal('show');
+            });
+
             /*Adjuntar Archivos*/
                 $('#error_tipoEntre').css('display', 'none');
                 $('#error_customFile').css('display', 'none');
@@ -806,7 +721,7 @@
                 $('.rechazar_tramite').css('display','none');
                 $('.autorizar_cae').css('display','none');
                 $('.revisar_cae').css('display','none');
-            /*Fin de Ocultar Botones de Acción*/          
+            /*Fin de Ocultar Botones de Acción*/
 
             /*Condicionales para Liberar los Botones*/
                 if (model.estatus == 'Autorizada') {
@@ -853,7 +768,7 @@
                     axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
                         if (btn.data > 0) {
                             $('.rechazar_tramite').css('display', 'block');
-                        } else {    
+                        } else {
                             $('.tramitar_pago').css('display', 'block');
                         }
                     });
@@ -1084,6 +999,14 @@
                 $('#titlePDF').text("PDF - \"" + tipo + "\"");
                 $('#objectPdf').html(data);
                 $('#show_pdf').modal('show');
+            });
+
+            $(document).on('click', '.view_alcance', function () {
+                let nombre = $(this).data('file');
+                let tipo = $(this).data('tipo');
+                let data = "<object width='100%' height='450px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre + "'></object>";
+                $('#titlePDF').text("PDF - \"" + tipo + "\"");
+                $('#viewAlcance').html(data);
             });
             /*FIN de ver archivo en modal*/
 
@@ -1343,6 +1266,7 @@
                         $('.error_customFile').css('display', 'block');
                     }
                 });
+
                 function validaCamposArchivoXml() {
                     if ($('.file_factura').val() == "") {
                         $('.file_factura').addClass('is-invalid');
@@ -1351,7 +1275,8 @@
                         return false;
                     }
                     return true;
-                }
+            }
+
                 $('#agregarFactura').click(function () {
                      var id = $("#idFactura").val();
 

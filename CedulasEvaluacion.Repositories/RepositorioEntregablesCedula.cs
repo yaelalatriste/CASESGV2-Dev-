@@ -52,6 +52,38 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
+        public async Task<List<Entregables>> GetAlcancesEntregable(int id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getAlcancesByEntregable", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@entregable", id));
+                        var response = new List<Entregables>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValueAlcances(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+
         public async Task<int> adjuntaEntregable(Entregables entregables)
         {
             DateTime date = DateTime.Now;
@@ -353,6 +385,24 @@ namespace CedulasEvaluacion.Repositories
                 Estatus = reader["Estatus"] != DBNull.Value ? reader["Estatus"].ToString() : "",
                 NombreArchivo = reader["Archivo"].ToString(),
                 FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"].ToString()),
+                FechaActualizacion = reader["FechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaActualizacion"].ToString()) : Convert.ToDateTime("01/01/1990"),
+                Comentarios = reader["Comentarios"].ToString(),
+                Icono = reader["Icono"].ToString(),
+                Color = reader["Color"].ToString()
+            };
+        }
+
+        private Entregables MapToValueAlcances(SqlDataReader reader)
+        {
+            return new Entregables
+            {
+                Id = (int)reader["Id"],
+                EntregableId = (int)reader["EntregableId"],
+                Tipo = reader["Tipo"].ToString(),
+                Estatus = reader["Estatus"] != DBNull.Value ? reader["Estatus"].ToString() : "",
+                NombreArchivo = reader["Archivo"].ToString(),
+                FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"].ToString()),
+                FechaActualizacion = reader["FechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaActualizacion"].ToString()) : Convert.ToDateTime("01/01/1990"),
                 Comentarios = reader["Comentarios"].ToString(),
                 Icono = reader["Icono"].ToString(),
                 Color = reader["Color"].ToString()

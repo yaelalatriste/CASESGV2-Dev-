@@ -238,7 +238,7 @@
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-default" data-dir="dwn"><span class="fas fa-minus"></span></button>
                                                     </span>
-                                                    <input type="text" class="form-control text-center personalSolicitado" value="1">
+                                                    <input type="number" class="form-control text-center personalSolicitado" value="1">
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-default" data-dir="up"><span class="fas fa-plus"></span></button>
                                                     </span>
@@ -252,7 +252,7 @@
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-default" data-dir="dwn"><span class="fas fa-minus"></span></button>
                                                     </span>
-                                                    <input type="text" class="form-control text-center personalBrindado" value="1">
+                                                    <input type="number" class="form-control text-center personalBrindado" value="1">
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-default" data-dir="up"><span class="fas fa-plus"></span></button>
                                                     </span>
@@ -681,10 +681,10 @@
                     if (btn.attr('data-dir') == 'up') {
                         newVal = parseInt(oldValue) + 1;
                     } else {
-                        if (oldValue > 1) {
+                        if (oldValue > 0) {
                             newVal = parseInt(oldValue) - 1;
                         } else {
-                            newVal = 1;
+                            newVal = 0;
                         }
                     }
                     btn.closest('.number-spinner').find('input').val(newVal);
@@ -2041,13 +2041,13 @@
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Servicio de Transportación de Bienes Muebles',
-                                'html': 'El <strong>Personal Proporcionado</strong> no puede ser mayor al <strong>Personal Proporcionado</strong> en la <strong>Pregunta ' + (i + 1) + '</strong>'
+                                'html': 'El <strong>Personal Proporcionado</strong> no puede ser mayor al <strong>Personal Solicitado</strong> en la <strong>Pregunta ' + (i + 1) + '</strong>'
                             });
                         } else if ($(".personalBrindado").val() == 0 && $(".personalSolicitado").val() == 0) {
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Servicio de Transportación de Bienes Muebles',
-                                'html': 'El <strong>Personal Proporcionado</strong> y el <strong>Personal Proporcionado</strong> no pueden ser igual a <b>cero</b> en la <strong>Pregunta ' + (i + 1) + '</strong>'
+                                'html': 'El <strong>Personal Solicitado</strong> y el <strong>Personal Proporcionado</strong> no pueden ser igual a <b>cero</b> en la <strong>Pregunta ' + (i + 1) + '</strong>'
                             });
                         } else if ($(".personalBrindado").val() == $(".personalSolicitado").val() && respuesta == "false") {
                             Swal.fire({

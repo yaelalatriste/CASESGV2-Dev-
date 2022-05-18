@@ -11,7 +11,7 @@
             <i class="fal fa-calendar-alt"></i>
         </a>
     }
-    <a href="/limpieza/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Limpieza" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/limpieza/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Limpieza" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
             <tr>
@@ -1851,7 +1851,12 @@
                 /*Elimina entregables*/
                     $(document).on("click", ".delete_files", function () {
                         let id = $(this).data('id');
-                        let tipo = $('#tipo_entregable option[value='+$(this).data('tipo')+']').text();
+                        let tipo = "";
+                        if ($(this).data('tipo') != "Reporte(s)") {
+                            tipo = $('#tipo_entregable option[value=' + $(this).data('tipo') + ']').text();
+                        } else {
+                            tipo = "Reporte(s)";
+                        }
 
                         Swal.fire({
                             'icon': 'warning',
