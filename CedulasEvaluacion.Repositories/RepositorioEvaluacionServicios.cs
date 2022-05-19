@@ -23,6 +23,7 @@ namespace CedulasEvaluacion.Repositories
 
         public async Task<int> VerificaCedula(int servicio, int anio, string mes, int inmueble)
         {
+            int id = 0;
             try
             {
                 using (SqlConnection sql = new SqlConnection(_connectionString))
@@ -30,6 +31,7 @@ namespace CedulasEvaluacion.Repositories
                     using (SqlCommand cmd = new SqlCommand("sp_buscaCedulaRegistrada", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", id)).Direction = ParameterDirection.Output;
                         cmd.Parameters.Add(new SqlParameter("@servicioId", servicio));
                         cmd.Parameters.Add(new SqlParameter("@anio", anio));
                         cmd.Parameters.Add(new SqlParameter("@mes", mes));
@@ -40,7 +42,8 @@ namespace CedulasEvaluacion.Repositories
                         {
                             while (await reader.ReadAsync())
                             {
-                                return Convert.ToInt32(reader["Id"].ToString());
+                                id = Convert.ToInt32(reader["Id"].ToString());
+                                return id;
                             }
                             return 0;
                         }

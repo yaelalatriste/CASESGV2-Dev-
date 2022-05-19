@@ -340,6 +340,19 @@
             <div class="modal-body">
                 <input class="form-control" id="idFactura" type="hidden" />
                 <div class="row col-lg-12 mt-2">
+                    <div class="form-group col-lg-4" id="divTipoFactura">
+                        <label for="forFactura">El "XML" corresponde a:</label>
+                        <select id="tipoFactura" class="form-control">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Factura">Factura</option>
+                            <option value="NC">Nota de Crédito</option>
+                        </select>
+                        <div class="col-sm-12 error_tipoFactura">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione él tipo de archivo a subir
+                            </small>
+                        </div>
+                    </div>
                     <div class="form-group col-lg-6">
                         <label for="elegirArchivo">Seleccionar Archivo XML: </label>
                         <div class="custom-file">
@@ -596,7 +609,7 @@
                         </div>
                         <div class="col-sm-12" id="error_customFile">
                             <small id="dateHelp" class="text-danger">
-                                Por favor seleccione él archivo correspondiente
+                                Por favor seleccione el archivo correspondiente
                             </small>
                         </div>
                     </div>
@@ -671,6 +684,7 @@
             /*Fin del Combo de inmuebles*/
 
             $('[data-toggle="tooltip"]').tooltip();
+            $('.error_tipoFactura').css('display', 'none');
 
             /*Spinner para el input number*/
                 $(document).on('click', '.number-spinner button', function () {
@@ -823,7 +837,7 @@
                         var archivo = e.target.files[0];
                         var fileName = $(this).val().split("\\").pop();
                         var ext = fileName.split('.').pop();
-                        if (ext == "xml") {
+                        if (ext == "xml" || ext == "XML") {
                             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                             if ($('.file_factura').hasClass('is-invalid')) {
                                 $('.file_factura').removeClass('is-invalid');
@@ -836,7 +850,7 @@
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Servicio de Transportación de Bienes Muebles',
-                                'text': 'El archivo que intentas adjuntar no es válido. Favor de solo seleccionar archivos "Xml"'
+                                'text': 'El archivo que intenta adjuntar no es válido. Favor de solo seleccionar archivos "Xml"'
                             });
 
                             $(".custom-file-label").text("Seleccionar Archivo");
@@ -852,6 +866,13 @@
                     });
 
                     function validaCamposArchivoXml() {
+                        if ($('#tipoFactura').val() == "" && $("#idFactura").val() == "") {
+                            $('#tipoFactura').addClass('is-invalid');
+                            $('.error_tipoFactura').css('display', 'block');
+
+                            return false;
+                        }
+
                         if ($('.file_factura').val() == "") {
                             $('.file_factura').addClass('is-invalid');
                             $('.error_customFile').css('display', 'block');
@@ -863,6 +884,7 @@
 
                     $('#agregarFactura').click(function () {
                          var id = $("#idFactura").val();
+                         var tipo = $("#tipoFactura").val();
 
                          var formData = new FormData();
                          var file = document.getElementById('fileFactura').files[0];
@@ -874,7 +896,8 @@
                          }
 
                          formData.append("Id", id);
-                         formData.append("ServicioId", 11);
+                        formData.append("ServicioId", 11);
+                        formData.append("Tipo", tipo);
                          formData.append("CedulaId", model.id);
                          formData.append("Xml", file);
                          if (validaCamposArchivoXml() == true) {
@@ -1024,7 +1047,7 @@
                                         '<strong>se borrarán todas las incidencias. ¿Desea continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -1102,7 +1125,7 @@
                                         '<strong>se borrarán todas las incidencias. ¿Desea continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -1460,7 +1483,7 @@
                                     if (response.status == 200) {
                                         Swal.fire(
                                             'Servicio de Transportación de Bienes Muebles',
-                                            'La incidencia fue eliminada con éxito.',
+                                            'La incidencia fue eliminada correctamente.',
                                             'success'
                                         ).then(function () {
                                             window.location.reload();

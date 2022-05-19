@@ -116,6 +116,7 @@ namespace CedulasEvaluacion.Repositories
                         if (facturas.retencion != null)
                             cmd.Parameters.Add(new SqlParameter("@retencion", facturas.retencion.Importe));
                         cmd.Parameters.Add(new SqlParameter("@nombre", facturas.emisor.Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@tipo", facturas.Tipo));
                         cmd.Parameters.Add(new SqlParameter("@usoCFDI", facturas.receptor.usoCFDI));
                         cmd.Parameters.Add(new SqlParameter("@uuid", facturas.timbreFiscal.UUID));
                         cmd.Parameters.Add(new SqlParameter("@serie", facturas.comprobante.Serie));

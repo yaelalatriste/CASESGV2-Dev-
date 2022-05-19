@@ -113,7 +113,7 @@
                             </div>
                             <div class="row col-lg-12 mt-3" id="diviPregunta3">
                                 <button type='button' class='btn btn-primary mr-2 addIncidencias' data-pregunta="3">Capturar Incidencia</button>
-                                <button type='button' class='btn btn-primary viewIncidencias' data-pregunta="3">Consultar Insidencias</button>
+                                <button type='button' class='btn btn-primary viewIncidencias' data-pregunta="3">Consultar Incidencias</button>
                             </div>
                         </div>
                         @* Fin de la Pregunta 3 *@
@@ -237,6 +237,19 @@
             <div class="modal-body">
                 <input class="form-control" id="idFactura" type="hidden" />
                 <div class="row col-lg-12 mt-2">
+                    <div class="form-group col-lg-4" id="divTipoFactura">
+                        <label for="forFactura">El "XML" corresponde a:</label>
+                        <select id="tipoFactura" class="form-control">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Factura">Factura</option>
+                            <option value="NC">Nota de Crédito</option>
+                        </select>
+                        <div class="col-sm-12 error_tipoFactura">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione él tipo de archivo a subir
+                            </small>
+                        </div>
+                    </div>
                     <div class="form-group col-lg-6">
                         <label for="elegirArchivo">Seleccionar Archivo XML: </label>
                         <div class="custom-file">
@@ -466,7 +479,7 @@
                         </div>
                         <div class="col-sm-12" id="error_customFile">
                             <small id="dateHelp" class="text-danger">
-                                Por favor seleccione él archivo correspondiente
+                                Por favor seleccione el archivo correspondiente
                             </small>
                         </div>
                     </div>
@@ -543,6 +556,7 @@
 
             $('[data-toggle="tooltip"]').tooltip();
 
+
             /*Detalles de Incidencias*/
                 $('#diviPregunta2').css('display', 'none');
                 $('#diviPregunta3').css('display', 'none');
@@ -552,7 +566,8 @@
             /*Detalles de Incidencias*/
 
             /*Errores*/
-                /*Adjuntar Archivos*/
+            /*Adjuntar Archivos*/
+                    $('.error_tipoFactura').css('display', 'none');
                     $('#error_tipoEntre').css('display', 'none');
                     $('#error_customFile').css('display', 'none');
                     $('#error_comentariosEntre').css('display', 'none');
@@ -625,11 +640,11 @@
                         Swal.fire({
                             'icon': 'warning',
                             'title': 'Servicio de Análisis Microbiológicos',
-                            'html': '<strong>Advertencia:</strong><p>¿Deseas eliminar la factura con Folio <strong>' + folio + '</strong> correspondiente al <strong>' +
+                            'html': '<strong>Advertencia:</strong><p>¿Desea eliminar la factura con Folio <strong>' + folio + '</strong> correspondiente al <strong>' +
                                 descripcion +'</strong>?</p>',
                             'confirmButtonColor': '#3085d6',
                             'cancelButtonColor': '#d33',
-                            'confirmButtonText': 'Si, deseo continuar',
+                            'confirmButtonText': 'Si, eliminar',
                             'cancelButtonText': 'Cancelar',
                             'showCancelButton': true
                         }).then(yes => {
@@ -651,7 +666,7 @@
                                             Swal.fire({
                                                 'icon': 'success',
                                                 'title': 'Servicio de Análisis Microbiológicos',
-                                                'text': 'La factura fue eliminada exitósamente.',
+                                                'text': 'La factura fue eliminada correctamente.',
                                             }).then(function () {
                                                 window.location.reload();
                                             });
@@ -666,7 +681,7 @@
                         var archivo = e.target.files[0];
                         var fileName = $(this).val().split("\\").pop();
                         var ext = fileName.split('.').pop();
-                        if (ext == "xml") {
+                        if (ext == "xml" || ext == "XML") {
                             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                             if ($('.file_factura').hasClass('is-invalid')) {
                                 $('.file_factura').removeClass('is-invalid');
@@ -679,7 +694,7 @@
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Servicio de Análisis Microbiológicos',
-                                'text': 'El archivo que intentas adjuntar no es válido. Favor de solo seleccionar archivos "Xml"'
+                                'text': 'El archivo que intenta adjuntar no es válido. Favor de solo seleccionar archivos "XML"'
                             });
 
                             $(".custom-file-label").text("Seleccionar Archivo");
@@ -695,6 +710,13 @@
                     });
 
                     function validaCamposArchivoXml() {
+                        if ($('#tipoFactura').val() == "" && $("#idFactura").val() == "") {
+                            $('#tipoFactura').addClass('is-invalid');
+                            $('.error_tipoFactura').css('display', 'block');
+
+                            return false;
+                        }
+
                         if ($('.file_factura').val() == "") {
                             $('.file_factura').addClass('is-invalid');
                             $('.error_customFile').css('display', 'block');
@@ -709,6 +731,7 @@
 
                          var formData = new FormData();
                          var file = document.getElementById('fileFactura').files[0];
+                         var tipo = $("#tipoFactura").val();
 
                          if (id.length > 0) {
                              id = parseInt(id);
@@ -717,6 +740,7 @@
                          }
 
                          formData.append("Id", id);
+                         formData.append("Tipo", tipo);
                          formData.append("ServicioId", 8);
                          formData.append("CedulaId", model.id);
                          formData.append("Xml", file);
@@ -726,7 +750,7 @@
                                      Swal.fire({
                                          'icon': "success",
                                          'title': 'Servicio de Análisis Microbiológicos',
-                                         'html': 'La factura fue agregada a la cédula de forma correcta.'
+                                         'html': 'La factura fue agregada a la cédula correctamente.'
                                      }).then(function () {
                                          window.location.reload();
                                      });
@@ -736,7 +760,7 @@
                                      Swal.fire({
                                          'icon': "success",
                                          'title': 'Servicio de Análisis Microbiológicos',
-                                         'html': 'La factura fue actualizada de forma correcta.'
+                                         'html': 'La factura fue actualizada correctamente.'
                                      }).then(function () {
                                          window.location.reload();
                                      });
@@ -840,11 +864,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Análisis Microbiológicos',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -867,7 +891,7 @@
                                                         Swal.fire({
                                                             'icon': 'success',
                                                             'title': 'Servicio de Análisis Microbiológicos',
-                                                            'html': 'Las incidencias fueron eliminadas con éxito.',
+                                                            'html': 'Las incidencias fueron eliminadas correctamente.',
                                                         }).then(function () {
                                                             $('#diviPregunta3').css('display', 'none');
                                                             $('input:radio[name="pregunta3"][value="true"]').prop('checked', true);
@@ -878,7 +902,7 @@
                                                     Swal.fire({
                                                         'icon': 'error',
                                                         'title': 'Servicio de Análisis Microbiológicos',
-                                                        'html': 'No se pudieron eliminar las incidencias del servicio de Análisis Microbiológicos. Contacta a tu Administrador.',
+                                                        'html': 'No se eliminaron las incidencias del servicio de Análisis Microbiológicos. Contacte al Administrador.',
                                                     });
                                                     $('input:radio[name="pregunta3"][value="false"]').prop('checked', true);
                                                     $('#diviPregunta3').css('display', 'block');
@@ -986,7 +1010,7 @@
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de Análisis Microbiológicos',
-                            'html': 'Hubo un error al obtener el listado de incidencias. Contacte a su administrador del sistema.'
+                            'html': 'Hubo un error al obtener el listado de incidencias. Contacte al administrador del sistema.'
                         });
                     });
                     $("#modal-consultaIncidencias").modal('show');
@@ -1060,7 +1084,7 @@
                                     Swal.fire({
                                         'icon': "success",
                                         'title': 'Servicio de Análisis Microbiológicos',
-                                        'html': "La incidencia fue registrada de forma correcta."
+                                        'html': "La incidencia fue registrada de correctamente."
                                     });
                                     guardaCedula();
                                 }
@@ -1068,7 +1092,7 @@
                                 Swal.fire({
                                     'icon': "error",
                                     'title': 'Servicio de Análisis Microbiológicos',
-                                    'html': "Hubo un error al registrar la incidencia. Contacte a su administrador del sistema."
+                                    'html': "Hubo un error al registrar la incidencia. Contacte al administrador del sistema."
                                 });
                             });
                         } else {
@@ -1078,7 +1102,7 @@
                                     Swal.fire({
                                         'icon': "success",
                                         'title': 'Servicio de Análisis Microbiológicos',
-                                        'html': "La incidencia fue actualizada de forma correcta."
+                                        'html': "La incidencia fue actualizada correctamente."
                                     });
                                     guardaCedula();
                                 }
@@ -1086,7 +1110,7 @@
                                 Swal.fire({
                                     'icon': "error",
                                     'title': 'Servicio de Análisis Microbiológicos',
-                                    'html': "Hubo un error al actualizar la incidencia. Contacte a su administrador del sistema."
+                                    'html': "Hubo un error al actualizar la incidencia. Contacte al administrador del sistema."
                                 });
                             });
                         }
@@ -1135,7 +1159,7 @@
                             'html': '¿Está seguro de eliminar la incidencia?',
                             'confirmButtonColor': '#3085d6',
                             'cancelButtonColor': '#d33',
-                            'confirmButtonText': 'Si, eliminar incidencia',
+                            'confirmButtonText': 'Si, eliminar',
                             'cancelButtonText': 'Cancelar',
                             'showCancelButton': true
                         }).then(response => {
@@ -1144,7 +1168,7 @@
                                     if (response.status == 200) {
                                         Swal.fire(
                                             'Servicio de Analisis de Personal',
-                                            'La incidencia fue eliminada con éxito.',
+                                            'La incidencia fue eliminada correctamente.',
                                             'success'
                                         ).then(function () {
                                             window.location.reload();
@@ -1153,7 +1177,7 @@
                                 }).catch(error => {
                                     Swal.fire(
                                         'Servicio de Analisis de Personal',
-                                        'No se pudo eliminar la incidencia del servicio de fumigación. Contacta a tu Administrador.',
+                                        'No se pudo eliminar la incidencia del servicio de análisis microbiológicos. Contacta a tu Administrador.',
                                         'error'
                                     );
                                 });
@@ -1204,13 +1228,13 @@
                     $("#customFile").on("change", function () {
                         var fileName = $(this).val().split("\\").pop();
                         var ext = fileName.split('.').pop();
-                        if (ext == "pdf") {
+                        if (ext == "pdf" || ext == "PDF") {
                             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                         } else {
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Servicio de Análisis Microbiológicos',
-                                'text': 'El archivo que intentas adjuntar no es válido. Favor de solo seleccionar archivos "PDF"'
+                                'text': 'El archivo que intenta adjuntar no es válido. Favor de solo seleccionar archivos "PDF"'
                             });
                             $(".custom-file-label").text("Seleccionar Archivo");
                             document.getElementById('customFile').value = '';
@@ -1256,7 +1280,7 @@
                                         Swal.fire({
                                             'icon': "success",
                                             'title': 'Servicio de Análisis Microbiológicos',
-                                            'text': 'Se adjuntó el archivo de forma correcta.'
+                                            'text': 'Se adjuntó el archivo de correctamente.'
                                         });
                                         $('#customFile').removeClass('is-valid');
                                         $('#comentarios_entregable').removeClass('is-valid');
@@ -1272,7 +1296,7 @@
                                     Swal.fire({
                                         'icon': "error",
                                         'title': 'Servicio de Análisis Microbiológicos',
-                                        'text': 'Se presento un error al intentar adjuntar el archivo.'
+                                        'text': 'Se presento un error al adjuntar el archivo.'
                                     });
                                 });
 
@@ -1294,7 +1318,7 @@
                                                 Swal.fire({
                                                     'icon': "success",
                                                     'title': 'Servicio de Análisis Microbiológicos',
-                                                    'text': 'Se adjuntó el archivo de forma correcta.'
+                                                    'text': 'Se adjuntó el archivo correctamente.'
                                                 });
                                                 $('#customFile').removeClass('is-valid');
                                                 $('#comentarios_entregable').removeClass('is-valid');
@@ -1310,7 +1334,7 @@
                                             Swal.fire({
                                                 'icon': "error",
                                                 'title': 'Servicio de Análisis Microbiológicos',
-                                                'text': 'Se presento un error al intentar adjuntar el archivo.'
+                                                'text': 'Se presento un error al adjuntar el archivo.'
                                             });
                                         });
 
@@ -1323,7 +1347,7 @@
                                         Swal.fire({
                                             'icon': "error",
                                             'title': 'Servicio de Análisis Microbiológicos',
-                                            'text': 'Ya existe un mismo entregable con el tipo ' + tipo
+                                            'text': 'Ya existe un entregable con el tipo ' + tipo
                                         });
                                     }
                                 }).catch(e => {
@@ -1383,7 +1407,7 @@
                                     if (response.status == 200) {
                                         Swal.fire(
                                             'Servicio de Analisis de Personal',
-                                            'Tu archivo fue eliminado con éxito.',
+                                            'Tu archivo fue eliminado correctamente.',
                                             'success'
                                         );
                                         axios.get("/analisis/getEntregables/" + model.id).then(response => {
@@ -1396,7 +1420,7 @@
                                 }).catch(error => {
                                     Swal.fire(
                                         'Servicio de Analisis de Personal',
-                                        'No se pudo procesar tu solicitud. Contacta a tu Administrador.',
+                                        'No se pudo procesar tu solicitud. Contacta al Administrador.',
                                         'error'
                                     );
                                 });

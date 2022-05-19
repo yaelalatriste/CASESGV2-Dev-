@@ -276,6 +276,19 @@
             <div class="modal-body">
                 <input class="form-control" id="idFactura" type="hidden" />
                 <div class="row col-lg-12 mt-2">
+                    <div class="form-group col-lg-4" id="divTipoFactura">
+                        <label for="forFactura">El "XML" corresponde a:</label>
+                        <select id="tipoFactura" class="form-control">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Factura">Factura</option>
+                            <option value="NC">Nota de Crédito</option>
+                        </select>
+                        <div class="col-sm-12 error_tipoFactura">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione él tipo de archivo a subir
+                            </small>
+                        </div>
+                    </div>
                     <div class="form-group col-lg-6">
                         <label for="elegirArchivo">Seleccionar Archivo XML: </label>
                         <div class="custom-file">
@@ -415,7 +428,7 @@
                         </div>
                         <div class="col-sm-12" id="error_customFile">
                             <small id="dateHelp" class="text-danger">
-                                Por favor seleccione él archivo correspondiente
+                                Por favor seleccione el archivo correspondiente
                             </small>
                         </div>
                     </div>
@@ -483,6 +496,7 @@
 
                 $('[data-toggle="tooltip"]').tooltip();
                 $('.error_customFile').css('display', 'none');
+                $('.error_tipoFactura').css('display', 'none');
 
             /*Errores en Adjuntar Archivos*/
                 $('#error_tipoEntre').css('display', 'none');
@@ -536,11 +550,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -562,7 +576,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta1"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -595,11 +609,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -621,7 +635,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta2"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -654,11 +668,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -680,7 +694,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta3"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -713,11 +727,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -739,7 +753,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta4"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -772,11 +786,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -798,7 +812,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta5"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -831,11 +845,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -857,7 +871,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta6"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -890,11 +904,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -916,7 +930,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta7"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -949,11 +963,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -975,7 +989,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta8"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -1008,11 +1022,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -1034,7 +1048,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta9"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -1067,11 +1081,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -1093,7 +1107,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta10"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -1126,11 +1140,11 @@
                                 Swal.fire({
                                     'icon': 'warning',
                                     'title': 'Servicio de Telefonía Celular',
-                                    'html': '<strong>Advertencia:</strong><p>Tienes incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
                                         '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
-                                    'confirmButtonText': 'Si, deseo continuar',
+                                    'confirmButtonText': 'Si, eliminar',
                                     'cancelButtonText': 'Cancelar',
                                     'showCancelButton': true
                                 }).then(p => {
@@ -1152,7 +1166,7 @@
                                                     Swal.fire({
                                                         'icon': 'success',
                                                         'title': 'Servicio de Telefonía Celular',
-                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas exitósamente.',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta11"][value="false"]').prop('checked', true);
                                                         guardaCedula();
@@ -1234,11 +1248,11 @@
                         Swal.fire({
                             'icon': 'warning',
                             'title': 'Eliminar Factura',
-                            'html': '<strong>Advertencia:</strong><p>¿Deseas eliminar la factura con Folio <strong>' + folio + '</strong> correspondiente al <strong>' +
+                            'html': '<strong>Advertencia:</strong><p>¿Desea eliminar la factura con Folio <strong>' + folio + '</strong> correspondiente al <strong>' +
                                 descripcion +'</strong>?</p>',
                             'confirmButtonColor': '#3085d6',
                             'cancelButtonColor': '#d33',
-                            'confirmButtonText': 'Si, deseo continuar',
+                            'confirmButtonText': 'Si, eliminar',
                             'cancelButtonText': 'Cancelar',
                             'showCancelButton': true
                         }).then(yes => {
@@ -1260,7 +1274,7 @@
                                             Swal.fire({
                                                 'icon': 'success',
                                                 'title': 'Borrado finalizado',
-                                                'text': 'La factura fue eliminada exitósamente.',
+                                                'text': 'La factura fue eliminada correctamente.',
                                             }).then(function () {
                                                 window.location.reload();
                                             });
@@ -1275,7 +1289,7 @@
                         var archivo = e.target.files[0];
                         var fileName = $(this).val().split("\\").pop();
                         var ext = fileName.split('.').pop();
-                        if (ext == "xml") {
+                        if (ext == "xml" || ext == "XML") {
                             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                             if ($('.file_factura').hasClass('is-invalid')) {
                                 $('.file_factura').removeClass('is-invalid');
@@ -1302,6 +1316,13 @@
                     });
 
                     function validaCamposArchivoXml() {
+                        if ($('#tipoFactura').val() == "" && $("#idFactura").val() == "") {
+                            $('#tipoFactura').addClass('is-invalid');
+                            $('.error_tipoFactura').css('display', 'block');
+
+                            return false;
+                        }
+
                         if ($('.file_factura').val() == "") {
                             $('.file_factura').addClass('is-invalid');
                             $('.error_customFile').css('display', 'block');
@@ -1312,7 +1333,8 @@
                     }
 
                     $('#agregarFactura').click(function () {
-                         var id = $("#idFactura").val();
+                        var id = $("#idFactura").val();
+                        var tipo = $("#tipoFactura").val();
 
                          var formData = new FormData();
                          var file = document.getElementById('fileFactura').files[0];
@@ -1324,6 +1346,7 @@
                          }
 
                         formData.append("Id", id);
+                        formData.append("Tipo", tipo);
                         formData.append("ServicioId", 5);
                         formData.append("CedulaId", model.id);
                         formData.append("Xml", file);
@@ -1333,7 +1356,7 @@
                                      Swal.fire({
                                          'icon': "success",
                                          'title': "Servicio de Telefonía Celular",
-                                         'html': 'La factura fue agregada a la cédula de forma correcta.'
+                                         'html': 'La factura fue agregada a la cédula correctamente.'
                                      }).then(function () {
                                          window.location.reload();
                                      });
@@ -1343,7 +1366,7 @@
                                      Swal.fire({
                                          'icon': "success",
                                          'title': "Servicio de Telefonía Celular",
-                                         'html': 'La factura fue actualizada de forma correcta.'
+                                         'html': 'La factura fue actualizada correctamente.'
                                      }).then(function () {
                                         window.location.reload();
                                      });
@@ -1461,7 +1484,7 @@
                     $("#customFile").on("change", function () {
                         var fileName = $(this).val().split("\\").pop();
                         var ext = fileName.split('.').pop();
-                        if (ext == "pdf" || ext == "xls" || ext == "xlsx") {
+                        if (ext == "pdf" || ext == "xls" || ext == "xlsx" || ext == "PDF") {
                             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                         } else {
                             Swal.fire({
@@ -1514,7 +1537,7 @@
                                         Swal.fire({
                                             'icon': "success",
                                             'title': 'Servicio de Telefonía Celular',
-                                            'text': 'Se adjuntó el archivo de forma correcta.'
+                                            'text': 'Se adjuntó el archivo correctamente.'
                                         });
                                         $('#customFile').removeClass('is-valid');
                                         $('#comentarios_entregable').removeClass('is-valid');
@@ -1553,7 +1576,7 @@
                                                 Swal.fire({
                                                     'icon': "success",
                                                     'title': 'Servicio de Telefonía Celular',
-                                                    'text': 'Se adjuntó el archivo de forma correcta.'
+                                                    'text': 'Se adjuntó el archivo correctamente.'
                                                 });
                                                 $('#customFile').removeClass('is-valid');
                                                 $('#comentarios_entregable').removeClass('is-valid');
@@ -1569,7 +1592,7 @@
                                             Swal.fire({
                                                 'icon': "error",
                                                 'title': 'Servicio de Telefonía Celular',
-                                                'text': 'Se presento un error al intentar adjuntar el archivo.'
+                                                'text': 'Se presento un error al adjuntar el archivo.'
                                             });
                                         });
 
@@ -1644,7 +1667,7 @@
                                     if (response.status == 200) {
                                         Swal.fire(
                                             'Archivo Borrado',
-                                            'Tu archivo fue eliminado con éxito.',
+                                            'El archivo fue eliminado con éxito.',
                                             'success'
                                         );
                                         axios.get("/telCelular/getEntregables/" + model.id).then(response => {
