@@ -63,12 +63,13 @@ namespace CedulasEvaluacion.Controllers
         {
             int exists = 0;
             exists = await vEntregables.GetFlujoCedulaCAE(cedula, estatus);
-            if (exists != -1)
+            if (exists != -3)
             {
                 return Ok(exists);
             }
             return BadRequest();
         }
+        
         [HttpGet]
         [Route("/entregables/flujo/car/{cedula?}/{estatus?}")]
         public async Task<IActionResult> GetFlujoCedulaCAR(int cedula, string estatus)
@@ -82,6 +83,18 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
+        [HttpGet]
+        [Route("/entregables/validaCedula/{cedula?}")]
+        public async Task<IActionResult> validaCedulaDAS(int cedula)
+        {
+            int valida = 0;
+            valida = await vEntregables.validaCedulaDAS(cedula);
+            if (valida != -1)
+            {
+                return Ok(valida);
+            }
+            return BadRequest();
+        }
         /*Flujo para los estatus*/
     }
 }

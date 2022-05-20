@@ -19,5 +19,6 @@ namespace CedulasEvaluacion.Interfaces
         Task<List<HistorialEntregables>> getHistorialEntregables(int id,int servicioId);
         Task<int> apruebaRechazaEntregable(Entregables entregables);
         Task<List<Entregables>> GetAlcancesEntregable(int id);
+        Task<int> validaCedulaDAS(int id);
     }
 }

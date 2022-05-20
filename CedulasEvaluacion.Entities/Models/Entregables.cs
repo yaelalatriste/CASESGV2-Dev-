@@ -28,6 +28,7 @@ namespace CedulasEvaluacion.Entities.Models
         public string Entregable { get; set; }
         public string Folio { get; set; }
         public int Tamanio { get; set; }
+        public bool ValidadoDas { get; set; }
         public int DiasAtraso { get; set; }
         public string Comentarios{ get; set; }
         public string Color { get; set; }

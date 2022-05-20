@@ -85,6 +85,10 @@ namespace CedulasEvaluacion.Controllers
                     {
                         tipo = "Memorándum";
                     }
+                    else if (entregable.Tipo.Trim().Equals("Oficio_Memo_Correo"))
+                    {
+                        tipo = "Oficio/Memo/Correo";
+                    }
                     else
                     {
                         tipo = entregable.Tipo;

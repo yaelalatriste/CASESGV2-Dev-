@@ -263,6 +263,11 @@
                                             tipo = "Listado de Muebles";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
+                                        else if (entre.Tipo.Trim().Equals("Oficio_Memo_Correo"))
+                                        {
+                                            tipo = "Oficio/Memo/Correo";
+                                            <td>@Html.DisplayName(tipo)</td>
+                                        }
                                         else
                                         {
                                             tipo = @entre.Tipo;
@@ -1305,7 +1310,7 @@
 
                 /*Editar Entregables*/
                     $(document).on("click", ".update_files", function () {
-                        var options = '<option value="">Seleccione un Entregable</option><option value="CartaPorte">Carta Porte</option><option value="Factura">Factura</option>' +
+                        var options = '<option value="">Seleccione un Entregable</option><option value="Oficio/Memo/Correo">Oficio/Memo/Correo</option><option value="CartaPorte">Carta Porte</option><option value="Factura">Factura</option>' +
                             '<option value="SAT">Validación del SAT</option><option value="NotaCredito">Nota de Crédito</option><option value="Cedula_Firmada">Cédula Firmada (FIREL)</option>' +
                             '<option value="Memorandum">Acuse Memorándum (FIREL)</option><option value="HojaEvidencia">Hoja de Evidencia</option><option value="ListadoMuebles">Listado de Muebles</option>';
                         $("#tipo_entregable").html(options);

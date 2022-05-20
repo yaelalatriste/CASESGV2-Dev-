@@ -227,14 +227,14 @@ namespace CedulasEvaluacion.Repositories
                 {
                     using (SqlCommand cmd = new SqlCommand("sp_getFlujoCedulaCAE", sql))
                     {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@total", id)).Direction = ParameterDirection.Output;
                         cmd.Parameters.Add(new SqlParameter("@cedulaId", cedula));
                         cmd.Parameters.Add(new SqlParameter("@estatus", estatus));
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
                         id = Convert.ToInt32(cmd.Parameters["@total"].Value);
-                            return id;
+                        return id;
                     }
                 }
             }
@@ -262,6 +262,30 @@ namespace CedulasEvaluacion.Repositories
                         await cmd.ExecuteNonQueryAsync();
                         id = Convert.ToInt32(cmd.Parameters["@total"].Value);
                         return id;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return -1;
+            }
+        }
+
+        public async Task<int> validaCedulaDAS(int id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_validaCedulaDAS", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+
+                        return 1;
                     }
                 }
             }
@@ -383,6 +407,7 @@ namespace CedulasEvaluacion.Repositories
                 CedulaEvaluacionId = (int)reader["CedulaEvaluacionId"],
                 Tipo = reader["Tipo"].ToString(),
                 Estatus = reader["Estatus"] != DBNull.Value ? reader["Estatus"].ToString() : "",
+                ValidadoDas = reader["ValidadoDas"] != DBNull.Value ? (bool)reader["ValidadoDas"]: false,
                 NombreArchivo = reader["Archivo"].ToString(),
                 FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"].ToString()),
                 FechaActualizacion = reader["FechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaActualizacion"].ToString()) : Convert.ToDateTime("01/01/1990"),

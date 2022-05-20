@@ -393,7 +393,7 @@
                 </div>
                 <div class="row col-lg-12">
                     <div class="form-group col-lg-12" id="divInciComentarios">
-                        <label for="fechaSolicitud">Comentarios: </label>
+                        <label id="lblComentarios"></label>
                         <textarea id="inciComentarios" class="form-control" style="resize:none;"></textarea>
                         <div class="col-sm-12" id="error_inciComentarios">
                             <small id="dateHelp" class="text-danger">
@@ -1048,10 +1048,12 @@
 
                     if (pregunta == 2) {
                         $("#categoria").val('Fechas');
+                        $("#lblComentarios").text("Comentarios (Indicar el número de garrafones no entregados):");
                         $('#divFechaProgramada').css('display', 'block');
                         $('#divFechaRealizada').css('display', 'block');
                         $('#divInciComentarios').css('display', 'block');
                     } else if (pregunta == 3) {
+                        $("#lblComentarios").text("Comentarios:");
                         $("#categoria").val('Horas');
                         $('#divFechaProgramada').css('display', 'block');
                         $('#divHoraProgramada').css('display', 'block');
@@ -1059,6 +1061,7 @@
                         $('#divInciComentarios').css('display', 'block');
                     } else if (pregunta == 4) {
                         $("#categoria").val('Garrafones');
+                        $("#lblComentarios").text("Comentarios:");
                         $('#divFechaProgramada').css('display', 'block');
                         $('#divFechaProgramada label').text('Fecha de Entrega');
                         $('#divFechaRealizada').css('display', 'block');
