@@ -2692,6 +2692,10 @@ a.btn.disabled, fieldset:disabled a.btn {
     box-shadow: none !important;
 }
 
+.bg-cjf {
+    background-color: #24135F !important;
+}
+
 
 .btn-primary:hover {
     color: #fff;
@@ -18344,19 +18348,35 @@ html.maximized-card {
     border-radius: 3px;
     background-color: #f8f9fa;
     border: 1px solid #ddd;
-    color: #6c757d;
+    color: #FFF;
     font-size: 12px;
-    height: 60px;
+    height: 50px;
     margin: 0 0 10px 10px;
     min-width: 80px;
-    padding: 15px 5px;
     position: relative;
-    text-align: center
+    text-align: center;
+    width: 150px;
+    white-space: initial;
+}
+
+.btn-app-mes {
+    border-radius: 3px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    color: #FFF;
+    font-size: 12px;
+    height: 30px;
+    margin: 0 0 10px 10px;
+    min-width: 80px;
+    position: relative;
+    text-align: center;
+    width: 75px;
+    white-space: initial;
 }
 
     .btn-app > .fa, .btn-app > .fab, .btn-app > .far, .btn-app > .fas, .btn-app > .glyphicon, .btn-app > .ion {
-        display: block;
-        font-size: 20px
+        font-size: 10px;
+        margin-right: 2px;
     }
 
     .btn-app:hover {
@@ -18376,6 +18396,29 @@ html.maximized-card {
         right: -10px;
         top: -3px
     }
+
+.btn-app-mes > .fa, .btn-app-mes > .fab, .btn-app-mes > .far, .btn-app-mes > .fas, .btn-app-mes > .glyphicon, .btn-app-mes > .ion {
+    font-size: 10px;
+    margin-right: 2px;
+}
+
+.btn-app-mes:hover {
+    background: #f8f9fa;
+    border-color: #aaa;
+    color: #444
+}
+
+.btn-app-mes:active, .btn-app-mes:focus {
+    box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
+}
+
+.btn-app-mes > .badge {
+    font-size: 10px;
+    font-weight: 400;
+    position: absolute;
+    right: -10px;
+    top: -3px
+}
 
 .btn-xs {
     padding: .125rem .25rem;

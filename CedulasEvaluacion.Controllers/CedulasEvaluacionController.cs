@@ -190,11 +190,11 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No aplica la entrega de acuses en el mes de evaluación.")});
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de limieza no portó identificación y/o uniforme en todo momento.")});
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón incidencias en el inmueble en el mes de evaluación.")});
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de limieza portó identificación y/o uniforme en todo momento.") });
                     }
                 }
                 else if (i == 3)
@@ -225,7 +225,8 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no entregó el SUA de su personal en tiempo y forma.")});
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no entregó el SUA de su personal en tiempo y forma, " +
+                            "la administración comentó lo siguiente: "+respuestas[i].Detalles)});
                     }
                     else
                     {

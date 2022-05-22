@@ -12,6 +12,9 @@ namespace CedulasEvaluacion.Interfaces
     {
         Task<int> VerificaCedula(int servicio, int anio, string mes, int inmueble);
         Task<List<VCedulas>> GetCedulasEvaluacion(int servicio, int user);
+        Task<List<VCedulasEvaluacion>> GetCedulasEvaluacionEstatus(int servicio, int user);
+        Task<List<VCedulasEvaluacion>> GetCedulasEvaluacionMes(int servicio, int user, string status);
+        Task<List<VCedulas>> GetCedulasEvaluacionServicios(int servicio, int user, string estatus, string mes);
         Task<int> insertaCedula(CedulaEvaluacion cedula);
         Task<string> GetFolioCedula(int servicio);
         Task<CedulaEvaluacion> CedulaById(int id);

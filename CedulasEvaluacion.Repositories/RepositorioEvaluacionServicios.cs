@@ -89,7 +89,107 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
+        
+        //Posible metodo de sustitución a los servicios
+        public async Task<List<VCedulasEvaluacion>> GetCedulasEvaluacionEstatus(int servicio, int user)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getCedulasEvaluacionServiciosByEstatus", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        cmd.Parameters.Add(new SqlParameter("@usuario", user));
+                        var response = new List<VCedulasEvaluacion>();
+                        await sql.OpenAsync();
 
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValueEstatus(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+        public async Task<List<VCedulasEvaluacion>> GetCedulasEvaluacionMes(int servicio, int user, string estatus)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getCedulasEvaluacionServiciosByMes", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        cmd.Parameters.Add(new SqlParameter("@usuario", user));
+                        cmd.Parameters.Add(new SqlParameter("@estatus", estatus));
+                        var response = new List<VCedulasEvaluacion>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValueMes(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+        public async Task<List<VCedulas>> GetCedulasEvaluacionServicios(int servicio, int user, string estatus,string mes)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getCedulasEvaluacionServicios", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        cmd.Parameters.Add(new SqlParameter("@usuario", user));
+                        cmd.Parameters.Add(new SqlParameter("@estatus", estatus));
+                        cmd.Parameters.Add(new SqlParameter("@mes", mes));
+                        var response = new List<VCedulas>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValue(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
         public async Task<int> insertaCedula(CedulaEvaluacion cedula)
         {
             try
@@ -406,6 +506,28 @@ namespace CedulasEvaluacion.Repositories
                 Anio = (int)reader["Anio"],
                 Servicio = reader["Servicio"].ToString(),
                 Estatus = reader["Estatus"].ToString()
+            };
+        }
+
+        private VCedulasEvaluacion MapToValueEstatus(SqlDataReader reader)
+        {
+            return new VCedulasEvaluacion()
+            {
+                Id = (int)reader["Id"],
+                Estatus = reader["Estatus"].ToString(),
+                Prioridad = reader["Prioridad"].ToString(),
+                Icono = reader["Icono"].ToString(),
+                Fondo = reader["Fondo"].ToString(),
+                TotalCedulas = (int)reader["TotalCedulas"],
+            };
+        }
+
+        private VCedulasEvaluacion MapToValueMes(SqlDataReader reader)
+        {
+            return new VCedulasEvaluacion()
+            {
+                Mes = reader["Mes"].ToString(),
+                TotalCedulas = (int)reader["TotalCedulas"],
             };
         }
 
