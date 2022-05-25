@@ -640,8 +640,10 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El servicio no se llevó a cabo en el día programado, se llevó a cabo en la fecha " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
-                                   " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " + Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".")});
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El servicio no se llevó a cabo en el día programado, se programó en la fecha "+Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("dd") +
+                                   " de " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("yyyy")+" y se llevó a cabo en la fecha " + 
+                                   Convert.ToDateTime(respuestas[i].Detalles.Split("|")[1]).ToString("dd") + " de " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[1]).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " 
+                                   + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[1]).ToString("yyyy") + ".")});
                     }
                     else
                     {

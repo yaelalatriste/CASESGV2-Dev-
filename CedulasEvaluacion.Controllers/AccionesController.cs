@@ -76,7 +76,7 @@ namespace CedulasEvaluacion.Controllers
         {
             int exists = 0;
             exists = await vEntregables.GetFlujoCedulaCAR(cedula, estatus);
-            if (exists != -1)
+            if (exists != -3)
             {
                 return Ok(exists);
             }

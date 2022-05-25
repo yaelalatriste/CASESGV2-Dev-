@@ -1,123 +1,259 @@
-﻿@* Principal de Traslado de Expedientes*@
-@model IEnumerable<CedulasEvaluacion.Entities.Vistas.VCedulas>
+﻿@model CedulasEvaluacion.Entities.MCedula.ModelsIndex
 @{
+    var i = 0;
     ViewData["Title"] = "Listado de Cédulas del Servicio Maniobras para el Traslado de Expedientes";
 }
-<div class="row" id="Prrueba">
-    <div class="col-lg-12">
-        <table class="table table-hover table-responsive-xl" id="dt_traslado">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Estatus</th>
-                    <th>Servicio</th>
-                    <th>Folio</th>
-                    <th>Mes</th>
-                    <th>Año</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
 
-                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                       @if (item.Estatus.Equals("Enviado a DAS"))
+<div class="row" id="Prrueba">
+    <div class="row col-lg-12">
+        <div class="row col-lg-12">
+            <p class="h5">Para dar seguimiento de clic en los estatus marcados con el recuadro "<button class='btn btn-xs btn-danger text-danger'><span class='bg-danger text-danger'></span>0</button>" con prioridad urgente.</p>
+        </div>
+        @foreach (var md in Model.cedulasEstatus)
+        {
+            @if (md.Prioridad.Equals("Urgente"))
+            {
+                <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
+                    <span class="badge bg-danger">@md.TotalCedulas</span>
+                    @Html.Raw(md.Icono)
+                    Cédula(s) en estatus @md.Estatus
+                </a>
+            }
+            else if (md.Prioridad.Equals("Alta"))
+            {
+                <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
+                    @Html.Raw(md.Icono)
+                    @md.TotalCedulas cédula(s) en estatus @md.Estatus
+                </a>
+            }
+            else if (md.Prioridad.Equals("Media"))
+            {
+                <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
+                    @Html.Raw(md.Icono)
+                    @md.TotalCedulas cédula(s) en estatus @md.Estatus
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
+                    @Html.Raw(md.Icono)
+                    @md.TotalCedulas cédula(s) en estatus @md.Estatus
+                </a>
+            }
+        }
+    </div>
+    <div class="row col-lg-12">
+        @if (Model.Estatus != null && !Model.Estatus.Equals(""))
+        {
+            <div class="col-lg-12">
+                <p class="h6 font-weight-bold">Para dar seguimiento a la(s) cédula(s) realice los siguientes pasos: </p>
+                <p class="h6 font-weight-bold mt-4">1) Seleccione el mes: </p>
+            </div>
+            <div class="col-lg-12">
+                @foreach (var md in Model.cedulasMes)
+                {
+                    <a class="btn @md.Fondo btn-app-mes text-white font-weight-bold btnMes" data-mes="@md.Mes" data-estatus="@Model.Estatus">
+                        <span class="badge bg-danger">@md.TotalCedulas</span>
+                        @md.Mes
+                    </a>
+                }
+            </div>
+        }
+    </div>
+    @if (Model.Mes != null && !Model.Mes.Equals(""))
+    {
+        <div class="col-lg-12">
+            <p class="h6 font-weight-bold mt-2 mb-4">2) En la sección de <strong>"Acciones"</strong> de clic en el ícono de seguimiento <i class="fas fa-file-import text-primary"></i> :</p>
+            <p class="text-justify"><b>NOTA: </b> Para el estatus <b class="text-danger">Rechazado</b> debe seleccionar el ícono <i class="fad fa-pencil text-primary"></i> para editar el cuestionario y volver a enviarlo a la DAS con las correcciones solicitadas para su revisión.</p>
+            <table class="table table-hover table-responsive-xl" id="dt_traslado">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Estatus</th>
+                        <th>Servicio</th>
+                        <th>Folio</th>
+                        <th>Mes</th>
+                        <th>Año</th>
+                        @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                         {
-                            <td class="text-enviadoDAS" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                            <th>Validación OP</th>
                         }
-                        else if (item.Estatus.Equals("Revisión CAE"))
-                        {
-                            <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                        }
-                        else if (item.Estatus.Equals("En Trámite"))
-                        {
-                            <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                        }
-                        else if (item.Estatus.Equals("Rechazada"))
-                        {
-                            <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                        }
-                        else if (item.Estatus.Equals("Trámite Rechazado"))
-                        {
-                            <td class="text-tramiteRechazado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                        }
-                        else if (item.Estatus.Equals("Autorizada"))
-                        {
-                            <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                        }
-                        else if (item.Estatus.Equals("Autorizado CAE"))
-                        {
-                            <td class="text-autorizadoCAE" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                        }
-                        else if (item.Estatus.Equals("Trámite de Pago"))
-                        {
-                            <td class="text-tramitePAgo" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                        }
-                        else if (item.Estatus.Equals("Enviada a DGPPT"))
-                        {
-                            <td class="text-dgppt" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                        }
-                        else if (item.Estatus.Equals("Pagada"))
-                        {
-                            <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                        }
-                        else 
-                        {
-                            <td class="text-warning" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                        }
-                        <td>@Html.DisplayFor(modelItem => item.Servicio)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Folio)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Mes)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Anio)</td>
-                        <td>
-                            @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.cedulas)
+                    {
+                        <tr>
+
+                            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                            @if (item.Estatus.Equals("Enviado a DAS"))
                             {
-                                <a href="/trasladoExp/revision/@item.Id" class="text-center">
-                                    <i class="fad fa-eye text-success"></i>
-                                </a>
+                                <td class="text-enviadoDAS" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                             }
-                            @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
+                            else if (item.Estatus.Equals("Revisión CAE"))
                             {
-                                <a asp-action="evaluacion" asp-controller="TrasladoExp" asp-route-id="@item.Id" class="text-center ml-2">
-                                    <i class="fad fa-pencil text-primary"></i>
-                                </a>
+                                <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                             }
-                            @if (!item.Estatus.Equals("En Proceso"))
+                            else if (item.Estatus.Equals("En Trámite"))
                             {
-                                <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
-                                    @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
-                                    {
-                                        <i class="fal fa-file-pdf text-success"></i>
-                                    }
-                                    else @if (item.Estatus.Equals("Rechazada"))
-                               {
-                                <i class="fal fa-file-pdf text-danger"></i>
+                                <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                            }
+                            else if (item.Estatus.Equals("Rechazada"))
+                            {
+                                <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                            }
+                            else if (item.Estatus.Equals("Trámite Rechazado"))
+                            {
+                                <td class="text-tramiteRechazado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                            }
+                            else if (item.Estatus.Equals("Autorizada"))
+                            {
+                                <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                            }
+                            else if (item.Estatus.Equals("Autorizado CAE"))
+                            {
+                                <td class="text-autorizadoCAE" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                            }
+                            else if (item.Estatus.Equals("Trámite de Pago"))
+                            {
+                                <td class="text-tramitePAgo" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                            }
+                            else if (item.Estatus.Equals("Enviada a DGPPT"))
+                            {
+                                <td class="text-dgppt" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                            }
+                            else if (item.Estatus.Equals("Pagada"))
+                            {
+                                <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                             }
                             else
                             {
-                                <i class="fal fa-file-pdf text-primary"></i>
+                                <td class="text-warning" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                             }
-                                </a>
+                            <td>@Html.DisplayFor(modelItem => item.Servicio)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Folio)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Mes)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Anio)</td>
+                            @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && item.Estatus.Equals("En Trámite"))
+                            {
+                                @if (item.MemoValidado == true && item.CedulaValidada == true)
+                                {
+                                    <td class="text-center">
+                                        <i class="fa-regular fa-check text-success"></i>
+                                        <i class="fa-regular fa-check text-success"></i>
+                                    </td>
+                                }
+                                else if ((item.MemoValidado == true && item.CedulaValidada == false) || (item.MemoValidado == false && item.CedulaValidada == true))
+                                {
+                                    <td class="text-center">
+                                        <i class="fa-regular fa-check text-success"></i>
+                                        <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
+                                    </td>
+                                }
+                                else if (item.MemoValidado == false && item.CedulaValidada == false)
+                                {
+                                    <td class="text-center">
+                                        <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
+                                        <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
+                                    </td>
+                                }
                             }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                            else if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && !item.Estatus.Equals("En Trámite"))
+                            {
+                                @if (item.MemoValidado == true && item.CedulaValidada == true)
+                                {
+                                    <td class="text-center">
+                                        <i class="fa-regular fa-check text-success"></i>
+                                        <i class="fa-regular fa-check text-success"></i>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="text-center">
+                                        <i class="fa-regular fa-user-clock text-primary"></i>
+                                    </td>
+                                }
+                            }
+                            <td>
+                                @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                                {
+                                    <a href="/trasladoExp/revision/@item.Id" class="text-center">
+                                        <i class="fad fa-eye text-success"></i>
+                                    </a>
+                                }
+                                @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
+                                {
+                                    <a asp-action="evaluacion" asp-controller="TrasladoExp" asp-route-id="@item.Id" class="text-center ml-2">
+                                        <i class="fad fa-pencil text-primary"></i>
+                                    </a>
+                                }
+                                @if (!item.Estatus.Equals("En Proceso"))
+                                {
+                                    <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                        @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
+                                        {
+                                            <i class="fal fa-file-pdf text-success"></i>
+                                        }
+                                        else @if (item.Estatus.Equals("Rechazada"))
+                                   {
+                                    <i class="fal fa-file-pdf text-danger"></i>
+                                }
+                                else
+                                {
+                                    <i class="fal fa-file-pdf text-primary"></i>
+                                }
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
+<style>
+    .swal2-icon.swal2-info {
+        color: #f27474 !important;
+        border-color: #f27474 !important;
+    }
+
+    .swal-wide {
+        width: 800px !important;
+    }
+
+    .swal-wide2 {
+        width: 900px !important;
+    }
+</style>
 @section Scripts{
     <script>
         $(function () {
+            var model = @Html.Raw(Json.Serialize(@Model));
+            $('[data-toggle="tooltip"]').tooltip();
+            localStorage.clear();
+
+            function cuentaTramites() {
+                var c = 0;
+                for (var i = 0; i < model.length; i++) {
+                    if (model[i].estatus == "En Trámite") {
+                        return 1;
+                    }
+                }
+            }
+
             $("#dt_traslado").DataTable({
-                paging: true,
-                bLengthChange: false,
-                pageLength: 10,
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
                 },
+                "columnDefs": [
+                    {
+                        "targets": [cuentaTramites() > 0 ? 7 : null],
+                        "visible": cuentaTramites() > 0 ? true : false,
+                        "searchable": false
+                    },
+                ]
             });
 
             $('.btn_pdf').click(function () {
@@ -137,6 +273,88 @@
                 } else {
                     window.open('/cedula/trasladoExp/' + servicio + '/' + id, '_blank');
                 }
+            });
+
+            if ((model.estatus == "" || model.estatus == null) && (model.mes == "" || model.mes == null) && cuentaCedulasUrgentes() != 0) {
+                Swal.fire({
+                    'icon': 'info',
+                    'customClass': 'swal-wide2',
+                    'title': 'Servicio de Traslado de Expedientes',
+                    'confirmButtonText': 'Cerrar',
+                    'html': '<p class="text-justify"><b>Cédulas pendientes de dar seguimiento:</b> ' + desgloceCedulasEstatus() + '</p>'
+                });
+            }
+            else if ((model.estatus != "" && model.estatus != null) && (model.mes == "" || model.mes == null) && (model.estatus != "Trámite de Pago" && model.estatus != "Enviada a DGPPT" && model.estatus != "Pagada")) {
+                Swal.fire({
+                    'icon': 'info',
+                    'title': 'Servicio de Traslado de Expedientes',
+                    'customClass': 'swal-wide',
+                    'confirmButtonText': 'Cerrar',
+                    'html': '<p class="text-justify">En el estatus <b>' + model.estatus + '</b> cuenta con un total de <b>' + totalCedulasMes() + '</b> cédula(s) desglosadas en el(los) siguiente(s) mese(s):<br /></p>' +
+                        desgloceCedulasMes() + '</p>'
+                });
+            }
+
+            function totalCedulasMes() {
+                let c = 0;
+                for (var i = 0; i < model.cedulasMes.length; i++) {
+                    c += model.cedulasMes[i].totalCedulas;
+                }
+                return c;
+            }
+
+            function desgloceCedulasMes() {
+                let tb = "<ul class='text-left'>";
+                for (var i = 0; i < model.cedulasMes.length; i++) {
+                    tb += "<li>" + "<b>" + model.cedulasMes[i].mes + ": </b>" + model.cedulasMes[i].totalCedulas + " cédula(s)</li>";
+                }
+                tb += "</ul>";
+                return tb;
+            }
+
+            function desgloceCedulasEstatus() {
+                let tb = "<table class='table mt-3'>" +
+                    "<thead>" +
+                    "<tr>" +
+                    "<th class='text-center'>Prioridad</th>" +
+                    "<th class='text-center'>Cédula(s)</th>" +
+                    "<th class='text-center'>Estatus</th>" +
+                    "</tr>" +
+                    "</thead><tbody>";
+                let bg = "";
+                for (var i = 0; i < model.cedulasEstatus.length; i++) {
+                    if (model.cedulasEstatus[i].prioridad == "Urgente") {
+                        bg = model.cedulasEstatus[i].prioridad == "Urgente" ? "btn-danger text-danger" : "btn-warning text-warning";
+                        tb +=
+                            "<tr>" +
+                            "<td class='text-center'><button class='btn btn-xs " + bg + " mr-2'><span class='bg-danger'></span>0</button>" + model.cedulasEstatus[i].prioridad + "</td>" +
+                            "<td class='text-center'>" + model.cedulasEstatus[i].totalCedulas + "</td>" +
+                            "<td class='text-center'>" + model.cedulasEstatus[i].estatus + "</td>" +
+                            "</tr>";
+                    }
+                }
+                tb += "</tbody></table>";
+                return tb;
+            }
+
+            function cuentaCedulasUrgentes() {
+                for (var i = 0; i < model.cedulasEstatus.length; i++) {
+                    if (model.cedulasEstatus[i].prioridad == "Urgente") {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+
+            $(".btnEstatus").click(function () {
+                var estatus = $(this).data('estatus');
+                window.location.href = "/trasladoExp/index/" + model.servicioId + '?Estatus=' + estatus;
+            });
+
+            $(".btnMes").click(function () {
+                var mes = $(this).data('mes');
+                var estatus = $(this).data('estatus');
+                window.location.href = "/trasladoExp/index/" + model.servicioId + '?Estatus=' + estatus + '&Mes=' + mes;
             });
         });
     </script>

@@ -25,5 +25,6 @@ namespace CedulasEvaluacion.Interfaces
         Task<int> capturaHistorial(HistorialCedulas historialCedulas);
         Task<List<HistorialCedulas>> getHistorial(object id);
         Task<int> EliminaCedula(int id);
+        int CuentaCedulasUrgentes(List<VCedulasEvaluacion> cedulas);
     }
 }

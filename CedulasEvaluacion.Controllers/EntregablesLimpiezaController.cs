@@ -13,11 +13,13 @@ namespace CedulasEvaluacion.Controllers
     public class EntregablesLimpiezaController : Controller
     {
         private readonly IRepositorioEntregablesCedula vEntregables;
+        private readonly IRepositorioAlcancesEntregables vAlcances;
         private readonly IHostingEnvironment environment;
 
-        public EntregablesLimpiezaController(IRepositorioEntregablesCedula iVEntregables, IHostingEnvironment environment)
+        public EntregablesLimpiezaController(IRepositorioEntregablesCedula iVEntregables, IRepositorioAlcancesEntregables viAlcances, IHostingEnvironment environment)
         {
             this.vEntregables = iVEntregables ?? throw new ArgumentNullException(nameof(iVEntregables));
+            this.vAlcances = viAlcances ?? throw new ArgumentNullException(nameof(viAlcances));
             this.environment = environment;
         }
 
@@ -29,6 +31,22 @@ namespace CedulasEvaluacion.Controllers
         {
             int success = 0;
             success = await vEntregables.adjuntaEntregable(entregables);
+            if (success != 0)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Route("/limpieza/adjuntaAlcance")]
+        public async Task<IActionResult> adjuntaAlcance([FromForm] Entregables entregables)
+        {
+            int success = 0;
+            success = await vAlcances.adjuntaEntregable(entregables);
             if (success != 0)
             {
                 return Ok();
@@ -95,7 +113,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> getAlcancesEntregables(int id)
         {
             List<Entregables> entregables = null;
-            entregables = await vEntregables.GetAlcancesEntregable(id);
+            entregables = await vAlcances.getEntregables(id);
             string table = "";
             int i = 0;
             string tipo = "";
@@ -120,13 +138,22 @@ namespace CedulasEvaluacion.Controllers
                     "<td>" + i + "</td>" +
                     "<td>" + tipo + "</td>" +
                     "<td>" + entregable.NombreArchivo + "</td>" +
+                    (entregable.Estatus.Equals("En Revisión") ? ("<td class='text-primary font-weight-bold'>" + entregable.Estatus + "</td>") : (entregable.Estatus.Equals("Autorizado") ? ("<td class='text-success font-weight-bold'>" + entregable.Estatus + "</td>") : ("<td class='text-danger font-weight-bold'>" + entregable.Estatus + "</td>"))) +
                     "<td>" + entregable.FechaCreacion.ToString("dd/MM/yyyy") + "</td>" +
-                    "<td>" + (entregable.FechaActualizacion.ToString("dd/MM/yyyy").Equals("01/01/1990") ? "-":entregable.FechaActualizacion.ToString("dd/MM/yyyy")) + "</td>" +
+                    "<td class='text-center'>" + (entregable.FechaActualizacion.ToString("dd/MM/yyyy").Equals("01/01/0001") ? "-":entregable.FechaActualizacion.ToString("dd/MM/yyyy")) + "</td>" +
                     "<td>" +
-                        "<a href='#' class='text-center mr-2 view_alcance' data-id='" + entregable.Id + "' data-file='" + entregable.NombreArchivo + "' data-tipo ='" + tipo + "'>" +
+                        "<a href='#' class='text-center mr-2 view_alcance' data-id='" + entregable.Id + "' data-file='" + entregable.NombreArchivo + "' data-tipo ='" + entregable.Tipo + "'>" +
                         "<i class='fas fa-eye text-success'></i></a>" +
                         "<a href='#' class='text-center mr-2 update_alcance' data-id='" + entregable.Id + "' data-coments='" + entregable.Comentarios + "' data-file='" + entregable.NombreArchivo + "'" +
                             "data-tipo='" + entregable.Tipo + "'><i class='fas fa-edit text-primary'></i></a>" +
+                        (entregable.Estatus.Equals("En Revisión") ? ("<a href='#' class='text-center mr-2 autorizar_alcance' data-id='" + entregable.Id + "' data-toggle='tooltip' title='Autorizar Alcance' "+
+                        " data-tipo = '" + entregable.Tipo + "'><i class='fas fa-check text-success'></i></a>" +
+                        "<a href='#' class='text-center mr-2 rechazar_alcance' data-id='" + entregable.Id + "' data-toggle='tooltip' title='Rechazar Alcance' "+
+                            " data-tipo = '" + entregable.Tipo + "'><i class='fas fa-times text-danger'></i></a>"):(""))+
+                         (entregable.Estatus.Equals("Autorizado") ? ("<a href='#' class='text-center mr-2 rechazar_alcance' data-id='" + entregable.Id + "' data-toggle='tooltip' title='Rechazar Alcance' " +
+                            " data-tipo = '" + entregable.Tipo + "'><i class='fas fa-times text-danger'></i></a>") : ("")) +
+                         (entregable.Estatus.Equals("Rechazado") ? ("<a href='#' class='text-center mr-2 autorizar_alcance' data-id='" + entregable.Id + "' data-toggle='tooltip' title='Autorizar Alcance' " +
+                        " data-tipo = '" + entregable.Tipo + "'><i class='fas fa-check text-success'></i></a>") : (""))+
                     "</td>" +
                     "</tr>";
                 }
@@ -167,9 +194,24 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("/limpieza/Entregables/autoRecha")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] Entregables entregables)
+        public async Task<IActionResult> apruebaRechazaEntregable([FromBody] Entregables entregables)
         {
             int success = await vEntregables.apruebaRechazaEntregable(entregables);
+            if (success != 0)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        [Route("/limpieza/alcances/autoRecha")]
+        public async Task<IActionResult> apruebaRechazaAlcance([FromBody] Entregables entregables)
+        {
+            int success = await vAlcances.apruebaRechazaAlcance(entregables);
             if (success != 0)
             {
                 return Ok();

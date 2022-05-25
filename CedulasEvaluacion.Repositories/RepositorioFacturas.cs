@@ -418,7 +418,7 @@ namespace CedulasEvaluacion.Repositories
             decimal total = 0;
             foreach (var fac in facturas)
             {
-                if (!fac.receptor.usoCFDI.Equals("G02") && !fac.comprobante.Serie.Equals("NCRE")) {
+                if (!fac.Tipo.Equals("NotaCredito")) {
                     total += fac.comprobante.Total;
                 }
             }
@@ -456,6 +456,7 @@ namespace CedulasEvaluacion.Repositories
                 Id = (int)reader["Id"],
                 CedulaId = (int)reader["CedulaId"],
                 Descripcion = reader["Descripcion"].ToString(),
+                Tipo = reader["Descripcion"] != DBNull.Value ? reader["Tipo"].ToString():"",
                 comprobante = compro,
                 emisor = emi,
                 receptor = recept,

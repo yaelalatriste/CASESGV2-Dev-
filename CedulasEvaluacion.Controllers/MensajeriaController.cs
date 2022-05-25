@@ -56,7 +56,7 @@ namespace CedulasEvaluacion.Controllers
                 models.cedulasEstatus = await vCedula.GetCedulasEvaluacionEstatus(servicio, UserId());
                 if (models.Estatus != null && !models.Estatus.Equals(""))
                 {
-                    models.cedulasMes= await vCedula.GetCedulasEvaluacionMes(servicio, UserId(),Estatus);
+                    models.cedulasMes = await vCedula.GetCedulasEvaluacionMes(servicio, UserId(), Estatus);
                 }
                 if (models.Mes != null && !models.Mes.Equals(""))
                 {
@@ -64,6 +64,7 @@ namespace CedulasEvaluacion.Controllers
                 }
                 return View(models);
             }
+            
             return Redirect("/error/denied");
         }
 

@@ -1,78 +1,140 @@
 ﻿@model IEnumerable<CedulasEvaluacion.Entities.Models.Dashboard>
 @{
-    ViewData["Title"] = "Bienvenido " + System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(@User.Claims.ElementAt(1).Value);
+    ViewData["Title"] = "Dashboard de Servicios";
 }
 
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-12 text-justify">
-            <h3>Dashboard de Servicios</h3>
+        <div class="col-lg-12 bg-danger text-justify font-weight-bold">
+            <h4>Cédulas pendientes</h4>
         </div>
     </div>
     <!-- Small boxes (Stat box) -->
     @if (Model.Count() > 0)
     {
-        <div class="row mt-3">
+        <div class="row col-lg-12 mt-3">
             @foreach (var ds in Model)
             {
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box @ds.Fondo">
-                        <div class="inner">
-                            <h3>@ds.Total</h3>
-                            @if (@ds.Estatus.Equals("Enviado a DAS"))
-                            {
-                                <div class="form-row">
-                                    <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "Enviadas a DAS"' data-placement="top">
-                                        <i class="fas fa-eye text-white"></i>
-                                    </a>
-                                    <strong><p>Cédulas Enviadas a DAS</p></strong>
-                                </div>
-                            }
-                            else if (@ds.Estatus.Equals("En Proceso"))
-                            {
-                                <div class="form-row">
-                                    <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "En Proceso"' data-placement="top">
-                                        <i class="fas fa-eye text-dark"></i>
-                                    </a>
-                                    <strong> <p>Cédulas en Proceso</p></strong>
-                                </div>
-                            }
-                            else if (@ds.Estatus.Equals("Trámite Rechazado"))
-                            {
-                                <div class="form-row">
-                                    <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion con "Trámite Rechazado"' data-placement="top">
-                                        <i class="fas fa-eye text-white"></i>
-                                    </a>
-                                    <strong> <p>Cédulas con Trámite Rechazado</p></strong>
-                                </div>
-                            }
-                            else if (@ds.Estatus.Equals("Trámite de Pago"))
-                            {
-                                <div class="form-row">
-                                    <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion en "Trámite de Pago"' data-placement="top">
-                                        <i class="fas fa-eye text-white"></i>
-                                    </a>
-                                    <strong> <p>Cédulas en @ds.Estatus</p></strong>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="form-row">
-                                    <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "@Html.DisplayFor(item => ds.Estatus)s"' data-placement="top">
-                                        <i class="fas fa-eye text-white"></i>
-                                    </a>
-                                    <strong><p>Cédulas @Html.DisplayFor(item => ds.Estatus)</p></strong>
-                                </div>
-                            }
+                @if(    !ds.Estatus.Equals("En Trámite") && !ds.Estatus.Equals("Trámite de Pago") && !ds.Estatus.Equals("Enviada a DGPPT") && !ds.Estatus.Equals("Pagada")) 
+                { 
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box @ds.Fondo">
+                            <div class="inner">
+                                <h3>@ds.Total</h3>
+                                @if (@ds.Estatus.Equals("Enviado a DAS"))
+                                {
+                                    <div class="form-row">
+                                        <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "Enviadas a DAS"' data-placement="top">
+                                            <i class="fas fa-eye text-white"></i>
+                                        </a>
+                                        <strong><p>Cédula(s) enviadas a DAS</p></strong>
+                                    </div>
+                                }
+                                else if (@ds.Estatus.Equals("En Proceso"))
+                                {
+                                    <div class="form-row">
+                                        <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "En Proceso"' data-placement="top">
+                                            <i class="fas fa-eye text-dark"></i>
+                                        </a>
+                                        <strong><p>Cédula(s) en proceso</p></strong>
+                                    </div>
+                                }
+                                else if (@ds.Estatus.Equals("Trámite Rechazado"))
+                                {
+                                    <div class="form-row">
+                                        <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion con "Trámite Rechazado"' data-placement="top">
+                                            <i class="fas fa-eye text-white"></i>
+                                        </a>
+                                        <strong> <p>Cédula(s) en trámite rechazado</p></strong>
+                                    </div>
+                                }
+                                else if (@ds.Estatus.Equals("Revisión CAE") || @ds.Estatus.Equals("Autorizado CAE"))
+                                {
+                                    <div class="form-row">
+                                        <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion con "Trámite Rechazado"' data-placement="top">
+                                            <i class="fas fa-eye text-white"></i>
+                                        </a>
+                                        <strong><p>Cédula(s) @Html.DisplayFor(item => ds.Estatus)</p></strong>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-row">
+                                        <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "@Html.DisplayFor(item => ds.Estatus)s"' data-placement="top">
+                                            <i class="fas fa-eye text-white"></i>
+                                        </a>
+                                        <strong><p>Cédula(s) @Html.DisplayFor(item => ds.Estatus)s</p></strong>
+                                    </div>
+                                }
+                            </div>
+                            <div class="icon">
+                                @Html.Raw(@ds.Icono)
+                            </div>
+                            <a href="/CedulasEstatus/@ds.Estatus" class="small-box-footer">Mas Información <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
-                        <div class="icon">
-                            @Html.Raw(@ds.Icono)
-                        </div>
-                        <a href="/CedulasEstatus/@ds.Estatus" class="small-box-footer">Mas Información <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
+                }
+            }
+        </div>
+        <div class="row col-lg-12 mt-3">
+            <div class="col-lg-12 bg-success mb-3 text-justify font-weight-bold">
+                <h4>Cédulas atendidas</h4>
+            </div>
+            @foreach (var ds in Model)
+            {
+                @if (ds.Estatus.Equals("Trámite de Pago") || ds.Estatus.Equals("Enviada a DGPPT") || ds.Estatus.Equals("Pagada") || ds.Estatus.Equals("En Trámite"))
+                {
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box @ds.Fondo">
+                            <div class="inner">
+                                <h3>@ds.Total</h3>
+                                @if (@ds.Estatus.Equals("Trámite de Pago"))
+                                {
+                                    <div class="form-row">
+                                        <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "Enviadas a DAS"' data-placement="top">
+                                            <i class="fas fa-eye text-white"></i>
+                                        </a>
+                                        <strong><p>Cédula(s) en trámite de pago</p></strong>
+                                    </div>
+                                }
+                                else if (@ds.Estatus.Equals("Enviada a DGPPT"))
+                                {
+                                    <div class="form-row">
+                                        <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion "En Proceso"' data-placement="top">
+                                            <i class="fas fa-eye text-white"></i>
+                                        </a>
+                                        <strong><p>Cédula(s) enviadas a DGPPT</p></strong>
+                                    </div>
+                                }
+                                else if (@ds.Estatus.Equals("Pagada"))
+                                {
+                                    <div class="form-row">
+                                        <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion con "Trámite Rechazado"' data-placement="top">
+                                            <i class="fas fa-eye text-white"></i>
+                                        </a>
+                                        <strong> <p>Cédula(s) pagadas</p></strong>
+                                    </div>
+                                }
+                                else if (@ds.Estatus.Equals("En Trámite"))
+                                {
+                                    <div class="form-row">
+                                        <a href="/home/listado/@ds.Estatus" class="small-box-footer mr-2 ml-2" data-toggle="tooltip" title='Ver todas las cédulas de evaluacion con "Trámite Rechazado"' data-placement="top">
+                                            <i class="fas fa-eye text-white"></i>
+                                        </a>
+                                        <strong> <p>Cédula(s) en trámite</p></strong>
+                                    </div>
+                                }
+                            </div>
+                            <div class="icon">
+                                @Html.Raw(@ds.Icono)
+                            </div>
+                            <a href="/CedulasEstatus/@ds.Estatus" class="small-box-footer">Mas Información <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                }
             }
         </div>
     }

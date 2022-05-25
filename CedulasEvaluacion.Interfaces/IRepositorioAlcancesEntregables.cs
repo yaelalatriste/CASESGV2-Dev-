@@ -11,11 +11,9 @@ namespace CedulasEvaluacion.Interfaces
         Task<List<Entregables>> getEntregables(int cedula);
         Task<int> adjuntaEntregable(Entregables entregables);//adjuntaEntregable
         Task<int> eliminaEntregable(Entregables entregable);
-        Task<int> GetFlujoCedulaCAE(int cedula, string estatus);
-        Task<int> GetFlujoCedulaCAR(int cedula, string estatus);
         Task<int> buscaEntregable(int id, string tipo);
         Task<int> capturaHistorial(HistorialEntregables historialEntregables);
         Task<List<HistorialEntregables>> getHistorialEntregables(int id, int servicioId);
-        Task<int> apruebaRechazaEntregable(Entregables entregables);
+        Task<int> apruebaRechazaAlcance(Entregables entregables);
     }
 }

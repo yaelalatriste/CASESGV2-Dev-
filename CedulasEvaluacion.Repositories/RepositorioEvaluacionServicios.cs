@@ -223,7 +223,6 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-
         public async Task<string> GetFolioCedula(int servicio)
         {
             string folio = "";
@@ -254,7 +253,6 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
         public async Task<CedulaEvaluacion> CedulaById(int id)
         {
             try
@@ -285,7 +283,6 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
         public async Task<int> GuardaRespuestas(List<RespuestasEncuesta> respuestasEncuestas)
         {
             int id = 0;
@@ -322,7 +319,6 @@ namespace CedulasEvaluacion.Repositories
                 return -1;
             }
         }
-
         public async Task<List<RespuestasEncuesta>> obtieneRespuestas(int id)
         {
             try
@@ -354,7 +350,6 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
         public async Task<int> enviaRespuestas(int servicio, int cedula)
         {
             try
@@ -380,7 +375,6 @@ namespace CedulasEvaluacion.Repositories
                 return -1;
             }
         }
-
         public async Task<int> apruebaRechazaCedula(CedulaEvaluacion cedula)
         {
             try
@@ -407,7 +401,6 @@ namespace CedulasEvaluacion.Repositories
                 return -1;
             }
         }//
-
         public async Task<int> capturaHistorial(HistorialCedulas historialCedulas)
         {
             try
@@ -435,7 +428,6 @@ namespace CedulasEvaluacion.Repositories
                 return -1;
             }
         }//
-
         public async Task<List<HistorialCedulas>> getHistorial(object id)
         {
             try
@@ -467,7 +459,6 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }//
-
         public async Task<int> EliminaCedula(int id)
         {
             try
@@ -492,7 +483,19 @@ namespace CedulasEvaluacion.Repositories
                 return -1;
             }
         }
+        public int CuentaCedulasUrgentes(List<VCedulasEvaluacion> cedulas)
+        {
+            int i = 0;
+            foreach (var ced in cedulas)
+            {
+                if (ced.Prioridad.Equals("Urgente"))
+                {
+                    i++;
+                }
+            }
 
+            return i;
+        }
         private VCedulas MapToValue(SqlDataReader reader)
         {
             return new VCedulas()
@@ -504,11 +507,12 @@ namespace CedulasEvaluacion.Repositories
                 Destino = reader["Destino"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Anio = (int)reader["Anio"],
+                CedulaValidada = reader["CedulaValidada"] != DBNull.Value ? (bool)reader["CedulaValidada"] : false,
+                MemoValidado = reader["MemoValidado"] != DBNull.Value ? (bool) reader["MemoValidado"] : false,
                 Servicio = reader["Servicio"].ToString(),
                 Estatus = reader["Estatus"].ToString()
             };
         }
-
         private VCedulasEvaluacion MapToValueEstatus(SqlDataReader reader)
         {
             return new VCedulasEvaluacion()
@@ -521,16 +525,15 @@ namespace CedulasEvaluacion.Repositories
                 TotalCedulas = (int)reader["TotalCedulas"],
             };
         }
-
         private VCedulasEvaluacion MapToValueMes(SqlDataReader reader)
         {
             return new VCedulasEvaluacion()
             {
+                Fondo = reader["Fondo"] != DBNull.Value ? reader["Fondo"].ToString():"",
                 Mes = reader["Mes"].ToString(),
                 TotalCedulas = (int)reader["TotalCedulas"],
             };
         }
-
         private CedulaEvaluacion MapToValueCedula(SqlDataReader reader)
         {
             return new CedulaEvaluacion()
@@ -550,7 +553,6 @@ namespace CedulasEvaluacion.Repositories
                 FechaCreacion = (DateTime)reader["FechaCreacion"]
             };
         }
-
         private RespuestasEncuesta MapToValueRespuestas(SqlDataReader reader)
         {
             return new RespuestasEncuesta
@@ -563,7 +565,6 @@ namespace CedulasEvaluacion.Repositories
                 MontoPenalizacion = reader["MontoPenalizacion"] != DBNull.Value ? Convert.ToDecimal(reader["MontoPenalizacion"]) : 0
             };
         }
-
         private HistorialCedulas MapToValueHistorial(SqlDataReader reader)
         {
             return new HistorialCedulas
@@ -576,7 +577,6 @@ namespace CedulasEvaluacion.Repositories
                 FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"])
             };
         }
-
         private string generaFolio(int inmuebleId, string mes, string servicio, int destino)
         {
             string date = DateTime.Now.ToString("yyyy");
@@ -593,7 +593,6 @@ namespace CedulasEvaluacion.Repositories
                 return inmuebleId < 9 ? servicio + "-0" + inmuebleId + "-" + date + convertirMes(mes) : servicio + "-" + inmuebleId + "-" + date + convertirMes(mes);
             }            
         }
-
         private string convertirMes(string mes)
         {
             string[] meses = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };

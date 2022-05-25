@@ -18355,7 +18355,7 @@ html.maximized-card {
     min-width: 80px;
     position: relative;
     text-align: center;
-    width: 150px;
+    width: 170px;
     white-space: initial;
 }
 
@@ -18375,7 +18375,7 @@ html.maximized-card {
 }
 
     .btn-app > .fa, .btn-app > .fab, .btn-app > .far, .btn-app > .fas, .btn-app > .glyphicon, .btn-app > .ion {
-        font-size: 10px;
+        font-size: 12px;
         margin-right: 2px;
     }
 
@@ -18390,7 +18390,7 @@ html.maximized-card {
     }
 
     .btn-app > .badge {
-        font-size: 10px;
+        font-size: 12px;
         font-weight: 400;
         position: absolute;
         right: -10px;

@@ -42,16 +42,27 @@ namespace CedulasEvaluacion.Controllers
 
         //Metodo que regresa las cedulas aceptadas, guardadas o rechazadas 
         [Route("/muebles/index/{servicio?}")]
-        public async Task<IActionResult> Index(int servicio)
+        public async Task<IActionResult> Index(int servicio, [FromQuery(Name = "Estatus")] string Estatus, [FromQuery(Name = "Mes")] string Mes)
         {
-            //return Redirect("/casesg");
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
-                List<VCedulas> resultado = new List<VCedulas>();
-                resultado = await vCedula.GetCedulasEvaluacion(servicio, UserId());
-                return View(resultado);
+                ModelsIndex models = new ModelsIndex();
+                models.ServicioId = servicio;
+                models.Estatus = Estatus;
+                models.Mes = Mes;
+                models.cedulasEstatus = await vCedula.GetCedulasEvaluacionEstatus(servicio, UserId());
+                if (models.Estatus != null && !models.Estatus.Equals(""))
+                {
+                    models.cedulasMes = await vCedula.GetCedulasEvaluacionMes(servicio, UserId(), Estatus);
+                }
+                if (models.Mes != null && !models.Mes.Equals(""))
+                {
+                    models.cedulas = await vCedula.GetCedulasEvaluacionServicios(servicio, UserId(), Estatus, Mes);
+                }
+                return View(models);
             }
+
             return Redirect("/error/denied");
         }
 

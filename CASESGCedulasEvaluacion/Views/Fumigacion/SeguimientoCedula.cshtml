@@ -311,7 +311,8 @@
                                                         <i class='fas fa-pencil text-primary'></i>                                                    </a>
                                                 }
                                             }
-                                            @if (@Model.Estatus.Equals("En Trámite") && @entre.Tipo.Equals("Cedula_Firmada") && @entre.ValidadoDas == false)
+                                            @if (@Model.Estatus.Equals("En Trámite") && (@entre.Tipo.Equals("Cedula_Firmada") || @entre.Tipo.Equals("Memorandum"))
+                                                           && @entre.ValidadoDas == false)
                                             {
                                                 @if (entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("validar cédula", @Model.ServicioId, @user) != 0)
                                                 {
@@ -957,18 +958,24 @@
 
             /*Autorizar Entregable*/
                 $(document).on('click', '.success_entregable', function () {
-                var tipo = $(this).data('tipo');
-                var id = $(this).data('id');
-                var mensaje = '';
-                if (tipo == "Memorándum") {
-                    mensaje = '¿Está seguro que desea autorizar el entregable <b>Memorándum</b>, el cual debe ser el acuse generado por el sistema de gestión documental (SIGDOC)?'
-                } else {
-                    mensaje = '¿Está seguro que desea autorizar el entregable <b>' + tipo + '</b>?';
-                }
+                    var tipo = $(this).data('tipo');
+                    var id = $(this).data('id');
+
+                    if (model.estatus == "Autorizada" || model.estatus == "Rechazada" || model.estatus == "Autorizado CAE" || model.estatus == "Enviado a DAS" ||
+                        model.estatus == "Trámite Rechazado") {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Fumigación',
+                            'html': 'No puedes autorizar o rechazar ningún entregable hasta que la cédula esté en el estatus "Revisado CAE" o "En Trámite".'
+                        });
+
+                        return false;
+                    }
+                
                 Swal.fire({
                     'icon': 'warning',
                     'title': 'Servicio de Fumigación',
-                    'html': mensaje,
+                    'html': '¿Está seguro que desea autorizar el entregable <b>' + tipo + '</b>?',
                     'confirmButtonColor': '#3085d6',
                     'cancelButtonColor': '#d33',
                     'confirmButtonText': 'Si, autorizar',
@@ -1008,6 +1015,17 @@
                 $(document).on('click', '.failed_entregable', function () {
                 var tipo = $(this).data('tipo');
                 var id = $(this).data('id');
+
+                    if (model.estatus == "Autorizada" || model.estatus == "Rechazada" || model.estatus == "Autorizado CAE" || model.estatus == "Enviado a DAS" ||
+                        model.estatus == "Trámite Rechazado") {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Fumigación',
+                            'html': 'No puedes autorizar o rechazar ningún entregable hasta que la cédula esté en el estatus "Revisado CAE" o "En Trámite".'
+                        });
+
+                        return false;
+                    }
 
                 Swal.fire({
                     'icon': 'warning',
@@ -1376,7 +1394,6 @@
                         $(".custom-file-label").text(file);
                         $('#tipo_entregable').val(tipo);
                         $('#comentarios_entregable').val(coments);
-                        $('#tipo_entregable').prop('disabled', true);
                         $('#modal_evidencias').modal('show');
                     });
                 /*FIN de editar Entregables*/

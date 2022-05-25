@@ -986,16 +986,22 @@
                 $(document).on('click', '.success_entregable', function () {
                 var tipo = $(this).data('tipo');
                 var id = $(this).data('id');
-                var mensaje = '';
-                if (tipo == "Memorándum") {
-                    mensaje = '¿Está seguro que desea autorizar el entregable <b>Memorándum</b>, el cual debe ser el acuse generado por el sistema de gestión documental (SIGDOC)?'
-                } else {
-                    mensaje = '¿Está seguro que desea autorizar el entregable <b>' + tipo + '</b>?';
-                }
+
+                    if (model.estatus == "Autorizada" || model.estatus == "Rechazada" || model.estatus == "Autorizado CAE" || model.estatus == "Enviado a DAS" ||
+                        model.estatus == "Trámite Rechazado") {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Agua para Beber',
+                            'html': 'No puedes autorizar o rechazar ningún entregable hasta que la cédula esté en el estatus "Revisado CAE" o "En Trámite".'
+                        });
+
+                        return false;
+                    }
+                
                 Swal.fire({
                     'icon': 'warning',
                     'title': 'Servicio de Agua Para Beber',
-                    'html': mensaje,
+                    'html': '¿Está seguro que desea autorizar el entregable <b>' + tipo + '</b>?',
                     'confirmButtonColor': '#3085d6',
                     'cancelButtonColor': '#d33',
                     'confirmButtonText': 'Si, autorizar',
@@ -1033,8 +1039,19 @@
 
             /*Rechazar Entregable*/
                 $(document).on('click', '.failed_entregable', function () {
-                var tipo = $(this).data('tipo');
-                var id = $(this).data('id');
+                    var tipo = $(this).data('tipo');
+                    var id = $(this).data('id');
+
+                    if (model.estatus == "Autorizada" || model.estatus == "Rechazada" || model.estatus == "Autorizado CAE" || model.estatus == "Enviado a DAS" ||
+                        model.estatus == "Trámite Rechazado") {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Agua para Beber',
+                            'html': 'No puedes autorizar o rechazar ningún entregable hasta que la cédula esté en el estatus "Revisado CAE" o "En Trámite".'
+                        });
+
+                        return false;
+                    }
 
                 Swal.fire({
                     'icon': 'warning',
@@ -1401,7 +1418,6 @@
                         $(".custom-file-label").text(file);
                         $('#tipo_entregable').val(tipo);
                         $('#comentarios_entregable').val(coments);
-                        $('#tipo_entregable').prop('disabled', true);
                         $('#modal_evidencias').modal('show');
                     });
             /*FIN de editar Entregables*/
