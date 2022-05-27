@@ -13,7 +13,7 @@
                 <i class="fal fa-calendar-alt"></i>
             </a>
         }
-    <a href="/mensajeria/index/@Model.ServicioId?Estatus=@Model.Estatus&Mes=@Model.Mes" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top">
+    <a href="javascript: history.go(-1)" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top">
         <i class="fal fa-arrow-left"></i>
     </a>
     </div>
@@ -316,11 +316,12 @@
                                                     </a>
                                                 }
                                             }
-                                            @if (@Model.Estatus.Equals("En Trámite") && @entre.Tipo.Equals("Cedula_Firmada") && @entre.ValidadoDas == false)
+                                            @if (@Model.Estatus.Equals("En Trámite") && (@entre.Tipo.Equals("Cedula_Firmada") || @entre.Tipo.Equals("Memorandum"))
+                                                && @entre.ValidadoDas == false)
                                             {
                                                 @if (entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("validar cédula", @Model.ServicioId, @user) != 0)
                                                 {
-                                                    <a href='#' class="text-center mr-2 valida_cedula" data-id="@entre.Id" data-toggle="tooltip" title="Validar Cédula de Evaluación"
+                                                    <a href='#' class="text-center mr-2 valida_cedula" data-id="@entre.Id" data-tipo="@tipo" data-toggle="tooltip" title="Validar Cédula de Evaluación"
                                                        data-placement="top">
                                                         <i class='fas fa-check text-cjf'></i>
                                                     </a>
@@ -661,7 +662,7 @@
                     Swal.fire({
                         'icon': 'warning',
                         'title': 'Servicio de Mensajería Acelerada',
-                        'html': '¿Está seguro que desea <b>validar la cédula con el folio: ' + model.folio + '?',
+                        'html': '¿Está seguro que desea <b>validar el(la) ' + $(this).data('tipo') + ' de la evaluación con folio: ' + model.folio + '?',
                         'confirmButtonColor': '#3085d6',
                         'cancelButtonColor': '#d33',
                         'confirmButtonText': 'Si, enviar',

@@ -1,232 +1,452 @@
 ﻿@model CedulasEvaluacion.Entities.MCedula.ModelsIndex
 @{
     var i = 0;
+    var user = Convert.ToInt32((@User.Claims.ElementAt(2).Value).Contains("Evaluador"));
     ViewData["Title"] = "Listado de Cédulas del Servicio Suministro de Agua Purificada para Beber";
 }
-<div class="row" id="Prrueba">
-    <div class="row col-lg-12">
+
+<div class="container-fluid">
+    <a href="#" type='button' id="search_cedula" class='btn-sm btn-primary float-right mr-2 mb-3' data-toggle="tooltip" title="Filtrar Cédula" data-placement="top">
+        <i class="fa-light fa-filter"></i>
+    </a>
+    <div class="row" id="Prrueba">
         <div class="row col-lg-12">
-            <p class="h5">Para dar seguimiento de clic en los estatus marcados con el recuadro "<button class='btn btn-xs btn-danger text-danger'><span class='bg-danger text-danger'></span>0</button>" con prioridad urgente.</p>
-        </div>
-        @foreach (var md in Model.cedulasEstatus)
-        {
-            @if (md.Prioridad.Equals("Urgente"))
-            {
-                <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
-                    <span class="badge bg-danger">@md.TotalCedulas</span>
-                    @Html.Raw(md.Icono)
-                    Cédula(s) en estatus @md.Estatus
-                </a>
-            }
-            else if (md.Prioridad.Equals("Alta"))
-            {
-                <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
-                    @Html.Raw(md.Icono)
-                    @md.TotalCedulas cédula(s) en estatus @md.Estatus
-                </a>
-            }
-            else if (md.Prioridad.Equals("Media"))
-            {
-                <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
-                    @Html.Raw(md.Icono)
-                    @md.TotalCedulas cédula(s) en estatus @md.Estatus
-                </a>
-            }
-            else
-            {
-                <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
-                    @Html.Raw(md.Icono)
-                    @md.TotalCedulas cédula(s) en estatus @md.Estatus
-                </a>
-            }
-        }
-    </div>
-    <div class="row col-lg-12">
-        @if (Model.Estatus != null && !Model.Estatus.Equals(""))
-        {
-            <div class="col-lg-12">
-                <p class="h6 font-weight-bold">Para dar seguimiento a la(s) cédula(s) realice los siguientes pasos: </p>
-                <p class="h6 font-weight-bold mt-4">1) Seleccione el mes: </p>
+            <div class="row col-lg-12">
+                <p class="h5">Para dar seguimiento de clic en los estatus marcados con el recuadro "<button class='btn btn-xs btn-danger text-danger'><span class='bg-danger text-danger'></span>0</button>" con prioridad urgente.</p>
             </div>
-            <div class="col-lg-12">
-                @foreach (var md in Model.cedulasMes)
+            @foreach (var md in Model.cedulasEstatus)
+            {
+                @if (md.Prioridad.Equals("Urgente"))
                 {
-                    <a class="btn @md.Fondo btn-app-mes text-white font-weight-bold btnMes" data-mes="@md.Mes" data-estatus="@Model.Estatus">
+                    <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
                         <span class="badge bg-danger">@md.TotalCedulas</span>
-                        @md.Mes
+                        @Html.Raw(md.Icono)
+                        Cédula(s) en estatus @md.Estatus
                     </a>
                 }
+                else if (md.Prioridad.Equals("Alta"))
+                {
+                    <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
+                        @Html.Raw(md.Icono)
+                        @md.TotalCedulas cédula(s) en estatus @md.Estatus
+                    </a>
+                }
+                else if (md.Prioridad.Equals("Media"))
+                {
+                    <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
+                        @Html.Raw(md.Icono)
+                        @md.TotalCedulas cédula(s) en estatus @md.Estatus
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-app @md.Fondo text-white font-weight-bold btnEstatus" data-estatus="@md.Estatus">
+                        @Html.Raw(md.Icono)
+                        @md.TotalCedulas cédula(s) en estatus @md.Estatus
+                    </a>
+                }
+            }
+        </div>
+        <div class="row col-lg-12">
+            @if (Model.Estatus != null && !Model.Estatus.Equals(""))
+            {
+                <div class="col-lg-12">
+                    <p class="h6 font-weight-bold">Para dar seguimiento a la(s) cédula(s) realice los siguientes pasos: </p>
+                    <p class="h6 font-weight-bold mt-4">1) Seleccione el mes: </p>
+                </div>
+                <div class="col-lg-12">
+                    @foreach (var md in Model.cedulasMes)
+                    {
+                        <a class="btn @md.Fondo btn-app-mes text-white font-weight-bold btnMes" data-mes="@md.Mes" data-estatus="@Model.Estatus">
+                            <span class="badge bg-danger">@md.TotalCedulas</span>
+                            @md.Mes
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+        @if (Model.Mes != null && !Model.Mes.Equals(""))
+        {
+            <div class="col-lg-12">
+                <p class="h6 font-weight-bold mt-2 mb-4">2) En la sección de <strong>"Acciones"</strong> de clic en el ícono de seguimiento <i class="fas fa-file-import text-primary"></i> :</p>
+                <p class="text-justify"><b>NOTA: </b> Para el estatus <b class="text-danger">Rechazado</b> debe seleccionar el ícono <i class="fad fa-pencil text-primary"></i> para editar el cuestionario y volver a enviarlo a la DAS con las correcciones solicitadas para su revisión.</p>
+                <table class="table table-responsive-xl" id="dt_inmuebles">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Estatus</th>
+                            <th>Servicio</th>
+                            <th>Inmueble</th>
+                            <th>Folio</th>
+                            <th>Mes</th>
+                            <th>Año</th>
+                            @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                            {
+                                <th>Validación OP</th>
+                            }
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.cedulas)
+                        {
+                            i++;
+                            <tr>
+
+                                <td>@i</td>
+                                @if (item.Estatus.Equals("Enviado a DAS"))
+                                {
+                                    <td class="text-enviadoDAS" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Revisión CAE"))
+                                {
+                                    <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("En Trámite"))
+                                {
+                                    <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Rechazada"))
+                                {
+                                    <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Trámite Rechazado"))
+                                {
+                                    <td class="text-tramiteRechazado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Autorizada"))
+                                {
+                                    <td class="text-autorizado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Autorizado CAE"))
+                                {
+                                    <td class="text-autorizadoCAE" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Trámite de Pago"))
+                                {
+                                    <td class="text-tramitePago" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Enviada a DGPPT"))
+                                {
+                                    <td class="text-dgppt" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Pagada"))
+                                {
+                                    <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else
+                                {
+                                    <td class="text-warning" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                <td>@Html.DisplayFor(modelItem => item.Servicio)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Folio)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Mes)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Anio)</td>
+                                @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && item.Estatus.Equals("En Trámite"))
+                                {
+                                    @if (item.MemoValidado == true && item.CedulaValidada == true)
+                                    {
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-check text-success"></i>
+                                            <i class="fa-regular fa-check text-success"></i>
+                                        </td>
+                                    }
+                                    else if ((item.MemoValidado == true && item.CedulaValidada == false) || (item.MemoValidado == false && item.CedulaValidada == true))
+                                    {
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-check text-success"></i>
+                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
+                                        </td>
+                                    }
+                                    else if (item.MemoValidado == false && item.CedulaValidada == false)
+                                    {
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
+                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
+                                        </td>
+                                    }
+                                }
+                                else if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && !item.Estatus.Equals("En Trámite"))
+                                {
+                                    @if (item.MemoValidado == true && item.CedulaValidada == true)
+                                    {
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-check text-success"></i>
+                                            <i class="fa-regular fa-check text-success"></i>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-user-clock text-primary"></i>
+                                        </td>
+                                    }
+                                }
+                                <td>
+                                    @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                                    {
+                                        <a href="/agua/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
+                                            <i class="fad fa-eye text-success"></i>
+                                        </a>
+                                    }
+                                    @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
+                                    {
+                                        <a asp-action="evaluacion" asp-controller="Agua" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                            <i class="fad fa-pencil text-primary"></i>
+                                        </a>
+                                    }
+                                    @if (item.Estatus.Equals("En Proceso"))
+                                    {
+                                        <a href="#" class="text-center ml-2 delete_cedula" data-id="@item.Id" data-folio="@item.Folio" data-toggle="tooltip" title="Eliminar Cédula" data-placement="top">
+                                            <i class="fad fa-times text-danger"></i>
+                                        </a>
+                                    }
+                                    @if (!item.Estatus.Equals("En Proceso"))
+                                    {
+                                        <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                            @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
+                                            {
+                                                <i class="fal fa-file-pdf text-success"></i>
+                                            }
+                                            else @if (item.Estatus.Equals("Rechazada"))
+                                       {
+                                        <i class="fal fa-file-pdf text-danger"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fal fa-file-pdf text-primary"></i>
+                                    }
+                                        </a>
+                                    }
+                                    @if (!item.Estatus.Equals("En Proceso"))
+                                    {
+                                        <a href="/agua/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
+                                            <i class="fas fa-file-import text-primary"></i>
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else if (Model.InmuebleId != 0 || (Model.Mes != null && !Model.Mes.Equals("")))
+        {
+            <div class="col-lg-12">
+                <p class="h6 font-weight-bold mt-2 mb-4">2) En la sección de <strong>"Acciones"</strong> de clic en el ícono de seguimiento <i class="fas fa-file-import text-primary"></i> :</p>
+                <p class="text-justify"><b>NOTA: </b> Para el estatus <b class="text-danger">Rechazado</b> debe seleccionar el ícono <i class="fad fa-pencil text-primary"></i> para editar el cuestionario y volver a enviarlo a la DAS con las correcciones solicitadas para su revisión.</p>
+                <table class="table table-responsive-xl" id="dt_inmuebles">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Estatus</th>
+                            <th>Servicio</th>
+                            <th>Inmueble</th>
+                            <th>Folio</th>
+                            <th>Mes</th>
+                            <th>Año</th>
+                            @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                            {
+                                <th>Validación OP</th>
+                            }
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.cedulas)
+                        {
+                            i++;
+                            <tr>
+
+                                <td>@i</td>
+                                @if (item.Estatus.Equals("Enviado a DAS"))
+                                {
+                                    <td class="text-enviadoDAS" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Revisión CAE"))
+                                {
+                                    <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("En Trámite"))
+                                {
+                                    <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Rechazada"))
+                                {
+                                    <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Trámite Rechazado"))
+                                {
+                                    <td class="text-tramiteRechazado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Autorizada"))
+                                {
+                                    <td class="text-autorizado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Autorizado CAE"))
+                                {
+                                    <td class="text-autorizadoCAE" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Trámite de Pago"))
+                                {
+                                    <td class="text-tramitePago" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Enviada a DGPPT"))
+                                {
+                                    <td class="text-dgppt" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else if (item.Estatus.Equals("Pagada"))
+                                {
+                                    <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                else
+                                {
+                                    <td class="text-warning" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                }
+                                <td>@Html.DisplayFor(modelItem => item.Servicio)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Folio)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Mes)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Anio)</td>
+                                @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && item.Estatus.Equals("En Trámite"))
+                                {
+                                    @if (item.MemoValidado == true && item.CedulaValidada == true)
+                                    {
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-check text-success"></i>
+                                            <i class="fa-regular fa-check text-success"></i>
+                                        </td>
+                                    }
+                                    else if ((item.MemoValidado == true && item.CedulaValidada == false) || (item.MemoValidado == false && item.CedulaValidada == true))
+                                    {
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-check text-success"></i>
+                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
+                                        </td>
+                                    }
+                                    else if (item.MemoValidado == false && item.CedulaValidada == false)
+                                    {
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
+                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
+                                        </td>
+                                    }
+                                }
+                                else if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && !item.Estatus.Equals("En Trámite"))
+                                {
+                                    @if (item.MemoValidado == true && item.CedulaValidada == true)
+                                    {
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-check text-success"></i>
+                                            <i class="fa-regular fa-check text-success"></i>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-user-clock text-primary"></i>
+                                        </td>
+                                    }
+                                }
+                                <td>
+                                    @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                                    {
+                                        <a href="/agua/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
+                                            <i class="fad fa-eye text-success"></i>
+                                        </a>
+                                    }
+                                    @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
+                                    {
+                                        <a asp-action="evaluacion" asp-controller="Agua" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                            <i class="fad fa-pencil text-primary"></i>
+                                        </a>
+                                    }
+                                    @if (item.Estatus.Equals("En Proceso"))
+                                    {
+                                        <a href="#" class="text-center ml-2 delete_cedula" data-id="@item.Id" data-folio="@item.Folio" data-toggle="tooltip" title="Eliminar Cédula" data-placement="top">
+                                            <i class="fad fa-times text-danger"></i>
+                                        </a>
+                                    }
+                                    @if (!item.Estatus.Equals("En Proceso"))
+                                    {
+                                        <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                            @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
+                                            {
+                                                <i class="fal fa-file-pdf text-success"></i>
+                                            }
+                                            else @if (item.Estatus.Equals("Rechazada"))
+                                       {
+                                        <i class="fal fa-file-pdf text-danger"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fal fa-file-pdf text-primary"></i>
+                                    }
+                                        </a>
+                                    }
+                                    @if (!item.Estatus.Equals("En Proceso"))
+                                    {
+                                        <a href="/agua/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
+                                            <i class="fas fa-file-import text-primary"></i>
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         }
     </div>
-    @if (Model.Mes != null && !Model.Mes.Equals(""))
-    {
-        <div class="col-lg-12">
-            <p class="h6 font-weight-bold mt-2 mb-4">2) En la sección de <strong>"Acciones"</strong> de clic en el ícono de seguimiento <i class="fas fa-file-import text-primary"></i> :</p>
-            <p class="text-justify"><b>NOTA: </b> Para el estatus <b class="text-danger">Rechazado</b> debe seleccionar el ícono <i class="fad fa-pencil text-primary"></i> para editar el cuestionario y volver a enviarlo a la DAS con las correcciones solicitadas para su revisión.</p>
-            <table class="table table-responsive-xl" id="dt_inmuebles">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Estatus</th>
-                        <th>Servicio</th>
-                        <th>Inmueble</th>
-                        <th>Folio</th>
-                        <th>Mes</th>
-                        <th>Año</th>
-                        @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
-                        {
-                            <th>Validación OP</th>
-                        }
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.cedulas)
-                    {
-                        i++;
-                        <tr>
-
-                            <td>@i</td>
-                            @if (item.Estatus.Equals("Enviado a DAS"))
-                            {
-                                <td class="text-enviadoDAS" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            else if (item.Estatus.Equals("Revisión CAE"))
-                            {
-                                <td class="text-primary" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            else if (item.Estatus.Equals("En Trámite"))
-                            {
-                                <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            else if (item.Estatus.Equals("Rechazada"))
-                            {
-                                <td class="text-danger" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            else if (item.Estatus.Equals("Trámite Rechazado"))
-                            {
-                                <td class="text-tramiteRechazado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            else if (item.Estatus.Equals("Autorizada"))
-                            {
-                                <td class="text-autorizado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            else if (item.Estatus.Equals("Autorizado CAE"))
-                            {
-                                <td class="text-autorizadoCAE" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            else if (item.Estatus.Equals("Trámite de Pago"))
-                            {
-                                <td class="text-tramitePago" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            else if (item.Estatus.Equals("Enviada a DGPPT"))
-                            {
-                                <td class="text-dgppt" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            else if (item.Estatus.Equals("Pagada"))
-                            {
-                                <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            else
-                            {
-                                <td class="text-warning" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
-                            }
-                            <td>@Html.DisplayFor(modelItem => item.Servicio)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Folio)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Mes)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Anio)</td>
-                            @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && item.Estatus.Equals("En Trámite"))
-                            {
-                                @if (item.MemoValidado == true && item.CedulaValidada == true)
-                                {
-                                    <td class="text-center">
-                                        <i class="fa-regular fa-check text-success"></i>
-                                        <i class="fa-regular fa-check text-success"></i>
-                                    </td>
-                                }
-                                else if ((item.MemoValidado == true && item.CedulaValidada == false) || (item.MemoValidado == false && item.CedulaValidada == true))
-                                {
-                                    <td class="text-center">
-                                        <i class="fa-regular fa-check text-success"></i>
-                                        <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
-                                    </td>
-                                }
-                                else if (item.MemoValidado == false && item.CedulaValidada == false)
-                                {
-                                    <td class="text-center">
-                                        <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
-                                        <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
-                                    </td>
-                                }
-                            }
-                            else if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && !item.Estatus.Equals("En Trámite"))
-                            {
-                                @if (item.MemoValidado == true && item.CedulaValidada == true)
-                                {
-                                    <td class="text-center">
-                                        <i class="fa-regular fa-check text-success"></i>
-                                        <i class="fa-regular fa-check text-success"></i>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="text-center">
-                                        <i class="fa-regular fa-user-clock text-primary"></i>
-                                    </td>
-                                }
-                            }
-                            <td>
-                                @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
-                                {
-                                    <a href="/agua/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
-                                        <i class="fad fa-eye text-success"></i>
-                                    </a>
-                                }
-                                @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
-                                {
-                                    <a asp-action="evaluacion" asp-controller="Agua" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
-                                        <i class="fad fa-pencil text-primary"></i>
-                                    </a>
-                                }
-                                @if (item.Estatus.Equals("En Proceso"))
-                                {
-                                    <a href="#" class="text-center ml-2 delete_cedula" data-id="@item.Id" data-folio="@item.Folio" data-toggle="tooltip" title="Eliminar Cédula" data-placement="top">
-                                        <i class="fad fa-times text-danger"></i>
-                                    </a>
-                                }
-                                @if (!item.Estatus.Equals("En Proceso"))
-                                {
-                                    <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
-                                        @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
-                                        {
-                                            <i class="fal fa-file-pdf text-success"></i>
-                                        }
-                                        else @if (item.Estatus.Equals("Rechazada"))
-                                   {
-                                    <i class="fal fa-file-pdf text-danger"></i>
-                                }
-                                else
-                                {
-                                    <i class="fal fa-file-pdf text-primary"></i>
-                                }
-                                    </a>
-                                }
-                                @if (!item.Estatus.Equals("En Proceso"))
-                                {
-                                    <a href="/agua/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
-                                        <i class="fas fa-file-import text-primary"></i>
-                                    </a>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
 </div>
+
+@*Modal para buscar cédulas*@
+<div class="modal fade" id="modal-sCedula">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white">Filtrado de Cédula(s)</h4>
+                <button type="button" class="close close-incidencias text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-row col-md-6" id="divBusqueda">
+                        <div class="select2-purple col-lg-12">
+                            <label for="Anio">Inmuebles: </label>
+                            <select class="form-control select2bs4" data-dropdown-css-class="select2-purple" id="selectInmueble">
+                            </select>
+                        </div>
+                        <div class="col-sm-12" id="error_inmueble">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione un inmueble
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row col-md-3" id="divBusquedaMes">
+                        <label for="Anio">Mes: </label>
+                        <select id="selectMes" class="form-control"></select>
+                        <div class="col-sm-12" id="error_mes">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione un mes
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button class="btn btn-primary" type="button" id="searchCedula">Filtrar Cédula(s)</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@*Fin del Modal para Capturar Oficios*@
+
 <style>
     .swal2-icon.swal2-info {
         color: #f27474 !important;
@@ -244,9 +464,99 @@
 @section Scripts{
     <script>
         $(function () {
+            var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             var model = @Html.Raw(Json.Serialize(@Model));
             $('[data-toggle="tooltip"]').tooltip();
             localStorage.clear();
+
+            $(".select2").select2();
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            $("#error_inmueble").css('display','none');
+            $("#error_mes").css('display','none');
+
+            $("#search_cedula").click(function () {
+                $("#modal-sCedula").modal('show');
+                $('#selectInmueble').removeClass('is-invalid');
+                $('#selectInmueble').removeClass('is-valid');
+                $('#selectMes').removeClass('is-invalid');
+                $('#selectMes').removeClass('is-valid');
+                $("#selectInmueble").val("");
+                let optionsInmueble = "<option value=''>Seleccione el Inmueble</option>";
+                if (@user == false) {
+                    $('#select_inmuebleOrigen').prop("disabled", false);
+                    axios.get('/inmuebles/getInmuebles').then(response => {
+                        response = response.data;
+                        response.forEach(function (inm) {
+                            optionsInmueble += "<option value=" + inm.id + " data-direccion='" + inm.direccion + "'" +
+                                " data-nombre='" + inm.nombre + "'>" + inm.nombre + "</option>"
+                        });
+                        $("#selectInmueble").html(optionsInmueble);
+                    });
+                } else {
+                    axios.get('/inmuebles/evaluar').then(response => {
+                        response = response.data;
+                        response.forEach(function (inm) {
+                            optionsInmueble += "<option value=" + inm.id + ">" + inm.nombre + "</option>"
+                        });
+                        $("#selectInmueble").html(optionsInmueble);
+                    });
+                }
+
+                let optionsMes = "<option value=''>Seleccione el Mes</option>";
+                meses.forEach(function (mes) {
+                    optionsMes += "<option value=" + mes + ">" + mes + "</option>"
+                });
+                $("#selectMes").html(optionsMes);
+            });
+
+            $("#searchCedula").click(function () {
+                if ($("#selectInmueble").val() != "" && $("#selectInmueble").val() != null && ($("#selectMes").val() == "" || $("#selectMes").val() == null)) {
+                    window.location.href = "/agua/index/" + model.servicioId + '?Inmueble=' + $("#selectInmueble").val();
+                } else if ($("#selectMes").val() != "" && $("#selectMes").val() != null &&
+                           ($("#selectInmueble").val() == "" || $("#selectInmueble").val() == null)) {
+                    window.location.href = "/agua/index/" + model.servicioId + '?Mes=' + $("#selectMes").val();
+                } else if ($("#selectMes").val() != "" && $("#selectMes").val() != null &&
+                    $("#selectInmueble").val() != "" && $("#selectInmueble").val() != null) {
+                    window.location.href = "/agua/index/" + model.servicioId + '?Mes=' + $("#selectMes").val() + '&Inmueble=' + $("#selectInmueble").val();
+                }
+
+                if ($("#selectMes").val() == "" && $("#selectMes").val() == null) {
+                    $('#selectMes').addClass('is-invalid');
+                    $("#error_mes").css('display', 'block');
+                }
+
+                if ($("#selectInmueble").val() == "" && $("#selectInmueble").val() == null) {
+                    $('#selectInmueble').addClass('is-invalid');
+                    $("#error_inmueble").css('display', 'block');
+                }
+            });
+
+            $("#selectInmueble").change(function () {
+                if ($(this).val() != "" && $(this).val() != null) {
+                    $('#selectInmueble').removeClass('is-invalid');
+                    $('#selectInmueble').addClass('is-valid');
+                    $("#error_inmueble").css('display', 'none');
+                } else {
+                    $('#selectInmueble').addClass('is-invalid');
+                    $('#selectInmueble').removeClass('is-valid');
+                    $("#error_inmueble").css('display', 'block');
+                }
+            });
+
+            $("#selectMes").change(function () {
+                if ($(this).val() != "" && $(this).val() != null) {
+                    $('#selectMes').removeClass('is-invalid');
+                    $('#selectMes').addClass('is-valid');
+                    $("#error_mes").css('display', 'none');
+                } else {
+                    $('#selectMes').addClass('is-invalid');
+                    $('#selectMes').removeClass('is-valid');
+                    $("#error_mes").css('display', 'block');
+                }
+            });
 
             function cuentaTramites() {
                 var c = 0;

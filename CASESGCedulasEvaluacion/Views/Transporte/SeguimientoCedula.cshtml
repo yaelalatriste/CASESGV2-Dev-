@@ -325,7 +325,7 @@
                                             {
                                                 @if (entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("validar cédula", @Model.ServicioId, @user) != 0)
                                                 {
-                                                    <a href='#' class="text-center mr-2 valida_cedula" data-id="@entre.Id" data-toggle="tooltip" title="Validar Cédula de Evaluación"
+                                                    <a href='#' class="text-center mr-2 valida_cedula" data-id="@entre.Id" data-tipo="@tipo" data-toggle="tooltip" title="Validar Cédula de Evaluación"
                                                        data-placement="top">
                                                         <i class='fas fa-check text-cjf'></i>
                                                     </a>
@@ -693,6 +693,44 @@
 
 
             /*Tramitar Cedula*/
+                $(document).on('click', '.valida_cedula', function () {
+                    Swal.fire({
+                        'icon': 'warning',
+                        'title': 'Servicio de Transporte',
+                        'html': '¿Está seguro que desea <b>validar el(la) ' + $(this).data('tipo') + ' de la evaluación con folio: ' + model.folio + '?',
+                        'confirmButtonColor': '#3085d6',
+                        'cancelButtonColor': '#d33',
+                        'confirmButtonText': 'Si, enviar',
+                        'cancelButtonText': 'Cancelar',
+                        'showCancelButton': true
+                    }).then(confirm => {
+                        if (confirm.isConfirmed) {
+                            axios.post('/transporte/historialTransporte', {
+                                CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
+                                Estatus: "En Trámite", Comentarios: "Se validó la cédula por operación."
+                            }).then(hist => {
+                                axios.get('/entregables/validaCedula/'+$(this).data('id')).then(valid => {
+                                    if (valid.status == 200) {
+                                        Swal.fire({
+                                            'icon': 'success',
+                                            'title': 'Servicio de Transporte',
+                                            'text': 'Se validó la cédula correctamente.'
+                                        }).then(function () {
+                                            window.location.reload();
+                                        });
+                                    }
+                                });
+                            }).catch(er => {
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Servicio de Transporte',
+                                    'text': 'Ocurrio un error al validar la cédula. Por favor comunicate a la ext. 2574.'
+                                });
+                            });
+                         }
+                    });
+                });
+
                 $(document).on('click', '.tramitar_cedula', function () {
 
                     Swal.fire({
@@ -934,7 +972,7 @@
 
                         return false;
                     }
-                
+
                 Swal.fire({
                     'icon': 'warning',
                     'title': 'Servicio de Transporte',

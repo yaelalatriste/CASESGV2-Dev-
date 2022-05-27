@@ -156,7 +156,7 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-        public async Task<List<VCedulas>> GetCedulasEvaluacionServicios(int servicio, int user, string estatus,string mes)
+        public async Task<List<VCedulas>> GetCedulasEvaluacionServicios(int servicio, int user, string estatus,string mes,int inmueble)
         {
             try
             {
@@ -168,6 +168,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
                         cmd.Parameters.Add(new SqlParameter("@usuario", user));
                         cmd.Parameters.Add(new SqlParameter("@estatus", estatus));
+                        cmd.Parameters.Add(new SqlParameter("@inmueble", inmueble));
                         cmd.Parameters.Add(new SqlParameter("@mes", mes));
                         var response = new List<VCedulas>();
                         await sql.OpenAsync();

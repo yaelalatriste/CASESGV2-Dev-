@@ -43,24 +43,36 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [Route("/trasladoExp/index/{servicio?}")]
-        public async Task<IActionResult> Index(int servicio, [FromQuery(Name = "Estatus")] string Estatus, [FromQuery(Name = "Mes")] string Mes)
+        public async Task<IActionResult> Index(int servicio, [FromQuery(Name = "Estatus")] string Estatus, [FromQuery(Name = "Mes")] string Mes,
+            [FromQuery(Name = "Inmueble")] int Inmueble)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "ver");
+
             if (success == 1)
             {
                 ModelsIndex models = new ModelsIndex();
                 models.ServicioId = servicio;
                 models.Estatus = Estatus;
                 models.Mes = Mes;
+                models.InmuebleId = Inmueble;
                 models.cedulasEstatus = await vCedula.GetCedulasEvaluacionEstatus(servicio, UserId());
                 if (models.Estatus != null && !models.Estatus.Equals(""))
                 {
                     models.cedulasMes = await vCedula.GetCedulasEvaluacionMes(servicio, UserId(), Estatus);
                 }
-                if (models.Mes != null && !models.Mes.Equals(""))
+                if (models.Mes != null && !models.Mes.Equals("") && models.InmuebleId == 0)
                 {
-                    models.cedulas = await vCedula.GetCedulasEvaluacionServicios(servicio, UserId(), Estatus, Mes);
+                    models.cedulas = await vCedula.GetCedulasEvaluacionServicios(servicio, UserId(), Estatus, Mes, Inmueble);
                 }
+                if (models.InmuebleId != 0 && (models.Mes == null || models.Mes.Equals("")))
+                {
+                    models.cedulas = await vCedula.GetCedulasEvaluacionServicios(servicio, UserId(), Estatus, Mes, Inmueble);
+                }
+                if (models.InmuebleId != 0 && (models.Mes != null && !models.Mes.Equals("")))
+                {
+                    models.cedulas = await vCedula.GetCedulasEvaluacionServicios(servicio, UserId(), Estatus, Mes, Inmueble);
+                }
+
                 return View(models);
             }
 
