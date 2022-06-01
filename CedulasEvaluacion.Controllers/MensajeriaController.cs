@@ -130,6 +130,7 @@ namespace CedulasEvaluacion.Controllers
                 {
                     return Redirect("/error/cedSend");
                 }
+                cedula.URL = Request.QueryString.Value;
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
                 cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
@@ -175,6 +176,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> IncidenciasMensajeria(int id)
         {
             CedulaEvaluacion cedulaMensajeria = await vCedula.CedulaById(id);
+            cedulaMensajeria.URL = Request.QueryString.Value;
             cedulaMensajeria.inmuebles = await vInmuebles.inmuebleById(cedulaMensajeria.InmuebleId);
             cedulaMensajeria.incidencias = new Entities.MIncidencias.ModelsIncidencias();
             cedulaMensajeria.incidencias.mensajeria = await viMensajeria.getIncidenciasMensajeria(id);
@@ -190,6 +192,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 CedulaEvaluacion cedMen = null;
                 cedMen = await vCedula.CedulaById(id);
+                cedMen.URL = Request.QueryString.Value;
                 cedMen.facturas = await vFacturas.getFacturas(id, cedMen.ServicioId);//
                 cedMen.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedMen.facturas);
                 cedMen.inmuebles = await vInmuebles.inmuebleById(cedMen.InmuebleId);
@@ -224,11 +227,11 @@ namespace CedulasEvaluacion.Controllers
             cedMen.inmuebles = await vInmuebles.inmuebleById(cedMen.InmuebleId);
             if (cedMen.inmuebles.Tipo == 1)
             {
-                return Redirect("/mensajeria/seguimiento/local/" + id);
+                return Redirect("/mensajeria/seguimiento/local/" + id+Request.QueryString.Value);
             }
             else
             {
-                return Redirect("/mensajeria/seguimiento/foraneo/" + id);
+                return Redirect("/mensajeria/seguimiento/foraneo/" + id+Request.QueryString.Value);
             }
         }
 
@@ -241,6 +244,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 CedulaEvaluacion cedMen = null;
                 cedMen = await vCedula.CedulaById(id);
+                cedMen.URL = Request.QueryString.Value;
                 cedMen.facturas = await vFacturas.getFacturas(id, cedMen.ServicioId);//
                 cedMen.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedMen.facturas);
                 cedMen.inmuebles = await vInmuebles.inmuebleById(cedMen.InmuebleId);
@@ -274,6 +278,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 CedulaEvaluacion cedMen = null;
                 cedMen = await vCedula.CedulaById(id);
+                cedMen.URL = Request.QueryString.Value;
                 cedMen.facturas = await vFacturas.getFacturas(id, cedMen.ServicioId);//
                 cedMen.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedMen.facturas);
                 cedMen.inmuebles = await vInmuebles.inmuebleById(cedMen.InmuebleId);

@@ -104,7 +104,7 @@
                                 }
                                 else if (item.Estatus.Equals("En Trámite"))
                                 {
-                                    <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                    <td class="text-info" style="font-weight: bold"> @Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
                                 else if (item.Estatus.Equals("Rechazada"))
                                 {
@@ -116,7 +116,7 @@
                                 }
                                 else if (item.Estatus.Equals("Autorizada"))
                                 {
-                                    <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                    <td class="text-autorizado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
                                 else if (item.Estatus.Equals("Autorizado CAE"))
                                 {
@@ -130,7 +130,7 @@
                                 {
                                     <td class="text-dgppt" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
-                                else if (item.Estatus.Equals("Pagada"))
+                                else if (item.Estatus.Equals("Pagado"))
                                 {
                                     <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
@@ -186,13 +186,13 @@
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
-                                        <a href="/fumigacion/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center btnRevision" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
                                             <i class="fad fa-eye text-success"></i>
                                         </a>
                                     }
-                                    @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
+                                    @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso") || !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
-                                        <a asp-action="evaluacion" asp-controller="Fumigacion" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnCuestionario" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
                                             <i class="fad fa-pencil text-primary"></i>
                                         </a>
                                     }
@@ -204,7 +204,7 @@
                                     }
                                     @if (!item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a href="#" data-id="@item.Id" data-servicio="@item.ServicioId" data-estatus="@item.Estatus" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
                                             @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
                                             {
                                                 <i class="fal fa-file-pdf text-success"></i>
@@ -218,11 +218,12 @@
                                         <i class="fal fa-file-pdf text-primary"></i>
                                     }
                                         </a>
-
                                     }
                                     @if (!item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a href="/fumigacion/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top"><i class="fas fa-file-import text-primary"></i></a>
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnSeguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
+                                            <i class="fas fa-file-import text-primary"></i>
+                                        </a>
                                     }
                                 </td>
                             </tr>
@@ -270,7 +271,7 @@
                                 }
                                 else if (item.Estatus.Equals("En Trámite"))
                                 {
-                                    <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                    <td class="text-info" style="font-weight: bold"> @Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
                                 else if (item.Estatus.Equals("Rechazada"))
                                 {
@@ -282,7 +283,7 @@
                                 }
                                 else if (item.Estatus.Equals("Autorizada"))
                                 {
-                                    <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                    <td class="text-autorizado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
                                 else if (item.Estatus.Equals("Autorizado CAE"))
                                 {
@@ -296,7 +297,7 @@
                                 {
                                     <td class="text-dgppt" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
-                                else if (item.Estatus.Equals("Pagada"))
+                                else if (item.Estatus.Equals("Pagado"))
                                 {
                                     <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
@@ -352,13 +353,13 @@
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
-                                        <a href="/fumigacion/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center btnRevision" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
                                             <i class="fad fa-eye text-success"></i>
                                         </a>
                                     }
-                                    @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
+                                    @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso") || !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
-                                        <a asp-action="evaluacion" asp-controller="Fumigacion" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnCuestionario" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
                                             <i class="fad fa-pencil text-primary"></i>
                                         </a>
                                     }
@@ -370,7 +371,7 @@
                                     }
                                     @if (!item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a href="#" data-id="@item.Id" data-servicio="@item.ServicioId" data-estatus="@item.Estatus" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
                                             @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
                                             {
                                                 <i class="fal fa-file-pdf text-success"></i>
@@ -384,11 +385,12 @@
                                         <i class="fal fa-file-pdf text-primary"></i>
                                     }
                                         </a>
-
                                     }
                                     @if (!item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a href="/fumigacion/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top"><i class="fas fa-file-import text-primary"></i></a>
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnSeguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
+                                            <i class="fas fa-file-import text-primary"></i>
+                                        </a>
                                     }
                                 </td>
                             </tr>
@@ -466,6 +468,18 @@
             var model = @Html.Raw(Json.Serialize(@Model));
             $('[data-toggle="tooltip"]').tooltip();
             localStorage.clear();
+
+            $(".btnRevision").click(function () {
+                window.location.href = "/fumigacion/revision/" + $(this).data('id') + '/' + window.location.search;
+            });
+
+            $(".btnSeguimiento").click(function () {
+                window.location.href = "/fumigacion/seguimiento/" + $(this).data('id') +window.location.search;
+            });
+
+            $(".btnCuestionario").click(function () {
+                window.location.href = "/fumigacion/evaluacion/" + $(this).data('id') +window.location.search;
+            });
 
             $(".select2").select2();
             $('.select2bs4').select2({

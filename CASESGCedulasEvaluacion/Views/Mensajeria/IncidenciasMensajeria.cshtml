@@ -5,7 +5,7 @@
 }
 <div class="container-fluid" id="limpieza">
     <div class="row float-right">
-        <a href="/mensajeria/evaluacion/@Model.Id" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar a la evaluación" data-placement="top">
+        <a href="/mensajeria/evaluacion/@Model.Id@Model.URL" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar a la evaluación" data-placement="top">
             <i class="fal fa-arrow-to-left"></i>
         </a>
         <a href="#" type='button' class='btn-sm btn-success float-right mr-2 mb-3' id="btn_excel" data-toggle="tooltip" title='Subir incidencias desde "Excel"' data-placement="top">
@@ -252,6 +252,7 @@
                                             <th>Numero Guía</th>
                                             <th>Codigo Rastreo</th>
                                             <th>Tipo de Servicio</th>
+                                            <th>Acta de Extravío</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -263,17 +264,21 @@
                                             {
                                                 <tr>
                                                     <td>@incidencia.Id</td>
-                                                    <td>Guías Extraviadas</td>
+                                                    <td>Guías Robadas</td>
                                                     <td>@incidencia.NumeroGuia</td>
                                                     <td>@incidencia.CodigoRastreo</td>
                                                     <td>@incidencia.TipoServicio</td>
+                                                    <td>@incidencia.NombreActa</td>
                                                     <td>
-                                                        <a href="#" class="update_incidencia" data-id="@incidencia.Id" data-tipo="@incidencia.Tipo" data-fechap="@incidencia.FechaProgramada.ToString("yyyy-MM-dd")"
-                                                           data-fechae="@incidencia.FechaEfectiva.ToString("yyyy-MM-dd")" data-numero="@incidencia.NumeroGuia" data-codigo="@incidencia.CodigoRastreo"
-                                                           data-tipose="@incidencia.TipoServicio">
+                                                        <a href="#" class="view_actaRobo" data-toggle="tooltip" title='Ver el Acta de Robo' data-placement="top" data-tipo="@incidencia.TipoServicio"
+                                                           data-guia="@incidencia.NumeroGuia" data-codigo="@incidencia.CodigoRastreo" data-file="@incidencia.NombreActa">
+                                                            <i class="fad fa-eye text-success mr-2"></i>
+                                                        </a>
+                                                        <a href="#" class="update_incidencia" data-id="@incidencia.Id" data-tipo="@incidencia.Tipo" data-numero="@incidencia.NumeroGuia" data-codigo="@incidencia.CodigoRastreo"
+                                                           data-tipose="@incidencia.TipoServicio" data-file="@incidencia.NombreActa">
                                                             <i class="fad fa-pencil text-primary mr-2"></i>
                                                         </a>
-                                                        <a href="#" class="delete_incidencia" data-id="@incidencia.Id" data-tipo="@incidencia.Tipo" data-numero="@incidencia.NumeroGuia">
+                                                        <a href="#" class="delete_incidencia" data-id="@incidencia.Id" data-tipo="@incidencia.Tipo" data-numero="@incidencia.NumeroGuia" data-file="@incidencia.NombreActa">
                                                             <i class="fad fa-times text-danger"></i>
                                                         </a>
                                                     </td>
@@ -291,7 +296,7 @@
                         <div class="row">
                             <h4 class="mt-2 mb-2">Incidencias en Guías Robadas</h4>
                             <div class="col-lg-12 mt-3">
-                                <table class="table table-responsive-xl" style="width:101%">
+                                <table class="table table-responsive-xl display" style="width:101%">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -686,7 +691,7 @@
                         $('#div_fechaEfectiva').css('display', 'none');
                         $('#div_totalAcuses').css('display', 'none');
                     }
-                    if ($(this).val() == "Robadas") {
+                    if ($(this).val() == "Robadas" || $(this).val() == "Extraviadas") {
                         $('#divArchivoActa').css('display', 'block');
                         $('#guardaIncidenciaRobada').css('display', 'block');
                         $('#guardaIncidencia').css('display', 'none');
@@ -915,7 +920,7 @@
                         }
                         return false;
                     }
-                    if (categoria == "Mal Estado" || categoria == "Extraviadas") {
+                    if (categoria == "Mal Estado") {
                         if ($("#codigo_rastreo").val() != "" && $("#numero_guia").val() != "" && $("#tipo_servicio").val() != "") {
                             return true;
                         }
@@ -938,7 +943,7 @@
                         return false;
                     }
 
-                    if (categoria == "Robadas") {
+                    if (categoria == "Robadas" || categoria == "Extraviadas") {
                         if ($("#codigo_rastreo").val() != "" && $("#numero_guia").val() != "" && $("#tipo_servicio").val() != "" && $('.incidencias_robo').val() != "") {
                             return true;
                         }
@@ -1002,7 +1007,7 @@
                         return false;
                     }
 
-                    if (categoria != "Robadas") {
+                    if (categoria != "Robadas" && categoria != "Extraviadas") {
                         if (validaCampos() == true) {
                             if (id == 0) {
                                 axios.post('/mensajeria/incidencias', {
@@ -1079,7 +1084,7 @@
                         return false;
                     }
 
-                    if (categoria == "Robadas") {
+                    if (categoria == "Robadas" || categoria == "Extraviadas") {
                         formData.append("Id", id);
                         formData.append("CedulaMensajeriaId", model.id);
                         formData.append("Pregunta", pregunta);

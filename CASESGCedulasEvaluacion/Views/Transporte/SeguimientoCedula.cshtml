@@ -7,7 +7,7 @@
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/transporte/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
+        <a href="/transporte/index/@Model.ServicioId@Model.URL" type='button' class='btn-sm btn-warning float-right mr-2 mb-3 btn_back'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -642,16 +642,16 @@
             /*Condicionales para Liberar los Botones*/
                 if (model.estatus == 'Autorizada') {
                     axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
-                        if (btn.data == 1) {
+                        if (btn.data != -1) {
                             $('.revisar_cae').css('display', 'block');
                         }
                     });
                 }
                 else if (model.estatus == 'Revisión CAE') {
                     axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
-                        if (btn.data > 0) {
+                        if (btn.data == 0) {
                             $('.rechazar_tramite').css('display', 'block');
-                        } else if(btn.data == 0){
+                        } else if(btn.data == 1){
                             $('.autorizar_cae').css('display', 'block');
                         }
                     });
@@ -661,7 +661,7 @@
                         if (btn.data == 1) {
                             $('.tramitar_cedula').css('display', 'block');
                         }
-                        else if (btn.data == 2)
+                        else
                         {
                             $('.rechazar_tramite').css('display', 'block');
                         }
@@ -669,25 +669,45 @@
                 }
                 else if (model.estatus == 'Trámite Rechazado') {
                     axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
-                        console.log(btn);
-                        if (btn.data == 1 || btn.data == 3)
+                        if (btn.data == 1)
                         {
                             $('.revisar_cae').css('display', 'block');
                         }
-                        else if (btn.data == 2)
+                        else if (btn.data == 0)
                         {
                             $('.tramitar_cedula').css('display', 'block');
+                        }
+                        else if (btn.data == 2) {
+                            $('.autorizar_cae').css('display', 'block');
                         }
                     });
                 }
                 else if (model.estatus == 'En Trámite') {
                     axios.get('/entregables/flujo/cae/' + model.id + '/' + model.estatus).then(btn => {
-                        if (btn.data > 0) {
+                        if (btn.data == -1) {
                             $('.rechazar_tramite').css('display', 'block');
-                        } else {
-                            $('.tramitar_pago').css('display', 'block');
                         }
+                        else if (btn.data == -2) {
+                            $('.revisar_cae').css('display', 'block');
+                        }
+                        else if (btn.data == 1) {
+                            $('.tramitar_pago').css('display', 'block');
+                        } else if (btn.data == 0) {
+                            $("#divAvisoFinancieros").css('display', 'block');
+                        }
+                    }).catch(error => {
+                        console.log(error);
                     });
+                }
+                else if (model.estatus == 'Trámite de Pago' || model.estatus == 'Enviada a DGPPT' || model.estatus == 'Pagada')
+                {
+                    $('.tramitar_cedula').css('display', 'none');
+                    $('.tramitar_pago').css('display', 'none');
+                    $('.rechazar_tramite').css('display', 'none');
+                    $('.autorizar_cae').css('display', 'none');
+                    $('.revisar_cae').css('display', 'none');
+                    $('.success_entregable').css('display', 'none');
+                    $('.failed_entregable').css('display', 'none');
                 }
             /*Fin Condicionales para Liberar los Botones*/
 

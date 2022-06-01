@@ -95,6 +95,7 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioEvaluacionServicios, RepositorioEvaluacionServicios>();
             services.AddScoped<IRepositorioEntregablesCedula, RepositorioEntregablesCedula>();
             services.AddScoped<IRepositorioAlcancesEntregables, RepositorioAlcancesEntregables>();
+            services.AddScoped<IRepositorioReportesFinancieros, RepositorioReportesFinancieros>();
 
             //Services
             services.AddTransient<ServiceModulos>();

@@ -10,6 +10,7 @@ namespace CedulasEvaluacion.Entities.Reportes
         public string Inmueble { get; set; }
         public string Folio { get; set; }
         public string Mes { get; set; }
+        public string Empresa { get; set; }
         public int Anio { get; set; }
         public string Administracion { get; set; }
         public string Servicio { get; set; }

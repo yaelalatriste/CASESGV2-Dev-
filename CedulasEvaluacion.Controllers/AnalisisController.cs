@@ -130,6 +130,7 @@ namespace CedulasEvaluacion.Controllers
                 {
                     return Redirect("/error/cedSend");
                 }
+                cedula.URL = Request.QueryString.Value;
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
                 cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
@@ -180,6 +181,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 CedulaEvaluacion cedAna = null;
                 cedAna = await vCedula.CedulaById(id);
+                cedAna.URL = Request.QueryString.Value;
                 cedAna.facturas = await vFacturas.getFacturas(id, cedAna.ServicioId);//
                 cedAna.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedAna.facturas);
                 cedAna.inmuebles = await vInmuebles.inmuebleById(cedAna.InmuebleId);
@@ -209,6 +211,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 CedulaEvaluacion cedFum = null;
                 cedFum = await vCedula.CedulaById(id);
+                cedFum.URL = Request.QueryString.Value;
                 cedFum.facturas = await vFacturas.getFacturas(id, cedFum.ServicioId);//
                 cedFum.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedFum.facturas);
                 cedFum.inmuebles = await vInmuebles.inmuebleById(cedFum.InmuebleId);

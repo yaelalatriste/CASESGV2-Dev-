@@ -1658,14 +1658,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Administracion">
+                        <Textbox Name="Inmueble">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Administracion.Value</Value>
+                                  <Value>=Fields!Inmueble.Value</Value>
                                   <Style>
                                     <Color>#a31515</Color>
                                   </Style>
@@ -1676,7 +1676,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Administracion</rd:DefaultName>
+                          <rd:DefaultName>Inmueble</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -1701,6 +1701,7 @@
                           </Style>
                         </Textbox>
                         <ColSpan>5</ColSpan>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -1751,14 +1752,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Inmueble">
+                        <Textbox Name="Administracion1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Inmueble.Value</Value>
+                                  <Value>=Fields!Administracion.Value</Value>
                                   <Style>
                                     <Color>#a31515</Color>
                                   </Style>
@@ -1769,7 +1770,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Inmueble</rd:DefaultName>
+                          <rd:DefaultName>Administracion1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>

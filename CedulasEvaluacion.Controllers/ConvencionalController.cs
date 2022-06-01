@@ -128,6 +128,7 @@ namespace CedulasEvaluacion.Controllers
                 {
                     return Redirect("/error/cedSend");
                 }
+                cedula.URL = Request.QueryString.Value;
                 cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
                 cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
                 cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
@@ -173,6 +174,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> IncidenciasConvencional(int id)
         {
             CedulaEvaluacion telefoniaConvencional = await vCedula.CedulaById(id);
+            telefoniaConvencional.URL = Request.QueryString.Value;
             telefoniaConvencional.incidencias = new Entities.MIncidencias.ModelsIncidencias();
             telefoniaConvencional.incidencias.convencional = await iConvencional.getIncidenciasConvencional(id);
             return View(telefoniaConvencional);
@@ -187,6 +189,7 @@ namespace CedulasEvaluacion.Controllers
              {
                 CedulaEvaluacion telCel = null;
                 telCel = await vCedula.CedulaById(id);
+                telCel.URL = Request.QueryString.Value;
                 telCel.facturas = await vFacturas.getFacturas(id, telCel.ServicioId);//
                 telCel.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telCel.facturas);
                 telCel.usuarios = await vUsuarios.getUserById(telCel.UsuarioId);
@@ -225,6 +228,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 CedulaEvaluacion telCel = null;
                 telCel = await vCedula.CedulaById(id);
+                telCel.URL = Request.QueryString.Value;
                 telCel.facturas = await vFacturas.getFacturas(id, telCel.ServicioId);//
                 telCel.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telCel.facturas);
                 telCel.usuarios = await vUsuarios.getUserById(telCel.UsuarioId);

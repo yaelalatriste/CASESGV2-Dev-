@@ -186,13 +186,13 @@
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
-                                        <a href="/agua/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
+                                       <a href="#" data-id="@item.Id" class="text-center btnRevision" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
                                             <i class="fad fa-eye text-success"></i>
                                         </a>
                                     }
                                     @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a asp-action="evaluacion" asp-controller="Agua" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnCuestionario" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
                                             <i class="fad fa-pencil text-primary"></i>
                                         </a>
                                     }
@@ -221,7 +221,7 @@
                                     }
                                     @if (!item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a href="/agua/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnSeguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
                                             <i class="fas fa-file-import text-primary"></i>
                                         </a>
                                     }
@@ -353,13 +353,13 @@
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
-                                        <a href="/agua/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center btnRevision" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
                                             <i class="fad fa-eye text-success"></i>
                                         </a>
                                     }
                                     @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a asp-action="evaluacion" asp-controller="Agua" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnCuestionario" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
                                             <i class="fad fa-pencil text-primary"></i>
                                         </a>
                                     }
@@ -388,7 +388,7 @@
                                     }
                                     @if (!item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a href="/agua/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnSeguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
                                             <i class="fas fa-file-import text-primary"></i>
                                         </a>
                                     }
@@ -468,6 +468,18 @@
             var model = @Html.Raw(Json.Serialize(@Model));
             $('[data-toggle="tooltip"]').tooltip();
             localStorage.clear();
+
+            $(".btnRevision").click(function () {
+                window.location.href = "/agua/revision/" + $(this).data('id') + window.location.search;
+            });
+
+            $(".btnSeguimiento").click(function () {
+                window.location.href = "/agua/seguimiento/" + $(this).data('id') + window.location.search;
+            });
+
+            $(".btnCuestionario").click(function () {
+                window.location.href = "/agua/evaluacion/" + $(this).data('id') + window.location.search;
+            });
 
             $(".select2").select2();
             $('.select2bs4').select2({

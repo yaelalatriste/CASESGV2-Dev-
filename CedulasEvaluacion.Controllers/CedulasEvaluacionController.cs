@@ -835,12 +835,12 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se llevó a cabo el registro de los servidores públicos en este mes.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se llevó a cabo el registro de los servidores públicos en este mes, los comentarios son los siguientes: " +
+                        respuestas[i].Detalles) });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se llevó a cabo el registro de los servidores públicos en este mes, los comentarios son los siguientes: " +
-                        respuestas[i].Detalles) });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se llevó a cabo el registro de los servidores públicos en este mes.") });
                     }
                 }
                 else if (i == 3)

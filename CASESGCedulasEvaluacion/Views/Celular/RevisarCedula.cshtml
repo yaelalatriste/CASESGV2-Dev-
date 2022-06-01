@@ -5,7 +5,7 @@
 
 <div class="row col-lg-12">
     <div class="col-lg-12">
-        <a href="/telCelular/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
+        <a href="/telCelular/index/@Model.ServicioId@Model.URL" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -182,8 +182,8 @@
                                                         <td>@i</td>
                                                         <td>Alta/Equipo</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 24)
@@ -290,8 +290,8 @@
                                                         <td>@i</td>
                                                         <td>Alta sin Equipo</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 6)
@@ -398,8 +398,8 @@
                                                         <td>@i</td>
                                                         <td>Baja</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 6)
@@ -506,8 +506,8 @@
                                                         <td>@i</td>
                                                         <td>Reactivación Robo/Extravío</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 24)
@@ -614,8 +614,8 @@
                                                         <td>@i</td>
                                                         <td>Suspensión Robo/Extravío</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 24)
@@ -722,8 +722,8 @@
                                                         <td>@i</td>
                                                         <td>Cambio de Perfil</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 48)
@@ -830,8 +830,8 @@
                                                         <td>@i</td>
                                                         <td>Switcheo de SIM</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 24)
@@ -938,8 +938,8 @@
                                                         <td>@i</td>
                                                         <td>Cambio de Número o Región</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 24)
@@ -1046,8 +1046,8 @@
                                                         <td>@i</td>
                                                         <td>Servicio de Voz/Datos</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 24)
@@ -1154,8 +1154,8 @@
                                                         <td>@i</td>
                                                         <td>Diagnóstico de Equipo</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 24)
@@ -1262,8 +1262,8 @@
                                                         <td>@i</td>
                                                         <td>Reparación de Equipo</td>
                                                         <td>@p1.Linea</td>
-                                                        <td>@p1.FechaSolicitud</td>
-                                                        <td>@p1.FechaAtencion</td>
+                                                        <td>@p1.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                                        <td>@p1.FechaAtencion.ToString("dd/MM/yyyy")</td>
                                                         <td>@p1.HorasAtencion</td>
                                                         <td>@p1.HorasRetraso</td>
                                                         @if (@p1.HorasAtencion <= 80)

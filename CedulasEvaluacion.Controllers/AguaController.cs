@@ -130,6 +130,7 @@ namespace CedulasEvaluacion.Controllers
                 {
                     return Redirect("/error/cedSend");
                 }
+                cedula.URL = Request.QueryString.Value;
                 cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
                 cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
@@ -180,6 +181,7 @@ namespace CedulasEvaluacion.Controllers
             {
                 CedulaEvaluacion cedAgua = null;
                 cedAgua = await vCedula.CedulaById(id);
+                cedAgua.URL = Request.QueryString.Value;
                 cedAgua.facturas = await vFacturas.getFacturas(id, cedAgua.ServicioId);//
                 cedAgua.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedAgua.facturas);
                 cedAgua.inmuebles = await vInmuebles.inmuebleById(cedAgua.InmuebleId);
@@ -207,28 +209,29 @@ namespace CedulasEvaluacion.Controllers
             int success = await vRepositorioPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
             if (success == 1)
             {
-                CedulaEvaluacion cedFum = null;
-                cedFum = await vCedula.CedulaById(id);
-                cedFum.facturas = await vFacturas.getFacturas(id, cedFum.ServicioId);//
-                cedFum.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedFum.facturas);
-                cedFum.inmuebles = await vInmuebles.inmuebleById(cedFum.InmuebleId);
-                cedFum.usuarios = await vUsuarios.getUserById(cedFum.UsuarioId);
-                cedFum.iEntregables = await eAgua.getEntregables(cedFum.Id);
-                cedFum.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedFum.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedFum.Id);
-                cedFum.historialCedulas = new List<HistorialCedulas>();
-                cedFum.historialCedulas = await vAgua.getHistorialAgua(cedFum.Id);
-                foreach (var user in cedFum.historialCedulas)
+                CedulaEvaluacion cedAgua = null;
+                cedAgua = await vCedula.CedulaById(id);
+                cedAgua.URL = Request.QueryString.Value;
+                cedAgua.facturas = await vFacturas.getFacturas(id, cedAgua.ServicioId);//
+                cedAgua.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedAgua.facturas);
+                cedAgua.inmuebles = await vInmuebles.inmuebleById(cedAgua.InmuebleId);
+                cedAgua.usuarios = await vUsuarios.getUserById(cedAgua.UsuarioId);
+                cedAgua.iEntregables = await eAgua.getEntregables(cedAgua.Id);
+                cedAgua.RespuestasEncuesta = new List<RespuestasEncuesta>();
+                cedAgua.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedAgua.Id);
+                cedAgua.historialCedulas = new List<HistorialCedulas>();
+                cedAgua.historialCedulas = await vAgua.getHistorialAgua(cedAgua.Id);
+                foreach (var user in cedAgua.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
-                cedFum.historialEntregables = new List<HistorialEntregables>();
-                cedFum.historialEntregables = await eAgua.getHistorialEntregables(cedFum.Id,cedFum.ServicioId);
-                foreach (var user in cedFum.historialEntregables)
+                cedAgua.historialEntregables = new List<HistorialEntregables>();
+                cedAgua.historialEntregables = await eAgua.getHistorialEntregables(cedAgua.Id, cedAgua.ServicioId);
+                foreach (var user in cedAgua.historialEntregables)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
-                return View(cedFum);
+                return View(cedAgua);
             }
             return Redirect("/error/denied");
         }

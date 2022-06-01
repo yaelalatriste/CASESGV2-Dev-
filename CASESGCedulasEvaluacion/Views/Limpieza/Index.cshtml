@@ -186,13 +186,13 @@
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
-                                        <a href="/limpieza/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center btnRevision" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
                                             <i class="fad fa-eye text-success"></i>
                                         </a>
                                     }
                                     @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso") || !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
-                                        <a asp-action="evaluacion" asp-controller="Limpieza" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnCuestionario" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
                                             <i class="fad fa-pencil text-primary"></i>
                                         </a>
                                     }
@@ -221,7 +221,9 @@
                                     }
                                     @if (!item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a href="/limpieza/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top"><i class="fas fa-file-import text-primary"></i></a>
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnSeguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
+                                            <i class="fas fa-file-import text-primary"></i>
+                                        </a>
                                     }
                                 </td>
                             </tr>
@@ -235,29 +237,30 @@
             <div class="col-lg-12">
                 <p class="h6 font-weight-bold mt-2 mb-4">2) En la sección de <strong>"Acciones"</strong> de clic en el ícono de seguimiento <i class="fas fa-file-import text-primary"></i> :</p>
                 <p class="text-justify"><b>NOTA: </b> Para el estatus <b class="text-danger">Rechazado</b> debe seleccionar el ícono <i class="fad fa-pencil text-primary"></i> para editar el cuestionario y volver a enviarlo a la DAS con las correcciones solicitadas para su revisión.</p>
-                <table class="table table-hover table-responsive-xl" id="dt_mensajeria">
+                <table class="table table-responsive-xl" id="dt_inmuebles">
                     <thead>
                         <tr>
-                            <th class="text-center">ID</th>
+                            <th>ID</th>
                             <th>Estatus</th>
                             <th>Servicio</th>
                             <th>Inmueble</th>
-                            <th class="text-center">Folio</th>
+                            <th>Folio</th>
                             <th>Mes</th>
-                            <th class="text-center">Año</th>
+                            <th>Año</th>
                             @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                             {
-                                <th class="text-center">Validación OP</th>
+                                <th>Validación OP</th>
                             }
-                            <th class="text-center">Acciones</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.cedulas)
                         {
+                            i++;
                             <tr>
-                                @{i++;}
-                                <td class="text-center">@i</td>
+
+                                <td>@i</td>
                                 @if (item.Estatus.Equals("Enviado a DAS"))
                                 {
                                     <td class="text-enviadoDAS" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
@@ -268,7 +271,7 @@
                                 }
                                 else if (item.Estatus.Equals("En Trámite"))
                                 {
-                                    <td class="text-info" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                    <td class="text-info" style="font-weight: bold"> @Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
                                 else if (item.Estatus.Equals("Rechazada"))
                                 {
@@ -280,7 +283,7 @@
                                 }
                                 else if (item.Estatus.Equals("Autorizada"))
                                 {
-                                    <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
+                                    <td class="text-autorizado" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
                                 else if (item.Estatus.Equals("Autorizado CAE"))
                                 {
@@ -294,7 +297,7 @@
                                 {
                                     <td class="text-dgppt" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
-                                else if (item.Estatus.Equals("Pagada"))
+                                else if (item.Estatus.Equals("Pagado"))
                                 {
                                     <td class="text-success" style="font-weight: bold">@Html.DisplayFor(modelItem => item.Estatus)</td>
                                 }
@@ -304,9 +307,9 @@
                                 }
                                 <td>@Html.DisplayFor(modelItem => item.Servicio)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
-                                <td class="text-center">@Html.DisplayFor(modelItem => item.Folio)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Folio)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Mes)</td>
-                                <td class="text-center">@Html.DisplayFor(modelItem => item.Anio)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Anio)</td>
                                 @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && item.Estatus.Equals("En Trámite"))
                                 {
                                     @if (item.MemoValidado == true && item.CedulaValidada == true)
@@ -320,14 +323,14 @@
                                     {
                                         <td class="text-center">
                                             <i class="fa-regular fa-check text-success"></i>
-                                            <i class="fa-regular fa-clipboard-check text-danger ml-1"></i>
+                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
                                         </td>
                                     }
                                     else if (item.MemoValidado == false && item.CedulaValidada == false)
                                     {
                                         <td class="text-center">
-                                            <i class="fa-regular fa-clipboard-check text-danger ml-1"></i>
-                                            <i class="fa-regular fa-clipboard-check text-danger ml-1"></i>
+                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
+                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
                                         </td>
                                     }
                                 }
@@ -347,16 +350,16 @@
                                         </td>
                                     }
                                 }
-                                <td class="text-center">
+                                <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
-                                        <a href="/mensajeria/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center btnRevision" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
                                             <i class="fad fa-eye text-success"></i>
                                         </a>
                                     }
-                                    @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
+                                    @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso") || !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
-                                        <a asp-action="evaluacion" asp-controller="Mensajeria" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnCuestionario" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
                                             <i class="fad fa-pencil text-primary"></i>
                                         </a>
                                     }
@@ -385,7 +388,7 @@
                                     }
                                     @if (!item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a href="/mensajeria/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" class="text-center ml-2 btnSeguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
                                             <i class="fas fa-file-import text-primary"></i>
                                         </a>
                                     }
@@ -463,6 +466,18 @@
             var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $('[data-toggle="tooltip"]').tooltip();
             var model = @Html.Raw(Json.Serialize(@Model));
+
+            $(".btnRevision").click(function () {
+                window.location.href = "/limpieza/revision/" + $(this).data('id') + window.location.search;
+            });
+
+            $(".btnSeguimiento").click(function () {
+                window.location.href = "/limpieza/seguimiento/" + $(this).data('id') + window.location.search;
+            });
+
+            $(".btnCuestionario").click(function () {
+                window.location.href = "/limpieza/evaluacion/" + $(this).data('id') + window.location.search;
+            });
 
             $(".select2").select2();
             $('.select2bs4').select2({

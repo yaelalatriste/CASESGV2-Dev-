@@ -179,7 +179,7 @@ namespace CedulasEvaluacion.Repositories
             string date_str = date.ToString("yyyyMMddHHmmss");
             int id = 0;
 
-            string saveFile = await guardaArchivo(incidenciasMensajeria.ActaRobo, incidenciasMensajeria.Folio, date_str);
+            string saveFile = await guardaArchivo(incidenciasMensajeria.ActaRobo, incidenciasMensajeria.Folio, date_str,incidenciasMensajeria.Tipo);
 
             try
             {
@@ -276,7 +276,7 @@ namespace CedulasEvaluacion.Repositories
                 int isDeleted = await eliminaArchivo(incidenciasMensajeria);
             }
 
-            string saveFile = await guardaArchivo(incidenciasMensajeria.ActaRobo, incidenciasMensajeria.Folio, date_str);
+            string saveFile = await guardaArchivo(incidenciasMensajeria.ActaRobo, incidenciasMensajeria.Folio, date_str,incidenciasMensajeria.Tipo);
 
             try
             {
@@ -603,7 +603,7 @@ namespace CedulasEvaluacion.Repositories
 
 
         /****************** Guarda el Adjunto del Acta de Robo *******************/
-        public async Task<string> guardaArchivo(IFormFile archivo, string folio, string date)
+        public async Task<string> guardaArchivo(IFormFile archivo, string folio, string date,string tipo)
         {
             long size = archivo.Length;
             string folderCedula = folio;
@@ -613,8 +613,14 @@ namespace CedulasEvaluacion.Repositories
             {
                 Directory.CreateDirectory(newPath);
             }
+            if (tipo.Equals("Robadas"))
+            {
+                newPath = newPath + "\\Actas de Robo";
+            }else if (tipo.Equals("Extraviadas"))
+            {
+                newPath = newPath + "\\Actas de Extravío";
+            }
 
-            newPath = newPath + "\\Actas de Robo";
             if (!Directory.Exists(newPath))
             {
                 Directory.CreateDirectory(newPath);
@@ -635,6 +641,7 @@ namespace CedulasEvaluacion.Repositories
 
         public async Task<int> eliminaArchivo(IncidenciasMensajeria incidenciasMensajeria)
         {
+            string newPath = "";
             try
             {
                 using (SqlConnection sql = new SqlConnection(_connectionString))
@@ -648,7 +655,13 @@ namespace CedulasEvaluacion.Repositories
                         await cmd.ExecuteNonQueryAsync();
 
                         string archivo = (cmd.Parameters["@archivo"].Value).ToString();
-                        string newPath = Directory.GetCurrentDirectory() + "\\Entregables\\" + incidenciasMensajeria.Folio + "\\Actas de Robo\\" + archivo;
+                        if (incidenciasMensajeria.Tipo.Equals("Robadas"))
+                        {
+                            newPath = Directory.GetCurrentDirectory() + "\\Entregables\\" + incidenciasMensajeria.Folio + "\\Actas de Robo\\" + archivo;
+                        }else if (incidenciasMensajeria.Tipo.Equals("Extraviadas"))
+                        {
+                            newPath = Directory.GetCurrentDirectory() + "\\Entregables\\" + incidenciasMensajeria.Folio + "\\Actas de Extravío\\" + archivo;
+                        }
                         File.Delete(newPath);
 
                         return 1;

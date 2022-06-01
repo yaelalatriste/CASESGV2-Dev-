@@ -19,7 +19,7 @@
                 <i class="fal fa-calendar-alt"></i>
             </a>
         }
-        <a href="javascript: history.go(-1)" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
+        <a href="/limpieza/index/@Model.ServicioId@Model.URL" type='button' class='btn-sm btn-warning float-right mr-2 mb-3'><i class="fal fa-arrow-left"></i></a>
     </div>
 </div>
 <div class="row">
@@ -1960,8 +1960,7 @@
                         $('#modal_evidencias').modal('show');
                         var options = '<option value="">Seleccione un Entregable</option><option value="ActaER">Acta Entrega - Recepción</option><option value="Factura">Factura</option>'+
                             '<option value="SAT">Validación del SAT</option><option value="NotaCredito">Nota de Crédito</option><option value="Cedula_Firmada">Cédula Firmada (FIREL)</option>' +
-                            '<option value="Memorandum">Acuse Memorándum (FIREL)</option><option value="AlcanceAER">Alcance a Acta Entrega-Recepción</option>' +
-                            '<option value = "AlcanceMO" > Alcance a Memorándum/Oficio</option>';
+                            '<option value="Memorandum">Acuse Memorándum (FIREL)</option>';
                         $("#tipo_entregable").html(options);
                         var id = $(this).data('id');
                         var tipo = $(this).data('tipo');

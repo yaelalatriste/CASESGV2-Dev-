@@ -6,7 +6,7 @@
 
 <div class="container-fluid" id="limpieza">
     <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Facturas" data-placement="top"><i class="fal fa-file-invoice"></i></a>
-    <a href="/telConvencional/index" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/telConvencional/index/@Model.ServicioId@Model.URL" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
             <tr>
@@ -81,7 +81,7 @@
                             <div>
                                 Para poder capturar las requerimientos presentadas en el mes, haga click en el siguiente botón:
                                 <br />
-                                <a href="/telConvencional/incidencias/@Model.Id" type='button' class='btn-sm btn-danger mt-2' data-toggle="tooltip" title="Requerimientos de Telefonía Celular" data-placement="top"><i class="far fa-car-crash mr-2"></i> Registrar Requerimiento(s)</a>
+                                <a href="/telConvencional/incidencias/@Model.Id@Model.URL" type='button' class='btn-sm btn-danger mt-2' data-toggle="tooltip" title="Requerimientos de Telefonía Celular" data-placement="top"><i class="far fa-car-crash mr-2"></i> Registrar Requerimiento(s)</a>
                             </div>
                         </div>
                         @* Fin del apartado Incidencias *@
@@ -276,6 +276,19 @@
             <div class="modal-body">
                 <input class="form-control" id="idFactura" type="hidden" />
                 <div class="row col-lg-12 mt-2">
+                    <div class="form-group col-lg-4" id="divTipoFactura">
+                        <label for="forFactura">El "XML" corresponde a:</label>
+                        <select id="tipoFactura" class="form-control">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Factura">Factura</option>
+                            <option value="NC">Nota de Crédito</option>
+                        </select>
+                        <div class="col-sm-12 error_tipoFactura">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione él tipo de archivo a subir
+                            </small>
+                        </div>
+                    </div>
                     <div class="form-group col-lg-6">
                         <label for="elegirArchivo">Seleccionar Archivo XML: </label>
                         <div class="custom-file">
@@ -480,6 +493,8 @@
                 $('#error_tipoEntre').css('display', 'none');
                 $('#error_customFile').css('display', 'none');
                 $('#error_comentariosEntre').css('display', 'none');
+                $('.error_tipoFactura').css('display', 'none');
+
             /*Fin Errores en Adjuntar Archivos*/
 
             /*Llenado Automático de Respuestas*/
@@ -1266,7 +1281,7 @@
                         var archivo = e.target.files[0];
                         var fileName = $(this).val().split("\\").pop();
                         var ext = fileName.split('.').pop();
-                        if (ext == "xml") {
+                        if (ext == "xml" || ext == "XML") {
                             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                             if ($('.file_factura').hasClass('is-invalid')) {
                                 $('.file_factura').removeClass('is-invalid');
@@ -1293,6 +1308,12 @@
                     });
 
                     function validaCamposArchivoXml() {
+                        if ($('#tipoFactura').val() == "" && $("#idFactura").val() == "") {
+                            $('#tipoFactura').addClass('is-invalid');
+                            $('.error_tipoFactura').css('display', 'block');
+
+                            return false;
+                        }
                         if ($('.file_factura').val() == "") {
                             $('.file_factura').addClass('is-invalid');
                             $('.error_customFile').css('display', 'block');
@@ -1304,6 +1325,7 @@
 
                     $('#agregarFactura').click(function () {
                          var id = $("#idFactura").val();
+                         var tipo = $("#tipoFactura").val();
 
                          var formData = new FormData();
                          var file = document.getElementById('fileFactura').files[0];
@@ -1316,6 +1338,7 @@
 
                         formData.append("Id", id);
                         formData.append("ServicioId", 6);
+                        formData.append("Tipo", tipo);
                         formData.append("CedulaId", model.id);
                         formData.append("Xml", file);
                         if (validaCamposArchivoXml() == true) {

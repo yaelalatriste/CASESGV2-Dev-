@@ -27,7 +27,9 @@
                             @Html.Raw(@ds.Icono)
                         </div>
                         <br /><br />
-                        <h6 class="mt-3 small-box-footer font-weight-bold">Total de Cédulas: @ds.Total</h6>
+                              <a href="/@ds.Abreviacion/Index/@ds.ServicioId?Estatus=@ds.Estatus" class="text-center text-white" data-toggle="tooltip" title="Consultar Cédulas por Mes" data-placement="top">
+                                  <h6 class="mt-3 small-box-footer font-weight-bold">Total de Cédulas: @ds.Total <i class="fa-solid fa-square-right ml-2"></i></h6>
+                              </a>
                     </div>
                 </div>
             }
@@ -44,6 +46,8 @@
 @section Scripts{ 
     <script>
         $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
             $("#changeEstatus").change(function () {
                 var estatus = $(this).val();
                 window.location.href = "/CedulasEstatus/" + estatus;

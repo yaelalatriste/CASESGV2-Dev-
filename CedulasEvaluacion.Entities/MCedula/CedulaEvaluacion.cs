@@ -22,6 +22,7 @@ namespace CedulasEvaluacion.Entities.MCedula
         public decimal? PenaCalificacion { get; set; }
         public decimal TotalBajoDemanda { get; set; }
         public string Estatus { get; set; }
+        public string URL { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public DateTime? FechaActualizacion { get; set; }
         public DateTime? FechaEliminacion { get; set; }

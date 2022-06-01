@@ -6,7 +6,7 @@
 
 <div class="container-fluid" id="limpieza">
     <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Facturas" data-placement="top"><i class="fal fa-file-invoice"></i></a>
-    <a href="/telCelular/index/@Model.ServicioId" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/telCelular/index/@Model.ServicioId@Model.URL" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Mensajería" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
             <tr>
@@ -81,7 +81,7 @@
                             <div>
                                 Para poder capturar los requerimientos presentados en el mes, haga click en el siguiente botón:
                                 <br />
-                                <a href="/telCelular/incidencias/@Model.Id" type='button' class='btn-sm btn-danger mt-2' data-toggle="tooltip" title="Requerimientos de Telefonía Celular" data-placement="top"><i class="far fa-car-crash mr-2"></i> Registrar Requerimiento(s)</a>
+                                <a href="/telCelular/incidencias/@Model.Id@Model.URL" type='button' class='btn-sm btn-danger mt-2' data-toggle="tooltip" title="Requerimientos de Telefonía Celular" data-placement="top"><i class="far fa-car-crash mr-2"></i> Registrar Requerimiento(s)</a>
                             </div>
                         </div>
                         @* Fin del apartado Incidencias *@
