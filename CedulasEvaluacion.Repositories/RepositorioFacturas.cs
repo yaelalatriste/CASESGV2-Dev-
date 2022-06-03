@@ -97,93 +97,132 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
-        public async Task<Facturas> insertaFacturas(Facturas facturas)
+        public async Task<int> buscaFactura(string uuid)
         {
-            await copiaFactura(facturas.Xml);
-            facturas = desglozaXML(facturas);
             try
             {
                 using (SqlConnection sql = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("sp_insertaFactura", sql))
+                    using (SqlCommand cmd = new SqlCommand("sp_buscaFactura", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.BigInt)).Direction = ParameterDirection.Output;
-                        cmd.Parameters.Add(new SqlParameter("@servicioId", facturas.ServicioId));
-                        cmd.Parameters.Add(new SqlParameter("@cedula", facturas.CedulaId));
-                        cmd.Parameters.Add(new SqlParameter("@rfc", facturas.emisor.RFC));
-                        cmd.Parameters.Add(new SqlParameter("@iva", facturas.traslado.Importe));
-                        if (facturas.retencion != null)
-                            cmd.Parameters.Add(new SqlParameter("@retencion", facturas.retencion.Importe));
-                        cmd.Parameters.Add(new SqlParameter("@nombre", facturas.emisor.Nombre));
-                        cmd.Parameters.Add(new SqlParameter("@tipo", facturas.Tipo));
-                        cmd.Parameters.Add(new SqlParameter("@usoCFDI", facturas.receptor.usoCFDI));
-                        cmd.Parameters.Add(new SqlParameter("@uuid", facturas.timbreFiscal.UUID));
-                        cmd.Parameters.Add(new SqlParameter("@serie", facturas.comprobante.Serie));
-                        cmd.Parameters.Add(new SqlParameter("@folio", facturas.comprobante.Folio));
-                        cmd.Parameters.Add(new SqlParameter("@fechaTimbrado", facturas.timbreFiscal.FechaTimbrado));
-                        cmd.Parameters.Add(new SqlParameter("@subtotal", facturas.comprobante.SubTotal));
-                        cmd.Parameters.Add(new SqlParameter("@total", facturas.comprobante.Total));
+                        cmd.Parameters.Add(new SqlParameter("@cedulaId", SqlDbType.Int)).Direction = ParameterDirection.Output;
+                        cmd.Parameters.Add(new SqlParameter("@uuid", uuid));
 
                         await sql.OpenAsync();
-
                         await cmd.ExecuteNonQueryAsync();
 
-                        facturas.Id = Convert.ToInt32(cmd.Parameters["@id"].Value);
-
-                        return facturas;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-                return null;
-            }
-        }
-
-        public async Task<int> insertaConceptoFacturas(Facturas facturas)
-        {
-            Facturas factura = await insertaFacturas(facturas);
-            double iva = 0;
-            try
-            {
-                foreach (var fac in factura.concepto)
-                {
-                    iva = Convert.ToDouble(fac.Importe) * 0.16;
-                    using (SqlConnection sql = new SqlConnection(_connectionString))
-                    {
-                        using (SqlCommand cmd = new SqlCommand("sp_insertaConceptoFactura", sql))
+                        if(cmd.Parameters["@cedulaId"].Value != DBNull.Value)
                         {
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.Add(new SqlParameter("@factura", factura.Id));
-                            cmd.Parameters.Add(new SqlParameter("@cantidad", fac.Cantidad));
-                            cmd.Parameters.Add(new SqlParameter("@claveProducto", fac.ClaveProdServ));
-                            cmd.Parameters.Add(new SqlParameter("@claveUnidad", fac.ClaveUnidad));
-                            cmd.Parameters.Add(new SqlParameter("@unidad", fac.Unidad));
-                            cmd.Parameters.Add(new SqlParameter("@descripcion", fac.Descripcion));
-                            if (facturas.datosExtra != null) {
-                                cmd.Parameters.Add(new SqlParameter("@folioSap", facturas.datosExtra.FolioSAP));
-                                cmd.Parameters.Add(new SqlParameter("@numeroCliente", facturas.datosExtra.NumeroCliente));
-                                cmd.Parameters.Add(new SqlParameter("@observacion", facturas.datosTotales.observGeneral1));
-                            }
-                            cmd.Parameters.Add(new SqlParameter("@precioUnitario", fac.ValorUnitario));
-                            cmd.Parameters.Add(new SqlParameter("@subtotal", fac.Importe));
-                            cmd.Parameters.Add(new SqlParameter("@descuento", fac.Descuento));
-                            cmd.Parameters.Add(new SqlParameter("@iva", iva));
-
-                            await sql.OpenAsync();
-                            await cmd.ExecuteNonQueryAsync();
+                            return Convert.ToInt32(cmd.Parameters["@cedulaId"].Value);
                         }
+
+                        return 0;
                     }
                 }
-                return 1;
             }
             catch (Exception ex)
             {
                 string msg = ex.Message;
                 return -1;
             }
+        }
+
+        public async Task<Facturas> insertaFacturas(Facturas facturas)
+        {
+            await copiaFactura(facturas.Xml);
+            facturas = desglozaXML(facturas);
+            facturas.CedulaExistente = await buscaFactura(facturas.timbreFiscal.UUID);
+            if(facturas.CedulaExistente == 0)
+            {
+                try
+                {
+                    using (SqlConnection sql = new SqlConnection(_connectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand("sp_insertaFactura", sql))
+                        {
+                            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.BigInt)).Direction = ParameterDirection.Output;
+                            cmd.Parameters.Add(new SqlParameter("@servicioId", facturas.ServicioId));
+                            cmd.Parameters.Add(new SqlParameter("@cedula", facturas.CedulaId));
+                            cmd.Parameters.Add(new SqlParameter("@rfc", facturas.emisor.RFC));
+                            cmd.Parameters.Add(new SqlParameter("@iva", facturas.traslado.Importe));
+                            if (facturas.retencion != null)
+                                cmd.Parameters.Add(new SqlParameter("@retencion", facturas.retencion.Importe));
+                            cmd.Parameters.Add(new SqlParameter("@nombre", facturas.emisor.Nombre));
+                            cmd.Parameters.Add(new SqlParameter("@tipo", facturas.Tipo));
+                            cmd.Parameters.Add(new SqlParameter("@usoCFDI", facturas.receptor.usoCFDI));
+                            cmd.Parameters.Add(new SqlParameter("@uuid", facturas.timbreFiscal.UUID));
+                            cmd.Parameters.Add(new SqlParameter("@serie", facturas.comprobante.Serie));
+                            cmd.Parameters.Add(new SqlParameter("@folio", facturas.comprobante.Folio));
+                            cmd.Parameters.Add(new SqlParameter("@fechaTimbrado", facturas.timbreFiscal.FechaTimbrado));
+                            cmd.Parameters.Add(new SqlParameter("@subtotal", facturas.comprobante.SubTotal));
+                            cmd.Parameters.Add(new SqlParameter("@total", facturas.comprobante.Total));
+
+                            await sql.OpenAsync();
+
+                            await cmd.ExecuteNonQueryAsync();
+
+                            facturas.Id = Convert.ToInt32(cmd.Parameters["@id"].Value);
+
+                            return facturas;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    return null;
+                }
+            }
+            return facturas;
+        }
+
+        public async Task<int> insertaConceptoFacturas(Facturas facturas)
+        {
+            Facturas factura = await insertaFacturas(facturas);
+            double iva = 0;
+            if (factura.CedulaExistente == 0) {
+                try
+                {
+                    foreach (var fac in factura.concepto)
+                    {
+                        iva = Convert.ToDouble(fac.Importe) * 0.16;
+                        using (SqlConnection sql = new SqlConnection(_connectionString))
+                        {
+                            using (SqlCommand cmd = new SqlCommand("sp_insertaConceptoFactura", sql))
+                            {
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add(new SqlParameter("@factura", factura.Id));
+                                cmd.Parameters.Add(new SqlParameter("@cantidad", fac.Cantidad));
+                                cmd.Parameters.Add(new SqlParameter("@claveProducto", fac.ClaveProdServ));
+                                cmd.Parameters.Add(new SqlParameter("@claveUnidad", fac.ClaveUnidad));
+                                cmd.Parameters.Add(new SqlParameter("@unidad", fac.Unidad));
+                                cmd.Parameters.Add(new SqlParameter("@descripcion", fac.Descripcion));
+                                if (facturas.datosExtra != null) {
+                                    cmd.Parameters.Add(new SqlParameter("@folioSap", facturas.datosExtra.FolioSAP));
+                                    cmd.Parameters.Add(new SqlParameter("@numeroCliente", facturas.datosExtra.NumeroCliente));
+                                    cmd.Parameters.Add(new SqlParameter("@observacion", facturas.datosTotales.observGeneral1));
+                                }
+                                cmd.Parameters.Add(new SqlParameter("@precioUnitario", fac.ValorUnitario));
+                                cmd.Parameters.Add(new SqlParameter("@subtotal", fac.Importe));
+                                cmd.Parameters.Add(new SqlParameter("@descuento", fac.Descuento));
+                                cmd.Parameters.Add(new SqlParameter("@iva", iva));
+
+                                await sql.OpenAsync();
+                                await cmd.ExecuteNonQueryAsync();
+                            }
+                        }
+                    }
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    return -1;
+                }
+            }
+            return factura.CedulaExistente;
         }
 
         public Facturas desglozaXML(Facturas facturas)
@@ -311,86 +350,95 @@ namespace CedulasEvaluacion.Repositories
          {
             await copiaFactura(facturas.Xml);
             facturas = desglozaXML(facturas);
-            try
+            facturas.CedulaExistente = await buscaFactura(facturas.timbreFiscal.UUID);
+            if (facturas.CedulaExistente == 0)
             {
-                using (SqlConnection sql = new SqlConnection(_connectionString))
+                try
                 {
-                    using (SqlCommand cmd = new SqlCommand("sp_actualizaFacturaLimpieza", sql))
+                    using (SqlConnection sql = new SqlConnection(_connectionString))
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@id", facturas.Id));
-                        cmd.Parameters.Add(new SqlParameter("@servicioId", facturas.ServicioId));
-                        cmd.Parameters.Add(new SqlParameter("@cedula", facturas.CedulaId));
-                        cmd.Parameters.Add(new SqlParameter("@rfc", facturas.emisor.RFC));
-                        cmd.Parameters.Add(new SqlParameter("@iva", facturas.traslado.Importe));
-                        if(facturas.retencion != null)
-                            cmd.Parameters.Add(new SqlParameter("@retencion", facturas.retencion.Importe));
-                        cmd.Parameters.Add(new SqlParameter("@nombre", facturas.emisor.Nombre));
-                        cmd.Parameters.Add(new SqlParameter("@usoCFDI", facturas.receptor.usoCFDI));
-                        cmd.Parameters.Add(new SqlParameter("@uuid", facturas.timbreFiscal.UUID));
-                        cmd.Parameters.Add(new SqlParameter("@serie", facturas.comprobante.Serie));
-                        cmd.Parameters.Add(new SqlParameter("@folio", facturas.comprobante.Folio));
-                        cmd.Parameters.Add(new SqlParameter("@fechaTimbrado", facturas.timbreFiscal.FechaTimbrado));
-                        cmd.Parameters.Add(new SqlParameter("@subtotal", facturas.comprobante.SubTotal));
-                        cmd.Parameters.Add(new SqlParameter("@total", facturas.comprobante.Total));
+                        using (SqlCommand cmd = new SqlCommand("sp_actualizaFacturaLimpieza", sql))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@id", facturas.Id));
+                            cmd.Parameters.Add(new SqlParameter("@servicioId", facturas.ServicioId));
+                            cmd.Parameters.Add(new SqlParameter("@cedula", facturas.CedulaId));
+                            cmd.Parameters.Add(new SqlParameter("@rfc", facturas.emisor.RFC));
+                            cmd.Parameters.Add(new SqlParameter("@iva", facturas.traslado.Importe));
+                            if (facturas.retencion != null)
+                                cmd.Parameters.Add(new SqlParameter("@retencion", facturas.retencion.Importe));
+                            cmd.Parameters.Add(new SqlParameter("@nombre", facturas.emisor.Nombre));
+                            cmd.Parameters.Add(new SqlParameter("@usoCFDI", facturas.receptor.usoCFDI));
+                            cmd.Parameters.Add(new SqlParameter("@uuid", facturas.timbreFiscal.UUID));
+                            cmd.Parameters.Add(new SqlParameter("@serie", facturas.comprobante.Serie));
+                            cmd.Parameters.Add(new SqlParameter("@folio", facturas.comprobante.Folio));
+                            cmd.Parameters.Add(new SqlParameter("@fechaTimbrado", facturas.timbreFiscal.FechaTimbrado));
+                            cmd.Parameters.Add(new SqlParameter("@subtotal", facturas.comprobante.SubTotal));
+                            cmd.Parameters.Add(new SqlParameter("@total", facturas.comprobante.Total));
 
-                        await sql.OpenAsync();
-                        int id = await cmd.ExecuteNonQueryAsync();
+                            await sql.OpenAsync();
+                            int id = await cmd.ExecuteNonQueryAsync();
 
-                        return facturas;
+                            return facturas;
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    return null;
+                }
             }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-                return null;
-            }
+            return facturas;
         }
 
         public async Task<int> updateConceptoFacturas(Facturas facturas)
         {
             Facturas factura = await updateFacturas(facturas);
             double iva = 0;
-            try
+            if (factura.CedulaExistente == 0)
             {
-                foreach(var fac in factura.concepto)
+                try
                 {
-                    iva = Convert.ToDouble(fac.Importe) * 0.16;
-                    using (SqlConnection sql = new SqlConnection(_connectionString))
+                    foreach (var fac in factura.concepto)
                     {
-                        using (SqlCommand cmd = new SqlCommand("sp_insertaConceptoFactura", sql))
+                        iva = Convert.ToDouble(fac.Importe) * 0.16;
+                        using (SqlConnection sql = new SqlConnection(_connectionString))
                         {
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.Add(new SqlParameter("@factura", factura.Id));
-                            cmd.Parameters.Add(new SqlParameter("@cantidad", fac.Cantidad));
-                            cmd.Parameters.Add(new SqlParameter("@claveProducto", fac.ClaveProdServ));
-                            cmd.Parameters.Add(new SqlParameter("@claveUnidad", fac.ClaveUnidad));
-                            cmd.Parameters.Add(new SqlParameter("@unidad", fac.Unidad));
-                            cmd.Parameters.Add(new SqlParameter("@descripcion", fac.Descripcion));
-                            if (facturas.datosExtra != null)
+                            using (SqlCommand cmd = new SqlCommand("sp_insertaConceptoFactura", sql))
                             {
-                                cmd.Parameters.Add(new SqlParameter("@folioSap", facturas.datosExtra.FolioSAP));
-                                cmd.Parameters.Add(new SqlParameter("@numeroCliente", facturas.datosExtra.NumeroCliente));
-                                cmd.Parameters.Add(new SqlParameter("@observacion", facturas.datosTotales.observGeneral1));
-                            }
-                            cmd.Parameters.Add(new SqlParameter("@precioUnitario", fac.ValorUnitario));
-                            cmd.Parameters.Add(new SqlParameter("@subtotal", fac.Importe));
-                            cmd.Parameters.Add(new SqlParameter("@descuento", fac.Descuento));
-                            cmd.Parameters.Add(new SqlParameter("@iva", iva));
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add(new SqlParameter("@factura", factura.Id));
+                                cmd.Parameters.Add(new SqlParameter("@cantidad", fac.Cantidad));
+                                cmd.Parameters.Add(new SqlParameter("@claveProducto", fac.ClaveProdServ));
+                                cmd.Parameters.Add(new SqlParameter("@claveUnidad", fac.ClaveUnidad));
+                                cmd.Parameters.Add(new SqlParameter("@unidad", fac.Unidad));
+                                cmd.Parameters.Add(new SqlParameter("@descripcion", fac.Descripcion));
+                                if (facturas.datosExtra != null)
+                                {
+                                    cmd.Parameters.Add(new SqlParameter("@folioSap", facturas.datosExtra.FolioSAP));
+                                    cmd.Parameters.Add(new SqlParameter("@numeroCliente", facturas.datosExtra.NumeroCliente));
+                                    cmd.Parameters.Add(new SqlParameter("@observacion", facturas.datosTotales.observGeneral1));
+                                }
+                                cmd.Parameters.Add(new SqlParameter("@precioUnitario", fac.ValorUnitario));
+                                cmd.Parameters.Add(new SqlParameter("@subtotal", fac.Importe));
+                                cmd.Parameters.Add(new SqlParameter("@descuento", fac.Descuento));
+                                cmd.Parameters.Add(new SqlParameter("@iva", iva));
 
-                            await sql.OpenAsync();
-                            await cmd.ExecuteNonQueryAsync();
+                                await sql.OpenAsync();
+                                await cmd.ExecuteNonQueryAsync();
+                            }
                         }
                     }
+                    return 1;
                 }
-                return 1;
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    return -1;
+                }
             }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-                return -1;
-            }
+            return factura.CedulaExistente;
         }
         /*FIN Metodo para Actualizar los datos de la factura*/
 

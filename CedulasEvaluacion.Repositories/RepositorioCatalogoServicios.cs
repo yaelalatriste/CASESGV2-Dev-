@@ -113,6 +113,38 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
+        public async Task<CatalogoServicios> GetDescripcionServicio(string servicio)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getDescripcionByServicio", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        var response = new CatalogoServicios();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response = MapToValueCatalogoServicios(reader);
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+
         private CatalogoServicios MapToValueCatalogoServicios(SqlDataReader reader)
         {
             return new CatalogoServicios

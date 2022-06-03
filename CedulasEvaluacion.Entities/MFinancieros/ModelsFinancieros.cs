@@ -10,5 +10,6 @@ namespace CedulasEvaluacion.Entities.MFinancieros
         public List<Oficio> oficio { get; set; }
         public int Anio { get; set; }
         public string Servicio { get; set; }
+        public string Descripcion { get; set; }
     }
 }

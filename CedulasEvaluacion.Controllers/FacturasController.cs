@@ -1,4 +1,5 @@
-﻿using CedulasEvaluacion.Entities.MFacturas;
+﻿using CedulasEvaluacion.Entities.MCedula;
+using CedulasEvaluacion.Entities.MFacturas;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -14,11 +15,16 @@ namespace CedulasEvaluacion.Controllers
     public class FacturasController : Controller
     {
         private readonly IRepositorioFacturas vFacturas;
+        private readonly IRepositorioEvaluacionServicios vCedula;
+        private readonly IRepositorioInmuebles vInmuebles;
         private readonly IHostingEnvironment environment;
 
-        public FacturasController(IRepositorioFacturas iFacturas, IHostingEnvironment environment)
+        public FacturasController(IRepositorioEvaluacionServicios viCedula, IRepositorioFacturas iFacturas, IRepositorioInmuebles viInmueble, IHostingEnvironment environment)
         {
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
+            this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
+            this.vInmuebles = viInmueble ?? throw new ArgumentNullException(nameof(viInmueble));
+
             this.environment = environment;
         }
 
@@ -43,10 +49,16 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> insertaFacturas([FromForm] Facturas facturas)
         {
             int success = await vFacturas.insertaConceptoFacturas(facturas);
-
-            if (success != -1)
+            CedulaEvaluacion cedula = null;
+            if (success == 1)
             {
                 return Ok(success);
+            }
+            else if (success != -1)
+            {
+                cedula = await vCedula.CedulaById(success);
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                return Ok(cedula);
             }
             return BadRequest();
         }
@@ -57,9 +69,16 @@ namespace CedulasEvaluacion.Controllers
         {
             int success = 0;
             success = await vFacturas.updateConceptoFacturas(facturas);
-            if (success != 0)
+            CedulaEvaluacion cedula = null;
+            if (success == 1)
             {
                 return Ok(success);
+            }
+            else if (success != -1)
+            {
+                cedula = await vCedula.CedulaById(success);
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                return Ok(cedula);
             }
             return NoContent();
         }

@@ -1,6 +1,7 @@
 ﻿@model CedulasEvaluacion.Entities.MFinancieros.ModelsFinancieros;
 @{
-    ViewData["Title"] = "Detalle de Cédulas y Oficios en el Servicio de \"" + Model.Servicio + "\"";
+
+    ViewData["Title"] = "Detalle de Cédulas y Oficios en el Servicio de " + Model.Descripcion;
     var estatus = new List<string>();
     var meses = new List<string>();
     var anio = 2023;
@@ -35,7 +36,7 @@
         <div class="row col-lg-4">
             <label for="cedulasAnio">Consultar Información del Año: </label>
             <div class="input-group mb-3">
-                <select class="form-control" asp-for="@Model.Anio">
+                <select class="form-control" asp-for="@Model.Anio" id="anioActual">
                     <option value="">Seleccione el Año</option>
                     <option value="2021">2021</option>
                     <option value="2022">2022</option>
@@ -56,7 +57,7 @@
                             <th>#</th>
                             <th>Servicio</th>
                             <th>Año</th>
-                            <th>Numero de Oficio</th>
+                            <th>Número de Oficio</th>
                             <th>Estatus</th>
                             <th>Fecha de Pago</th>                            
                             <th>Acciones</th>
@@ -279,6 +280,8 @@
             var tbodyC = "";
             var tbodyF = "";
             var model = @Html.Raw(Json.Serialize(@Model));
+
+            $("#anioActual").val(@System.DateTime.Now.Year);
 
             $("#tableOficios").DataTable({
                 paging: true,

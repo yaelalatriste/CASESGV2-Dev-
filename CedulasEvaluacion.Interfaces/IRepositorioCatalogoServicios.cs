@@ -12,5 +12,6 @@ namespace CedulasEvaluacion.Interfaces
         Task<List<DashboardCS>> GetDashBoard();
         Task<List<CatalogoServicios>> GetCatalogoServicios();
         Task<CatalogoServicios> GetServicioById(int servicio);
+        Task<CatalogoServicios> GetDescripcionServicio(string servicio);
     }
 }

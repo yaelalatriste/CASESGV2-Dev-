@@ -50,6 +50,7 @@ namespace CedulasEvaluacion.Controllers
                 ModelsFinancieros models = new ModelsFinancieros();
                 models.Anio = Anio;
                 models.Servicio = servicio;
+                models.Descripcion =((CatalogoServicios) await vCatalogo.GetDescripcionServicio(servicio)).Descripcion;
                 models.dashboard = new List<DashboardFinancieros>();
                 models.dashboard = await vFinancieros.GetDetalleServicio(servicio, Anio);
                 models.oficio = new List<Oficio>();

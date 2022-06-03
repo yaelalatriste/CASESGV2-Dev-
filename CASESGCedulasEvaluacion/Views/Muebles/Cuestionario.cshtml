@@ -4,7 +4,7 @@
 }
 
 <div class="container-fluid" id="limpieza">
-    <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Facturas" data-placement="top"><i class="fal fa-file-invoice"></i></a>
+    <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Factura(s) o Nota(s) de Crédito" data-placement="top"><i class="fal fa-file-invoice"></i></a>
     <a href="/muebles/index/@Model.ServicioId@Model.URL" type='button' class='btn-sm btn-warning float-right mr-2 mb-3' data-toggle="tooltip" title="Regresar al Listado de Cédulas de Bienes Muebles" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-2 mb-3">
         <table class="table">
@@ -332,7 +332,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-joke">
-                <h4 class="modal-title text-white">Agregar/Modificar Factura</h4>
+                <h4 class="modal-title text-white">Agregar/Modificar Factura o Nota de Crédito</h4>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -349,7 +349,7 @@
                         </select>
                         <div class="col-sm-12 error_tipoFactura">
                             <small id="dateHelp" class="text-danger">
-                                Por favor seleccione él tipo de archivo a subir
+                                Por favor seleccione el tipo de archivo a subir
                             </small>
                         </div>
                     </div>
@@ -357,18 +357,18 @@
                         <label for="elegirArchivo">Seleccionar Archivo XML: </label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input file_factura" id="fileFactura" accept=".xml">
-                            <label class="custom-file-label" for="customFile">Subir "XML" de la factura</label>
+                            <label class="custom-file-label" for="customFile">Subir archivo "XML"</label>
                         </div>
                         <div class="col-sm-12 error_customFile">
                             <small id="dateHelp" class="text-danger">
-                                Por favor seleccione él archivo correspondiente
+                                Por favor seleccione el archivo correspondiente
                             </small>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-end">
-                <button type="button" class="btn btn-primary" id="agregarFactura">Guardar Factura</button>
+                <button type="button" class="btn btn-primary" id="agregarFactura">Guardar</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -382,14 +382,14 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-joke">
-                <h4 class="modal-title text-white">Ver/Agregar Factura(s)</h4>
+                <h4 class="modal-title text-white">Ver/Agregar Factura(s) o Nota(s) de Crédito</h4>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <button class='btn btn-sm btn-primary mr-2 mb-3' data-toggle="tooltip" title="Agregar Facturas" data-placement="top" id="add_facturas">
-                    <i class="fal fa-plus text-white"></i> Agregar Factura
+                <button class='btn btn-sm btn-primary mr-2 mb-3' data-toggle="tooltip" title="Agregar Factura o Nota de Crédito" data-placement="top" id="add_facturas">
+                    <i class="fal fa-plus text-white"></i> Agregar
                 </button>
                 <div class=" row col-lg-12">
                     <p>
@@ -904,26 +904,63 @@
                          if (validaCamposArchivoXml() == true) {
                              if (id == "") {
                                  axios.post('/limpieza/insertaFactura', formData).then(fact => {
+                                     if (fact.data == 1) {
+                                         Swal.fire({
+                                             'icon': "success",
+                                             'title': 'Servicio de Transportación de Bienes Muebles',
+                                             'html': 'La factura fue agreagada correctamente.'
+                                         }).then(function () {
+                                             window.location.reload();
+                                         });
+                                     } else if (fact.data != 1 && fact.data != -1) {
+                                         Swal.fire({
+                                             'icon': "error",
+                                             'title': 'Servicio de Transportación de Bienes Muebles',
+                                             'html': '<p style="text-align: justify">La factura que intenta adjuntar ya fue agregada previamente en la cédula con los siguientes datos: <br />' +
+                                                 '<li> <b>Folio: </b>' + fact.data.folio + '</li>' +
+                                                 '<li> <b>Inmueble: </b>' + fact.data.inmuebles.nombre + '</li></p>'
+                                         });
+                                     }
+                                 }).catch(error => {
                                      Swal.fire({
-                                         'icon': "success",
+                                         'icon': "error",
                                          'title': 'Servicio de Transportación de Bienes Muebles',
-                                         'html': 'La factura fue agregada a la cédula de forma correcta.'
-                                     }).then(function () {
-                                         window.location.reload();
+                                         'html': '<p style="text-align: justitfy;">CASESG no puede adjuntar la factura, Contacte al administrador del Sistema.'
                                      });
                                  });
                              } else {
                                  axios.post('/limpieza/updateFactura', formData).then(fact => {
+                                     if (fact.data == 1) {
+                                         Swal.fire({
+                                             'icon': "success",
+                                             'title': 'Servicio de Transportación de Bienes Muebles',
+                                             'html': 'La factura fue actualizada correctamente.'
+                                         }).then(function () {
+                                             window.location.reload();
+                                         });
+                                     } else if (fact.data != 1 && fact.data != -1) {
+                                         Swal.fire({
+                                             'icon': "error",
+                                             'title': 'Servicio de Transportación de Bienes Muebles',
+                                             'html': '<p style="text-align: justify">La factura que intenta adjuntar ya fue agregada previamente en la cédula con los siguientes datos: <br />' +
+                                                 '<li> <b>Folio: </b>' + fact.data.folio + '</li>' +
+                                                 '<li> <b>Inmueble: </b>' + fact.data.inmuebles.nombre + '</li></p>'
+                                         });
+                                     }
+                                 }).catch(error => {
                                      Swal.fire({
-                                         'icon': "success",
+                                         'icon': "error",
                                          'title': 'Servicio de Transportación de Bienes Muebles',
-                                         'html': 'La factura fue actualizada de forma correcta.'
-                                     }).then(function () {
-                                         window.location.reload();
+                                         'html': '<p style="text-align: justitfy;">CASESG no puede adjuntar la factura, Contacte al administrador del Sistema.'
                                      });
                                  });
                              }
                         }
+                        document.getElementById('customFile').value = '';
+                        $('#idFactura').val("");
+                        $(".custom-file .custom-file-label").text("Subir archivo \"XML\"");
+                        $('.file_factura').removeClass('is-valid');
+                        $("#tipoFactura").val('');
                     });
                 /*FIN del proceso para editar la cedula*/
 
@@ -942,9 +979,6 @@
                                 "<td>" +
                                 "<a class='view_factura' href='#' data-id='" + i + "'><i class='far fa-list text-success'></i></a>" +
                                 "<a class='update_factura' href='#' data-id='" + facturas[i].id + "'><i class='fad fa-pencil text-primary ml-2'></i></a>" +
-                                "<a class='delete_factura' href='#' data-id='" + facturas[i].id + "' data-serie='" + facturas[i].comprobante.serie +
-                                "' data-folio='" + facturas[i].comprobante.folio + "' data-total='" + facturas[i].comprobante.total + "' " +
-                                " data-descr='" + facturas[i].concepto.descripcion + "'><i class='fad fa-times text-danger ml-2'></i></a>" +
                                 "</td>" +
                                 "</tr>";
                         }
@@ -1092,7 +1126,7 @@
                                         $('#diviPregunta2').css('display', 'block');
                                     }
                                 });
-                            } 
+                            }
                         });
                         $('#diviPregunta2').css('display', 'none');
                     }
@@ -1271,7 +1305,7 @@
                     let fechaRespuesta = $('#fechaRespuesta').val();
 
                     let fechaS = $('#fechaSolicitud2').val();
-                    
+
                     let comentarios = $('#inciComentarios').val();
                     if (tipo == '' && pregunta == 5) {
                         $('#categoria').addClass('is-invalid');
@@ -1321,7 +1355,7 @@
                         $('#fechaSolicitud2').addClass('is-invalid');
                         $('#error_fechaSolicitud2').css('display', 'block');
                     }
-                   
+
                     if (fechaS != '' && pregunta == 2) {
                         return true;
                     }
@@ -1468,7 +1502,7 @@
 
                 $(document).on("click", ".delete_incidencia", function(){
                     var id = $(this).data("id");
-                    
+
                     Swal.fire({
                             'icon': 'warning',
                             'title': 'Servicio de Transportación de Bienes Muebles',

@@ -421,6 +421,7 @@ namespace CedulasEvaluacion.Repositories
             return new DashboardFinancieros
             {
                 Servicio = reader["Servicio"].ToString(),
+                Descripcion = reader["Descripcion"].ToString(),
                 Estatus = reader["Estatus"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Fondo = reader["Fondo"].ToString(),
