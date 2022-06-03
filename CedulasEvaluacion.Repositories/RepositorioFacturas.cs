@@ -200,6 +200,14 @@ namespace CedulasEvaluacion.Repositories
                 namespaceManager.AddNamespace("ext", "http://www.buzone.com.mx/XSD/Addenda/EMEBuzWS");
 
                 XmlNodeList ndComprobante = doc.SelectNodes("//cfdi:Comprobante", namespaceManager);
+                if (ndComprobante.Count == 0)
+                {
+                    namespaceManager.AddNamespace("cfdi", "http://www.sat.gob.mx/cfd/4");
+                    namespaceManager.AddNamespace("tfd", "http://www.sat.gob.mx/TimbreFiscalDigital");
+                    namespaceManager.AddNamespace("ext", "http://www.buzone.com.mx/XSD/Addenda/EMEBuzWS");
+                    ndComprobante = doc.SelectNodes("//cfdi:Comprobante", namespaceManager);
+                }
+
                 XmlNodeList ndEmisor = doc.SelectNodes("//cfdi:Emisor", namespaceManager);
                 XmlNodeList ndConcepto = doc.SelectNodes("//cfdi:Conceptos/cfdi:Concepto", namespaceManager);
                 XmlNodeList nDTimbrado = doc.SelectNodes("//cfdi:Complemento/tfd:TimbreFiscalDigital", namespaceManager);

@@ -226,7 +226,8 @@ namespace CedulasEvaluacion.Repositories
         {
             PerfilesCelular pc = new PerfilesCelular();
             pc.Id = reader["PerfilCelularId"] != DBNull.Value ? (int)reader["PerfilCelularId"]:0;
-            
+            pc.Nombre = reader["NombrePerfil"] != DBNull.Value ? reader["NombrePerfil"].ToString() : "";
+
 
             return new IncidenciasCelular
             {

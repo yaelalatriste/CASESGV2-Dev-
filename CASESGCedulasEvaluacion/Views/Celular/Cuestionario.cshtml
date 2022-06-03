@@ -1564,57 +1564,42 @@
                                 $('#comentarios_entregable').val('');
                                 $('#fecha_presentacion').val('')
                             } else {
-                                axios.get('/telCelular/buscaEntregable/' + model.id + '/' + tipo).then(exist => {
-                                    if (exist.data == 0) {
-                                        axios.post('/telCelular/adjuntaEntregable', formData, {
-                                            headers: { 'Content-Type': 'multipart/form-data' }
+                                axios.post('/telCelular/adjuntaEntregable', formData, {
+                                    headers: { 'Content-Type': 'multipart/form-data' }
 
-                                        }).then(response => {
-                                            $('#cerrar_modal_sua').trigger('click');
-                                            /*Validamos la pregunta a la que se realizo el anexo de evidencia*/
-                                            if (response.status == 200) {
-                                                Swal.fire({
-                                                    'icon': "success",
-                                                    'title': 'Servicio de Telefonía Celular',
-                                                    'text': 'Se adjuntó el archivo correctamente.'
-                                                });
-                                                $('#customFile').removeClass('is-valid');
-                                                $('#comentarios_entregable').removeClass('is-valid');
-                                                $('#tipo_entregable').removeClass('is-valid');
-                                            }
-                                            axios.get("/telCelular/getEntregables/" + model.id).then(success => {
-                                                if (success.data == null || success.data == "") {
-                                                    $('#tEntregables').html(success.data);
-                                                }
-                                                $('#tEntregables').html(success.data);
-                                            });
-                                        }).catch(error => {
-                                            Swal.fire({
-                                                'icon': "error",
-                                                'title': 'Servicio de Telefonía Celular',
-                                                'text': 'Se presento un error al adjuntar el archivo.'
-                                            });
-                                        });
-
-                                        document.getElementById('customFile').value = '';
-                                        $('#file_id').val("");
-                                        $(".custom-file-label").text("Seleccionar Archivo");
-                                        $('#tipo_entregable').val('');
-                                        $('#comentarios_entregable').val('');
-                                    } else {
+                                }).then(response => {
+                                    $('#cerrar_modal_sua').trigger('click');
+                                    /*Validamos la pregunta a la que se realizo el anexo de evidencia*/
+                                    if (response.status == 200) {
                                         Swal.fire({
-                                            'icon': "error",
+                                            'icon': "success",
                                             'title': 'Servicio de Telefonía Celular',
-                                            'text': 'Ya fue enviado un entregable con el mismo tipo.'
+                                            'text': 'Se adjuntó el archivo correctamente.'
                                         });
+                                        $('#customFile').removeClass('is-valid');
+                                        $('#comentarios_entregable').removeClass('is-valid');
+                                        $('#tipo_entregable').removeClass('is-valid');
                                     }
-                                }).catch(e => {
+                                    axios.get("/telCelular/getEntregables/" + model.id).then(success => {
+                                        if (success.data == null || success.data == "") {
+                                            $('#tEntregables').html(success.data);
+                                        }
+                                        $('#tEntregables').html(success.data);
+                                    });
+                                }).catch(error => {
                                     Swal.fire({
                                         'icon': "error",
                                         'title': 'Servicio de Telefonía Celular',
-                                        'text': 'Ocurrío un error al válidar el entregable.'
+                                        'text': 'Se presento un error al adjuntar el archivo.'
                                     });
                                 });
+
+                                document.getElementById('customFile').value = '';
+                                $('#file_id').val("");
+                                $(".custom-file-label").text("Seleccionar Archivo");
+                                $('#tipo_entregable').val('');
+                                $('#comentarios_entregable').val('');
+                                $("#fecha_presentacion").val('');
                             }
                         }
                     });

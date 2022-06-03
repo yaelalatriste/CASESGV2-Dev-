@@ -180,47 +180,49 @@
                                     </td>
                                 }
                             }
-                            <td>
-                                @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
-                                {
-                                    <a href="/muebles/revision/@item.Id" class="text-center" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
-                                        <i class="fad fa-eye text-success"></i>
-                                    </a>
-                                }
-                                @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso"))
-                                {
-                                    <a asp-action="evaluacion" asp-controller="Muebles" asp-route-id="@item.Id" class="text-center ml-2" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
-                                        <i class="fad fa-pencil text-primary"></i>
-                                    </a>
-                                }
-                                @if (item.Estatus.Equals("En Proceso"))
-                                {
-                                    <a href="#" class="text-center ml-2 delete_cedula" data-id="@item.Id" data-folio="@item.Folio" data-toggle="tooltip" title="Eliminar Cédula" data-placement="top">
-                                        <i class="fad fa-times text-danger"></i>
-                                    </a>
-                                }
-                                @if (!item.Estatus.Equals("En Proceso"))
-                                {
-                                    <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
-                                        @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
-                                        {
-                                            <i class="fal fa-file-pdf text-success"></i>
-                                        }
-                                        else @if (item.Estatus.Equals("Rechazada"))
-                                   {
-                                    <i class="fal fa-file-pdf text-danger"></i>
-                                }
-                                else
-                                {
-                                    <i class="fal fa-file-pdf text-primary"></i>
-                                }
-                                    </a>
-                                }
-                                @if (!item.Estatus.Equals("En Proceso"))
-                                {
-                                    <a href="/muebles/seguimiento/@item.Id" class="text-center ml-2 btn_seguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top"><i class="fas fa-file-import text-primary"></i></a>
-                                }
-                            </td>
+                        <td>
+                            @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                            {
+                                <a href="#" data-id="@item.Id" class="text-center btnRevision" data-toggle="tooltip" title="Revisar Cédula" data-placement="top">
+                                    <i class="fad fa-eye text-success"></i>
+                                </a>
+                            }
+                            @if (item.Estatus.Equals("Rechazada") || item.Estatus.Equals("En Proceso") || !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                            {
+                                <a href="#" data-id="@item.Id" class="text-center ml-2 btnCuestionario" data-toggle="tooltip" title="Modificar Cédula" data-placement="top">
+                                    <i class="fad fa-pencil text-primary"></i>
+                                </a>
+                            }
+                            @if (item.Estatus.Equals("En Proceso"))
+                            {
+                                <a href="#" class="text-center ml-2 delete_cedula" data-id="@item.Id" data-folio="@item.Folio" data-toggle="tooltip" title="Eliminar Cédula" data-placement="top">
+                                    <i class="fad fa-times text-danger"></i>
+                                </a>
+                            }
+                            @if (!item.Estatus.Equals("En Proceso"))
+                            {
+                                <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                    @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
+                                    {
+                                        <i class="fal fa-file-pdf text-success"></i>
+                                    }
+                                    else @if (item.Estatus.Equals("Rechazada"))
+                               {
+                                <i class="fal fa-file-pdf text-danger"></i>
+                            }
+                            else
+                            {
+                                <i class="fal fa-file-pdf text-primary"></i>
+                            }
+                                </a>
+                            }
+                            @if (!item.Estatus.Equals("En Proceso"))
+                            {
+                                <a href="#" data-id="@item.Id" class="text-center ml-2 btnSeguimiento" data-toggle="tooltip" title="Seguimiento a la Cédula" data-placement="top">
+                                    <i class="fas fa-file-import text-primary"></i>
+                                </a>
+                            }
+                        </td>
                         </tr>
                     }
                 </tbody>
@@ -248,6 +250,18 @@
            var model = @Html.Raw(Json.Serialize(@Model));
             $('[data-toggle="tooltip"]').tooltip();
             localStorage.clear();
+
+            $(".btnRevision").click(function () {
+                window.location.href = "/muebles/revision/" + $(this).data('id') + window.location.search;
+            });
+
+            $(".btnSeguimiento").click(function () {
+                window.location.href = "/muebles/seguimiento/" + $(this).data('id') + window.location.search;
+            });
+
+            $(".btnCuestionario").click(function () {
+                window.location.href = "/muebles/evaluacion/" + $(this).data('id') + window.location.search;
+            });
 
             function cuentaTramites() {
                 var c = 0;
