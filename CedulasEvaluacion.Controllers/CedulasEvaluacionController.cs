@@ -45,7 +45,8 @@ namespace CedulasEvaluacion.Controllers
 
 
         private readonly IWebHostEnvironment web;
-        
+
+        private readonly IRepositorioCedulasEvaluacion vFirmas;
         private readonly IRepositorioEvaluacionServicios vCedula;        
         private readonly IRepositorioReporteCedula vrCedula;
         private readonly IRepositorioIncidencias iLimpieza;
@@ -63,9 +64,11 @@ namespace CedulasEvaluacion.Controllers
         public CedulasEvaluacionController(IWebHostEnvironment vweb,IRepositorioReporteCedula vvReporte, IRepositorioIncidenciasMensajeria iiMensajeria,
             IRepositorioIncidencias iiLimpieza, IRepositorioEvaluacionServicios viCedula, IRepositorioIncidenciasFumigacion iiFumigacion, IRepositorioIncidenciasTraslado iiTraslado,
             IRepositorioIncidenciasMuebles IiMuebles, IRepositorioIncidenciasCelular iiCelular, IRepositorioIncidenciasAgua iiAgua, IRepositorioIncidenciasResiduos iiResiduos,
-            IRepositorioIncidenciasConvencional iiConvencional, IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioIncidenciasTransporte iiTransporte)
+            IRepositorioIncidenciasConvencional iiConvencional, IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioIncidenciasTransporte iiTransporte, 
+            IRepositorioCedulasEvaluacion viFirmas)
         {
             this.web = vweb;
+            this.vFirmas = viFirmas;
             this.vCedula = viCedula;
             this.vrCedula = vvReporte;
             this.iLimpieza = iiLimpieza;
@@ -148,7 +151,7 @@ namespace CedulasEvaluacion.Controllers
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio si entregó suficiente material de embalaje para las guías.")});
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio entregó suficiente material de embalaje para las guías.")});
                     }
                 }
             }
@@ -214,7 +217,7 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no tuvo inasistencias en el mes de evaluación.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no presentó inasistencias en el mes de evaluación.") });
                     }
                     else
                     {
@@ -230,7 +233,7 @@ namespace CedulasEvaluacion.Controllers
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicio entregó el SUA de su personal en tiempo y forma, la fecha de entrega" +
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio entregó el SUA de su personal en tiempo y forma, la fecha de entrega" +
                                 " fue el " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("dd") +
                                        " de " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " +
                                        Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("yyyy") + " correspondiente al mes de " +
@@ -245,7 +248,7 @@ namespace CedulasEvaluacion.Controllers
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicio entregó el acta Entrega - Recepción en tiempo y forma " +
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio entregó el acta Entrega - Recepción en tiempo y forma " +
                             "el " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
                                    " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " +
                                    Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".")});
@@ -319,18 +322,18 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con la regulación vigente de los productos.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con la regulación vigente de los productos.") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador cumplió con la regulación vigente de los productos.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio cumplió con la regulación vigente de los productos.") });
                     }
                 }
                 else if (i == 5)
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se entregó el reporte de servicios por parte del prestador.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se entregó el reporte de servicios por parte del prestador del servicio.") });
                     }
                     else
                     {
@@ -344,7 +347,7 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se entregó el listado de personal por parte del prestador.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se entregó el listado de personal por parte del prestador del servicio.") });
                     }
                     else
                     {
@@ -358,12 +361,12 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicios no entregó el SUA de su personal, comentó lo siguiente: "
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no entregó el SUA de su personal, comentó lo siguiente: "
                             +respuestas[i].Detalles) });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicio entregó el SUA de su personal, la fecha de entrega" +
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio entregó el SUA de su personal, la fecha de entrega" +
                                 " fue el " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("dd") +
                                        " de " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " +
                                        Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("yyyy") + " correspondiente al mes de " +
@@ -391,13 +394,13 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false) 
                     { 
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicios no cumplió con la fecha y hora solicitada para la prestación del servicio, la fecha en que se solicito fue," +
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con la fecha y hora solicitada para la prestación del servicio, la fecha en que se solicito fue," +
                                      Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]) +" y la fecha y hora de llegada fue:"+ Convert.ToDateTime(respuestas[i].Detalles.Split("|")[1])
                                      + ".")});
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicios cumplió con la fecha y hora solicitada para la prestación del servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio cumplió con la fecha y hora solicitada para la prestación del servicio.") });
                     }
                 }
                 else if (i == 1)
@@ -406,35 +409,35 @@ namespace CedulasEvaluacion.Controllers
                     local.DataSources.Add(new ReportDataSource("IncidenciasPregunta2", incidencias));
                     if (respuestas[i].Respuesta == false && respuestas[i].Detalles != "N/A")
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con la maquinaria, equipo y herramientas para la prestación del servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con la maquinaria, equipo y herramientas para la prestación del servicio.") });
                         
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador cumplió con la maquinaria, equipo y herramientas para la prestación del servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio cumplió con la maquinaria, equipo y herramientas para la prestación del servicio.") });
                     }
                 }
                 else if (i == 2)
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con la unidad de transporte solicitada para la prestación del servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con la unidad de transporte solicitada para la prestación del servicio.") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador cumplió con la unidad de transporte solicitada para la prestación del servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio cumplió con la unidad de transporte solicitada para la prestación del servicio.") });
                     }
                 }
                 else if (i == 3)
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con el personal necesario para realizar la prestación del servicio, se solicitaron "+
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con el personal necesario para realizar la prestación del servicio, se solicitaron "+
                             respuestas[i].Detalles.Split("|")[0]+" persona(s) y se nos brindaron "+respuestas[i].Detalles.Split("|")[1]+" persona(s) para efectuar el servicio.") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador cumplió con el personal necesario para realizar la prestación del servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio cumplió con el personal necesario para realizar la prestación del servicio.") });
                     }
                 }
                 else if (i == 4)
@@ -597,11 +600,11 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no cumplió con la regulación vigente de los garrafones.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con la regulación vigente de los garrafones.") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador cumplió con la regulación vigente de los garrafones.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio cumplió con la regulación vigente de los garrafones.") });
                     }
                 }
                 else if (i == 5)
@@ -612,7 +615,7 @@ namespace CedulasEvaluacion.Controllers
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador de servicio entregó el reporte de servicio en tiempo y forma, la fecha de entrega" +
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio entregó el reporte de servicio en tiempo y forma, la fecha de entrega" +
                                 " fue el " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
                                        " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " +
                                        Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".") });
@@ -638,27 +641,31 @@ namespace CedulasEvaluacion.Controllers
 
                 if (i == 0)
                 {
-                    if (respuestas[i].Respuesta == false)
+                    if (respuestas[i].Respuesta == false && !respuestas[i].Detalles.Split("|")[0].Equals("Anticipada"))
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El servicio no se llevó a cabo en el día programado, se programó en la fecha "+Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("dd") +
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El servicio no se realizó en el día programado, se programó en la fecha "+Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("dd") +
                                    " de " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]).ToString("yyyy")+" y se llevó a cabo en la fecha " + 
                                    Convert.ToDateTime(respuestas[i].Detalles.Split("|")[1]).ToString("dd") + " de " + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[1]).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " 
                                    + Convert.ToDateTime(respuestas[i].Detalles.Split("|")[1]).ToString("yyyy") + ".")});
                     }
+                    else if (respuestas[i].Respuesta == false && respuestas[i].Detalles.Split("|").Length == 3)
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El servicio se realizó de manera anticipada sin que ello implique una afectación al servicio.")});
+                    }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El servicio si se llevó a cabo en el día programado.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El servicio se llevó a cabo en el día programado.") });
                     }
                 }
                 else if (i == 1)
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de servicio no presentó identificación en todo momento.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal del prestador del servicio no portó identificación en todo momento.") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de servicio presentó identificación en todo momento.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal del prestador del servicio portó identificación en todo momento.") });
                     }
                 }
                 else if (i == 2)
@@ -682,7 +689,7 @@ namespace CedulasEvaluacion.Controllers
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El manifiesto de entrega se entrego con todos los datos necesarios.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El manifiesto de entrega se entregó con todos los datos necesarios.") });
                     }
                 }
                 else if (i == 4)
@@ -691,11 +698,11 @@ namespace CedulasEvaluacion.Controllers
                     local.DataSources.Add(new ReportDataSource("IncidenciasResiduos", incidencias));
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "Se presentarón incidencias en el mes, las cuales se describen a continuación: ") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal del prestador del servicio no utilizó equipo de protección en todo momento, a continuación se describen las incidencias presentadas:") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se presentarón incidencias en el mes.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal del prestador del servicio utilizó equipo de protección en todo momento.") });
                     }
                 }
             }
@@ -764,22 +771,22 @@ namespace CedulasEvaluacion.Controllers
                     if (respuestas[i].Respuesta == false)
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio recolectó un total de " + respuestas[i].Detalles + " muestras, no cumpliendo " +
-                        " con el número de muestras minimas de 7.") });
+                        " con el número de muestras mínimas de 7.") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio si recolectó el número total de muestras solicitadas.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio recolectó el número total de muestras solicitadas.") });
                     }
                 }
                 else if (i == 5)
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador no se llevó a cabo el servicio en la fecha programada.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no realizó el servicio en la fecha programada.") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador llevó a cabo el servicio en la fecha programada.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio realizó el servicio en la fecha programada.") });
                     }
                 }
                 else if (i == 6)
@@ -898,6 +905,28 @@ namespace CedulasEvaluacion.Controllers
 
             var excel = local.Render("EXCELOPENXML");
             return File(excel, "application/msexcel", "ReporteLimpieza_" + DateTime.Now + ".xls");
+        }
+
+        [Route("/cedula/obtieneFirmantes/{user}")]
+        public async Task<IActionResult> GetFirmantesCedula(int user)
+        {
+            List<Usuarios> usuarios = await vFirmas.GetUsuariosByAdministracion(user);
+            if(usuarios != null)
+            {
+                return Ok(usuarios);
+            }
+            return BadRequest();
+        }
+
+        [Route("/cedula/verificaFirmante/{tipo}/{user}")]
+        public async Task<IActionResult> VerificaFirmante(string tipo, int user)
+        {
+            int exists = await vFirmas.GetVerificaFirmantes(tipo,user);
+            if (exists != -1)
+            {
+                return Ok(exists);
+            }
+            return BadRequest();
         }
     }
 }

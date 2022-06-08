@@ -148,5 +148,37 @@ namespace CedulasEvaluacion.Controllers
             }
             return BadRequest();
         }
+
+        /*Seguimiento Cedula*/
+        [HttpPost]
+        [Route("/telConvencional/Entregables/autoRecha")]
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] Entregables entregables)
+        {
+            int success = await eConvencional.apruebaRechazaEntregable(entregables);
+            if (success != 0)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        [Route("/telConvencional/entregables/historialEntregable")]
+        public async Task<IActionResult> historialEntregable([FromBody] HistorialEntregables historialEntregables)
+        {
+            int success = 0;
+            success = await eConvencional.capturaHistorial(historialEntregables);
+            if (success != 0)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }

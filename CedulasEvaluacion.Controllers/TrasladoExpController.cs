@@ -180,25 +180,57 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "revisión");
             if (success == 1)
             {
-                CedulaEvaluacion cedMen = null;
-                cedMen = await vCedula.CedulaById(id);
-                cedMen.URL = Request.QueryString.Value;
-                cedMen.inmuebles = await vInmuebles.inmuebleById(cedMen.InmuebleId);
-                cedMen.facturas = await vFacturas.getFacturas(id, cedMen.ServicioId);//
-                cedMen.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedMen.facturas);
-                cedMen.usuarios = await vUsuarios.getUserById(cedMen.UsuarioId);
-                cedMen.iEntregables = await vEntregables.getEntregables(cedMen.Id);
-                cedMen.incidencias = new Entities.MIncidencias.ModelsIncidencias();
-                cedMen.incidencias.traslado = await iTraslado.getIncidencias(cedMen.Id);
-                cedMen.RespuestasEncuesta = new List<RespuestasEncuesta>();
-                cedMen.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedMen.Id);
-                cedMen.historialCedulas = new List<HistorialCedulas>();
-                cedMen.historialCedulas = await vTraslado.getHistorialTraslado(cedMen.Id);
-                foreach (var user in cedMen.historialCedulas)
+                CedulaEvaluacion cedula = null;
+                cedula = await vCedula.CedulaById(id);
+                cedula.URL = Request.QueryString.Value;
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);//
+                cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
+                cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
+                cedula.iEntregables = await vEntregables.getEntregables(cedula.Id);
+                cedula.incidencias = new Entities.MIncidencias.ModelsIncidencias();
+                cedula.incidencias.traslado = await iTraslado.getIncidencias(cedula.Id);
+                cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
+                cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedula.Id);
+                cedula.historialCedulas = new List<HistorialCedulas>();
+                cedula.historialCedulas = await vTraslado.getHistorialTraslado(cedula.Id);
+                foreach (var user in cedula.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
-                return View(cedMen);
+                return View(cedula);
+            }
+            return Redirect("/error/denied");
+        }
+
+        [HttpGet]
+        [Route("/trasladoExp/seguimiento/{id}")]
+        public async Task<IActionResult> SeguimientoCedula(int id)
+        {
+            int success = await vPerfiles.getPermiso(UserId(), modulo(), "seguimiento");
+            if (success == 1)
+            {
+                CedulaEvaluacion cedula = null;
+                cedula = await vCedula.CedulaById(id);
+                cedula.URL = Request.QueryString.Value;
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
+                cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);//
+                cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
+                cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
+                cedula.iEntregables = await vEntregables.getEntregables(cedula.Id);
+                cedula.historialCedulas = new List<HistorialCedulas>();
+                cedula.historialCedulas = await vTraslado.getHistorialTraslado(cedula.Id);
+                foreach (var user in cedula.historialCedulas)
+                {
+                    user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
+                }
+                cedula.historialEntregables = new List<HistorialEntregables>();
+                cedula.historialEntregables = await vEntregables.getHistorialEntregables(cedula.Id, cedula.ServicioId);
+                foreach (var user in cedula.historialEntregables)
+                {
+                    user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
+                }
+                return View(cedula);
             }
             return Redirect("/error/denied");
         }

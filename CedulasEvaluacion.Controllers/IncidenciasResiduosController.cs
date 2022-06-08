@@ -14,9 +14,9 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioIncidenciasResiduos iResiduos;
         private readonly IHostingEnvironment environment;
 
-        private string[] manifiestoEntrega = { "Nombre, Sello y Firma del titular del servicio médico", "Domicilio del Consultorio que brinda el servicio", "Descripción e identificación del Tipo de Residuo",
-                                               "Nombre y firma del responsable de la recolección", "Cantidad y Unidad de medida del Residuo", "Envase o contenedor utilizado", "Instrucciones especiales e información para su manejo seguro",
-                                               "Descripción General de la Transportación y del Centro de Acopio o Destinatario", "Número de Registro Ambiental", "Número de Manifiesto", "Clasificación" };
+        private string[] manifiestoEntrega = { "Nombre, sello y firma del titular del servicio médico.", "Domicilio del consultorio donde se brinda el servicio.", "Descripción e identificación del tipo de residuo.",
+                                               "Nombre y firma del responsable de la recolección.", "Cantidad y unidad de medida del residuo.", "Envase o contenedor utilizado.", "Instrucciones especiales e información para su manejo seguro.",
+                                               "Descripción general de la transportación y del centro de acopio o destinatario.", "Número de registro ambiental.", "Fecha y número del manifiesto.", "Clasificación." };
         private string[] manifiestoEntregaBD = { "DatosTitularMedico", "ConsultorioBrindaServicio", "DescripcionResiduo", "DatosRecoleccion", "DetallesResiduo", "EnvaseUtilizado", "ManejoSeguro",
                                                 "CentroDestinatario","RegistroAmbiental", "NumeroManifiesto", "Clasificacion" };
 
@@ -51,6 +51,23 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> getIncidenciasTipo(int id, string tipo)
         {
             List<IncidenciasResiduos> incidencias = await iResiduos.getIncidenciasTipo(id, tipo);
+            string rpbi = "";
+            if (tipo.Equals("ManifiestoEntrega"))
+            {
+                var com = incidencias[0].Comentarios.Split("|");
+                for (var i = 0; i < com.Length; i++)
+                {
+                    for (var j = 0; j < manifiestoEntregaBD.Length; j++)
+                    {
+                        if (manifiestoEntrega[j].Equals(com[i]))
+                        {
+                            rpbi += manifiestoEntregaBD[j] + "|";
+                            break;
+                        }
+                    }
+                }
+                incidencias[0].Comentarios = rpbi;
+            }
             if (incidencias != null)
             {
                 return Ok(incidencias);
@@ -62,6 +79,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> getIncidenciasPregunta4(int id, string pregunta)
         {
             List<IncidenciasResiduos> incidencias = await iResiduos.getIncidenciasTipo(id, pregunta);
+            string rpbi = "";
             string table = "";
             string coments = "";
             if (incidencias.Count != 0)
@@ -71,9 +89,10 @@ namespace CedulasEvaluacion.Controllers
                 {
                     for (var j = 0; j < manifiestoEntregaBD.Length; j++)
                     {
-                        if (manifiestoEntregaBD[j] == com[i])
+                        if (manifiestoEntrega[j].Equals(com[i]))
                         {
                             coments += manifiestoEntrega[j] + "<br />";
+                            rpbi+= manifiestoEntregaBD[i]+"|";
                             break;
                         }
                     }
@@ -88,7 +107,7 @@ namespace CedulasEvaluacion.Controllers
                             "<td>" + coments + "</td>" +
                             "<td>" +
                                 "<a href='#' class='text-primary mr-3 update_pregunta4' data-tipo ='" + res.Tipo + "'  data - id = '" + res.Id + "' "+
-                                    "data-coment ='" + res.Comentarios + "'><i class='fas fa-pencil'></i></a>" +
+                                    "data-coment ='" + rpbi + "'><i class='fas fa-pencil'></i></a>" +
                                 "<a href='#' class='text-danger delete_pregunta4' data-id='" + res.Id + "'><i class='fas fa-times'></i></a>" +
                             "</td>" +
                         "</tr>";

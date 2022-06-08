@@ -20,6 +20,7 @@ namespace CedulasEvaluacion.Entities.Models
         public string rfc_emp{ get; set; }
         public string curp_emp{ get; set; }
         public string correo_electronico { get; set; }
+        public string NombreCompleto { get; set; }
 
         public virtual Areas areas { get; set; }
     }

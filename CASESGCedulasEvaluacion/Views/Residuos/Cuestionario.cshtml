@@ -41,9 +41,6 @@
             <div class="row ">
                 <div class="col-lg-12">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        @*<li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#incidencias" role="tab" aria-controls="home" aria-selected="true">Registro de Incidencias</a>
-                            </li>*@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#pregunta_1" role="tab" aria-controls="profile" aria-selected="false">Pregunta 1</a>
                         </li>
@@ -75,6 +72,10 @@
                                 <input type="radio" name="pregunta1" value="false" id="radioSuccess2" class="pregunta1">
                                 <label for="radioSuccess2">No</label>
                             </div>
+                            <div class="icheck-success d-inline ml-3">
+                                <input type="radio" name="pregunta1" value="Anticipada" id="radioSuccess3" class="pregunta1">
+                                <label for="radioSuccess3">De manera anticipada</label>
+                            </div>
                             <div class="form-row col-lg-12 mt-3" id="detalles_pregunta1">
                                 <div class="form-row">
                                     <div class="col col-lg-2">
@@ -93,12 +94,12 @@
                         <div class="tab-pane fade mt-2 ml-3" id="pregunta_2" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="text-black h5">2. ¿El personal de servicio presentó identificación en todo momento?</p>
                             <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta2" value="true" id="radioSuccess3" class="pregunta2">
-                                <label for="radioSuccess3">Si</label>
+                                <input type="radio" name="pregunta2" value="true" id="radioSuccess4" class="pregunta2">
+                                <label for="radioSuccess4">Si</label>
                             </div>
                             <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta2" value="false" id="radioSuccess4" class="pregunta2">
-                                <label for="radioSuccess4">No</label>
+                                <input type="radio" name="pregunta2" value="false" id="radioSuccess5" class="pregunta2">
+                                <label for="radioSuccess5">No</label>
                             </div>
                         </div>
                         @* Fin de la Pregunta 2 *@
@@ -106,12 +107,12 @@
                         <div class="tab-pane fade mt-2 ml-3" id="pregunta_3" role="tabpanel" aria-labelledby="contact-tab">
                             <p class="text-black h5">3. ¿La recolección se llevó a cabo con las condiciones técnicas descritas en el anexo técnico?</p>
                             <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta3" value="true" id="radioSuccess5" class="pregunta3">
-                                <label for="radioSuccess5">Si</label>
+                                <input type="radio" name="pregunta3" value="true" id="radioSuccess6" class="pregunta3">
+                                <label for="radioSuccess6">Si</label>
                             </div>
                             <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta3" value="false" id="radioSuccess6" class="pregunta3">
-                                <label for="radioSuccess6">No</label>
+                                <input type="radio" name="pregunta3" value="false" id="radioSuccess7" class="pregunta3">
+                                <label for="radioSuccess7">No</label>
                             </div>
                             <div class="form-row col-lg-12 mt-2" id="detalles_pregunta3">
                                 <div class="form-group mt-2 col-md-6">
@@ -125,12 +126,12 @@
                         <div class="tab-pane fade mt-2 ml-3" id="pregunta_4" role="tabpanel" aria-labelledby="contact-tab">
                             <p class="text-black h5">4. ¿Se entregó el manifiesto de entrega, transporte y recepción de residuos peligrosos con los datos necesarios?</p>
                             <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta4" value="true" id="radioSuccess7" class="pregunta4">
-                                <label for="radioSuccess7">Si</label>
+                                <input type="radio" name="pregunta4" value="true" id="radioSuccess8" class="pregunta4">
+                                <label for="radioSuccess8">Si</label>
                             </div>
                             <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta4" value="false" id="radioSuccess8" class="pregunta4">
-                                <label for="radioSuccess8">No</label>
+                                <input type="radio" name="pregunta4" value="false" id="radioSuccess9" class="pregunta4">
+                                <label for="radioSuccess9">No</label>
                             </div>
                             <div class="form-row col-lg-12 mt-3" id="detalles_pregunta4">
                                 <div class="form-row">
@@ -146,12 +147,12 @@
                         <div class="tab-pane fade mt-2 ml-3" id="pregunta_5" role="tabpanel" aria-labelledby="contact-tab">
                             <p class="text-black h5">5. ¿El personal del servicio portó equipo de protección en todo momento?</p>
                             <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta5" value="true" id="radioSuccess9" class="pregunta5">
-                                <label for="radioSuccess9">Si</label>
+                                <input type="radio" name="pregunta5" value="true" id="radioSuccess10" class="pregunta5">
+                                <label for="radioSuccess10">Si</label>
                             </div>
                             <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta5" value="false" id="radioSuccess10" class="pregunta5">
-                                <label for="radioSuccess10">No</label>
+                                <input type="radio" name="pregunta5" value="false" id="radioSuccess11" class="pregunta5">
+                                <label for="radioSuccess11">No</label>
                             </div>
                             <div class="row col-lg-12 mt-3" id="detalles_pregunta5">
                                 <button type='button' class='btn btn-primary mr-2' id="addPregunta5">Capturar Incidencia</button>
@@ -188,7 +189,7 @@
         <div class="card-footer">
             <div class=" col-lg-12">
                 <button type="button" class="btn btn-primary float-right ml-3 btn_enviar" data-toggle="tooltip" title='Enviar la "Cédula" a evaluación' data-placement="top">Enviar a DAS</button>
-                <button type="button" class="btn btn-success float-right btn_guardar" data-toggle="tooltip" title='Guardar la información capturada sin envíar la cédula a evaluación' data-placement="top">Guardar Cédula</button>
+                <button type="button" class="btn btn-success float-right btn_guardar" data-toggle="tooltip" title='Guardar la información capturada sin enviar la cédula a evaluación' data-placement="top">Guardar Cédula</button>
             </div>
         </div>
     </div>
@@ -329,61 +330,61 @@
                 <div class="row col-lg-12">
                     <div class="col-lg-4 mt-3" style="text-align: justify">
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Nombre, Sello y Firma del titular del servicio médico</strong>
+                            <strong class="text-black mr-3">Nombre, sello y firma del titular del servicio médico.</strong>
                             <input class="manifiestoEntrega1" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="DatosTitularMedico" name="manifiesto[]">
                         </div>
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Domicilio del Consultorio que brinda el servicio</strong>
+                            <strong class="text-black mr-3">Domicilio del consultorio donde se brinda el servicio.</strong>
                             <input class="manifiestoEntrega2" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="ConsultorioBrindaServicio" name="manifiesto[]">
                         </div>
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Descripción e identificación del tipo de Residuo</strong>
+                            <strong class="text-black mr-3">Descripción e identificación del tipo de residuo.</strong>
                             <input class="manifiestoEntrega3" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="DescripcionResiduo" name="manifiesto[]">
                         </div>
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Nombre y firma del responsable de la recolección</strong>
+                            <strong class="text-black mr-3">Nombre y firma del responsable de la recolección.</strong>
                             <input class="manifiestoEntrega4" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="DatosRecoleccion" name="manifiesto[]">
                         </div>
                     </div>
                     <div class="col-lg-4 mt-3" style="text-align: justify">
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Cantidad y Unidad de medida del Residuo</strong>
+                            <strong class="text-black mr-3">Cantidad y unidad de medida del residuo.</strong>
                             <input class="manifiestoEntrega5" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="DetallesResiduo" name="manifiesto[]">
                         </div>
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Envase o contenedor utilizado</strong>
+                            <strong class="text-black mr-3">Envase o contenedor utilizado.</strong>
                             <input class="manifiestoEntrega6" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="EnvaseUtilizado" name="manifiesto[]">
                         </div>
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Instrucciones especiales e información para su manejo seguro</strong>
+                            <strong class="text-black mr-3">Instrucciones especiales e información para su manejo seguro.</strong>
                             <input class="manifiestoEntrega7" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="ManejoSeguro" name="manifiesto[]">
                         </div>
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Descripción general de la transportación y del centro de acopio o destinatario</strong>
+                            <strong class="text-black mr-3">Descripción general de la transportación y del centro de acopio o destinatario.</strong>
                             <input class="manifiestoEntrega8" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="CentroDestinatario" name="manifiesto[]">
                         </div>
                     </div>
                     <div class="col-lg-4 mt-3" style="text-align: justify">
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Número de registro ambiental</strong>
+                            <strong class="text-black mr-3">Número de registro ambiental.</strong>
                             <input class="manifiestoEntrega9" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="RegistroAmbiental" name="manifiesto[]">
                         </div>
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Número de manifiesto</strong>
+                            <strong class="text-black mr-3">Fecha y número de manifiesto.</strong>
                             <input class="manifiestoEntrega10" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="NumeroManifiesto" name="manifiesto[]">
                         </div>
                         <div class="form-check-inline i-checks mt-3">
-                            <strong class="text-black mr-3">Clasificación</strong>
+                            <strong class="text-black mr-3">Clasificación.</strong>
                             <input class="manifiestoEntrega11" type="checkbox" data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>"
                                    data-onstyle="success" data-offstyle="danger" data-style="ios" value="Clasificacion" name="manifiesto[]">
                         </div>
@@ -478,7 +479,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Tipo</th>
-                                    <th>Comentarios</th>
+                                    <th>Incidencias</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -660,7 +661,7 @@
             /*Fin Errores en Adjuntar Archivos*/
 
             /*Llenamos el Combo de Meses de Correspondencia*/
-                let optionsMes = "<option value=''>Selecciona el Mes</option>";
+                let optionsMes = "<option value=''>Seleccione el Mes</option>";
                 meses.forEach(function (mes) {
                     optionsMes += "<option value=" + mes + ">" + mes + "</option>"
                 });
@@ -986,12 +987,14 @@
                         $("#id_manifiesto").val(response.data[0].id);
                         response = response.data[0].comentarios;
                         var res = response.split("|");
+                        console.log(res);
                         for (var i = 0; i < res.length; i++) {
                             for (var j = 0; j < 11; j++) {
                                 if ($('.manifiestoEntrega' + (j + 1)).val() == res[i]) {
+                                    console.log($('.manifiestoEntrega' + (j + 1)).val());
                                     $('.manifiestoEntrega' + (j + 1)).parent().removeClass('btn-danger off');
                                     $('.manifiestoEntrega' + (j + 1)).parent().addClass('btn-green btn-success');
-                                    $('.manifiestoEntrega' + (j + 1)).prop('checked', true)
+                                    $('.manifiestoEntrega' + (j + 1)).prop('checked', true);
                                 }
                             }
                         }
@@ -1049,7 +1052,7 @@
                                 Swal.fire({
                                     'icon': 'success',
                                     'title': 'Servicio de RPBI',
-                                    'text': 'La incidencía fue actualizada correctamente.'
+                                    'text': 'La(s) incidencia(s) fue(fueron) actualizada(s) correctamente.'
                                 });
                             });
                             $("#id_manifiesto").val("");
@@ -1061,7 +1064,7 @@
                                 Swal.fire({
                                     'icon': 'success',
                                     'title': 'Servicio de RPBI',
-                                    'text': 'La incidencía fue capturada correctamente.'
+                                    'text': 'La(s) incidencia(s) fue(fueron) registrada(s) correctamente.'
                                 });
                                 guardaCedula();
                             });
@@ -1069,7 +1072,7 @@
                             $("#addPregunta4").css("display", "none");
                         }
                     }
-
+                    $('#modal-pregunta4').modal('hide');
                 });
 
                 $("#addPregunta5").click(function () {
@@ -1218,7 +1221,9 @@
 
                 $('.pregunta1').change(function () {
                     let pr2 = $(this).val();
-                    if (pr2 == "false") {
+                    if (pr2 == "false" || pr2 == "Anticipada") {
+                        $('#fecha_programada').val('');
+                        $('#fecha_realizada').val('');
                         $('#detalles_pregunta1').css('display', 'block');
                     } else {
                         $('#detalles_pregunta1').css('display', 'none');
@@ -1249,7 +1254,7 @@
                                     'icon': 'warning',
                                     'title': 'Servicio de RPBI',
                                     'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
-                                        '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
+                                        '<strong>se borrarán todas las incidencias. ¿Desea continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
                                     'confirmButtonText': 'Si, eliminar',
@@ -1275,7 +1280,7 @@
                                                         Swal.fire({
                                                             'icon': 'success',
                                                             'title': 'Servicio de RPBI',
-                                                            'html': 'Las incidencias fueron eliminadas correctamente.',
+                                                            'html': 'Las(s) incidencia(s) fue(fueron) eliminada(s) correctamente.',
                                                         }).then(function () {
                                                             $('#detalles_pregunta4').css('display', 'none');
                                                             $('input:radio[name="pregunta4"][value="true"]').prop('checked', true);
@@ -1316,7 +1321,7 @@
                                     'icon': 'warning',
                                     'title': 'Servicio de RPBI',
                                     'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
-                                        '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
+                                        '<strong>se borrarán todas las incidencias. ¿Desea continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
                                     'confirmButtonText': 'Si, deseo continuar',
@@ -1380,10 +1385,18 @@
                 /*Si existen Respuestas dentro de la Cedula*/
                 for (var i = 0; i < respuestas.length; i++) {
                     if (i == 0 && respuestas[i].respuesta == false) {
-                        $('input:radio[name="pregunta' + respuestas[i].pregunta + '"][value="false"]').prop('checked', true);
                         var resp = respuestas[i].detalles.split("|");
-                        $('#fecha_programada').val(resp[0]);
-                        $('#fecha_realizada').val(resp[1]);
+                        if (resp[0] == "Anticipada") {
+                            $('input:radio[name="pregunta' + respuestas[i].pregunta + '"][value="Anticipada"]').prop('checked', true);
+                            $('#fecha_programada').val(resp[1]);
+                            $('#fecha_realizada').val(resp[2]);
+                        }
+                        else
+                        {
+                            $('input:radio[name="pregunta' + respuestas[i].pregunta + '"][value="false"]').prop('checked', true);
+                            $('#fecha_programada').val(resp[0]);
+                            $('#fecha_realizada').val(resp[1]);
+                        }
                         $('#detalles_pregunta1').css('display', 'block');
                     } else if (i == 2 && respuestas[i].respuesta == false) {
                         $('input:radio[name="pregunta' + respuestas[i].pregunta + '"][value="false"]').prop('checked', true);
@@ -1450,7 +1463,7 @@
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Formato Incorrecto',
-                                'text': 'El archivo que intenta adjuntar no es válido. Favor de solo seleccionar archivos "PDF"'
+                                'text': 'El archivo que intenta adjuntar no es válido. Favor de sólo seleccionar archivos "PDF"'
                             });
                             $(".custom-file-label").text("Seleccionar Archivo");
                             document.getElementById('customFile').value = '';
@@ -1611,8 +1624,8 @@
                         let tipo = $(this).data('tipo');
                         Swal.fire({
                             'icon': 'warning',
-                            'title': '¿Deseas Continuar?',
-                            'text': '¿Estás seguro de eliminar el archivo relacionado a "'+tipo+'"?',
+                            'title': '¿Desea Continuar?',
+                            'text': '¿Está seguro de eliminar el archivo relacionado a "'+tipo+'"?',
                             'confirmButtonColor': '#3085d6',
                             'cancelButtonColor': '#d33',
                             'confirmButtonText': 'Si, Eliminar Archivo',
@@ -1718,7 +1731,11 @@
                                     respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 } else {
                                     if (i == 0) {
-                                        detalles = $("#fecha_programada").val() + "|" + $("#fecha_realizada").val();
+                                        if (respuesta == "Anticipada") {
+                                            detalles = respuesta+"|"+$("#fecha_programada").val() + "|" + $("#fecha_realizada").val();
+                                        } else {
+                                            detalles = $("#fecha_programada").val() + "|" + $("#fecha_realizada").val();
+                                        }
                                     } else if ( i == 2 ) {
                                         detalles = $("#comentarios_pregunta3").val();
                                     }
@@ -1757,7 +1774,11 @@
                                     respuestas.push({ CedulaEvaluacionId: parseInt(model.id), Pregunta: (i + 1), Respuesta: (respuesta == "true"), Detalles: null });
                                 } else {
                                     if (i == 0) {
-                                        detalles = $("#fecha_programada").val() + "|" + $("#fecha_realizada").val();
+                                        if (respuesta == "Anticipada") {
+                                            detalles = respuesta + "|" + $("#fecha_programada").val() + "|" + $("#fecha_realizada").val();
+                                        } else {
+                                            detalles = $("#fecha_programada").val() + "|" + $("#fecha_realizada").val();
+                                        }
                                     } else if (i == 2) {
                                         detalles = $("#comentarios_pregunta3").val();
                                     }
@@ -1886,6 +1907,22 @@
                             next = false;
                             break;
                         }
+                        else if (i == 0 && respuesta == 'false' && ($("#fecha_programada").val() == "" || $("#fecha_realizada").val() == "")) {
+                            next = false;
+                            break;
+                        }
+                        else if (i == 0 && respuesta == 'false' && $("#fecha_programada").val() >= $("#fecha_realizada").val()) {
+                            next = false;
+                            break;
+                        }
+                        else if (i == 0 && respuesta == 'Anticipada' && ($("#fecha_programada").val() == "" || $("#fecha_realizada").val() == "")) {
+                            next = false;
+                            break;
+                        }
+                        else if (i == 0 && respuesta == 'Anticipada' && $("#fecha_realizada").val() >= $("#fecha_programada").val()) {
+                            next = false;
+                            break;
+                        }
                         else if (i == 2 && respuesta == 'false' && $("#comentarios_pregunta3").val() == "") {
                             next = false;
                             break;
@@ -1910,6 +1947,38 @@
                             'title': 'Servicio de RPBI',
                             'html': 'No ha respondido la <strong>Pregunta ' + (i + 1) + '</strong>'
                         });
+                        return false;
+                    }
+                    else if (i == 0 && respuesta == 'false') {
+                        if ($("#fecha_programada").val() >= $("#fecha_realizada").val()) {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Servicio de RPBI',
+                                'html': 'La <b>Fecha Programada</b> no puede ser mayor o igual a la <b>Fecha Realizada</b> en la <b>Pregunta ' + (i + 1) + '</b>.'
+                            });
+                        } else {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Servicio de RPBI',
+                                'html': 'Por favor capture la <b>Fecha Programada</b> y/o la <b>Fecha Realizada</b> en la <b>Pregunta ' + (i + 1) + '</b>.'
+                            });
+                        }
+                        return false;
+                    }
+                    else if (i == 0 && respuesta == 'Anticipada') {
+                        if ($("#fecha_realizada").val() >= $("#fecha_programada").val()) {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Servicio de RPBI',
+                                'html': 'La <b>Fecha Programada</b> no puede ser menor o igual a la <b>Fecha Realizada</b> en la <b>Pregunta ' + (i + 1) + '</b>.'
+                            });
+                        } else {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Servicio de RPBI',
+                                'html': 'Por favor capture la <b>Fecha Programada</b> y/o la <b>Fecha Realizada</b> en la <b>Pregunta ' + (i + 1) + '</b>.'
+                            });
+                        }
                         return false;
                     }
                     else if (i == 2 && respuesta == 'false') {

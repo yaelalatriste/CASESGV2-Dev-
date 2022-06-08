@@ -627,6 +627,7 @@
             }
             else if (model.estatus == 'En Trámite') {
                 axios.get('/entregables/flujo/car/' + model.id + '/' + model.estatus).then(btn => {
+                    console.log(btn);
                     if (btn.data == -1) {
                         $('.rechazar_tramite').css('display', 'block');
                     }
@@ -833,8 +834,7 @@
                 var tipo = $(this).data('tipo');
                 var id = $(this).data('id');
                 var mensaje = '';
-
-                    if (model.estatus == "Autorizada") {
+                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de RPBI',
@@ -888,7 +888,7 @@
                     var tipo = $(this).data('tipo');
                     var id = $(this).data('id');
 
-                    if (model.estatus == "Autorizada") {
+                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de Mensajería Acelerada',

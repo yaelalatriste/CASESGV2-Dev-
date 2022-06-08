@@ -831,7 +831,7 @@
                 var tipo = $(this).data('tipo');
                 var id = $(this).data('id');
 
-                    if (model.estatus == "Autorizada") {
+                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de Análisis Microbiológicos',
@@ -885,7 +885,7 @@
                     var tipo = $(this).data('tipo');
                     var id = $(this).data('id');
 
-                    if (model.estatus == "Autorizada") {
+                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de Análisis Microbiológicos',

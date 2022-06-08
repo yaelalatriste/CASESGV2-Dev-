@@ -464,7 +464,10 @@
     <script>
         $(function () {
             var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            var idUsuario = @User.Claims.ElementAt(0).Value;
+            
             $('[data-toggle="tooltip"]').tooltip();
+
             var model = @Html.Raw(Json.Serialize(@Model));
 
             $(".btnRevision").click(function () {
@@ -477,11 +480,6 @@
 
             $(".btnCuestionario").click(function () {
                 window.location.href = "/limpieza/evaluacion/" + $(this).data('id') + window.location.search;
-            });
-
-            $(".select2").select2();
-            $('.select2bs4').select2({
-                theme: 'bootstrap4'
             });
 
             localStorage.clear();
@@ -509,27 +507,8 @@
                 ]
             });
 
+            $("#error_inmueble").css('display', 'none');
 
-            $('.btn_pdf').click(function () {
-                let id = $(this).data('id');
-                let estatus = $(this).data('estatus');
-                let servicio = $(this).data('servicio');
-                if (estatus == 'Autorizada') {
-                    Swal.fire({
-                        'icon': 'info',
-                        'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
-                        'html': '<p style="text-align: justify">La cédula de evaluación ya fue autorizada, no olvide firmarla electrónicamente y ' +
-                            'posteriormente <strong>subirla en el sistema CASESGV2 en el apartado de "Seguimiento a la Cédula"</strong>, si tiene alguna duda por favor ' +
-                            'comuníquese a la ext. 2574 o 2635. </p>'
-                    }).then(function () {
-                        window.open('/cedula/limpieza/'+servicio+'/' + id, '_blank');
-                    });
-                } else {
-                    window.open('/cedula/limpieza/' + servicio + '/' + id, '_blank');
-                }
-            });
-
-            $("#error_inmueble").css('display','none');
             $("#error_mes").css('display','none');
 
             $("#search_cedula").click(function () {
@@ -741,10 +720,40 @@
                 window.location.href = "/limpieza/index/" + model.servicioId + '?Estatus=' + estatus + '&Mes=' + mes;
             });
 
+            //$('.btn_pdf').click(function () {
+            //    let id = $(this).data('id');
+            //    let estatus = $(this).data('estatus');
+            //    let servicio = $(this).data('servicio');
+            //    if (estatus == 'Autorizada') {
+            //        Swal.fire({
+            //            'icon': 'info',
+            //            'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
+            //            'html': '<p style="text-align: justify">La cédula de evaluación ya fue autorizada, no olvide firmarla electrónicamente y ' +
+            //                'posteriormente <strong>subirla en el sistema CASESGV2 en el apartado de "Seguimiento a la Cédula"</strong>, si tiene alguna duda por favor ' +
+            //                'comuníquese a la ext. 2574 o 2635. </p>'
+            //        }).then(function () {
+            //            axios.get('/cedula/verificaFirmante/Reviso/' + idUsuario).then(review => {
+                            
+            //            }).catch(error => {
+            //                Swal.fire({
+            //                    'icon': 'info',
+            //                    'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
+            //                    'html': '<p style="text-align: justify">Hubo un error al registrar a la persona que revisará la cédula. Por favor comuníquese a la ext. 2574 o 2635. </p>'
+            //                })
+            //            });
+            //            firmaReviso();
+            //            //window.open('/cedula/limpieza/' + servicio + '/' + id, '_blank');
+            //        });
+            //    } else {
+            //        firmaReviso();
+            //        //window.open('/cedula/limpieza/' + servicio + '/' + id, '_blank');
+            //    }
+            //});
+
             $('.btn_pdf').click(function () {
                 let id = $(this).data('id');
-                let estatus = $(this).data('estatus');
                 let servicio = $(this).data('servicio');
+                let estatus = $(this).data('estatus');
                 if (estatus == 'Autorizada') {
                     Swal.fire({
                         'icon': 'info',
@@ -758,6 +767,51 @@
                 } else {
                     window.open('/cedula/limpieza/' + servicio + '/' + id, '_blank');
                 }
+            });
+
+            function firmaReviso() {
+                Swal.fire({
+                    'icon': 'warning',
+                    'title': 'Servicio de Limpieza en Áreas Comunes',
+                    'html': '<p style="text-align: justify;">Aún no captura al personal que se encarga de firmar el apartado <b>"Revisar"</b> dentró de la cédula de acuerdo al servicio de la administración/inmueble al que pertenece. '+
+                        'Por favor seleccione al personal que firmada dicho apartado en la cédula antes de poder generarla.</p><div class="select2-purple col-lg-12" style="text-align: justify">'+
+                        '<p class="font-weight-bold" style="font-size: 16px;">¿Quien revisa la cédula?:</p>' +
+                        '<select class= "form-control select2bs4" data-dropdown-css-class="select2-purple" id = "usrReviso" > ' + obtieneFirmantes() + '</select >' +
+                        '</div>',
+                    'confirmButtonColor': '#3085d6',
+                    'cancelButtonColor': '#d33',
+                    'confirmButtonText': 'Si, pagar',
+                    'cancelButtonText': 'Cancelar',
+                    'showCancelButton': true
+                }).then(confirm => {
+                    var fechaPago = $("#fechaPago").val();
+                    if (fechaPago != "" || fechaPago != null) {
+
+                    }
+                });
+            }
+
+            /********************************** Funciones Adicionales *********************************/
+                function obtieneFirmantes() {
+                    let reviso = "<option value=''>Seleccione un empleado</option>";
+                    $.ajax({
+                        url: '/cedula/obtieneFirmantes/' +idUsuario,
+                        type: 'GET',
+                        async: false,
+                        success: function (json) {
+                            console.log(json);
+                            json.forEach(function (usr) {
+                                reviso += "<option value=" + usr.id + ">" + usr.nombreCompleto + "</option>"
+                            });
+                        },
+                    });
+                    return reviso;
+                }
+
+            /********************************** FIN Funciones Asincronas*********************************/
+            $(".select2").select2();
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
             });
         });
     </script>
