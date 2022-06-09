@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\TrasladoExp\SeguimientoCedula.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.21" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.9" />
@@ -38,10 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Connected Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\TrasladoExp\SeguimientoCedula.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,6 +8,7 @@ namespace CedulasEvaluacion.Entities.Vistas
     {
         public int Id { get; set; }
         public int ServicioId { get; set; }
+        public int InmuebleId{ get; set; }
         public string Abreviacion { get; set; }
         public string Nombre { get; set; }
         public string Destino { get; set; }

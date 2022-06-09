@@ -394,7 +394,7 @@
                                         <td>@hist.usuarios.nombre_emp @hist.usuarios.paterno_emp @hist.usuarios.materno_emp</td>
                                         <td>@hist.Comentarios</td>
                                         <td>@hist.Estatus</td>
-                                        <td>@hist.FechaCreacion</td>
+                                        <td>@Convert.ToDateTime(@hist.FechaCreacion).ToString("dd/MM/yyyy hh:mm tt")</td>
                                     </tr>
                                 }
                             </tbody>
@@ -428,7 +428,7 @@
                                         <td>@hist.usuarios.nombre_emp @hist.usuarios.paterno_emp @hist.usuarios.materno_emp</td>
                                         <td>@hist.Comentarios</td>
                                         <td>@hist.Estatus</td>
-                                        <td>@hist.FechaCreacion</td>
+                                        <td>@Convert.ToDateTime(@hist.FechaCreacion).ToString("dd/MM/yyyy hh:mm tt")</td>
                                     </tr>
                                 }
                             </tbody>
@@ -1173,7 +1173,7 @@
                                 cancelButtonColor: '#d33',
                                 cancelButtonText: 'Cancelar',
                                 confirmButtonText: 'Rechazar',
-                                input: 'text',
+                                input: '<textarea><textarea>',
                                 inputPlaceholder: 'Escriba los comentarios correspondientes'
                             }).then(send => {
                                 if (send.value.length > 0) {
@@ -1409,7 +1409,7 @@
                             cancelButtonColor: '#d33',
                             cancelButtonText: 'Cancelar',
                             confirmButtonText: 'Rechazar',
-                            input: 'text',
+                            input: 'textarea',
                             inputPlaceholder: 'Escriba los comentarios correspondientes'
                         }).then(send => {
                             if (send.value.length > 0) {
@@ -1519,7 +1519,7 @@
                             cancelButtonColor: '#d33',
                             cancelButtonText: 'Cancelar',
                             confirmButtonText: 'Rechazar',
-                            input: 'text',
+                            input: 'textarea',
                             inputPlaceholder: 'Escriba los comentarios correspondientes'
                         }).then(send => {
                             if (send.value.length > 0) {

@@ -24,8 +24,6 @@ namespace CASESGCedulasEvaluacion {
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
     public partial class DtGeneraCedulaByServicio : global::System.Data.DataSet {
         
-        private sp_generaCedulaByServicioDataTable tablesp_generaCedulaByServicio;
-        
         private sp_getIncidenciaLimpiezaDataTable tablesp_getIncidenciaLimpieza;
         
         private sp_getIncidenciasAguaDataTable tablesp_getIncidenciasAgua;
@@ -74,6 +72,8 @@ namespace CASESGCedulasEvaluacion {
         
         private sp_generaReporteMensualPATDataTable tablesp_generaReporteMensualPAT;
         
+        private sp_generaCedulaByServicioDataTable tablesp_generaCedulaByServicio;
+        
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -102,9 +102,6 @@ namespace CASESGCedulasEvaluacion {
             if ((this.DetermineSchemaSerializationMode(info, context) == global::System.Data.SchemaSerializationMode.IncludeSchema)) {
                 global::System.Data.DataSet ds = new global::System.Data.DataSet();
                 ds.ReadXmlSchema(new global::System.Xml.XmlTextReader(new global::System.IO.StringReader(strSchema)));
-                if ((ds.Tables["sp_generaCedulaByServicio"] != null)) {
-                    base.Tables.Add(new sp_generaCedulaByServicioDataTable(ds.Tables["sp_generaCedulaByServicio"]));
-                }
                 if ((ds.Tables["sp_getIncidenciaLimpieza"] != null)) {
                     base.Tables.Add(new sp_getIncidenciaLimpiezaDataTable(ds.Tables["sp_getIncidenciaLimpieza"]));
                 }
@@ -177,6 +174,9 @@ namespace CASESGCedulasEvaluacion {
                 if ((ds.Tables["sp_generaReporteMensualPAT"] != null)) {
                     base.Tables.Add(new sp_generaReporteMensualPATDataTable(ds.Tables["sp_generaReporteMensualPAT"]));
                 }
+                if ((ds.Tables["sp_generaCedulaByServicio"] != null)) {
+                    base.Tables.Add(new sp_generaCedulaByServicioDataTable(ds.Tables["sp_generaCedulaByServicio"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -193,16 +193,6 @@ namespace CASESGCedulasEvaluacion {
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
             base.Tables.CollectionChanged += schemaChangedHandler;
             this.Relations.CollectionChanged += schemaChangedHandler;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        [global::System.ComponentModel.Browsable(false)]
-        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public sp_generaCedulaByServicioDataTable sp_generaCedulaByServicio {
-            get {
-                return this.tablesp_generaCedulaByServicio;
-            }
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -447,6 +437,16 @@ namespace CASESGCedulasEvaluacion {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public sp_generaCedulaByServicioDataTable sp_generaCedulaByServicio {
+            get {
+                return this.tablesp_generaCedulaByServicio;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.BrowsableAttribute(true)]
         [global::System.ComponentModel.DesignerSerializationVisibilityAttribute(global::System.ComponentModel.DesignerSerializationVisibility.Visible)]
         public override global::System.Data.SchemaSerializationMode SchemaSerializationMode {
@@ -512,9 +512,6 @@ namespace CASESGCedulasEvaluacion {
                 this.Reset();
                 global::System.Data.DataSet ds = new global::System.Data.DataSet();
                 ds.ReadXml(reader);
-                if ((ds.Tables["sp_generaCedulaByServicio"] != null)) {
-                    base.Tables.Add(new sp_generaCedulaByServicioDataTable(ds.Tables["sp_generaCedulaByServicio"]));
-                }
                 if ((ds.Tables["sp_getIncidenciaLimpieza"] != null)) {
                     base.Tables.Add(new sp_getIncidenciaLimpiezaDataTable(ds.Tables["sp_getIncidenciaLimpieza"]));
                 }
@@ -587,6 +584,9 @@ namespace CASESGCedulasEvaluacion {
                 if ((ds.Tables["sp_generaReporteMensualPAT"] != null)) {
                     base.Tables.Add(new sp_generaReporteMensualPATDataTable(ds.Tables["sp_generaReporteMensualPAT"]));
                 }
+                if ((ds.Tables["sp_generaCedulaByServicio"] != null)) {
+                    base.Tables.Add(new sp_generaCedulaByServicioDataTable(ds.Tables["sp_generaCedulaByServicio"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -620,12 +620,6 @@ namespace CASESGCedulasEvaluacion {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         internal void InitVars(bool initTable) {
-            this.tablesp_generaCedulaByServicio = ((sp_generaCedulaByServicioDataTable)(base.Tables["sp_generaCedulaByServicio"]));
-            if ((initTable == true)) {
-                if ((this.tablesp_generaCedulaByServicio != null)) {
-                    this.tablesp_generaCedulaByServicio.InitVars();
-                }
-            }
             this.tablesp_getIncidenciaLimpieza = ((sp_getIncidenciaLimpiezaDataTable)(base.Tables["sp_getIncidenciaLimpieza"]));
             if ((initTable == true)) {
                 if ((this.tablesp_getIncidenciaLimpieza != null)) {
@@ -770,6 +764,12 @@ namespace CASESGCedulasEvaluacion {
                     this.tablesp_generaReporteMensualPAT.InitVars();
                 }
             }
+            this.tablesp_generaCedulaByServicio = ((sp_generaCedulaByServicioDataTable)(base.Tables["sp_generaCedulaByServicio"]));
+            if ((initTable == true)) {
+                if ((this.tablesp_generaCedulaByServicio != null)) {
+                    this.tablesp_generaCedulaByServicio.InitVars();
+                }
+            }
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -780,8 +780,6 @@ namespace CASESGCedulasEvaluacion {
             this.Namespace = "http://tempuri.org/DtGeneraCedulaByServicio.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
-            this.tablesp_generaCedulaByServicio = new sp_generaCedulaByServicioDataTable();
-            base.Tables.Add(this.tablesp_generaCedulaByServicio);
             this.tablesp_getIncidenciaLimpieza = new sp_getIncidenciaLimpiezaDataTable();
             base.Tables.Add(this.tablesp_getIncidenciaLimpieza);
             this.tablesp_getIncidenciasAgua = new sp_getIncidenciasAguaDataTable();
@@ -830,12 +828,8 @@ namespace CASESGCedulasEvaluacion {
             base.Tables.Add(this.tablesp_getIncidenciasTrasladoByPregunta);
             this.tablesp_generaReporteMensualPAT = new sp_generaReporteMensualPATDataTable();
             base.Tables.Add(this.tablesp_generaReporteMensualPAT);
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private bool ShouldSerializesp_generaCedulaByServicio() {
-            return false;
+            this.tablesp_generaCedulaByServicio = new sp_generaCedulaByServicioDataTable();
+            base.Tables.Add(this.tablesp_generaCedulaByServicio);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -984,6 +978,12 @@ namespace CASESGCedulasEvaluacion {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        private bool ShouldSerializesp_generaCedulaByServicio() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void SchemaChanged(object sender, global::System.ComponentModel.CollectionChangeEventArgs e) {
             if ((e.Action == global::System.ComponentModel.CollectionChangeAction.Remove)) {
                 this.InitVars();
@@ -1036,9 +1036,6 @@ namespace CASESGCedulasEvaluacion {
             xs.Add(dsSchema);
             return type;
         }
-        
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public delegate void sp_generaCedulaByServicioRowChangeEventHandler(object sender, sp_generaCedulaByServicioRowChangeEvent e);
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public delegate void sp_getIncidenciaLimpiezaRowChangeEventHandler(object sender, sp_getIncidenciaLimpiezaRowChangeEvent e);
@@ -1112,436 +1109,8 @@ namespace CASESGCedulasEvaluacion {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public delegate void sp_generaReporteMensualPATRowChangeEventHandler(object sender, sp_generaReporteMensualPATRowChangeEvent e);
         
-        /// <summary>
-        ///Represents the strongly named DataTable class.
-        ///</summary>
-        [global::System.Serializable()]
-        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class sp_generaCedulaByServicioDataTable : global::System.Data.TypedTableBase<sp_generaCedulaByServicioRow> {
-            
-            private global::System.Data.DataColumn columnId;
-            
-            private global::System.Data.DataColumn columnInmueble;
-            
-            private global::System.Data.DataColumn columnFolio;
-            
-            private global::System.Data.DataColumn columnMes;
-            
-            private global::System.Data.DataColumn columnAnio;
-            
-            private global::System.Data.DataColumn columnAdministracion;
-            
-            private global::System.Data.DataColumn columnServicio;
-            
-            private global::System.Data.DataColumn columnEstatus;
-            
-            private global::System.Data.DataColumn columnCalificacion;
-            
-            private global::System.Data.DataColumn columnFechaCreacion;
-            
-            private global::System.Data.DataColumn columnFacturas;
-            
-            private global::System.Data.DataColumn columnMontosFacturas;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_generaCedulaByServicioDataTable() {
-                this.TableName = "sp_generaCedulaByServicio";
-                this.BeginInit();
-                this.InitClass();
-                this.EndInit();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal sp_generaCedulaByServicioDataTable(global::System.Data.DataTable table) {
-                this.TableName = table.TableName;
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected sp_generaCedulaByServicioDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn IdColumn {
-                get {
-                    return this.columnId;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn InmuebleColumn {
-                get {
-                    return this.columnInmueble;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn FolioColumn {
-                get {
-                    return this.columnFolio;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn MesColumn {
-                get {
-                    return this.columnMes;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn AnioColumn {
-                get {
-                    return this.columnAnio;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn AdministracionColumn {
-                get {
-                    return this.columnAdministracion;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn ServicioColumn {
-                get {
-                    return this.columnServicio;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn EstatusColumn {
-                get {
-                    return this.columnEstatus;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn CalificacionColumn {
-                get {
-                    return this.columnCalificacion;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn FechaCreacionColumn {
-                get {
-                    return this.columnFechaCreacion;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn FacturasColumn {
-                get {
-                    return this.columnFacturas;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn MontosFacturasColumn {
-                get {
-                    return this.columnMontosFacturas;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            [global::System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_generaCedulaByServicioRow this[int index] {
-                get {
-                    return ((sp_generaCedulaByServicioRow)(this.Rows[index]));
-                }
-            }
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event sp_generaCedulaByServicioRowChangeEventHandler sp_generaCedulaByServicioRowChanging;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event sp_generaCedulaByServicioRowChangeEventHandler sp_generaCedulaByServicioRowChanged;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event sp_generaCedulaByServicioRowChangeEventHandler sp_generaCedulaByServicioRowDeleting;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event sp_generaCedulaByServicioRowChangeEventHandler sp_generaCedulaByServicioRowDeleted;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Addsp_generaCedulaByServicioRow(sp_generaCedulaByServicioRow row) {
-                this.Rows.Add(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_generaCedulaByServicioRow Addsp_generaCedulaByServicioRow(string Inmueble, string Folio, string Mes, int Anio, string Administracion, string Servicio, string Estatus, string Calificacion, string FechaCreacion, string Facturas, string MontosFacturas) {
-                sp_generaCedulaByServicioRow rowsp_generaCedulaByServicioRow = ((sp_generaCedulaByServicioRow)(this.NewRow()));
-                object[] columnValuesArray = new object[] {
-                        null,
-                        Inmueble,
-                        Folio,
-                        Mes,
-                        Anio,
-                        Administracion,
-                        Servicio,
-                        Estatus,
-                        Calificacion,
-                        FechaCreacion,
-                        Facturas,
-                        MontosFacturas};
-                rowsp_generaCedulaByServicioRow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowsp_generaCedulaByServicioRow);
-                return rowsp_generaCedulaByServicioRow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_generaCedulaByServicioRow FindById(int Id) {
-                return ((sp_generaCedulaByServicioRow)(this.Rows.Find(new object[] {
-                            Id})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public override global::System.Data.DataTable Clone() {
-                sp_generaCedulaByServicioDataTable cln = ((sp_generaCedulaByServicioDataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Data.DataTable CreateInstance() {
-                return new sp_generaCedulaByServicioDataTable();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal void InitVars() {
-                this.columnId = base.Columns["Id"];
-                this.columnInmueble = base.Columns["Inmueble"];
-                this.columnFolio = base.Columns["Folio"];
-                this.columnMes = base.Columns["Mes"];
-                this.columnAnio = base.Columns["Anio"];
-                this.columnAdministracion = base.Columns["Administracion"];
-                this.columnServicio = base.Columns["Servicio"];
-                this.columnEstatus = base.Columns["Estatus"];
-                this.columnCalificacion = base.Columns["Calificacion"];
-                this.columnFechaCreacion = base.Columns["FechaCreacion"];
-                this.columnFacturas = base.Columns["Facturas"];
-                this.columnMontosFacturas = base.Columns["MontosFacturas"];
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            private void InitClass() {
-                this.columnId = new global::System.Data.DataColumn("Id", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnId);
-                this.columnInmueble = new global::System.Data.DataColumn("Inmueble", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnInmueble);
-                this.columnFolio = new global::System.Data.DataColumn("Folio", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFolio);
-                this.columnMes = new global::System.Data.DataColumn("Mes", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMes);
-                this.columnAnio = new global::System.Data.DataColumn("Anio", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAnio);
-                this.columnAdministracion = new global::System.Data.DataColumn("Administracion", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAdministracion);
-                this.columnServicio = new global::System.Data.DataColumn("Servicio", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnServicio);
-                this.columnEstatus = new global::System.Data.DataColumn("Estatus", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnEstatus);
-                this.columnCalificacion = new global::System.Data.DataColumn("Calificacion", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCalificacion);
-                this.columnFechaCreacion = new global::System.Data.DataColumn("FechaCreacion", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFechaCreacion);
-                this.columnFacturas = new global::System.Data.DataColumn("Facturas", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFacturas);
-                this.columnMontosFacturas = new global::System.Data.DataColumn("MontosFacturas", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMontosFacturas);
-                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnId}, true));
-                this.columnId.AutoIncrement = true;
-                this.columnId.AllowDBNull = false;
-                this.columnId.ReadOnly = true;
-                this.columnId.Unique = true;
-                this.columnInmueble.MaxLength = 128;
-                this.columnFolio.AllowDBNull = false;
-                this.columnFolio.MaxLength = 50;
-                this.columnMes.AllowDBNull = false;
-                this.columnMes.MaxLength = 12;
-                this.columnAnio.AllowDBNull = false;
-                this.columnAdministracion.MaxLength = 128;
-                this.columnServicio.MaxLength = 50;
-                this.columnEstatus.MaxLength = 50;
-                this.columnCalificacion.ReadOnly = true;
-                this.columnCalificacion.MaxLength = 30;
-                this.columnFechaCreacion.ReadOnly = true;
-                this.columnFechaCreacion.MaxLength = 62;
-                this.columnFacturas.ReadOnly = true;
-                this.columnFacturas.MaxLength = 8000;
-                this.columnMontosFacturas.ReadOnly = true;
-                this.columnMontosFacturas.MaxLength = 4000;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_generaCedulaByServicioRow Newsp_generaCedulaByServicioRow() {
-                return ((sp_generaCedulaByServicioRow)(this.NewRow()));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new sp_generaCedulaByServicioRow(builder);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Type GetRowType() {
-                return typeof(sp_generaCedulaByServicioRow);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.sp_generaCedulaByServicioRowChanged != null)) {
-                    this.sp_generaCedulaByServicioRowChanged(this, new sp_generaCedulaByServicioRowChangeEvent(((sp_generaCedulaByServicioRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.sp_generaCedulaByServicioRowChanging != null)) {
-                    this.sp_generaCedulaByServicioRowChanging(this, new sp_generaCedulaByServicioRowChangeEvent(((sp_generaCedulaByServicioRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.sp_generaCedulaByServicioRowDeleted != null)) {
-                    this.sp_generaCedulaByServicioRowDeleted(this, new sp_generaCedulaByServicioRowChangeEvent(((sp_generaCedulaByServicioRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.sp_generaCedulaByServicioRowDeleting != null)) {
-                    this.sp_generaCedulaByServicioRowDeleting(this, new sp_generaCedulaByServicioRowChangeEvent(((sp_generaCedulaByServicioRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Removesp_generaCedulaByServicioRow(sp_generaCedulaByServicioRow row) {
-                this.Rows.Remove(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
-                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DtGeneraCedulaByServicio ds = new DtGeneraCedulaByServicio();
-                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
-                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
-                any1.MinOccurs = new decimal(0);
-                any1.MaxOccurs = decimal.MaxValue;
-                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any1);
-                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
-                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
-                any2.MinOccurs = new decimal(1);
-                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any2);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute1.Name = "namespace";
-                attribute1.FixedValue = ds.Namespace;
-                type.Attributes.Add(attribute1);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "sp_generaCedulaByServicioDataTable";
-                type.Attributes.Add(attribute2);
-                type.Particle = sequence;
-                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
-                if (xs.Contains(dsSchema.TargetNamespace)) {
-                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
-                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
-                    try {
-                        global::System.Xml.Schema.XmlSchema schema = null;
-                        dsSchema.Write(s1);
-                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
-                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
-                            s2.SetLength(0);
-                            schema.Write(s2);
-                            if ((s1.Length == s2.Length)) {
-                                s1.Position = 0;
-                                s2.Position = 0;
-                                for (; ((s1.Position != s1.Length) 
-                                            && (s1.ReadByte() == s2.ReadByte())); ) {
-                                    ;
-                                }
-                                if ((s1.Position == s1.Length)) {
-                                    return type;
-                                }
-                            }
-                        }
-                    }
-                    finally {
-                        if ((s1 != null)) {
-                            s1.Close();
-                        }
-                        if ((s2 != null)) {
-                            s2.Close();
-                        }
-                    }
-                }
-                xs.Add(dsSchema);
-                return type;
-            }
-        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        public delegate void sp_generaCedulaByServicioRowChangeEventHandler(object sender, sp_generaCedulaByServicioRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -10365,293 +9934,544 @@ namespace CASESGCedulasEvaluacion {
         }
         
         /// <summary>
-        ///Represents strongly named DataRow class.
+        ///Represents the strongly named DataTable class.
         ///</summary>
-        public partial class sp_generaCedulaByServicioRow : global::System.Data.DataRow {
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class sp_generaCedulaByServicioDataTable : global::System.Data.TypedTableBase<sp_generaCedulaByServicioRow> {
             
-            private sp_generaCedulaByServicioDataTable tablesp_generaCedulaByServicio;
+            private global::System.Data.DataColumn columnId;
+            
+            private global::System.Data.DataColumn columnInmueble;
+            
+            private global::System.Data.DataColumn columnFolio;
+            
+            private global::System.Data.DataColumn columnMes;
+            
+            private global::System.Data.DataColumn columnAnio;
+            
+            private global::System.Data.DataColumn columnAdministracion;
+            
+            private global::System.Data.DataColumn columnServicio;
+            
+            private global::System.Data.DataColumn columnEstatus;
+            
+            private global::System.Data.DataColumn columnCalificacion;
+            
+            private global::System.Data.DataColumn columnFechaCreacion;
+            
+            private global::System.Data.DataColumn columnFacturas;
+            
+            private global::System.Data.DataColumn columnMontosFacturas;
+            
+            private global::System.Data.DataColumn columnElaboro;
+            
+            private global::System.Data.DataColumn columnReviso;
+            
+            private global::System.Data.DataColumn columnPuestoReviso;
+            
+            private global::System.Data.DataColumn columnSuperviso;
+            
+            private global::System.Data.DataColumn columnPuestoSuperviso;
+            
+            private global::System.Data.DataColumn columnAutoriza;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal sp_generaCedulaByServicioRow(global::System.Data.DataRowBuilder rb) : 
-                    base(rb) {
-                this.tablesp_generaCedulaByServicio = ((sp_generaCedulaByServicioDataTable)(this.Table));
+            public sp_generaCedulaByServicioDataTable() {
+                this.TableName = "sp_generaCedulaByServicio";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public int Id {
-                get {
-                    return ((int)(this[this.tablesp_generaCedulaByServicio.IdColumn]));
+            internal sp_generaCedulaByServicioDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
                 }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.IdColumn] = value;
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected sp_generaCedulaByServicioDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn IdColumn {
+                get {
+                    return this.columnId;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Inmueble {
+            public global::System.Data.DataColumn InmuebleColumn {
                 get {
+                    return this.columnInmueble;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn FolioColumn {
+                get {
+                    return this.columnFolio;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn MesColumn {
+                get {
+                    return this.columnMes;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn AnioColumn {
+                get {
+                    return this.columnAnio;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn AdministracionColumn {
+                get {
+                    return this.columnAdministracion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn ServicioColumn {
+                get {
+                    return this.columnServicio;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn EstatusColumn {
+                get {
+                    return this.columnEstatus;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn CalificacionColumn {
+                get {
+                    return this.columnCalificacion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn FechaCreacionColumn {
+                get {
+                    return this.columnFechaCreacion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn FacturasColumn {
+                get {
+                    return this.columnFacturas;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn MontosFacturasColumn {
+                get {
+                    return this.columnMontosFacturas;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn ElaboroColumn {
+                get {
+                    return this.columnElaboro;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn RevisoColumn {
+                get {
+                    return this.columnReviso;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn PuestoRevisoColumn {
+                get {
+                    return this.columnPuestoReviso;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn SupervisoColumn {
+                get {
+                    return this.columnSuperviso;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn PuestoSupervisoColumn {
+                get {
+                    return this.columnPuestoSuperviso;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn AutorizaColumn {
+                get {
+                    return this.columnAutoriza;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public sp_generaCedulaByServicioRow this[int index] {
+                get {
+                    return ((sp_generaCedulaByServicioRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public event sp_generaCedulaByServicioRowChangeEventHandler sp_generaCedulaByServicioRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public event sp_generaCedulaByServicioRowChangeEventHandler sp_generaCedulaByServicioRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public event sp_generaCedulaByServicioRowChangeEventHandler sp_generaCedulaByServicioRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public event sp_generaCedulaByServicioRowChangeEventHandler sp_generaCedulaByServicioRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Addsp_generaCedulaByServicioRow(sp_generaCedulaByServicioRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public sp_generaCedulaByServicioRow Addsp_generaCedulaByServicioRow(
+                        string Inmueble, 
+                        string Folio, 
+                        string Mes, 
+                        int Anio, 
+                        string Administracion, 
+                        string Servicio, 
+                        string Estatus, 
+                        decimal Calificacion, 
+                        string FechaCreacion, 
+                        string Facturas, 
+                        string MontosFacturas, 
+                        string Elaboro, 
+                        string Reviso, 
+                        string PuestoReviso, 
+                        string Superviso, 
+                        string PuestoSuperviso, 
+                        string Autoriza) {
+                sp_generaCedulaByServicioRow rowsp_generaCedulaByServicioRow = ((sp_generaCedulaByServicioRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        null,
+                        Inmueble,
+                        Folio,
+                        Mes,
+                        Anio,
+                        Administracion,
+                        Servicio,
+                        Estatus,
+                        Calificacion,
+                        FechaCreacion,
+                        Facturas,
+                        MontosFacturas,
+                        Elaboro,
+                        Reviso,
+                        PuestoReviso,
+                        Superviso,
+                        PuestoSuperviso,
+                        Autoriza};
+                rowsp_generaCedulaByServicioRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowsp_generaCedulaByServicioRow);
+                return rowsp_generaCedulaByServicioRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public sp_generaCedulaByServicioRow FindById(int Id) {
+                return ((sp_generaCedulaByServicioRow)(this.Rows.Find(new object[] {
+                            Id})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                sp_generaCedulaByServicioDataTable cln = ((sp_generaCedulaByServicioDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new sp_generaCedulaByServicioDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            internal void InitVars() {
+                this.columnId = base.Columns["Id"];
+                this.columnInmueble = base.Columns["Inmueble"];
+                this.columnFolio = base.Columns["Folio"];
+                this.columnMes = base.Columns["Mes"];
+                this.columnAnio = base.Columns["Anio"];
+                this.columnAdministracion = base.Columns["Administracion"];
+                this.columnServicio = base.Columns["Servicio"];
+                this.columnEstatus = base.Columns["Estatus"];
+                this.columnCalificacion = base.Columns["Calificacion"];
+                this.columnFechaCreacion = base.Columns["FechaCreacion"];
+                this.columnFacturas = base.Columns["Facturas"];
+                this.columnMontosFacturas = base.Columns["MontosFacturas"];
+                this.columnElaboro = base.Columns["Elaboro"];
+                this.columnReviso = base.Columns["Reviso"];
+                this.columnPuestoReviso = base.Columns["PuestoReviso"];
+                this.columnSuperviso = base.Columns["Superviso"];
+                this.columnPuestoSuperviso = base.Columns["PuestoSuperviso"];
+                this.columnAutoriza = base.Columns["Autoriza"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            private void InitClass() {
+                this.columnId = new global::System.Data.DataColumn("Id", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnId);
+                this.columnInmueble = new global::System.Data.DataColumn("Inmueble", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnInmueble);
+                this.columnFolio = new global::System.Data.DataColumn("Folio", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFolio);
+                this.columnMes = new global::System.Data.DataColumn("Mes", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMes);
+                this.columnAnio = new global::System.Data.DataColumn("Anio", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAnio);
+                this.columnAdministracion = new global::System.Data.DataColumn("Administracion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAdministracion);
+                this.columnServicio = new global::System.Data.DataColumn("Servicio", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnServicio);
+                this.columnEstatus = new global::System.Data.DataColumn("Estatus", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEstatus);
+                this.columnCalificacion = new global::System.Data.DataColumn("Calificacion", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCalificacion);
+                this.columnFechaCreacion = new global::System.Data.DataColumn("FechaCreacion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFechaCreacion);
+                this.columnFacturas = new global::System.Data.DataColumn("Facturas", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFacturas);
+                this.columnMontosFacturas = new global::System.Data.DataColumn("MontosFacturas", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMontosFacturas);
+                this.columnElaboro = new global::System.Data.DataColumn("Elaboro", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnElaboro);
+                this.columnReviso = new global::System.Data.DataColumn("Reviso", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnReviso);
+                this.columnPuestoReviso = new global::System.Data.DataColumn("PuestoReviso", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPuestoReviso);
+                this.columnSuperviso = new global::System.Data.DataColumn("Superviso", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSuperviso);
+                this.columnPuestoSuperviso = new global::System.Data.DataColumn("PuestoSuperviso", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPuestoSuperviso);
+                this.columnAutoriza = new global::System.Data.DataColumn("Autoriza", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAutoriza);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnId}, true));
+                this.columnId.AutoIncrement = true;
+                this.columnId.AllowDBNull = false;
+                this.columnId.ReadOnly = true;
+                this.columnId.Unique = true;
+                this.columnInmueble.MaxLength = 128;
+                this.columnFolio.AllowDBNull = false;
+                this.columnFolio.MaxLength = 50;
+                this.columnMes.AllowDBNull = false;
+                this.columnMes.MaxLength = 12;
+                this.columnAnio.AllowDBNull = false;
+                this.columnAdministracion.MaxLength = 128;
+                this.columnServicio.MaxLength = 50;
+                this.columnEstatus.MaxLength = 50;
+                this.columnCalificacion.AllowDBNull = false;
+                this.columnFechaCreacion.ReadOnly = true;
+                this.columnFechaCreacion.MaxLength = 62;
+                this.columnFacturas.ReadOnly = true;
+                this.columnFacturas.MaxLength = 8000;
+                this.columnMontosFacturas.ReadOnly = true;
+                this.columnMontosFacturas.MaxLength = 4000;
+                this.columnElaboro.ReadOnly = true;
+                this.columnElaboro.MaxLength = 386;
+                this.columnReviso.ReadOnly = true;
+                this.columnReviso.MaxLength = 386;
+                this.columnPuestoReviso.ReadOnly = true;
+                this.columnPuestoReviso.MaxLength = 64;
+                this.columnSuperviso.ReadOnly = true;
+                this.columnSuperviso.MaxLength = 386;
+                this.columnPuestoSuperviso.ReadOnly = true;
+                this.columnPuestoSuperviso.MaxLength = 64;
+                this.columnAutoriza.MaxLength = 100;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public sp_generaCedulaByServicioRow Newsp_generaCedulaByServicioRow() {
+                return ((sp_generaCedulaByServicioRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new sp_generaCedulaByServicioRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(sp_generaCedulaByServicioRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.sp_generaCedulaByServicioRowChanged != null)) {
+                    this.sp_generaCedulaByServicioRowChanged(this, new sp_generaCedulaByServicioRowChangeEvent(((sp_generaCedulaByServicioRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.sp_generaCedulaByServicioRowChanging != null)) {
+                    this.sp_generaCedulaByServicioRowChanging(this, new sp_generaCedulaByServicioRowChangeEvent(((sp_generaCedulaByServicioRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.sp_generaCedulaByServicioRowDeleted != null)) {
+                    this.sp_generaCedulaByServicioRowDeleted(this, new sp_generaCedulaByServicioRowChangeEvent(((sp_generaCedulaByServicioRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.sp_generaCedulaByServicioRowDeleting != null)) {
+                    this.sp_generaCedulaByServicioRowDeleting(this, new sp_generaCedulaByServicioRowChangeEvent(((sp_generaCedulaByServicioRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Removesp_generaCedulaByServicioRow(sp_generaCedulaByServicioRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                DtGeneraCedulaByServicio ds = new DtGeneraCedulaByServicio();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "sp_generaCedulaByServicioDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
                     try {
-                        return ((string)(this[this.tablesp_generaCedulaByServicio.InmuebleColumn]));
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
                     }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Inmueble\' de la tabla \'sp_generaCedulaByServicio\' es DBNu" +
-                                "ll.", e);
-                    }
-                }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.InmuebleColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Folio {
-                get {
-                    return ((string)(this[this.tablesp_generaCedulaByServicio.FolioColumn]));
-                }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.FolioColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Mes {
-                get {
-                    return ((string)(this[this.tablesp_generaCedulaByServicio.MesColumn]));
-                }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.MesColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public int Anio {
-                get {
-                    return ((int)(this[this.tablesp_generaCedulaByServicio.AnioColumn]));
-                }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.AnioColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Administracion {
-                get {
-                    try {
-                        return ((string)(this[this.tablesp_generaCedulaByServicio.AdministracionColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Administracion\' de la tabla \'sp_generaCedulaByServicio\' e" +
-                                "s DBNull.", e);
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
                     }
                 }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.AdministracionColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Servicio {
-                get {
-                    try {
-                        return ((string)(this[this.tablesp_generaCedulaByServicio.ServicioColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Servicio\' de la tabla \'sp_generaCedulaByServicio\' es DBNu" +
-                                "ll.", e);
-                    }
-                }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.ServicioColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Estatus {
-                get {
-                    try {
-                        return ((string)(this[this.tablesp_generaCedulaByServicio.EstatusColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Estatus\' de la tabla \'sp_generaCedulaByServicio\' es DBNul" +
-                                "l.", e);
-                    }
-                }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.EstatusColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Calificacion {
-                get {
-                    try {
-                        return ((string)(this[this.tablesp_generaCedulaByServicio.CalificacionColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Calificacion\' de la tabla \'sp_generaCedulaByServicio\' es " +
-                                "DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.CalificacionColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string FechaCreacion {
-                get {
-                    try {
-                        return ((string)(this[this.tablesp_generaCedulaByServicio.FechaCreacionColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'FechaCreacion\' de la tabla \'sp_generaCedulaByServicio\' es" +
-                                " DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.FechaCreacionColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Facturas {
-                get {
-                    try {
-                        return ((string)(this[this.tablesp_generaCedulaByServicio.FacturasColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Facturas\' de la tabla \'sp_generaCedulaByServicio\' es DBNu" +
-                                "ll.", e);
-                    }
-                }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.FacturasColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string MontosFacturas {
-                get {
-                    try {
-                        return ((string)(this[this.tablesp_generaCedulaByServicio.MontosFacturasColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'MontosFacturas\' de la tabla \'sp_generaCedulaByServicio\' e" +
-                                "s DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablesp_generaCedulaByServicio.MontosFacturasColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsInmuebleNull() {
-                return this.IsNull(this.tablesp_generaCedulaByServicio.InmuebleColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetInmuebleNull() {
-                this[this.tablesp_generaCedulaByServicio.InmuebleColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsAdministracionNull() {
-                return this.IsNull(this.tablesp_generaCedulaByServicio.AdministracionColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetAdministracionNull() {
-                this[this.tablesp_generaCedulaByServicio.AdministracionColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsServicioNull() {
-                return this.IsNull(this.tablesp_generaCedulaByServicio.ServicioColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetServicioNull() {
-                this[this.tablesp_generaCedulaByServicio.ServicioColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsEstatusNull() {
-                return this.IsNull(this.tablesp_generaCedulaByServicio.EstatusColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetEstatusNull() {
-                this[this.tablesp_generaCedulaByServicio.EstatusColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsCalificacionNull() {
-                return this.IsNull(this.tablesp_generaCedulaByServicio.CalificacionColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetCalificacionNull() {
-                this[this.tablesp_generaCedulaByServicio.CalificacionColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsFechaCreacionNull() {
-                return this.IsNull(this.tablesp_generaCedulaByServicio.FechaCreacionColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetFechaCreacionNull() {
-                this[this.tablesp_generaCedulaByServicio.FechaCreacionColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsFacturasNull() {
-                return this.IsNull(this.tablesp_generaCedulaByServicio.FacturasColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetFacturasNull() {
-                this[this.tablesp_generaCedulaByServicio.FacturasColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsMontosFacturasNull() {
-                return this.IsNull(this.tablesp_generaCedulaByServicio.MontosFacturasColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetMontosFacturasNull() {
-                this[this.tablesp_generaCedulaByServicio.MontosFacturasColumn] = global::System.Convert.DBNull;
+                xs.Add(dsSchema);
+                return type;
             }
         }
         
@@ -15623,36 +15443,449 @@ namespace CASESGCedulasEvaluacion {
         }
         
         /// <summary>
-        ///Row event argument class
+        ///Represents strongly named DataRow class.
         ///</summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public class sp_generaCedulaByServicioRowChangeEvent : global::System.EventArgs {
+        public partial class sp_generaCedulaByServicioRow : global::System.Data.DataRow {
             
-            private sp_generaCedulaByServicioRow eventRow;
-            
-            private global::System.Data.DataRowAction eventAction;
+            private sp_generaCedulaByServicioDataTable tablesp_generaCedulaByServicio;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_generaCedulaByServicioRowChangeEvent(sp_generaCedulaByServicioRow row, global::System.Data.DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
+            internal sp_generaCedulaByServicioRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tablesp_generaCedulaByServicio = ((sp_generaCedulaByServicioDataTable)(this.Table));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public sp_generaCedulaByServicioRow Row {
+            public int Id {
                 get {
-                    return this.eventRow;
+                    return ((int)(this[this.tablesp_generaCedulaByServicio.IdColumn]));
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.IdColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataRowAction Action {
+            public string Inmueble {
                 get {
-                    return this.eventAction;
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.InmuebleColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Inmueble\' de la tabla \'sp_generaCedulaByServicio\' es DBNu" +
+                                "ll.", e);
+                    }
                 }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.InmuebleColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Folio {
+                get {
+                    return ((string)(this[this.tablesp_generaCedulaByServicio.FolioColumn]));
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.FolioColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Mes {
+                get {
+                    return ((string)(this[this.tablesp_generaCedulaByServicio.MesColumn]));
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.MesColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public int Anio {
+                get {
+                    return ((int)(this[this.tablesp_generaCedulaByServicio.AnioColumn]));
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.AnioColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Administracion {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.AdministracionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Administracion\' de la tabla \'sp_generaCedulaByServicio\' e" +
+                                "s DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.AdministracionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Servicio {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.ServicioColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Servicio\' de la tabla \'sp_generaCedulaByServicio\' es DBNu" +
+                                "ll.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.ServicioColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Estatus {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.EstatusColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Estatus\' de la tabla \'sp_generaCedulaByServicio\' es DBNul" +
+                                "l.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.EstatusColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public decimal Calificacion {
+                get {
+                    return ((decimal)(this[this.tablesp_generaCedulaByServicio.CalificacionColumn]));
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.CalificacionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string FechaCreacion {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.FechaCreacionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'FechaCreacion\' de la tabla \'sp_generaCedulaByServicio\' es" +
+                                " DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.FechaCreacionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Facturas {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.FacturasColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Facturas\' de la tabla \'sp_generaCedulaByServicio\' es DBNu" +
+                                "ll.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.FacturasColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string MontosFacturas {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.MontosFacturasColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'MontosFacturas\' de la tabla \'sp_generaCedulaByServicio\' e" +
+                                "s DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.MontosFacturasColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Elaboro {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.ElaboroColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Elaboro\' de la tabla \'sp_generaCedulaByServicio\' es DBNul" +
+                                "l.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.ElaboroColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Reviso {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.RevisoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Reviso\' de la tabla \'sp_generaCedulaByServicio\' es DBNull" +
+                                ".", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.RevisoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string PuestoReviso {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.PuestoRevisoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'PuestoReviso\' de la tabla \'sp_generaCedulaByServicio\' es " +
+                                "DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.PuestoRevisoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Superviso {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.SupervisoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Superviso\' de la tabla \'sp_generaCedulaByServicio\' es DBN" +
+                                "ull.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.SupervisoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string PuestoSuperviso {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.PuestoSupervisoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'PuestoSuperviso\' de la tabla \'sp_generaCedulaByServicio\' " +
+                                "es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.PuestoSupervisoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Autoriza {
+                get {
+                    try {
+                        return ((string)(this[this.tablesp_generaCedulaByServicio.AutorizaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Autoriza\' de la tabla \'sp_generaCedulaByServicio\' es DBNu" +
+                                "ll.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_generaCedulaByServicio.AutorizaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsInmuebleNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.InmuebleColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetInmuebleNull() {
+                this[this.tablesp_generaCedulaByServicio.InmuebleColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsAdministracionNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.AdministracionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetAdministracionNull() {
+                this[this.tablesp_generaCedulaByServicio.AdministracionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsServicioNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.ServicioColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetServicioNull() {
+                this[this.tablesp_generaCedulaByServicio.ServicioColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsEstatusNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.EstatusColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetEstatusNull() {
+                this[this.tablesp_generaCedulaByServicio.EstatusColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsFechaCreacionNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.FechaCreacionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetFechaCreacionNull() {
+                this[this.tablesp_generaCedulaByServicio.FechaCreacionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsFacturasNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.FacturasColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetFacturasNull() {
+                this[this.tablesp_generaCedulaByServicio.FacturasColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsMontosFacturasNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.MontosFacturasColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetMontosFacturasNull() {
+                this[this.tablesp_generaCedulaByServicio.MontosFacturasColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsElaboroNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.ElaboroColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetElaboroNull() {
+                this[this.tablesp_generaCedulaByServicio.ElaboroColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsRevisoNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.RevisoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetRevisoNull() {
+                this[this.tablesp_generaCedulaByServicio.RevisoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsPuestoRevisoNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.PuestoRevisoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetPuestoRevisoNull() {
+                this[this.tablesp_generaCedulaByServicio.PuestoRevisoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsSupervisoNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.SupervisoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetSupervisoNull() {
+                this[this.tablesp_generaCedulaByServicio.SupervisoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsPuestoSupervisoNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.PuestoSupervisoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetPuestoSupervisoNull() {
+                this[this.tablesp_generaCedulaByServicio.PuestoSupervisoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsAutorizaNull() {
+                return this.IsNull(this.tablesp_generaCedulaByServicio.AutorizaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetAutorizaNull() {
+                this[this.tablesp_generaCedulaByServicio.AutorizaColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -16471,216 +16704,44 @@ namespace CASESGCedulasEvaluacion {
                 }
             }
         }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        public class sp_generaCedulaByServicioRowChangeEvent : global::System.EventArgs {
+            
+            private sp_generaCedulaByServicioRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public sp_generaCedulaByServicioRowChangeEvent(sp_generaCedulaByServicioRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public sp_generaCedulaByServicioRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
     }
 }
 namespace CASESGCedulasEvaluacion.DtGeneraCedulaByServicioTableAdapters {
     
-    
-    /// <summary>
-    ///Represents the connection and commands used to retrieve and save data.
-    ///</summary>
-    [global::System.ComponentModel.DesignerCategoryAttribute("code")]
-    [global::System.ComponentModel.ToolboxItem(true)]
-    [global::System.ComponentModel.DataObjectAttribute(true)]
-    [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
-        ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
-    [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-    public partial class sp_generaCedulaByServicioTableAdapter : global::System.ComponentModel.Component {
-        
-        private global::System.Data.SqlClient.SqlDataAdapter _adapter;
-        
-        private global::System.Data.SqlClient.SqlConnection _connection;
-        
-        private global::System.Data.SqlClient.SqlTransaction _transaction;
-        
-        private global::System.Data.SqlClient.SqlCommand[] _commandCollection;
-        
-        private bool _clearBeforeFill;
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public sp_generaCedulaByServicioTableAdapter() {
-            this.ClearBeforeFill = true;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        protected internal global::System.Data.SqlClient.SqlDataAdapter Adapter {
-            get {
-                if ((this._adapter == null)) {
-                    this.InitAdapter();
-                }
-                return this._adapter;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        internal global::System.Data.SqlClient.SqlConnection Connection {
-            get {
-                if ((this._connection == null)) {
-                    this.InitConnection();
-                }
-                return this._connection;
-            }
-            set {
-                this._connection = value;
-                if ((this.Adapter.InsertCommand != null)) {
-                    this.Adapter.InsertCommand.Connection = value;
-                }
-                if ((this.Adapter.DeleteCommand != null)) {
-                    this.Adapter.DeleteCommand.Connection = value;
-                }
-                if ((this.Adapter.UpdateCommand != null)) {
-                    this.Adapter.UpdateCommand.Connection = value;
-                }
-                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
-                    if ((this.CommandCollection[i] != null)) {
-                        ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[i])).Connection = value;
-                    }
-                }
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        internal global::System.Data.SqlClient.SqlTransaction Transaction {
-            get {
-                return this._transaction;
-            }
-            set {
-                this._transaction = value;
-                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
-                    this.CommandCollection[i].Transaction = this._transaction;
-                }
-                if (((this.Adapter != null) 
-                            && (this.Adapter.DeleteCommand != null))) {
-                    this.Adapter.DeleteCommand.Transaction = this._transaction;
-                }
-                if (((this.Adapter != null) 
-                            && (this.Adapter.InsertCommand != null))) {
-                    this.Adapter.InsertCommand.Transaction = this._transaction;
-                }
-                if (((this.Adapter != null) 
-                            && (this.Adapter.UpdateCommand != null))) {
-                    this.Adapter.UpdateCommand.Transaction = this._transaction;
-                }
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        protected global::System.Data.SqlClient.SqlCommand[] CommandCollection {
-            get {
-                if ((this._commandCollection == null)) {
-                    this.InitCommandCollection();
-                }
-                return this._commandCollection;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public bool ClearBeforeFill {
-            get {
-                return this._clearBeforeFill;
-            }
-            set {
-                this._clearBeforeFill = value;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private void InitAdapter() {
-            this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
-            global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
-            tableMapping.SourceTable = "Table";
-            tableMapping.DataSetTable = "sp_generaCedulaByServicio";
-            tableMapping.ColumnMappings.Add("Id", "Id");
-            tableMapping.ColumnMappings.Add("Inmueble", "Inmueble");
-            tableMapping.ColumnMappings.Add("Folio", "Folio");
-            tableMapping.ColumnMappings.Add("Mes", "Mes");
-            tableMapping.ColumnMappings.Add("Anio", "Anio");
-            tableMapping.ColumnMappings.Add("Administracion", "Administracion");
-            tableMapping.ColumnMappings.Add("Servicio", "Servicio");
-            tableMapping.ColumnMappings.Add("Estatus", "Estatus");
-            tableMapping.ColumnMappings.Add("Calificacion", "Calificacion");
-            tableMapping.ColumnMappings.Add("FechaCreacion", "FechaCreacion");
-            tableMapping.ColumnMappings.Add("Facturas", "Facturas");
-            tableMapping.ColumnMappings.Add("MontosFacturas", "MontosFacturas");
-            this._adapter.TableMappings.Add(tableMapping);
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private void InitConnection() {
-            this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = "Data Source=10.100.66.26;Initial Catalog=CedulasEvaluacionV2;Persist Security Inf" +
-                "o=True;User ID=sa;Password=yael.123";
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
-            this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
-            this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "dbo.sp_generaCedulaByServicio";
-            this._commandCollection[0].CommandType = global::System.Data.CommandType.StoredProcedure;
-            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@servicio", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(DtGeneraCedulaByServicio.sp_generaCedulaByServicioDataTable dataTable, global::System.Nullable<int> id, global::System.Nullable<int> servicio) {
-            this.Adapter.SelectCommand = this.CommandCollection[0];
-            if ((id.HasValue == true)) {
-                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(id.Value));
-            }
-            else {
-                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
-            }
-            if ((servicio.HasValue == true)) {
-                this.Adapter.SelectCommand.Parameters[2].Value = ((int)(servicio.Value));
-            }
-            else {
-                this.Adapter.SelectCommand.Parameters[2].Value = global::System.DBNull.Value;
-            }
-            if ((this.ClearBeforeFill == true)) {
-                dataTable.Clear();
-            }
-            int returnValue = this.Adapter.Fill(dataTable);
-            return returnValue;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual DtGeneraCedulaByServicio.sp_generaCedulaByServicioDataTable GetData(global::System.Nullable<int> id, global::System.Nullable<int> servicio) {
-            this.Adapter.SelectCommand = this.CommandCollection[0];
-            if ((id.HasValue == true)) {
-                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(id.Value));
-            }
-            else {
-                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
-            }
-            if ((servicio.HasValue == true)) {
-                this.Adapter.SelectCommand.Parameters[2].Value = ((int)(servicio.Value));
-            }
-            else {
-                this.Adapter.SelectCommand.Parameters[2].Value = global::System.DBNull.Value;
-            }
-            DtGeneraCedulaByServicio.sp_generaCedulaByServicioDataTable dataTable = new DtGeneraCedulaByServicio.sp_generaCedulaByServicioDataTable();
-            this.Adapter.Fill(dataTable);
-            return dataTable;
-        }
-    }
     
     /// <summary>
     ///Represents the connection and commands used to retrieve and save data.
@@ -21405,6 +21466,218 @@ namespace CASESGCedulasEvaluacion.DtGeneraCedulaByServicioTableAdapters {
                 this.Adapter.SelectCommand.Parameters[2].Value = global::System.DBNull.Value;
             }
             DtGeneraCedulaByServicio.sp_generaReporteMensualPATDataTable dataTable = new DtGeneraCedulaByServicio.sp_generaReporteMensualPATDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+    }
+    
+    /// <summary>
+    ///Represents the connection and commands used to retrieve and save data.
+    ///</summary>
+    [global::System.ComponentModel.DesignerCategoryAttribute("code")]
+    [global::System.ComponentModel.ToolboxItem(true)]
+    [global::System.ComponentModel.DataObjectAttribute(true)]
+    [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
+        ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+    public partial class sp_generaCedulaByServicioTableAdapter : global::System.ComponentModel.Component {
+        
+        private global::System.Data.SqlClient.SqlDataAdapter _adapter;
+        
+        private global::System.Data.SqlClient.SqlConnection _connection;
+        
+        private global::System.Data.SqlClient.SqlTransaction _transaction;
+        
+        private global::System.Data.SqlClient.SqlCommand[] _commandCollection;
+        
+        private bool _clearBeforeFill;
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        public sp_generaCedulaByServicioTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        protected internal global::System.Data.SqlClient.SqlDataAdapter Adapter {
+            get {
+                if ((this._adapter == null)) {
+                    this.InitAdapter();
+                }
+                return this._adapter;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        internal global::System.Data.SqlClient.SqlConnection Connection {
+            get {
+                if ((this._connection == null)) {
+                    this.InitConnection();
+                }
+                return this._connection;
+            }
+            set {
+                this._connection = value;
+                if ((this.Adapter.InsertCommand != null)) {
+                    this.Adapter.InsertCommand.Connection = value;
+                }
+                if ((this.Adapter.DeleteCommand != null)) {
+                    this.Adapter.DeleteCommand.Connection = value;
+                }
+                if ((this.Adapter.UpdateCommand != null)) {
+                    this.Adapter.UpdateCommand.Connection = value;
+                }
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    if ((this.CommandCollection[i] != null)) {
+                        ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[i])).Connection = value;
+                    }
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        internal global::System.Data.SqlClient.SqlTransaction Transaction {
+            get {
+                return this._transaction;
+            }
+            set {
+                this._transaction = value;
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    this.CommandCollection[i].Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.DeleteCommand != null))) {
+                    this.Adapter.DeleteCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.InsertCommand != null))) {
+                    this.Adapter.InsertCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.UpdateCommand != null))) {
+                    this.Adapter.UpdateCommand.Transaction = this._transaction;
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        protected global::System.Data.SqlClient.SqlCommand[] CommandCollection {
+            get {
+                if ((this._commandCollection == null)) {
+                    this.InitCommandCollection();
+                }
+                return this._commandCollection;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        public bool ClearBeforeFill {
+            get {
+                return this._clearBeforeFill;
+            }
+            set {
+                this._clearBeforeFill = value;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        private void InitAdapter() {
+            this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
+            global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
+            tableMapping.SourceTable = "Table";
+            tableMapping.DataSetTable = "sp_generaCedulaByServicio";
+            tableMapping.ColumnMappings.Add("Id", "Id");
+            tableMapping.ColumnMappings.Add("Inmueble", "Inmueble");
+            tableMapping.ColumnMappings.Add("Folio", "Folio");
+            tableMapping.ColumnMappings.Add("Mes", "Mes");
+            tableMapping.ColumnMappings.Add("Anio", "Anio");
+            tableMapping.ColumnMappings.Add("Administracion", "Administracion");
+            tableMapping.ColumnMappings.Add("Servicio", "Servicio");
+            tableMapping.ColumnMappings.Add("Estatus", "Estatus");
+            tableMapping.ColumnMappings.Add("Calificacion", "Calificacion");
+            tableMapping.ColumnMappings.Add("FechaCreacion", "FechaCreacion");
+            tableMapping.ColumnMappings.Add("Facturas", "Facturas");
+            tableMapping.ColumnMappings.Add("MontosFacturas", "MontosFacturas");
+            tableMapping.ColumnMappings.Add("Elaboro", "Elaboro");
+            tableMapping.ColumnMappings.Add("Reviso", "Reviso");
+            tableMapping.ColumnMappings.Add("PuestoReviso", "PuestoReviso");
+            tableMapping.ColumnMappings.Add("Superviso", "Superviso");
+            tableMapping.ColumnMappings.Add("PuestoSuperviso", "PuestoSuperviso");
+            tableMapping.ColumnMappings.Add("Autoriza", "Autoriza");
+            this._adapter.TableMappings.Add(tableMapping);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        private void InitConnection() {
+            this._connection = new global::System.Data.SqlClient.SqlConnection();
+            this._connection.ConnectionString = "Data Source=10.100.66.26;Initial Catalog=CedulasEvaluacionV2;Persist Security Inf" +
+                "o=True;User ID=sa;Password=yael.123";
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        private void InitCommandCollection() {
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[0].Connection = this.Connection;
+            this._commandCollection[0].CommandText = "dbo.sp_generaCedulaByServicio";
+            this._commandCollection[0].CommandType = global::System.Data.CommandType.StoredProcedure;
+            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@servicio", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
+        public virtual int Fill(DtGeneraCedulaByServicio.sp_generaCedulaByServicioDataTable dataTable, global::System.Nullable<int> id, global::System.Nullable<int> servicio) {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            if ((id.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(id.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            if ((servicio.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[2].Value = ((int)(servicio.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
+        public virtual DtGeneraCedulaByServicio.sp_generaCedulaByServicioDataTable GetData(global::System.Nullable<int> id, global::System.Nullable<int> servicio) {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            if ((id.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(id.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            if ((servicio.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[2].Value = ((int)(servicio.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            DtGeneraCedulaByServicio.sp_generaCedulaByServicioDataTable dataTable = new DtGeneraCedulaByServicio.sp_generaCedulaByServicioDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }

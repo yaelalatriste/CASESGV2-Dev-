@@ -348,6 +348,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Tipo de Xml</th>
                                         <th>Empresa</th>
                                         <th>Folio Fiscal</th>
                                         <th>Número Factura</th>
@@ -1174,6 +1175,7 @@
                         for (var i = 0; i < facturas.length; i++) {
                             table += "<tr>" +
                                 "<td>" + (i + 1) + "</td>" +
+                                "<td>" + (facturas[i].tipo == "NC" ? "Nota de Crédito" : facturas[i].tipo)+ "</td>" +
                                 "<td>" + facturas[i].emisor.nombre + "</td>" +
                                 "<td>" + facturas[i].timbreFiscal.uuid + "</td>" +
                                 "<td>" + (facturas[i].comprobante.serie + "" + facturas[i].comprobante.folio) + "</td>" +

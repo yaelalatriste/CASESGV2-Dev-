@@ -373,7 +373,7 @@
                                         <td>@hist.usuarios.nombre_emp @hist.usuarios.paterno_emp @hist.usuarios.materno_emp</td>
                                         <td>@hist.Comentarios</td>
                                         <td>@hist.Estatus</td>
-                                        <td>@hist.FechaCreacion</td>
+                                        <td>@Convert.ToDateTime(@hist.FechaCreacion).ToString("dd/MM/yyyy")</td>
                                     </tr>
                                 }
                             </tbody>
@@ -407,7 +407,7 @@
                                         <td>@hist.usuarios.nombre_emp @hist.usuarios.paterno_emp @hist.usuarios.materno_emp</td>
                                         <td>@hist.Comentarios</td>
                                         <td>@hist.Estatus</td>
-                                        <td>@hist.FechaCreacion</td>
+                                        <td>@Convert.ToDateTime(@hist.FechaCreacion).ToString("dd/MM/yyyy")</td>
                                     </tr>
                                 }
                             </tbody>
@@ -776,7 +776,7 @@
                                 cancelButtonColor: '#d33',
                                 cancelButtonText: 'Cancelar',
                                 confirmButtonText: 'Rechazar',
-                                input: 'text',
+                                input: 'textarea',
                                 inputPlaceholder: 'Escriba los comentarios correspondientes'
                             }).then(send => {
                                 if (send.value.length > 0) {
@@ -915,7 +915,7 @@
                             cancelButtonColor: '#d33',
                             cancelButtonText: 'Cancelar',
                             confirmButtonText: 'Rechazar',
-                            input: 'text',
+                            input: 'textarea',
                             inputPlaceholder: 'Escriba los comentarios correspondientes'
                         }).then(send => {
                             if (send.value.length > 0) {
@@ -987,7 +987,7 @@
             }
 
                 $("#btn_facturas").click(function () {
-                    axios.get('/limpieza/getFacturas/' + model.id+'/'+7).then(table => {
+                    axios.get('/limpieza/getFacturas/' + model.id+'/'+8).then(table => {
                         var facturas = table.data;
                         console.log(facturas);
                         for (var i = 0; i < facturas.length; i++) {
@@ -1017,7 +1017,7 @@
                 var id = $(this).data('id');
                 var divTbl = "";
                 $('#modal-ver-facturas').modal('hide');
-                axios.get('/limpieza/getFacturas/' + model.id + '/' + 7).then(table => {
+                axios.get('/limpieza/getFacturas/' + model.id + '/' + 8).then(table => {
                     $("#factura_serie").text("Detalle de la Factura: " + table.data[id].comprobante.serie + table.data[id].comprobante.folio);
                     var conceptos = table.data[id].concepto;
 

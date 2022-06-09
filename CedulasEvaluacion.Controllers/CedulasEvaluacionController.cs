@@ -23,6 +23,7 @@ using CedulasEvaluacion.Entities.MResiduos;
 using CedulasEvaluacion.Entities.MAnalisis;
 using CedulasEvaluacion.Entities.MTransporte;
 using CedulasEvaluacion.Entities.TrasladoExp;
+using CedulasEvaluacion.Entities.MCedula;
 
 namespace CedulasEvaluacion.Controllers
 {
@@ -256,6 +257,7 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaLimpieza", cedulas));
+            local.SetParameters(new[] { new ReportParameter("elaboro", ((List<ReporteCedula>)cedulas)[0].Elaboro+"") });
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }
@@ -337,7 +339,7 @@ namespace CedulasEvaluacion.Controllers
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El reporte de servicios se entregó el" +
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El reporte de servicios se entregó " +
                             "el " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
                                    " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " +
                                    Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".")});
@@ -375,6 +377,7 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaFumigacion", cedulas));
+            local.SetParameters(new[] { new ReportParameter("elaboro", ((List<ReporteCedula>)cedulas)[0].Elaboro + "") });
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }
@@ -707,6 +710,7 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaResiduos", cedulas));
+            local.SetParameters(new[] { new ReportParameter("elaboro", ((List<ReporteCedula>)cedulas)[0].Elaboro + "") });
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }
@@ -745,6 +749,7 @@ namespace CedulasEvaluacion.Controllers
                 else if (i == 2)
                 {
                     incidencias = await iAnalisis.GetIncidenciasPregunta(id, respuestas[i].Pregunta);
+                    local.DataSources.Add(new ReportDataSource("IncidenciasAnalisis", incidencias));
                     if (respuestas[i].Respuesta == false)
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de servicio no cumplió con la maquinaria, equipo o  herramientas necesarias para prestar el servicio, se describen las incidencias: .") });
@@ -753,7 +758,6 @@ namespace CedulasEvaluacion.Controllers
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de servicio cumplió con la maquinaria, equipo o  herramientas necesarias para prestar el servicio.") });
                     }
-                    local.DataSources.Add(new ReportDataSource("IncidenciasAnalisis", incidencias));
                 }
                 else if (i == 3)
                 {
@@ -804,6 +808,7 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaAnalisis", cedulas));
+            local.SetParameters(new[] { new ReportParameter("elaboro", ((List<ReporteCedula>)cedulas)[0].Elaboro + "") });
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }
@@ -918,10 +923,22 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/cedula/verificaFirmante/{tipo}/{user}")]
-        public async Task<IActionResult> VerificaFirmante(string tipo, int user)
+        [Route("/cedula/verificaFirmante/{tipo}/{inmueble}/{servicio}")]
+        public async Task<IActionResult> VerificaFirmante(string tipo, int inmueble, int servicio)
         {
-            int exists = await vFirmas.GetVerificaFirmantes(tipo,user);
+            int exists = await vFirmas.GetVerificaFirmantes(tipo,inmueble,servicio);
+            if (exists != -1)
+            {
+                return Ok(exists);
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("/cedula/insertaFirmante")]
+        public async Task<IActionResult> insertaFirmante([FromBody] FirmantesServicio firmante)
+        {
+            int exists = await vFirmas.insertaFirmante(firmante);
             if (exists != -1)
             {
                 return Ok(exists);

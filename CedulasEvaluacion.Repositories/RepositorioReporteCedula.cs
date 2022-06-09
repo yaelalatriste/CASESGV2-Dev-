@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -163,6 +164,12 @@ namespace CedulasEvaluacion.Repositories
                 FechaCreacion = reader["FechaCreacion"].ToString(),
                 Facturas = reader["Facturas"].ToString(),
                 MontosFacturas = reader["MontosFacturas"].ToString(),
+                Autoriza = reader["Autoriza"].ToString().Equals("C.P. Elizabeth Carreón Rios") || reader["Autoriza"].ToString().Equals("Lic. Mayte Itzel Vite Villa") ? CultureInfo.InvariantCulture.TextInfo.ToTitleCase(CultureInfo.InvariantCulture.TextInfo.ToLower(reader["Autoriza"].ToString())+ "\n ADMINISTRADORA") : CultureInfo.InvariantCulture.TextInfo.ToTitleCase(CultureInfo.InvariantCulture.TextInfo.ToLower(reader["Autoriza"].ToString()) + "\n ADMINISTRADOR"),
+                Reviso = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(CultureInfo.InvariantCulture.TextInfo.ToLower(reader["Reviso"].ToString())),
+                PuestoReviso = reader["PuestoReviso"].ToString(),
+                Superviso = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(CultureInfo.InvariantCulture.TextInfo.ToLower(reader["Superviso"].ToString())),
+                PuestoSuperviso = reader["PuestoSuperviso"].ToString(),
+                Elaboro = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(CultureInfo.InvariantCulture.TextInfo.ToLower(reader["Elaboro"].ToString())),
             };
         }
         private ReporteFinancieros MapToValueFinancieros(SqlDataReader reader)

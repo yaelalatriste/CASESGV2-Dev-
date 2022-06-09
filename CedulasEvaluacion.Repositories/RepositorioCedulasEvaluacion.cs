@@ -1,4 +1,5 @@
-﻿using CedulasEvaluacion.Entities.Models;
+﻿using CedulasEvaluacion.Entities.MCedula;
+using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +19,6 @@ namespace CedulasEvaluacion.Repositories
         {
             _connectionString = configuration.GetConnectionString("DatabaseConnection"); ;
         }
-
         public async Task<List<Usuarios>> GetUsuariosByAdministracion(int user)
         {
             try
@@ -50,8 +50,7 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
-        public async Task<int> GetVerificaFirmantes(string tipo,int user)
+        public async Task<int> GetVerificaFirmantes(string tipo,int inmueble,int servicio)
         {
             int r = 0;
             try
@@ -61,7 +60,8 @@ namespace CedulasEvaluacion.Repositories
                     using (SqlCommand cmd = new SqlCommand("sp_getFirmanteTipo", sql))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@usuario", user));
+                        cmd.Parameters.Add(new SqlParameter("@inmueble", inmueble));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
                         cmd.Parameters.Add(new SqlParameter("@tipo", tipo));
                         var response = new List<Usuarios>();
                         await sql.OpenAsync();
@@ -74,6 +74,34 @@ namespace CedulasEvaluacion.Repositories
                             }
                             return r;
                         }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return -1;
+            }
+        }
+        public async Task<int> insertaFirmante(FirmantesServicio firmante)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_insertaFirmanteByCedula", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", firmante.Id)).Direction = ParameterDirection.Output;
+                        cmd.Parameters.Add(new SqlParameter("@usuario", firmante.UsuarioId));
+                        cmd.Parameters.Add(new SqlParameter("@inmueble", firmante.InmuebleId));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", firmante.ServicioId));
+                        cmd.Parameters.Add(new SqlParameter("@tipo", firmante.Tipo));
+
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+                        int id = Convert.ToInt32(cmd.Parameters["@id"].Value);
+                        return id;
                     }
                 }
             }

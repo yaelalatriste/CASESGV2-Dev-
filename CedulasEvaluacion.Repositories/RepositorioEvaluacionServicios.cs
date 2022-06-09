@@ -503,6 +503,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 Id = (int)reader["Id"],
                 ServicioId = (int)reader["ServicioId"],
+                InmuebleId = (int)reader["InmuebleId"],
                 Folio = reader["Folio"].ToString(),
                 Nombre = reader["Nombre"].ToString(),
                 Destino = reader["Destino"].ToString(),
