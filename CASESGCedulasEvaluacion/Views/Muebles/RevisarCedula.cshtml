@@ -258,12 +258,12 @@
                         </div>
                     </div>
                 }
-                else
+                else if (@Model.RespuestasEncuesta[1].Respuesta == false && @Model.RespuestasEncuesta[1].Detalles == "N/A")
                 {
                     <div class="row mt-4">
                         <div class="row col-lg-12 mt-3">
                             <div class="col-lg-9 mt-3 ml-4">
-                                <p class="h3 text-justify text-success">El prestador de servicios cumplió con la maquinaria, equipo y herramientas necesarias para prestar el servicio, evitando la penalización correspondiente.</p>
+                                <p class="h3 text-justify text-success">No aplica.</p>
                             </div>
                             <div class="col-lg-2" style="margin-top: -18px;">
                                 <div class="small-box bg-warning">
@@ -281,6 +281,30 @@
                             </h5>
                         </div>
                     </div>
+                }
+                else
+                {
+                <div class="row mt-4">
+                    <div class="row col-lg-12 mt-3">
+                        <div class="col-lg-9 mt-3 ml-4">
+                            <p class="h3 text-justify text-success">El prestador de servicios cumplió con la maquinaria, equipo y herramientas necesarias para prestar el servicio, evitando la penalización correspondiente.</p>
+                        </div>
+                        <div class="col-lg-2" style="margin-top: -18px;">
+                            <div class="small-box bg-warning">
+                                <div class="icon">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-12">
+                        <h5 class="text-success ml-4">
+                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
+                        </h5>
+                    </div>
+                </div>
                 }
             </div>
             <div class="tab-pane fade" id="transporte" role="tabpanel" aria-labelledby="profile-tab">
@@ -309,6 +333,30 @@
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
                                 <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
+                            </h5>
+                        </div>
+                    </div>
+                }
+                else if (@Model.RespuestasEncuesta[2].Respuesta == false && @Model.RespuestasEncuesta[2].Detalles == "N/A")
+                {
+                    <div class="row mt-4">
+                        <div class="row col-lg-12 mt-3">
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <p class="h3 text-justify text-success">No aplica.</p>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: -18px;">
+                                <div class="small-box bg-warning">
+                                    <div class="icon">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5 class="text-success ml-4">
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>
@@ -342,7 +390,7 @@
                 <div class="col-lg-12 h3 mt-4">
                     Personal Solicitado
                 </div>
-                @if (@Model.RespuestasEncuesta[3].Respuesta == false)
+                @if (@Model.RespuestasEncuesta[3].Respuesta == false && @Model.RespuestasEncuesta[3].Detalles != "N/A")
                 {
                     string pSolicitadas = @Model.RespuestasEncuesta[3].Detalles.Split("|")[0];
                     string pBrindadas = @Model.RespuestasEncuesta[3].Detalles.Split("|")[1];
@@ -366,6 +414,30 @@
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
+                            </h5>
+                        </div>
+                    </div>
+                }
+                else if (@Model.RespuestasEncuesta[3].Respuesta == false && @Model.RespuestasEncuesta[3].Detalles == "N/A")
+                {
+                    <div class="row mt-4">
+                        <div class="row col-lg-12 mt-3">
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <p class="h3 text-justify text-success">No aplica.</p>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: -18px;">
+                                <div class="small-box bg-warning">
+                                    <div class="icon">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5 class="text-success ml-4">
                                 <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                             </h5>
                         </div>
