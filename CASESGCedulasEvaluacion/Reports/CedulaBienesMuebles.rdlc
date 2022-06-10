@@ -444,7 +444,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox59</rd:DefaultName>
-            <Top>13.48673cm</Top>
+            <Top>13.32798cm</Top>
             <Left>1.48737cm</Left>
             <Height>0.6cm</Height>
             <Width>16.18794cm</Width>
@@ -476,7 +476,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox37</rd:DefaultName>
-            <Top>12.71794cm</Top>
+            <Top>12.65444cm</Top>
             <Left>1.48737cm</Left>
             <Height>0.6cm</Height>
             <Width>16.39578cm</Width>
@@ -495,13 +495,13 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>3.30159cm</Width>
+                  <Width>2.33654cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.25128cm</Width>
+                  <Width>4.75743cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.1944cm</Width>
+                  <Width>4.67818cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>5cm</Width>
@@ -823,10 +823,10 @@
             <RepeatRowHeaders>true</RepeatRowHeaders>
             <KeepTogether>true</KeepTogether>
             <DataSetName>IncidenciasMuebles</DataSetName>
-            <Top>15.7277cm</Top>
+            <Top>15.3467cm</Top>
             <Left>1.48512cm</Left>
             <Height>1.72917cm</Height>
-            <Width>16.74727cm</Width>
+            <Width>16.77215cm</Width>
             <ZIndex>10</ZIndex>
             <Visibility>
               <Hidden>=IIF(CountRows()&gt;0,false,true)</Hidden>
@@ -852,7 +852,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox59</rd:DefaultName>
-            <Top>14.9372cm</Top>
+            <Top>14.6832cm</Top>
             <Left>1.47386cm</Left>
             <Height>0.6cm</Height>
             <Width>16.18794cm</Width>
@@ -884,7 +884,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox37</rd:DefaultName>
-            <Top>14.23137cm</Top>
+            <Top>14.00912cm</Top>
             <Left>1.48737cm</Left>
             <Height>0.6cm</Height>
             <Width>16.39578cm</Width>
@@ -939,6 +939,17 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
+                    <Value />
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
                     <Value>_________________________</Value>
                     <Style />
                   </TextRun>
@@ -949,7 +960,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>17.88602cm</Top>
+            <Top>17.82252cm</Top>
             <Left>1.03838cm</Left>
             <Height>1.43058cm</Height>
             <Width>5.62214cm</Width>
@@ -1004,6 +1015,17 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
+                    <Value />
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
                     <Value>_________________________</Value>
                     <Style />
                   </TextRun>
@@ -1014,7 +1036,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>17.90701cm</Top>
+            <Top>17.84351cm</Top>
             <Left>6.6452cm</Left>
             <Height>1.43058cm</Height>
             <Width>5.62214cm</Width>
@@ -1069,6 +1091,17 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
+                    <Value />
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
                     <Value>_________________________</Value>
                     <Style />
                   </TextRun>
@@ -1079,7 +1112,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox79</rd:DefaultName>
-            <Top>17.89761cm</Top>
+            <Top>17.83411cm</Top>
             <Left>12.61025cm</Left>
             <Height>1.43058cm</Height>
             <Width>5.62214cm</Width>
@@ -1701,7 +1734,6 @@
                           </Style>
                         </Textbox>
                         <ColSpan>5</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -2554,8 +2586,8 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>CedulaMuebles</DataSetName>
-            <Top>18.43987cm</Top>
-            <Left>2.12765cm</Left>
+            <Top>17.13812cm</Top>
+            <Left>2.0324cm</Left>
             <Height>0.6cm</Height>
             <Width>16.10474cm</Width>
             <ZIndex>20</ZIndex>
@@ -2566,7 +2598,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>7.62572in</Height>
+        <Height>7.58822in</Height>
         <Style>
           <Border>
             <Style>None</Style>

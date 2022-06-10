@@ -397,9 +397,8 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false) 
                     { 
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con la fecha y hora solicitada para la prestación del servicio, la fecha en que se solicito fue," +
-                                     Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]) +" y la fecha y hora de llegada fue:"+ Convert.ToDateTime(respuestas[i].Detalles.Split("|")[1])
-                                     + ".")});
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con la fecha y hora solicitada para la prestación del servicio, la fecha en que se solicitó fue: " +
+                                     Convert.ToDateTime(respuestas[i].Detalles.Split("|")[0]) +" y la fecha y hora de llegada fue:"+ Convert.ToDateTime(respuestas[i].Detalles.Split("|")[1]))});
                     }
                     else
                     {
@@ -413,7 +412,11 @@ namespace CedulasEvaluacion.Controllers
                     if (respuestas[i].Respuesta == false && respuestas[i].Detalles != "N/A")
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con la maquinaria, equipo y herramientas para la prestación del servicio.") });
-                        
+
+                    }
+                    else if (respuestas[i].Respuesta == false && respuestas[i].Detalles == "N/A")
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No aplica.") });
                     }
                     else
                     {
@@ -422,9 +425,13 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else if (i == 2)
                 {
-                    if (respuestas[i].Respuesta == false)
+                    if (respuestas[i].Respuesta == false && respuestas[i].Detalles != "N/A")
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con la unidad de transporte solicitada para la prestación del servicio.") });
+                    }
+                    else if (respuestas[i].Respuesta == false && respuestas[i].Detalles == "N/A")
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No aplica.") });
                     }
                     else
                     {
@@ -433,10 +440,14 @@ namespace CedulasEvaluacion.Controllers
                 }
                 else if (i == 3)
                 {
-                    if (respuestas[i].Respuesta == false)
+                    if (respuestas[i].Respuesta == false && respuestas[i].Detalles != "N/A")
                     {
                         local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con el personal necesario para realizar la prestación del servicio, se solicitaron "+
-                            respuestas[i].Detalles.Split("|")[0]+" persona(s) y se nos brindaron "+respuestas[i].Detalles.Split("|")[1]+" persona(s) para efectuar el servicio.") });
+                            respuestas[i].Detalles.Split("|")[0]+" persona(s) y el personal proporcionado fue de "+respuestas[i].Detalles.Split("|")[1]+" persona(s) para efectuar el servicio.") });
+                    }
+                    else if (respuestas[i].Respuesta == false && respuestas[i].Detalles == "N/A")
+                    {
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No aplica.") });
                     }
                     else
                     {
@@ -453,7 +464,7 @@ namespace CedulasEvaluacion.Controllers
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal cumplió con las actividades contempladas en el programa de operación, no presentó incidencias en el mes.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal cumplió con las actividades contempladas en el programa de operación.") });
                     }
                 }
             }

@@ -1079,7 +1079,7 @@
                                     'icon': 'warning',
                                     'title': 'Servicio de Transportación de Bienes Muebles',
                                     'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" o de "NO" a "N/A" ' +
-                                        '<strong>se borrarán todas las incidencias. ¿Desea continuar? </strong></p>',
+                                        '<strong>se eliminarán todas las incidencias. ¿Desea continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
                                     'confirmButtonText': 'Si, eliminar',
@@ -1106,7 +1106,11 @@
                                                         'title': 'Servicio de Transportación de Bienes Muebles',
                                                         'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
-                                                        $('input:radio[name="pregunta2"][value="true"]').prop('checked', true);
+                                                        if (tf == "false") {
+                                                            $('input:radio[name="pregunta2"][value="true"]').prop('checked', true);
+                                                        } else if (tf == "N/A") {
+                                                            $('input:radio[name="pregunta2"][value="N/A"]').prop('checked', true);
+                                                        }
                                                         $('#diviPregunta2').css('display', 'none');
                                                         guardaCedula();
                                                     });
@@ -1157,7 +1161,7 @@
                                     'icon': 'warning',
                                     'title': 'Servicio de Transportación de Bienes Muebles',
                                     'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" ' +
-                                        '<strong>se borrarán todas las incidencias. ¿Desea continuar? </strong></p>',
+                                        '<strong>se eliminarán todas las incidencias. ¿Desea continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
                                     'confirmButtonText': 'Si, eliminar',
