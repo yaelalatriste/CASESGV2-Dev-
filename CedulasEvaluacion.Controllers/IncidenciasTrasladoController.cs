@@ -135,13 +135,36 @@ namespace CedulasEvaluacion.Controllers
             return BadRequest();
         }
 
-        [Route("/trasladoExp/eliminaIncumplimiento/{id?}")]
-        public async Task<IActionResult> EliminaIncumplimiento(int id)
+        [Route("/trasladoExp/incidencia/eliminar/{id?}")]
+        public async Task<IActionResult> EliminaIncidencia(int id)
         {
-            int success = await iTraslado.EliminaIncumplimiento(id);
-            if (success != -1)
+            int excel = await iTraslado.EliminaIncidencia(id);
+            if (excel != -1)
             {
-                return Ok(success);
+                return Ok(excel);
+            }
+            return BadRequest();
+        }
+
+        /*Elimina todas las incidencias*/
+        [Route("/trasladoExp/eliminaIncidencias/{id?}/{pregunta?}")]
+        public async Task<IActionResult> EliminaTodaIncidencia(int id, int pregunta)
+        {
+            int excel = await iTraslado.EliminaTodaIncidencia(id, pregunta);
+            if (excel != -1)
+            {
+                return Ok(excel);
+            }
+            return BadRequest();
+        }
+
+        [Route("/trasladoExp/totalIncidencia/{id?}/{pregunta?}")]
+        public async Task<IActionResult> IncidenciasTipo(int id, int pregunta)
+        {
+            int total = ((List<IncidenciasTraslado>)await iTraslado.getIncidenciasByPregunta(id, pregunta)).Count;
+            if (total != -1)
+            {
+                return Ok(total);
             }
             return BadRequest();
         }

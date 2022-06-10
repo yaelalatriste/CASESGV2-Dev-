@@ -144,7 +144,7 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-        public async Task<int> EliminaIncumplimiento(int id)
+        public async Task<int> EliminaIncidencia(int id)
         {
             try
             {
@@ -157,6 +157,31 @@ namespace CedulasEvaluacion.Repositories
 
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return -1;
+            }
+        }
+        public async Task<int> EliminaTodaIncidencia(int id, int pregunta)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_eliminaTodaIncidenciaTraslado", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        cmd.Parameters.Add(new SqlParameter("@pregunta", pregunta));
+
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+
                         return 1;
                     }
                 }

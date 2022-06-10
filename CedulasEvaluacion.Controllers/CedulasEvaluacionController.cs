@@ -490,18 +490,25 @@ namespace CedulasEvaluacion.Controllers
                     local.DataSources.Add(new ReportDataSource("IncidenciasPregunta1", incidencias));
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal no se presentó el personal solicitado para prestar el servicio, a continuación se describe la incidencia: ") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no presentó el personal solicitado para prestar el servicio, a continuación se indican las incidencias presentadas: ") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal se presentó el personal solicitado para prestar el servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio presentó el personal solicitado para prestar el servicio.") });
                     }
                 }
                 else if (i == 1)
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal no se presentó debidamente uniformado e identificado al prestar el servicio.") });
+                        if (!respuestas[i].Detalles.Equals("") && respuestas[i].Detalles != null)
+                        {
+                            local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal no se presentó debidamente uniformado e identificado al prestar el servicio, los comentarios capturados son los siguientes: " + respuestas[i].Detalles) });
+                        }
+                        else
+                        {
+                            local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal no se presentó debidamente uniformado e identificado al prestar el servicio.") });
+                        }
                     }
                     else
                     {
@@ -514,11 +521,11 @@ namespace CedulasEvaluacion.Controllers
                     local.DataSources.Add(new ReportDataSource("IncidenciasPregunta3", incidencias));
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal no se presentó debidamente uniformado e identificado al prestar el servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio no cumplió con la maquinaria, equipo y herramientas para la prestación del servicio, a continuación se describen las incidencias presentadas: ") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal se presentó debidamente uniformado e identificado al prestar el servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El prestador del servicio cumplió con la maquinaria, equipo y herramientas para la prestación del servicio.") });
                     }
                 }
             }

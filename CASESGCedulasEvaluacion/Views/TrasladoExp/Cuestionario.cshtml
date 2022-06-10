@@ -57,11 +57,11 @@
                         <div class="tab-pane fade mt-2 ml-3 show active" id="pregunta_1" role="tabpanel" aria-labelledby="home-tab">
                             <p class="text-black h5">1. ¿Se presentó el número total de personal solicitado para realizar el servicio?</p>
                             <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta1" value="true" id="radioSuccess1" class="pregunta1">
+                                <input type="radio" name="pregunta1" value="true" id="radioSuccess1" class="pregunta1" data-pregunta="1">
                                 <label for="radioSuccess1">Si</label>
                             </div>
                             <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta1" value="false" id="radioSuccess2" class="pregunta1">
+                                <input type="radio" name="pregunta1" value="false" id="radioSuccess2" class="pregunta1" data-pregunta="1">
                                 <label for="radioSuccess2">No</label>
                             </div>
                             <div class="row col-lg-12 mt-3" id="diviPregunta1">
@@ -95,11 +95,11 @@
                         <div class="tab-pane fade mt-2 ml-3" id="pregunta_3" role="tabpanel" aria-labelledby="contact-tab">
                             <p class="text-black h5">3. ¿El personal presentó el equipo, maquinaria y herramientas necesarias para prestar el servicio durante el mes?</p>
                             <div class="icheck-success d-inline">
-                                <input type="radio" name="pregunta3" value="true" id="radioSuccess5" class="pregunta3">
+                                <input type="radio" name="pregunta3" value="true" id="radioSuccess5" class="pregunta3" data-pregunta="3">
                                 <label for="radioSuccess5">Si</label>
                             </div>
                             <div class="icheck-success d-inline ml-3">
-                                <input type="radio" name="pregunta3" value="false" id="radioSuccess6" class="pregunta3">
+                                <input type="radio" name="pregunta3" value="false" id="radioSuccess6" class="pregunta3" data-pregunta="3">
                                 <label for="radioSuccess6">No</label>
                             </div>
                             <div class="row col-lg-12 mt-3" id="diviPregunta3">
@@ -854,14 +854,13 @@
                 $(document).on('click', '.delete_incumplimiento', function () {
                     var id = $(this).data('id');
                     var pregunta = $(this).data('pregunta');
-                    axios.get('/trasladoExp/eliminaIncumplimiento/'+id)
+                    axios.get('/trasladoExp/incidencia/eliminar/'+id)
                         .then(res => {
                             Swal.fire({
                                 'icon': 'success',
                                 'title': 'Servicio de Traslado de Expedientes',
                                 'html': 'Se eliminó el incumplimiento correctamente.'
                             });
-
                             axios.get('/trasladoExp/getIncidenciasTable/' + model.id + '/' + pregunta).then(res => {
                                 res = res.data;
                                 $("#tbl_incumplimiento").html(res);
@@ -1266,12 +1265,66 @@
             /******************************* Mostrar/Ocultar Campos de Días**********************************/
                 $('.pregunta1').change(function () {
                     let pr = $(this).val();
+                    let pregunta = $(this).data('pregunta');
                     if (pr == "false") {
                         $('#diviPregunta1').css('display', 'block');
                     } else {
+                        axios.get('/trasladoExp/totalIncidencia/' + model.id + '/' + pregunta).then(total => {
+                            if (total.data > 0) {
+                                Swal.fire({
+                                    'icon': 'warning',
+                                    'title': 'Servicio de Traslado de Expedientes',
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI"' +
+                                        '<strong>se eliminarán todas las incidencias. ¿Desea continuar? </strong></p>',
+                                    'confirmButtonColor': '#3085d6',
+                                    'cancelButtonColor': '#d33',
+                                    'confirmButtonText': 'Si, eliminar',
+                                    'cancelButtonText': 'Cancelar',
+                                    'showCancelButton': true
+                                }).then(p => {
+                                    if (p.isConfirmed) {
+                                        Swal.fire({
+                                            'icon': 'warning',
+                                            'title': 'Servicio de Traslado de Expedientes',
+                                            'text': 'Escriba la palabra ELIMINAR en mayúsculas para confirmar el cambio de respuesta.',
+                                            'confirmButtonColor': '#3085d6',
+                                            'cancelButtonColor': '#d33',
+                                            'confirmButtonText': 'Si, eliminar todo',
+                                            'cancelButtonText': 'Cancelar',
+                                            'showCancelButton': true,
+                                            'input': 'text',
+                                            'inputPlaceholder': 'Escribe la palabra ELIMINAR'
+                                        }).then(res => {
+                                            if (res.value == 'ELIMINAR') {
+                                                axios.get('/trasladoExp/eliminaIncidencias/' + model.id + '/' + pregunta).then(r => {
+                                                    Swal.fire({
+                                                        'icon': 'success',
+                                                        'title': 'Servicio de Traslado de Expedientes',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
+                                                    }).then(function () {
+                                                        $('input:radio[name="pregunta1"][value="true"]').prop('checked', true);
+                                                        $('#diviPregunta1').css('display', 'none');
+                                                        guardaCedula();
+                                                    });
+                                                });
+                                            } else {
+                                                Swal.fire({
+                                                    'icon': 'error',
+                                                    'title': 'Servicio de Traslado de Expedientes',
+                                                    'text': 'Debe escribir correctamente la palabra ELIMINAR en mayúsculas.',
+                                                });
+                                                $('input:radio[name="pregunta1"][value="false"]').prop('checked', true);
+                                                $('#diviPregunta1').css('display', 'block');
+                                            }
+                                        });
+                                    } else {
+                                        $('input:radio[name="pregunta1"][value="false"]').prop('checked', true);
+                                        $('#diviPregunta1').css('display', 'block');
+                                    }
+                                });
+                            }
+                        });
                         $('#diviPregunta1').css('display', 'none');
-                        $('#personalSolicitado').val('');
-                        $('#personalBrindado').val('');
                     }
                 });
 
@@ -1288,10 +1341,65 @@
 
                 $('.pregunta3').change(function () {
                     let pr = $(this).val();
-                    let fol = '@Model.Folio';
+                    let pregunta  = $(this).data('pregunta');
                     if (pr == "false") {
                         $('#diviPregunta3').css('display', 'block');
                     } else {
+                        axios.get('/trasladoExp/totalIncidencia/' + model.id + '/' + pregunta).then(total => {
+                            if (total.data > 0) {
+                                Swal.fire({
+                                    'icon': 'warning',
+                                    'title': 'Servicio de Traslado de Expedientes',
+                                    'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI"' +
+                                        '<strong>se eliminarán todas las incidencias. ¿Desea continuar? </strong></p>',
+                                    'confirmButtonColor': '#3085d6',
+                                    'cancelButtonColor': '#d33',
+                                    'confirmButtonText': 'Si, eliminar',
+                                    'cancelButtonText': 'Cancelar',
+                                    'showCancelButton': true
+                                }).then(p => {
+                                    if (p.isConfirmed) {
+                                        Swal.fire({
+                                            'icon': 'warning',
+                                            'title': 'Servicio de Traslado de Expedientes',
+                                            'text': 'Escriba la palabra ELIMINAR en mayúsculas para confirmar el cambio de respuesta.',
+                                            'confirmButtonColor': '#3085d6',
+                                            'cancelButtonColor': '#d33',
+                                            'confirmButtonText': 'Si, eliminar todo',
+                                            'cancelButtonText': 'Cancelar',
+                                            'showCancelButton': true,
+                                            'input': 'text',
+                                            'inputPlaceholder': 'Escribe la palabra ELIMINAR'
+                                        }).then(res => {
+                                            if (res.value == 'ELIMINAR') {
+                                                axios.get('/trasladoExp/eliminaIncidencias/' + model.id + '/' + pregunta).then(r => {
+                                                    Swal.fire({
+                                                        'icon': 'success',
+                                                        'title': 'Servicio de Traslado de Expedientes',
+                                                        'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
+                                                    }).then(function () {
+                                                        $('input:radio[name="pregunta3"][value="true"]').prop('checked', true);
+                                                        $('#diviPregunta3').css('display', 'none');
+                                                        guardaCedula();
+                                                    });
+                                                });
+                                            } else {
+                                                Swal.fire({
+                                                    'icon': 'error',
+                                                    'title': 'Servicio de Traslado de Expedientes',
+                                                    'text': 'Debe escribir correctamente la palabra ELIMINAR en mayúsculas.',
+                                                });
+                                                $('input:radio[name="pregunta3"][value="false"]').prop('checked', true);
+                                                $('#diviPregunta3').css('display', 'block');
+                                            }
+                                        });
+                                    } else {
+                                        $('input:radio[name="pregunta3"][value="false"]').prop('checked', true);
+                                        $('#diviPregunta3').css('display', 'block');
+                                    }
+                                });
+                            }
+                        });
                         $('#diviPregunta3').css('display', 'none');
                     }
                 });
@@ -1425,10 +1533,24 @@
                     }
 
                 /*FIN Validamos que ya fueron adjuntados todos los entregables*/
-
+                /********************************** Funciones Adicionales *********************************/
+                    function cuentaincidenciasTraslado(pregunta) {
+                        var isContinue = true;
+                        $.ajax({
+                            url: '/trasladoExp/totalIncidencia/' + model.id + '/' + pregunta,
+                            type: 'GET',
+                            async: false,
+                            success: function (json) {
+                                json == 0 ? isContinue = false : true;
+                            },
+                        });
+                        return isContinue;
+                    }
+                /********************************** FIN Funciones Asincronas*********************************/
                 /*Enviar la Cedula*/
                     $('.btn_enviar').click(function () {
-
+                        var isContinue = true;
+                        let respuesta = false;
                         if (model.facturas.length == 0) {
                             Swal.fire({
                                 'icon': 'error',
@@ -1439,9 +1561,9 @@
                         }
 
                         guardaCedula();
-
-                        for (let i = 0; i < 3; i++) {
-                            let respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
+                        let i = 0;
+                        for (i = 0; i < 3; i++) {
+                            respuesta = $("input[name=pregunta" + (i + 1) + "]:checked").val();
                             if (respuesta == null || respuesta == "") {
                                 Swal.fire({
                                     'icon': 'error',
@@ -1450,21 +1572,27 @@
                                 });
                                 return false;
                             } else if (respuesta == "false") {
-                                axios.get('/trasladoExp/getIncidencias/' + model.id + '/' + (i+1)).then(res => {
-                                    res = res.data;
-                                    if (res == 0) {
-                                        Swal.fire({
-                                            'icon': 'error',
-                                            'title': 'Servicio de Traslado de Expedientes',
-                                            'html': 'No has capturado incidencias en la <strong>Pregunta ' + (i + 1) + '</strong>'
-                                        });
-                                        return false;
+                                if (i == 0 || i == 2) {
+                                    isContinue = cuentaincidenciasTraslado((i + 1));
+                                    if (isContinue == false) {
+                                        break;
                                     }
-                                });
+                                }
                             }
                         }
 
-                        validaEntregables();
+                        if (isContinue == false) {
+                            if (i == 0 || i == 2) {
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Servicio de Traslado de Expedientes',
+                                    'html': 'No has capturado incidencias en la <strong>Pregunta ' + (i + 1) + '</strong>'
+                                });
+                                return false;
+                            }
+                        } else {
+                            validaEntregables();
+                        }
                     });
                 /*Enviar de guardar la cedula*/
 

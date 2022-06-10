@@ -495,13 +495,13 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.33654cm</Width>
+                  <Width>2.21641cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>4.75743cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.67818cm</Width>
+                  <Width>4.77343cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>5cm</Width>
@@ -826,7 +826,7 @@
             <Top>15.3467cm</Top>
             <Left>1.48512cm</Left>
             <Height>1.72917cm</Height>
-            <Width>16.77215cm</Width>
+            <Width>16.74727cm</Width>
             <ZIndex>10</ZIndex>
             <Visibility>
               <Hidden>=IIF(CountRows()&gt;0,false,true)</Hidden>
@@ -1134,10 +1134,7 @@
                   <Width>3.30159cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.25128cm</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>4.1944cm</Width>
+                  <Width>8.07156cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>5cm</Width>
@@ -1206,43 +1203,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox15</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <BackgroundColor>Indigo</BackgroundColor>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox72">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Fecha y Hora de Respuesta</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox54</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -1368,39 +1328,6 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="TipoServicio6">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!FechaRespuesta.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>TipoServicio</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="Comentarios2">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -1441,7 +1368,6 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -1462,7 +1388,7 @@
             <Top>9.46507cm</Top>
             <Left>1.51cm</Left>
             <Height>1.72917cm</Height>
-            <Width>16.74727cm</Width>
+            <Width>16.37315cm</Width>
             <ZIndex>16</ZIndex>
             <Visibility>
               <Hidden>=IIF(CountRows()&gt;0,false,true)</Hidden>
@@ -2732,7 +2658,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalPages</rd:DefaultName>
-              <Top>1.48763cm</Top>
+              <Top>1.48762cm</Top>
               <Left>14.12938cm</Left>
               <Height>0.6cm</Height>
               <Width>5cm</Width>

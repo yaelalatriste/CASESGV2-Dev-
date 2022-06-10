@@ -12,6 +12,7 @@ namespace CedulasEvaluacion.Interfaces
         Task<int> ActualizaIncidencia(IncidenciasTraslado incidenciasTraslado);
         Task<List<IncidenciasTraslado>> getIncidencias(int id);
         Task<List<IncidenciasTraslado>> getIncidenciasByPregunta(int cedulaId, int pregunta);
-        Task<int> EliminaIncumplimiento(int id);
+        Task<int> EliminaIncidencia(int id);
+        Task<int> EliminaTodaIncidencia(int id, int pregunta);
     }
 }
