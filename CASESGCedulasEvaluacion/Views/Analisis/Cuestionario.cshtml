@@ -7,7 +7,7 @@
     <a href="#" type='button' id="btn_facturas" class='btn-sm btn-facturas float-right mr-2 mb-3' data-toggle="tooltip" title="Ver/Agregar Factura(s) o Nota(s) de Crédito" data-placement="top"><i class="fal fa-file-invoice"></i></a>
     @if (@Model.facturas.Count != 0)
     {
-        <a href="/documents/actaAnalisis/@Model.Id" class='btn-sm btn-primary float-right mr-2 mb-3' data-toggle="tooltip" title="Generar Acta ER" data-placement="top">
+        <a href="/documents/actaAnalisis/@Model.Id/@Model.ServicioId" class='btn-sm btn-primary float-right mr-2 mb-3' data-toggle="tooltip" title="Generar Acta ER" data-placement="top">
             <i class="fal fa-calendar-alt"></i>
         </a>
     }

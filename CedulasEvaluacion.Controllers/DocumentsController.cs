@@ -43,7 +43,7 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioEntregables vEntregables;
 
         private readonly IRepositorioMensajeria vMensajeria;
-        private readonly IRepositorioIncidenciasMensajeria viMensajeria;
+        private readonly IRepositorioIncidenciasMensajeria iMensajeria;
 
         private readonly IRepositorioCelular vCelular;
         private readonly IRepositorioIncidenciasCelular iCelular;
@@ -80,7 +80,7 @@ namespace CedulasEvaluacion.Controllers
                                     IRepositorioIncidenciasFumigacion iIncidenciasFumigacion, IRepositorioIncidenciasAgua iIncidenciasAgua, IRepositorioIncidenciasResiduos iiResiduos,
                                     IRepositorioResiduos ivResiduos, IRepositorioTransporte ivTransporte, IRepositorioIncidenciasTransporte iiTransporte, IRepositorioIncidenciasTraslado iiTraslado,
                                    IRepositorioEntregables iVEntregables, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioTrasladoExp ivTraslado,
-                                    IRepositorioFacturas iFacturas, IRepositorioCelular iCelular,
+                                    IRepositorioFacturas iFacturas, IRepositorioCelular iCelular, IRepositorioIncidenciasMensajeria iiMensajeria,
                                     IRepositorioIncidenciasCelular ivCelular, IRepositorioConvencional iConvencional, IRepositorioIncidenciasConvencional ivConvencional,
                                     IRepositorioEntregablesConvencional ieConvencional, IRepositorioDocuments ivDocuments, IRepositorioIncidenciasMuebles iiMuebles,
                                     IRepositorioMuebles iVMuebles, IRepositorioAnalisis ivAnalisis, IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioInmuebles viInmuebles,
@@ -93,6 +93,7 @@ namespace CedulasEvaluacion.Controllers
 
             this.vCelular = iCelular ?? throw new ArgumentNullException(nameof(iCelular));
             this.iCelular = ivCelular ?? throw new ArgumentNullException(nameof(ivCelular));
+            this.iMensajeria = iiMensajeria ?? throw new ArgumentNullException(nameof(iiMensajeria));
 
             this.vResiduos = ivResiduos ?? throw new ArgumentNullException(nameof(ivResiduos));
             this.iResiduos = iiResiduos ?? throw new ArgumentNullException(nameof(iiResiduos));
@@ -128,18 +129,15 @@ namespace CedulasEvaluacion.Controllers
         }
 
 
-        [Route("/documents/actaLimpieza/{id?}")]
-        public async Task<IActionResult> getActaEntregaRecepcionLimpieza(int id)
+        [Route("/documents/actaLimpieza/{id?}/{servicio?}")]
+        public async Task<IActionResult> getActaEntregaRecepcionLimpieza(int id,int servicio)
         {
 
-            ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            CedulaEvaluacion cedulaLimpieza = new CedulaEvaluacion();
-            cedulaLimpieza = await vCedula.CedulaById(id);
-            cedula = await vDocuments.getDatosActa(id, 1);
-            cedula.facturas = new List<Facturas>();
-            cedula.facturas = await vFacturas.getFacturas(id, 1);
-
-
+            ActaEntregaRecepcion acta = new ActaEntregaRecepcion();
+            CedulaEvaluacion cedula = new CedulaEvaluacion();
+            cedula = await vCedula.CedulaById(id);
+            acta = await vDocuments.getDatosActa(id, servicio);
+            
             Document document = new Document();
             var path = @"E:\Plantillas CASESGV2\DocsV2\Acta ER\Acta Entrega - Recepción 2022.docx";
             document.LoadFromFile(path);
@@ -147,27 +145,26 @@ namespace CedulasEvaluacion.Controllers
             //Creamos la Tabla
             Section tablas = document.AddSection();
 
-            document.Replace("|Periodo|", cedula.FechaInicio.Day + " de " + cedula.FechaInicio.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaInicio.Year + " al " +
-                 cedula.FechaFin.Day + " de " + cedula.FechaFin.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaFin.Year, false, true);
-
-            document.Replace("|Ciudad|", cedula.Estado, false, true);
-            if (cedula.Estado.Equals("Ciudad de México"))
+            document.Replace("|Ciudad|", acta.Estado, false, true);
+            if (acta.Estado.Equals("Ciudad de México"))
             {
-                document.Replace("|Estado|", "en la " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en la " + acta.Estado, false, true);
             }
             else
             {
-                document.Replace("|Estado|", "en el " + cedula.Estado, false, true);
-                document.Replace("|Estado|", "en " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en el " + acta.Estado, false, true);
+                document.Replace("|Estado|", "en " + acta.Estado, false, true);
             }
 
-            document.Replace("|InmuebleP|", cedula.InmuebleC, false, true);
-            document.Replace("|DomicilioInmueble|", cedula.Direccion, false, true);
-            document.Replace("|ResponsableInmueble|", cedula.Administrador, false, true);
-            document.Replace("|Reviso|", cedula.Reviso, false, true);
-            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cedula.Elaboro.ToLower()), false, true);
-            document.Replace("|InmuebleCedula|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Inmueble), false, true);
-            document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC) + "\n", false, true);
+            document.Replace("|EncabezadoInmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.EncabezadoInmueble), false, true);
+            document.Replace("|AdministracionInmueble|",acta.EncabezadoInmueble, false, true);
+            document.Replace("|InmuebleEvaluado|", acta.InmuebleEvaluado, false, true);
+            document.Replace("|Puesto|", acta.PuestoAutoriza, false, true);
+            document.Replace("|PuestoFirma|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.PuestoAutoriza), false, true);
+            document.Replace("|DomicilioInmueble|", acta.Direccion, false, true);
+            document.Replace("|Administrador|", acta.Administrador, false, true);
+            document.Replace("|Reviso|", acta.Reviso, false, true);
+            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(acta.Elaboro.ToLower()), false, true);
 
             document.Replace("|Folio|", cedula.Folio, false, true);
 
@@ -191,62 +188,16 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("|Declaraciones|", "\nSe hace constar que los servicios fueron recibidos por el Consejo de la Judicatura Federal, presentando incidencias, mismas que se vierten en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
             }
 
-            string strFacturas = "";
-            string strNotas = "";
-            string strNTimbrado = "";
-            string strCantidades = "";
-            string strCantidadesNota = "";
-            string strTimbrado = "";
-            decimal total = 0, totalNC = 0;
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                if ((cedula.facturas.Count - 1) != i && i != 0)
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NC"))
-                    {
-                        strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "/";
-                        strCantidades += Convert.ToInt32(cedula.facturas[i].concepto[0].Cantidad) + "/";
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado + "/";
-
-                        total += cedula.facturas[i].comprobante.Total;
-                    }
-                    else
-                    {
-                        strNotas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "/";
-                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado + "/";
-                        strCantidadesNota += Convert.ToInt32(cedula.facturas[i].concepto[0].Cantidad) + "/";
-                        totalNC += cedula.facturas[i].comprobante.Total;
-                    }
-                }
-                else
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NC"))
-                    {
-                        strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio;
-                        strCantidades += Convert.ToInt32(cedula.facturas[i].concepto[0].Cantidad);
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado;
-                        total += cedula.facturas[i].comprobante.Total;
-                    }
-                    else
-                    {
-                        strNotas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio;
-                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado;
-                        strCantidadesNota += Convert.ToInt32(cedula.facturas[i].concepto[0].Cantidad);
-                        totalNC += cedula.facturas[i].comprobante.Total;
-                    }
-                }
-            }
-
-            document.Replace("|ImporteIVA|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total), false, true);
-            document.Replace("|CantidadServicios|", strCantidades + "", false, true);
-            document.Replace("|FechaTimbrado|", strTimbrado, false, true);
-            document.Replace("|FolioFactura|", strFacturas, false, true);
+            document.Replace("|ImporteIVA|", acta.Total.Replace("|","\n"), false, true);
+            document.Replace("|CantidadServicios|", acta.Cantidad.Replace("|", "\n"), false, true);
+            document.Replace("|FechaTimbrado|", acta.FechasTimbrado.Replace("|", "\n"), false, true);
+            document.Replace("|FolioFactura|", acta.Folios.Replace("|", "\n"), false, true);
 
             //Notas de Crédito
-            document.Replace("|ImporteNota|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalNC), false, true);
-            document.Replace("|CantidadNota|", strCantidadesNota.Equals("") ? "N/A" : strCantidadesNota + "", false, true);
-            document.Replace("|TimbradoNota|", strNTimbrado, false, true);
-            document.Replace("|FolioNota|", strNotas.Equals("") ? "N/A" : strNotas, false, true);
+            document.Replace("|ImporteNota|", acta.TotalNC.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadNota|", acta.CantidadNC.Replace("|", "\n"), false, true);
+            document.Replace("|TimbradoNota|", acta.FechasTimbradoNC.Replace("|", "\n"), false, true);
+            document.Replace("|FolioNota|", acta.FoliosNC.Replace("|", "\n"), false, true);
 
             //Salvar y Lanzar
 
@@ -259,148 +210,14 @@ namespace CedulasEvaluacion.Controllers
             return File(toArray, "application/ms-word", "ActaER_Limpieza_" + cedula.Mes + ".docx");
         }
 
-        [Route("/documents/alcanceActa/{id?}")]
-        public async Task<IActionResult> getAActaEntregaRecepcionLimpieza(int id)
+        [Route("/documents/actaFumigacion/{id?}/{servicio?}")]
+        public async Task<IActionResult> getActaEntregaRecepcionFumigacion(int id,int servicio)
         {
 
-            ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            CedulaEvaluacion cedulaLimpieza = new CedulaEvaluacion();
-            cedulaLimpieza = await vCedula.CedulaById(id);
-            cedula = await vDocuments.getDatosActa(id, 1);
-            cedula.facturas = new List<Facturas>();
-            cedula.facturas = await vFacturas.getFacturas(id, 1);
-
-
-            Document document = new Document();
-            var path = @"E:\Plantillas CASESGV2\DocsV2\Acta ER\Acta Entrega - Recepción 2022 Alcance.docx";
-            document.LoadFromFile(path);
-
-            //Creamos la Tabla
-            Section tablas = document.AddSection();
-
-            document.Replace("|Periodo|", cedula.FechaInicio.Day + " de " + cedula.FechaInicio.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaInicio.Year + " al " +
-                 cedula.FechaFin.Day + " de " + cedula.FechaFin.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaFin.Year, false, true);
-
-            document.Replace("|Ciudad|", cedula.Estado, false, true);
-            if (cedula.Estado.Equals("Ciudad de México"))
-            {
-                document.Replace("|Estado|", "en la " + cedula.Estado, false, true);
-            }
-            else
-            {
-                document.Replace("|Estado|", "en el " + cedula.Estado, false, true);
-                document.Replace("|Estado|", "en " + cedula.Estado, false, true);
-            }
-
-            document.Replace("|InmuebleP|", cedula.InmuebleC, false, true);
-            document.Replace("|DomicilioInmueble|", cedula.Direccion, false, true);
-            document.Replace("|ResponsableInmueble|", cedula.Administrador, false, true);
-            document.Replace("|Reviso|", cedula.Reviso, false, true);
-            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cedula.Elaboro.ToLower()), false, true);
-            document.Replace("|InmuebleCedula|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Inmueble), false, true);
-            document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC) + "\n", false, true);
-
-            document.Replace("|Folio|", cedula.Folio, false, true);
-
-            document.Replace("|MesEval|", cedula.Mes, false, true);
-
-
-            DateTime fechaActual = DateTime.Now;
-            document.Replace("|Dia|", fechaActual.Day + "", false, true);
-            document.Replace("|Mes|", fechaActual.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")), false, true);
-            document.Replace("|Anio|", fechaActual.Year + "", false, true);
-            document.Replace("|Hora|", fechaActual.Hour + ":00", false, true);
-            document.Replace("|DiaActual|", fechaActual.Day + " de " + fechaActual.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + fechaActual.Year, false, true);
-            document.Replace("|HoraActual|", fechaActual.Hour + ":00", false, true);
-            document.Replace("|Hora|", fechaActual.Hour + ":00", false, true);
-            if ((await vIncidencias.getIncidencias(id)).Count == 0)
-            {
-                document.Replace("|Declaraciones|", "Se hace constar que los servicios solicitados fueron atendidos a entera satisfacción del Consejo de la Judicatura Federal conforme se visualiza en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
-            }
-            else
-            {
-                document.Replace("|Declaraciones|", "\nSe hace constar que los servicios fueron recibidos por el Consejo de la Judicatura Federal, presentando incidencias, mismas que se vierten en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
-            }
-
-            string strFacturas = "";
-            string strNotas = "";
-            string strNTimbrado = "";
-            string strCantidades = "";
-            string strCantidadesNota = "";
-            string strTimbrado = "";
-            decimal total = 0, totalNC = 0;
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                if ((cedula.facturas.Count - 1) != i && i != 0)
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NC"))
-                    {
-                        strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "/";
-                        strCantidades += Convert.ToInt32(cedula.facturas[i].concepto[0].Cantidad) + "/";
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado + "/";
-
-                        total += cedula.facturas[i].comprobante.Total;
-                    }
-                    else
-                    {
-                        strNotas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "/";
-                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado + "/";
-                        strCantidadesNota += Convert.ToInt32(cedula.facturas[i].concepto[0].Cantidad) + "/";
-                        totalNC += cedula.facturas[i].comprobante.Total;
-                    }
-                }
-                else
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NC"))
-                    {
-                        strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio;
-                        strCantidades += Convert.ToInt32(cedula.facturas[i].concepto[0].Cantidad);
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado;
-                        total += cedula.facturas[i].comprobante.Total;
-                    }
-                    else
-                    {
-                        strNotas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio;
-                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado;
-                        strCantidadesNota += Convert.ToInt32(cedula.facturas[i].concepto[0].Cantidad);
-                        totalNC += cedula.facturas[i].comprobante.Total;
-                    }
-                }
-            }
-
-            document.Replace("|ImporteIVA|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total), false, true);
-            document.Replace("|CantidadServicios|", strCantidades + "", false, true);
-            document.Replace("|FechaTimbrado|", strTimbrado, false, true);
-            document.Replace("|FolioFactura|", strFacturas, false, true);
-
-            //Notas de Crédito
-            document.Replace("|ImporteNota|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalNC), false, true);
-            document.Replace("|CantidadNota|", strCantidadesNota.Equals("") ? "N/A" : strCantidadesNota + "", false, true);
-            document.Replace("|TimbradoNota|", strNTimbrado.Equals("") ? "N/A" : strNTimbrado, false, true);
-            document.Replace("|FolioNota|", strNotas.Equals("") ? "N/A" : strNotas, false, true);
-
-            //Salvar y Lanzar
-
-            byte[] toArray = null;
-            using (MemoryStream ms1 = new MemoryStream())
-            {
-                document.SaveToStream(ms1, Spire.Doc.FileFormat.Docx2013);
-                toArray = ms1.ToArray();
-            }
-            return File(toArray, "application/ms-word", "ActaER_Limpieza_" + cedula.Mes + ".docx");
-        }
-
-        [Route("/documents/actaFumigacion/{id?}")]
-        public async Task<IActionResult> getActaEntregaRecepcionFumigacion(int id)
-        {
-
-            ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            CedulaEvaluacion cedulaFumigacion = new CedulaEvaluacion();
-            cedulaFumigacion = await vCedula.CedulaById(id);
-            cedula = await vDocuments.getDatosActa(id, 2);
-            cedula.facturas = new List<Facturas>();
-            cedula.facturas = await vFacturas.getFacturas(id, 2);
-
+            ActaEntregaRecepcion acta = new ActaEntregaRecepcion();
+            CedulaEvaluacion cedula = new CedulaEvaluacion();
+            cedula = await vCedula.CedulaById(id);
+            acta = await vDocuments.getDatosActa(id, servicio);
 
             Document document = new Document();
             var path = @"E:\Plantillas CASESGV2\DocsV2\Acta ER\Acta Entrega - Recepción 2022 Fumigacion.docx";
@@ -409,27 +226,26 @@ namespace CedulasEvaluacion.Controllers
             //Creamos la Tabla
             Section tablas = document.AddSection();
 
-            document.Replace("|Periodo|", cedula.FechaInicio.Day + " de " + cedula.FechaInicio.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaInicio.Year + " al " +
-                 cedula.FechaFin.Day + " de " + cedula.FechaFin.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaFin.Year, false, true);
-
-            document.Replace("|Ciudad|", cedula.Estado, false, true);
-            if (cedula.Estado.Equals("Ciudad de México"))
+            document.Replace("|Ciudad|", acta.Estado, false, true);
+            if (acta.Estado.Equals("Ciudad de México"))
             {
-                document.Replace("|Estado|", "en la " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en la " + acta.Estado, false, true);
             }
             else
             {
-                document.Replace("|Estado|", "en el " + cedula.Estado, false, true);
-                document.Replace("|Estado|", "en " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en el " + acta.Estado, false, true);
+                document.Replace("|Estado|", "en " + acta.Estado, false, true);
             }
 
-            document.Replace("|InmuebleP|", cedula.InmuebleC, false, true);
-            document.Replace("|DomicilioInmueble|", cedula.Direccion, false, true);
-            document.Replace("|ResponsableInmueble|", cedula.Administrador, false, true);
-            document.Replace("|Reviso|", cedula.Reviso, false, true);
-            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cedula.Elaboro.ToLower()), false, true);
-            document.Replace("|InmuebleCedula|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Inmueble), false, true);
-            document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC) + "\n", false, true);
+            document.Replace("|EncabezadoInmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.EncabezadoInmueble), false, true);
+            document.Replace("|AdministracionInmueble|", acta.EncabezadoInmueble, false, true);
+            document.Replace("|InmuebleEvaluado|", acta.InmuebleEvaluado, false, true);
+            document.Replace("|Puesto|", acta.PuestoAutoriza, false, true);
+            document.Replace("|PuestoFirma|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.PuestoAutoriza), false, true);
+            document.Replace("|DomicilioInmueble|", acta.Direccion, false, true);
+            document.Replace("|Administrador|", acta.Administrador, false, true);
+            document.Replace("|Reviso|", acta.Reviso, false, true);
+            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(acta.Elaboro.ToLower()), false, true);
 
             document.Replace("|Folio|", cedula.Folio, false, true);
 
@@ -444,6 +260,8 @@ namespace CedulasEvaluacion.Controllers
             document.Replace("|DiaActual|", fechaActual.Day + " de " + fechaActual.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + fechaActual.Year, false, true);
             document.Replace("|HoraActual|", fechaActual.Hour + ":00", false, true);
             document.Replace("|Hora|", fechaActual.Hour + ":00", false, true);
+
+
             if ((await iFumigacion.GetIncidenciasPregunta(id, 2)).Count == 0 && (await iFumigacion.GetIncidenciasPregunta(id, 3)).Count == 0 && (await iFumigacion.GetIncidenciasPregunta(id, 4)).Count == 0)
             {
                 document.Replace("|Declaraciones|", "Se hace constar que los servicios solicitados fueron atendidos a entera satisfacción del Consejo de la Judicatura Federal conforme se visualiza en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
@@ -453,130 +271,16 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("|Declaraciones|", "\nSe hace constar que los servicios fueron recibidos por el Consejo de la Judicatura Federal, presentando incidencias, mismas que se vierten en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
             }
 
-            string strFacturas = "";
-            string strNotas = "";
-            string strNTimbrado = "";
-            string strCantidades = "";
-            string strCantidadesNota = "";
-            string strTimbrado = "";
-            decimal total = 0, totalNC = 0;
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                if ((cedula.facturas.Count - 1) != i && i != 0)
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                    {
-                        strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "/";
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado + "/";
-
-                        total += cedula.facturas[i].comprobante.Total;
-                    }
-                    else
-                    {
-                        strNotas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio;
-                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado;
-                        totalNC += cedula.facturas[i].comprobante.Total;
-                    }
-                }
-                else
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                    {
-                        strFacturas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio;
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado;
-                        total += cedula.facturas[i].comprobante.Total;
-                    }
-                    else
-                    {
-                        strNotas += cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio;
-                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado;
-                        totalNC += cedula.facturas[i].comprobante.Total;
-                    }
-                }
-            }
-            int cantidad = 0;
-            string concepto = "";
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                for (int j = 0; j < cedula.facturas[i].concepto.Count; j++)
-                {
-                    if ((cedula.facturas[i].concepto.Count - 1) != j && j != 0)
-                    {
-                        if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades = cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades += cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                        else
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota = cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota += cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades = cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades += cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                        else
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota = cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota += cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                    }
-                }
-                concepto = "";
-                cantidad = 0;
-            }
-
-            document.Replace("|ImporteIVA|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total), false, true);
-            document.Replace("|CantidadServicios|", strCantidades + "", false, true);
-            document.Replace("|FechaTimbrado|", strTimbrado, false, true);
-            document.Replace("|FolioFactura|", strFacturas, false, true);
+            document.Replace("|ImporteIVA|", acta.Total.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadServicios|", acta.Cantidad.Replace("|", "\n"), false, true);
+            document.Replace("|FechaTimbrado|", acta.FechasTimbrado.Replace("|", "\n"), false, true);
+            document.Replace("|FolioFactura|", acta.Folios.Replace("|", "\n"), false, true);
 
             //Notas de Crédito
-            document.Replace("|ImporteNota|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalNC), false, true);
-            document.Replace("|CantidadNota|", strCantidadesNota.Equals("") ? "N/A" : strCantidadesNota + "", false, true);
-            document.Replace("|TimbradoNota|", strNTimbrado.Equals("") ? "N/A" : strNTimbrado, false, true);
-            document.Replace("|FolioNota|", strNotas.Equals("") ? "N/A" : strNotas, false, true);
+            document.Replace("|ImporteNota|", acta.TotalNC.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadNota|", acta.CantidadNC.Replace("|", "\n"), false, true);
+            document.Replace("|TimbradoNota|", acta.FechasTimbradoNC.Replace("|", "\n"), false, true);
+            document.Replace("|FolioNota|", acta.FoliosNC.Replace("|", "\n"), false, true);
 
             //Salvar y Lanzar
 
@@ -589,14 +293,14 @@ namespace CedulasEvaluacion.Controllers
             return File(toArray, "application/ms-word", "ActaER_Fumigacion_" + cedula.Mes + ".docx");
         }
 
-        [Route("/documents/actaMensajeria/{id?}")]
-        public async Task<IActionResult> getActaEntregaRecepcionMensajeria(int id)
+        [Route("/documents/actaMensajeria/{id?}/{servicio?}")]
+        public async Task<IActionResult> getActaEntregaRecepcionMensajeria(int id,int servicio)
         {
 
-            ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            cedula = await vDocuments.getDatosActa(id, 3);
-            cedula.facturas = new List<Facturas>();
-            cedula.facturas = await vFacturas.getFacturas(id, 3);
+            ActaEntregaRecepcion acta = new ActaEntregaRecepcion();
+            CedulaEvaluacion cedula = new CedulaEvaluacion();
+            cedula = await vCedula.CedulaById(id);
+            acta = await vDocuments.getDatosActa(id, servicio);
 
 
             Document document = new Document();
@@ -605,29 +309,27 @@ namespace CedulasEvaluacion.Controllers
 
             Section tablas = document.AddSection();
 
-            document.Replace("|Periodo|", cedula.FechaInicio.Day + " de " + cedula.FechaInicio.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaInicio.Year + " al " +
-                 cedula.FechaFin.Day + " de " + cedula.FechaFin.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaFin.Year, false, true);
-
-            document.Replace("|Ciudad|", cedula.Estado, false, true);
-            if (cedula.Estado.Equals("Ciudad de México"))
+            document.Replace("|Ciudad|", acta.Estado, false, true);
+            if (acta.Estado.Equals("Ciudad de México"))
             {
-                document.Replace("|Estado|", "en la " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en la " + acta.Estado, false, true);
                 document.Replace("|Coordinacion|", "COORDINACIÓN DE CONTROL OPERATIVO DE ADMINISTRACIONES DE EDIFICIOS", false, true);
-                document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC), false, true);
+                document.Replace("|EncabezadoInmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.EncabezadoInmueble), false, true);
             }
             else
             {
-                document.Replace("|Estado|", "en el " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en el " + acta.Estado, false, true);
                 document.Replace("|Coordinacion|", "COORDINACIÓN DE ADMINISTRACIÓN REGIONAL", false, true);
-                document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.TipoInmueble) + " " + CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Estado), false, true);
+                document.Replace("|EncabezadoInmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.TipoInmueble) + " " + CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.Estado), false, true);
             }
 
-            document.Replace("|InmuebleP|", cedula.InmuebleC, false, true);
-            document.Replace("|DomicilioInmueble|", cedula.Direccion, false, true);
-            document.Replace("|ResponsableInmueble|", cedula.Administrador, false, true);
-            document.Replace("|Reviso|", cedula.Reviso, false, true);
-            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cedula.Elaboro.ToLower()), false, true);
-            document.Replace("|InmuebleCedula|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Inmueble), false, true);
+            document.Replace("|InmuebleEvaluado|", acta.InmuebleEvaluado, false, true);
+            document.Replace("|Puesto|", acta.PuestoAutoriza, false, true);
+            document.Replace("|PuestoFirma|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.PuestoAutoriza), false, true);
+            document.Replace("|DomicilioInmueble|", acta.Direccion, false, true);
+            document.Replace("|Administrador|", acta.Administrador, false, true);
+            document.Replace("|Reviso|", acta.Reviso, false, true);
+            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(acta.Elaboro.ToLower()), false, true);
 
             document.Replace("|Folio|", cedula.Folio, false, true);
 
@@ -642,7 +344,9 @@ namespace CedulasEvaluacion.Controllers
             document.Replace("|DiaActual|", fechaActual.Day + " de " + fechaActual.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + fechaActual.Year, false, true);
             document.Replace("|HoraActual|", fechaActual.Hour + ":00", false, true);
             document.Replace("|Hora|", fechaActual.Hour + ":00", false, true);
-            if ((await iFumigacion.GetIncidenciasPregunta(id, 2)).Count == 0 && (await iFumigacion.GetIncidenciasPregunta(id, 3)).Count == 0 && (await iFumigacion.GetIncidenciasPregunta(id, 4)).Count == 0)
+            if ((await iMensajeria.getIncidenciasByTipoMensajeria(id, "Recoleccion")).Count == 0 && (await iMensajeria.getIncidenciasByTipoMensajeria(id, "Entrega")).Count == 0 &&
+                (await iMensajeria.getIncidenciasByTipoMensajeria(id, "Acuses")).Count == 0 && (await iMensajeria.getIncidenciasByTipoMensajeria(id, "Mal Estado")).Count == 0 &&
+                (await iMensajeria.getIncidenciasByTipoMensajeria(id, "Extraviadas")).Count == 0 && (await iMensajeria.getIncidenciasByTipoMensajeria(id, "Robadas")).Count == 0)
             {
                 document.Replace("|Declaraciones|", "Se hace constar que los servicios solicitados fueron atendidos a entera satisfacción del Consejo de la Judicatura Federal conforme se visualiza en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
             }
@@ -651,196 +355,16 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("|Declaraciones|", "Se hace constar que los servicios fueron recibidos por el Consejo de la Judicatura Federal, presentando incidencias, mismas que se vierten en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
             }
 
-            string strFacturas = "";
-            string strNotas = "";
-            string strNTimbrado = "";
-            string strCantidades = "";
-            string strCantidadesNota = "";
-            string strTimbrado = "";
-            decimal total = 0, totalNC = 0;
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                if ((cedula.facturas.Count - 1) != i && i != 0)
-                {
-                    if (!cedula.facturas[i].receptor.usoCFDI.Equals("G02"))
-                    {
-                        strFacturas += cedula.facturas[i].comprobante.Folio + "\n";
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
+            document.Replace("|ImporteIVA|", acta.Total.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadServicios|", acta.Cantidad.Replace("|", "\n"), false, true);
+            document.Replace("|FechaTimbrado|", acta.FechasTimbrado.Replace("|", "\n"), false, true);
+            document.Replace("|FolioFactura|", acta.Folios.Replace("|", "\n"), false, true);
 
-                        total += cedula.facturas[i].comprobante.Total;
-                    }
-                    else
-                    {
-                        strNotas += cedula.facturas[i].comprobante.Folio + "\n";
-                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        totalNC += cedula.facturas[i].comprobante.Total;
-                    }
-                }
-                else
-                {
-                    if (!cedula.facturas[i].receptor.usoCFDI.Equals("G02"))
-                    {
-                        strFacturas += cedula.facturas[i].comprobante.Folio + "\n";
-                        strTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        total += cedula.facturas[i].comprobante.Total;
-                    }
-                    else
-                    {
-                        strNotas += cedula.facturas[i].comprobante.Folio + "\n";
-                        strNTimbrado += cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        totalNC += cedula.facturas[i].comprobante.Total;
-                    }
-                }
-            }
-            int cantidad = 0;
-            decimal cantidadS = 0;
-            string concepto = "";
-            string unidad = "";
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                for (int j = 0; j < cedula.facturas[i].concepto.Count; j++)
-                {
-                    unidad = cedula.facturas[i].concepto[j].Unidad.Equals("ACTIVIDAD") ? "(ES)" : "(S)";
-                    if ((cedula.facturas[i].concepto.Count - 1) != j && j != 0)
-                    {
-                        if (!cedula.facturas[i].receptor.usoCFDI.Equals("G02"))
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                if (cedula.facturas[i].concepto[j].Unidad.Equals("GUIA"))
-                                {
-                                    cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades = cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                                else
-                                {
-                                    cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                if (cedula.facturas[i].concepto[j].Unidad.Equals("GUIA"))
-                                {
-                                    cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades += cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                                else
-                                {
-                                    cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                if (cedula.facturas[i].concepto[j].Unidad.Equals("GUIA"))
-                                {
-                                    cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota = cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                                else
-                                {
-                                    cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                if (cedula.facturas[i].concepto[j].Unidad.Equals("GUIA"))
-                                {
-                                    cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota += cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                                else
-                                {
-                                    cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!cedula.facturas[i].receptor.usoCFDI.Equals("G02"))
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                if (cedula.facturas[i].concepto[j].Unidad.Equals("GUIA"))
-                                {
-                                    cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades = cantidad + " GUÍA(S) - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                                else
-                                {
-                                    cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                if (cedula.facturas[i].concepto[j].Unidad.Equals("GUIA"))
-                                {
-                                    cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades += cantidad + " GUÍA(S) - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                                else
-                                {
-                                    cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidades += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                if (cedula.facturas[i].concepto[j].Unidad.Equals("GUIA"))
-                                {
-                                    cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota = cantidad + " GUÍA(S) - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                                else
-                                {
-                                    cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota = cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + "  - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                            }
-                            else
-                            {
-                                if (cedula.facturas[i].concepto[j].Unidad.Equals("GUIA"))
-                                {
-                                    cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota = cantidad + " GUÍA(S) - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                                else
-                                {
-                                    cantidadS += Convert.ToDecimal(cedula.facturas[i].concepto[j].Cantidad);
-                                    strCantidadesNota += cantidadS + " " + cedula.facturas[i].concepto[j].Unidad + unidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                                }
-                            }
-                        }
-                    }
-                }
-                concepto = "";
-                cantidad = 0;
-                cantidadS = 0;
-            }
-
-            document.Replace("|ImporteIVA|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total), false, true);
-            document.Replace("|CantidadServicios|", strCantidades + "", false, true);
-            document.Replace("|FechaTimbrado|", strTimbrado, false, true);
-            document.Replace("|FolioFactura|", strFacturas, false, true);
-
-            document.Replace("|ImporteNota|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalNC), false, true);
-            document.Replace("|CantidadNota|", strCantidadesNota.Equals("") ? "N/A" : strCantidadesNota + "", false, true);
-            document.Replace("|TimbradoNota|", strNTimbrado, false, true);
-            document.Replace("|FolioNota|", strNotas.Equals("") ? "N/A" : strNotas, false, true);
+            //Notas de Crédito
+            document.Replace("|ImporteNota|", acta.TotalNC.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadNota|", acta.CantidadNC.Replace("|", "\n"), false, true);
+            document.Replace("|TimbradoNota|", acta.FechasTimbradoNC.Replace("|", "\n"), false, true);
+            document.Replace("|FolioNota|", acta.FoliosNC.Replace("|", "\n"), false, true);
 
 
             byte[] toArray = null;
@@ -852,16 +376,14 @@ namespace CedulasEvaluacion.Controllers
             return File(toArray, "application/ms-word", "ActaER_Mensajeria_" + cedula.Mes + ".docx");
         }
 
-        [Route("/documents/actaAgua/{id?}")]
-        public async Task<IActionResult> getActaEntregaRecepcionAgua(int id)
+        [Route("/documents/actaAgua/{id?}/{servicio?}")]
+        public async Task<IActionResult> getActaEntregaRecepcionAgua(int id, int servicio)
         {
 
-            ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            CedulaAgua cedulaAgua = new CedulaAgua();
-            cedulaAgua = await vAgua.CedulaById(id);
-            cedula = await vDocuments.getDatosActa(id, 9);
-            cedula.facturas = new List<Facturas>();
-            cedula.facturas = await vFacturas.getFacturas(id, 9);
+            ActaEntregaRecepcion acta = new ActaEntregaRecepcion();
+            CedulaEvaluacion cedula = new CedulaEvaluacion();
+            cedula = await vCedula.CedulaById(id);
+            acta = await vDocuments.getDatosActa(id, servicio);
 
 
             Document document = new Document();
@@ -871,27 +393,26 @@ namespace CedulasEvaluacion.Controllers
             //Creamos la Tabla
             Section tablas = document.AddSection();
 
-            document.Replace("|Periodo|", cedula.FechaInicio.Day + " de " + cedula.FechaInicio.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaInicio.Year + " al " +
-                 cedula.FechaFin.Day + " de " + cedula.FechaFin.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaFin.Year, false, true);
-
-            document.Replace("|Ciudad|", cedula.Estado, false, true);
-            if (cedula.Estado.Equals("Ciudad de México"))
+            document.Replace("|Ciudad|", acta.Estado, false, true);
+            if (acta.Estado.Equals("Ciudad de México"))
             {
-                document.Replace("|Estado|", "en la " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en la " + acta.Estado, false, true);
             }
             else
             {
-                document.Replace("|Estado|", "en el " + cedula.Estado, false, true);
-                document.Replace("|Estado|", "en " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en el " + acta.Estado, false, true);
+                document.Replace("|Estado|", "en " + acta.Estado, false, true);
             }
 
-            document.Replace("|InmuebleP|", cedula.InmuebleC, false, true);
-            document.Replace("|DomicilioInmueble|", cedula.Direccion, false, true);
-            document.Replace("|ResponsableInmueble|", cedula.Administrador, false, true);
-            document.Replace("|Reviso|", cedula.Reviso, false, true);
-            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cedula.Elaboro.ToLower()), false, true);
-            document.Replace("|InmuebleCedula|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Inmueble), false, true);
-            document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC) + "\n", false, true);
+            document.Replace("|EncabezadoInmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.EncabezadoInmueble), false, true);
+            document.Replace("|AdministracionInmueble|", acta.EncabezadoInmueble, false, true);
+            document.Replace("|InmuebleEvaluado|", acta.InmuebleEvaluado, false, true);
+            document.Replace("|Puesto|", acta.PuestoAutoriza, false, true);
+            document.Replace("|PuestoFirma|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.PuestoAutoriza), false, true);
+            document.Replace("|DomicilioInmueble|", acta.Direccion, false, true);
+            document.Replace("|Administrador|", acta.Administrador, false, true);
+            document.Replace("|Reviso|", acta.Reviso, false, true);
+            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(acta.Elaboro.ToLower()), false, true);
 
             document.Replace("|Folio|", cedula.Folio, false, true);
 
@@ -915,130 +436,16 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("|Declaraciones|", "\nSe hace constar que los servicios fueron recibidos por el Consejo de la Judicatura Federal, presentando incidencias, mismas que se vierten en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
             }
 
-            string strFacturas = "";
-            string strNotas = "";
-            string strNTimbrado = "";
-            string strCantidades = "";
-            string strCantidadesNota = "";
-            string strTimbrado = "";
-            string total = "", totalNC = "";
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                if ((cedula.facturas.Count - 1) != i && i != 0)
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                    {
-                        strFacturas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-
-                        total += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                    else
-                    {
-                        strNotas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strNTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        totalNC += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                }
-                else
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                    {
-                        strFacturas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        total += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                    else
-                    {
-                        strNotas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strNTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        totalNC += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                }
-            }
-            int cantidad = 0;
-            string concepto = "";
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                for (int j = 0; j < cedula.facturas[i].concepto.Count; j++)
-                {
-                    if ((cedula.facturas[i].concepto.Count - 1) != j && j != 0)
-                    {
-                        if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                        else
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                        else
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                    }
-                }
-                concepto = "";
-                cantidad = 0;
-            }
-
-            document.Replace("|ImporteIVA|", total, false, true);
-            document.Replace("|CantidadServicios|", strCantidades + "", false, true);
-            document.Replace("|FechaTimbrado|", strTimbrado, false, true);
-            document.Replace("|FolioFactura|", strFacturas, false, true);
+            document.Replace("|ImporteIVA|", acta.Total.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadServicios|", acta.Cantidad.Replace("|", "\n"), false, true);
+            document.Replace("|FechaTimbrado|", acta.FechasTimbrado.Replace("|", "\n"), false, true);
+            document.Replace("|FolioFactura|", acta.Folios.Replace("|", "\n"), false, true);
 
             //Notas de Crédito
-            document.Replace("|ImporteNota|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalNC), false, true);
-            document.Replace("|CantidadNota|", strCantidadesNota.Equals("") ? "N/A" : strCantidadesNota + "", false, true);
-            document.Replace("|TimbradoNota|", strNTimbrado.Equals("") ? "N/A" : strNTimbrado, false, true);
-            document.Replace("|FolioNota|", strNotas.Equals("") ? "N/A" : strNotas, false, true);
+            document.Replace("|ImporteNota|", acta.TotalNC.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadNota|", acta.CantidadNC.Replace("|", "\n"), false, true);
+            document.Replace("|TimbradoNota|", acta.FechasTimbradoNC.Replace("|", "\n"), false, true);
+            document.Replace("|FolioNota|", acta.FoliosNC.Replace("|", "\n"), false, true);
 
             //Salvar y Lanzar
 
@@ -1051,18 +458,13 @@ namespace CedulasEvaluacion.Controllers
             return File(toArray, "application/ms-word", "ActaER_Agua_" + cedula.Mes + ".docx");
         }
 
-        [Route("/documents/actaRPBI/{id?}")]
-        public async Task<IActionResult> getActaEntregaRecepcionRPBI(int id)
+        [Route("/documents/actaRPBI/{id?}/{servicio?}")]
+        public async Task<IActionResult> getActaEntregaRecepcionRPBI(int id,int servicio)
         {
-
-            ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            CedulaEvaluacion cedulaResiduos = new CedulaEvaluacion();
-            cedulaResiduos = await vCedula.CedulaById(id);
-            cedulaResiduos.usuarios = await vUsuarios.getUserById(cedulaResiduos.UsuarioId);
-            cedula = await vDocuments.getDatosActa(id, 7);
-            cedula.facturas = new List<Facturas>();
-            cedula.facturas = await vFacturas.getFacturas(id, 7);
-
+            ActaEntregaRecepcion acta = new ActaEntregaRecepcion();
+            CedulaEvaluacion cedula = new CedulaEvaluacion();
+            cedula = await vCedula.CedulaById(id);
+            acta = await vDocuments.getDatosActa(id, servicio);
 
             Document document = new Document();
             var path = @"E:\Plantillas CASESGV2\DocsV2\Acta ER\Acta Entrega - Recepción 2022 RPBI.docx";
@@ -1071,34 +473,30 @@ namespace CedulasEvaluacion.Controllers
             //Creamos la Tabla
             Section tablas = document.AddSection();
 
-            document.Replace("|Periodo|", cedula.FechaInicio.Day + " de " + cedula.FechaInicio.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaInicio.Year + " al " +
-                 cedula.FechaFin.Day + " de " + cedula.FechaFin.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaFin.Year, false, true);
-
-            document.Replace("|Ciudad|", cedula.Estado, false, true);
-            if (cedula.Estado.Equals("Ciudad de México"))
+            document.Replace("|Ciudad|", acta.Estado, false, true);
+            if (acta.Estado.Equals("Ciudad de México"))
             {
-                document.Replace("|Estado|", "en la " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en la " + acta.Estado, false, true);
             }
             else
             {
-                document.Replace("|Estado|", "en el " + cedula.Estado, false, true);
-                document.Replace("|Estado|", "en " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en el " + acta.Estado, false, true);
+                document.Replace("|Estado|", "en " + acta.Estado, false, true);
             }
 
-            document.Replace("|InmuebleP|", cedula.Inmueble, false, true);
-            document.Replace("|DomicilioInmueble|", cedula.Direccion, false, true);
-            document.Replace("|ResponsableInmueble|", cedula.Administrador, false, true);
-            document.Replace("|Reviso|", cedula.Reviso, false, true);
-            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cedula.Elaboro.ToLower()), false, true);
-            document.Replace("|InmuebleCedula|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Inmueble), false, true);
-            document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC) + "\n", false, true);
+            document.Replace("|EncabezadoInmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.EncabezadoInmueble), false, true);
+            document.Replace("|AdministracionInmueble|", acta.EncabezadoInmueble, false, true);
+            document.Replace("|InmuebleEvaluado|", acta.InmuebleEvaluado, false, true);
+            document.Replace("|Puesto|", acta.PuestoAutoriza, false, true);
+            document.Replace("|PuestoFirma|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.PuestoAutoriza), false, true);
+            document.Replace("|DomicilioInmueble|", acta.Direccion, false, true);
+            document.Replace("|Medico|", acta.Elaboro, false, true);
+            document.Replace("|Reviso|", acta.Reviso, false, true);
+            document.Replace("|Usuario|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(acta.Elaboro.ToLower()), false, true);
 
             document.Replace("|Folio|", cedula.Folio, false, true);
 
             document.Replace("|MesEval|", cedula.Mes, false, true);
-
-            document.Replace("|Medico|", cedulaResiduos.usuarios.nombre_emp + " " + cedulaResiduos.usuarios.paterno_emp + " " +
-                cedulaResiduos.usuarios.materno_emp, false, true);
 
 
             DateTime fechaActual = DateTime.Now;
@@ -1109,6 +507,7 @@ namespace CedulasEvaluacion.Controllers
             document.Replace("|DiaActual|", fechaActual.Day + " de " + fechaActual.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + fechaActual.Year, false, true);
             document.Replace("|HoraActual|", fechaActual.Hour + ":00", false, true);
             document.Replace("|Hora|", fechaActual.Hour + ":00", false, true);
+
             if ((await iAgua.GetIncidenciasPregunta(id, 2)).Count == 0 && (await iAgua.GetIncidenciasPregunta(id, 3)).Count == 0 && (await iAgua.GetIncidenciasPregunta(id, 4)).Count == 0)
             {
                 document.Replace("|Declaraciones|", "Se hace constar que los servicios solicitados fueron atendidos a entera satisfacción del Consejo de la Judicatura Federal conforme se visualiza en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
@@ -1118,130 +517,16 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("|Declaraciones|", "\nSe hace constar que los servicios fueron recibidos por el Consejo de la Judicatura Federal, presentando incidencias, mismas que se vierten en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
             }
 
-            string strFacturas = "";
-            string strNotas = "";
-            string strNTimbrado = "";
-            string strCantidades = "";
-            string strCantidadesNota = "";
-            string strTimbrado = "";
-            string total = "", totalNC = "";
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                if ((cedula.facturas.Count - 1) != i && i != 0)
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                    {
-                        strFacturas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-
-                        total += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                    else
-                    {
-                        strNotas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strNTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        totalNC += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                }
-                else
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                    {
-                        strFacturas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        total += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                    else
-                    {
-                        strNotas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strNTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        totalNC += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                }
-            }
-            int cantidad = 0;
-            string concepto = "";
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                for (int j = 0; j < cedula.facturas[i].concepto.Count; j++)
-                {
-                    if ((cedula.facturas[i].concepto.Count - 1) != j && j != 0)
-                    {
-                        if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                        else
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                        else
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                    }
-                }
-                concepto = "";
-                cantidad = 0;
-            }
-
-            document.Replace("|ImporteIVA|", total, false, true);
-            document.Replace("|CantidadServicios|", strCantidades + "", false, true);
-            document.Replace("|FechaTimbrado|", strTimbrado, false, true);
-            document.Replace("|FolioFactura|", strFacturas, false, true);
+            document.Replace("|ImporteIVA|", acta.Total.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadServicios|", acta.Cantidad.Replace("|", "\n"), false, true);
+            document.Replace("|FechaTimbrado|", acta.FechasTimbrado.Replace("|", "\n"), false, true);
+            document.Replace("|FolioFactura|", acta.Folios.Replace("|", "\n"), false, true);
 
             //Notas de Crédito
-            document.Replace("|ImporteNota|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalNC), false, true);
-            document.Replace("|CantidadNota|", strCantidadesNota.Equals("") ? "N/A" : strCantidadesNota + "", false, true);
-            document.Replace("|TimbradoNota|", strNTimbrado.Equals("") ? "N/A" : strNTimbrado, false, true);
-            document.Replace("|FolioNota|", strNotas.Equals("") ? "N/A" : strNotas, false, true);
+            document.Replace("|ImporteNota|", acta.TotalNC.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadNota|", acta.CantidadNC.Replace("|", "\n"), false, true);
+            document.Replace("|TimbradoNota|", acta.FechasTimbradoNC.Replace("|", "\n"), false, true);
+            document.Replace("|FolioNota|", acta.FoliosNC.Replace("|", "\n"), false, true);
 
             //Salvar y Lanzar
 
@@ -1254,18 +539,13 @@ namespace CedulasEvaluacion.Controllers
             return File(toArray, "application/ms-word", "ActaER_RPBI_" + cedula.Mes + ".docx");
         }
 
-        [Route("/documents/actaAnalisis/{id?}")]
-        public async Task<IActionResult> getActaEntregaRecepcionAnalisis(int id)
+        [Route("/documents/actaAnalisis/{id?}/{servicio?}")]
+        public async Task<IActionResult> getActaEntregaRecepcionAnalisis(int id, int servicio)
         {
-
-            ActaEntregaRecepcion cedula = new ActaEntregaRecepcion();
-            CedulaEvaluacion cedulaResiduos = new CedulaEvaluacion();
-            cedulaResiduos = await vCedula.CedulaById(id);
-            cedulaResiduos.usuarios = await vUsuarios.getUserById(cedulaResiduos.UsuarioId);
-            cedula = await vDocuments.getDatosActa(id, 8);
-            cedula.facturas = new List<Facturas>();
-            cedula.facturas = await vFacturas.getFacturas(id, 8);
-
+            ActaEntregaRecepcion acta = new ActaEntregaRecepcion();
+            CedulaEvaluacion cedula = new CedulaEvaluacion();
+            cedula = await vCedula.CedulaById(id);
+            acta = await vDocuments.getDatosActa(id, servicio);
 
             Document document = new Document();
             var path = @"E:\Plantillas CASESGV2\DocsV2\Acta ER\Acta Entrega - Recepción 2022 Analisis.docx";
@@ -1274,34 +554,26 @@ namespace CedulasEvaluacion.Controllers
             //Creamos la Tabla
             Section tablas = document.AddSection();
 
-            document.Replace("|Periodo|", cedula.FechaInicio.Day + " de " + cedula.FechaInicio.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaInicio.Year + " al " +
-                 cedula.FechaFin.Day + " de " + cedula.FechaFin.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + cedula.FechaFin.Year, false, true);
-
-            document.Replace("|Ciudad|", cedula.Estado, false, true);
-            if (cedula.Estado.Equals("Ciudad de México"))
+            document.Replace("|Ciudad|", acta.Estado, false, true);
+            if (acta.Estado.Equals("Ciudad de México"))
             {
-                document.Replace("|Estado|", "en la " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en la " + acta.Estado, false, true);
             }
             else
             {
-                document.Replace("|Estado|", "en el " + cedula.Estado, false, true);
-                document.Replace("|Estado|", "en " + cedula.Estado, false, true);
+                document.Replace("|Estado|", "en el " + acta.Estado, false, true);
+                document.Replace("|Estado|", "en " + acta.Estado, false, true);
             }
 
-            document.Replace("|InmuebleP|", cedula.Inmueble, false, true);
-            document.Replace("|DomicilioInmueble|", cedula.Direccion, false, true);
-            document.Replace("|ResponsableInmueble|", cedula.Administrador, false, true);
-            document.Replace("|Reviso|", cedula.Reviso, false, true);
-            document.Replace("|ResponsableCENDI|", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cedula.Elaboro.ToLower()), false, true);
-            document.Replace("|InmuebleCedula|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.Inmueble), false, true);
-            document.Replace("|Inmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(cedula.InmuebleC) + "\n", false, true);
+            document.Replace("|EncabezadoInmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.EncabezadoInmueble), false, true);
+            document.Replace("|AdministracionInmueble|", acta.EncabezadoInmueble, false, true);
+            document.Replace("|InmuebleEvaluado|", acta.InmuebleEvaluado, false, true);
+            document.Replace("|DomicilioInmueble|", acta.Direccion, false, true);
+            document.Replace("|ResponsableCENDI|", acta.Elaboro, false, true);
 
             document.Replace("|Folio|", cedula.Folio, false, true);
 
             document.Replace("|MesEval|", cedula.Mes, false, true);
-
-            document.Replace("|Medico|", cedulaResiduos.usuarios.nombre_emp + " " + cedulaResiduos.usuarios.paterno_emp + " " +
-                cedulaResiduos.usuarios.materno_emp, false, true);
 
 
             DateTime fechaActual = DateTime.Now;
@@ -1321,130 +593,16 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("|Declaraciones|", "\nSe hace constar que los servicios fueron recibidos por el Consejo de la Judicatura Federal, presentando incidencias, mismas que se vierten en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
             }
 
-            string strFacturas = "";
-            string strNotas = "";
-            string strNTimbrado = "";
-            string strCantidades = "";
-            string strCantidadesNota = "";
-            string strTimbrado = "";
-            string total = "", totalNC = "";
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                if ((cedula.facturas.Count - 1) != i && i != 0)
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                    {
-                        strFacturas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-
-                        total += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                    else
-                    {
-                        strNotas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strNTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        totalNC += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                }
-                else
-                {
-                    if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                    {
-                        strFacturas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        total += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                    else
-                    {
-                        strNotas += (i + 1) + ".- " + cedula.facturas[i].comprobante.Serie + cedula.facturas[i].comprobante.Folio + "\n";
-                        strNTimbrado += (i + 1) + ".- " + cedula.facturas[i].timbreFiscal.FechaTimbrado.ToString("dd/MM/yyyy") + "\n";
-                        totalNC += (i + 1) + ".- " + String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", cedula.facturas[i].comprobante.Total) + "\n";
-                    }
-                }
-            }
-            int cantidad = 0;
-            string concepto = "";
-            for (int i = 0; i < cedula.facturas.Count; i++)
-            {
-                for (int j = 0; j < cedula.facturas[i].concepto.Count; j++)
-                {
-                    if ((cedula.facturas[i].concepto.Count - 1) != j && j != 0)
-                    {
-                        if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                        else
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!cedula.facturas[i].comprobante.Serie.Equals("NCRE"))
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidades += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                        else
-                        {
-                            if (concepto.Equals(cedula.facturas[i].concepto[j].Descripcion))
-                            {
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota = (i + 1) + ".- " + cantidad + " - " + cedula.facturas[i].concepto[j].Descripcion + "\n";
-                            }
-                            else
-                            {
-                                concepto = cedula.facturas[i].concepto[j].Descripcion;
-                                cantidad += Convert.ToInt32(cedula.facturas[i].concepto[j].Cantidad);
-                                strCantidadesNota += (i + 1) + ".- " + cantidad + " - " + concepto + "\n";
-                            }
-                        }
-                    }
-                }
-                concepto = "";
-                cantidad = 0;
-            }
-
-            document.Replace("|ImporteIVA|", total, false, true);
-            document.Replace("|CantidadServicios|", strCantidades + "", false, true);
-            document.Replace("|FechaTimbrado|", strTimbrado, false, true);
-            document.Replace("|FolioFactura|", strFacturas, false, true);
+            document.Replace("|ImporteIVA|", acta.Total.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadServicios|", acta.Cantidad.Replace("|", "\n"), false, true);
+            document.Replace("|FechaTimbrado|", acta.FechasTimbrado.Replace("|", "\n"), false, true);
+            document.Replace("|FolioFactura|", acta.Folios.Replace("|", "\n"), false, true);
 
             //Notas de Crédito
-            document.Replace("|ImporteNota|", String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", totalNC), false, true);
-            document.Replace("|CantidadNota|", strCantidadesNota.Equals("") ? "N/A" : strCantidadesNota + "", false, true);
-            document.Replace("|TimbradoNota|", strNTimbrado.Equals("") ? "N/A" : strNTimbrado, false, true);
-            document.Replace("|FolioNota|", strNotas.Equals("") ? "N/A" : strNotas, false, true);
+            document.Replace("|ImporteNota|", acta.TotalNC.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadNota|", acta.CantidadNC.Replace("|", "\n"), false, true);
+            document.Replace("|TimbradoNota|", acta.FechasTimbradoNC.Replace("|", "\n"), false, true);
+            document.Replace("|FolioNota|", acta.FoliosNC.Replace("|", "\n"), false, true);
 
             //Salvar y Lanzar
 

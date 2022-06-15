@@ -562,7 +562,7 @@ namespace CedulasEvaluacion.Repositories
                 CedulaEvaluacionId = (int)reader["CedulaEvaluacionId"],
                 Pregunta = (int)reader["Pregunta"],
                 Respuesta = Convert.ToBoolean(reader["Respuesta"]),
-                Detalles = reader["Detalles"].ToString(),
+                Detalles = reader["Detalles"] != DBNull.Value ? reader["Detalles"].ToString(): "",
                 Penalizable = reader["Penalizable"] != DBNull.Value ? Convert.ToBoolean(reader["Penalizable"]) : false,
                 MontoPenalizacion = reader["MontoPenalizacion"] != DBNull.Value ? Convert.ToDecimal(reader["MontoPenalizacion"]) : 0
             };

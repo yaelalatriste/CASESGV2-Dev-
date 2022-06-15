@@ -19,52 +19,13 @@ namespace CedulasEvaluacion.Repositories
             _connectionString = configuration.GetConnectionString("DatabaseConnection"); ;
         }
 
-        public async Task<List<ActaEntregaRecepcion>> getFacturasActa(int cedula, int servicio)
-        {
-            try
-            {
-                using (SqlConnection sql = new SqlConnection(_connectionString))
-                {
-                    using (SqlCommand cmd = new SqlCommand("sp_getDatosActaERLimpieza", sql))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@cedulaId", cedula));
-                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
-                        var response = new List<ActaEntregaRecepcion>();
-                        await sql.OpenAsync();
-
-                        using (var reader = await cmd.ExecuteReaderAsync())
-                        {
-                            while (await reader.ReadAsync())
-                            {
-                                if (servicio == 3)
-                                {
-                                    response.Add(MapToValueMensajeria(reader));
-                                }
-                                else
-                                {
-                                    response.Add(MapToValue(reader));
-                                }
-                            }
-                        }
-                        return response;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-                return null;
-            }
-        }
-
         public async Task<ActaEntregaRecepcion> getDatosActa(int cedula, int servicio)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("sp_getDatosActaERLimpieza", sql))
+                    using (SqlCommand cmd = new SqlCommand("sp_getDatosActaER", sql))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@cedulaId", cedula));
@@ -106,17 +67,22 @@ namespace CedulasEvaluacion.Repositories
                 Mes = reader["Mes"].ToString(),
                 Folio = reader["Folio"].ToString(),
                 Anio = (int)reader["Anio"],
-                Contrato = reader["Contrato"].ToString(),
-                Servicio = reader["Servicio"].ToString(),
-                Inmueble = reader["Inmueble"].ToString(),
-                InmuebleC = reader["InmuebleC"].ToString(),
-                Direccion = reader["Direccion"].ToString(),
-                Estado = reader["Estado"].ToString(),
-                Administrador = reader["Administrador"].ToString(),
-                Elaboro = reader["Elaboro"].ToString(),
-                Reviso = reader["Reviso"].ToString(),
-                FechaInicio = Convert.ToDateTime(reader["FechaInicio"]),
-                FechaFin = Convert.ToDateTime(reader["FechaFin"]),
+                EncabezadoInmueble = reader["EncabezadoInmueble"] != DBNull.Value ? reader["EncabezadoInmueble"].ToString():"",
+                InmuebleEvaluado = reader["InmuebleEvaluado"] != DBNull.Value ? reader["InmuebleEvaluado"].ToString():"",
+                Direccion = reader["Direccion"] != DBNull.Value ? reader["Direccion"].ToString():"",
+                Estado = reader["Estado"] != DBNull.Value ? reader["Estado"].ToString():"",
+                Administrador = reader["Administrador"] != DBNull.Value ? reader["Administrador"].ToString():"",
+                PuestoAutoriza = reader["PuestoAutoriza"] != DBNull.Value ? reader["PuestoAutoriza"].ToString():"",
+                Elaboro = reader["Elaboro"] != DBNull.Value ? reader["Elaboro"].ToString():"",
+                Reviso = reader["Reviso"] != DBNull.Value ? reader["Reviso"].ToString():"",
+                Folios = reader["Folios"] != DBNull.Value ? reader["Folios"].ToString():"",
+                FechasTimbrado = reader["FechasTimbrado"] != DBNull.Value ? reader["FechasTimbrado"].ToString():"",
+                Cantidad = reader["Cantidad"] != DBNull.Value ? reader["Cantidad"].ToString():"",
+                Total = reader["Total"] != DBNull.Value ? reader["Total"].ToString():"",
+                FoliosNC = reader["FoliosNC"] != DBNull.Value ? reader["FoliosNC"].ToString():"",
+                FechasTimbradoNC = reader["FechasTimbradoNC"] != DBNull.Value ? reader["FechasTimbradoNC"].ToString():"",
+                CantidadNC = reader["CantidadNC"] != DBNull.Value ? reader["CantidadNC"].ToString():"",
+                TotalNC = reader["TotalNC"] != DBNull.Value ? reader["TotalNC"].ToString():"",
             };
         }
 
@@ -128,18 +94,23 @@ namespace CedulasEvaluacion.Repositories
                 Mes = reader["Mes"].ToString(),
                 Folio = reader["Folio"].ToString(),
                 Anio = (int)reader["Anio"],
-                Contrato = reader["Contrato"].ToString(),
-                TipoInmueble = reader["TipoInmueble"].ToString(),
-                Servicio = reader["Servicio"].ToString(),
-                Inmueble = reader["Inmueble"].ToString(),
-                InmuebleC = reader["InmuebleC"].ToString(),
+                EncabezadoInmueble = reader["EncabezadoInmueble"].ToString(),
+                InmuebleEvaluado = reader["InmuebleEvaluado"].ToString(),
                 Direccion = reader["Direccion"].ToString(),
                 Estado = reader["Estado"].ToString(),
                 Administrador = reader["Administrador"].ToString(),
+                PuestoAutoriza = reader["PuestoAutoriza"].ToString(),
                 Elaboro = reader["Elaboro"].ToString(),
                 Reviso = reader["Reviso"].ToString(),
-                FechaInicio = Convert.ToDateTime(reader["FechaInicio"]),
-                FechaFin = Convert.ToDateTime(reader["FechaFin"]),
+                Folios = reader["Folios"].ToString(),
+                FechasTimbrado = reader["FechasTimbrado"].ToString(),
+                Cantidad = reader["Cantidad"].ToString(),
+                Total = reader["Total"].ToString(),
+                FoliosNC = reader["FoliosNC"].ToString(),
+                FechasTimbradoNC = reader["FechasTimbradoNC"].ToString(),
+                CantidadNC = reader["CantidadNC"].ToString(),
+                TotalNC = reader["TotalNC"].ToString(),
+                TipoInmueble = reader["TipoInmueble"].ToString(),
             };
         }
     }
