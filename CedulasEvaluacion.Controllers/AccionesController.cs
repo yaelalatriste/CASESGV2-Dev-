@@ -56,6 +56,24 @@ namespace CedulasEvaluacion.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        [Route("/view/acuseFinancieros/{numero}/{acuse}")]
+        public IActionResult verAcuseFinancieros(string numero,string acuse)
+        {
+            string folderName = Directory.GetCurrentDirectory() + "\\Oficios Financieros\\" + numero+ "\\";
+            string webRootPath = environment.ContentRootPath;
+            string newPath = Path.Combine(webRootPath, folderName);
+            string pathArchivo = Path.Combine(newPath, acuse);
+
+            if (System.IO.File.Exists(pathArchivo))
+            {
+                Stream stream = System.IO.File.Open(pathArchivo, FileMode.Open);
+
+                return File(stream, "application/pdf");
+            }
+            return NotFound();
+        }
+
         /*Flujo para los estatus*/
         [HttpGet]
         [Route("/entregables/flujo/cae/{cedula?}/{estatus?}")]

@@ -234,6 +234,19 @@ namespace CedulasEvaluacion.Controllers
             return Ok(filas);
         }
 
+        //Actualización de Oficio para carga del Acuse
+        [HttpPost]
+        [Route("/financieros/insertaAcuse")]
+        public async Task<IActionResult> insertaAcuseOficio([FromForm] Oficio oficio)
+        {
+            int success = await vFinancieros.insertaAcuseOficio(oficio);
+            if (success == 1)
+            {
+                return Ok(success);
+            }
+            return BadRequest();
+        }
+
         public int obtienePosicion(List<string> estatus, string nEstatus)
         {
             int p = -1;

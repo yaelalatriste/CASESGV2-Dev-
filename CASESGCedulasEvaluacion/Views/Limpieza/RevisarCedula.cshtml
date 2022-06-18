@@ -64,18 +64,20 @@
                                         </h2>
                                         <p class="text-sm">Evaluación correspondiente al mes <b>@Model.Mes</b> del año <b>@Model.Anio</b></p>
                                         <ul class="ml-4 mb-0 fa-ul">
-                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-lg fa-dollar-sign"></i></span> <b>Facturación Total: </b>: @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.TotalMontoFactura)</li>
+                                            <li class="small mt-3"><span class="fa-li"><i class="fad fa-clock text-danger"></i></span> <b class="text-danger">Fecha de Cierre del Servicio: </b>@Convert.ToDateTime(@Model.RespuestasEncuesta[0].Detalles).ToString("dd/MM/yyyy")</li>
+                                            <li class="small mt-3"><span class="fa-li"><i class="fad fa-file-word text-primary"></i></span> <b class="text-primary">Fecha de Entrega del Acta ER: </b>@Convert.ToDateTime(@Model.RespuestasEncuesta[6].Detalles).ToString("dd/MM/yyyy")</li>
+                                            <li class="small mt-3"><span class="fa-li"><i class="fas fa-lg fa-dollar-sign"></i></span> <b>Facturación Total: </b> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.TotalMontoFactura)</li>
                                             @if (Model.RespuestasEncuesta[4].Respuesta == true)
                                             {
-                                                <li class="small mt-3 @Html.Raw(@Model.RespuestasEncuesta[4].Detalles.Equals("") ? "text-danger" : "")"><span class="fa-li"><i class="fad fa-user"></i></span> 
-                                                    <b>Inasistencias: </b> @Html.Raw(@Model.RespuestasEncuesta[4].Detalles.Equals("") ? "El empleado no capturó las inasistencias" : @Model.RespuestasEncuesta[4].Detalles) 
+                                                <li class="small mt-3 @Html.Raw(@Model.RespuestasEncuesta[4].Detalles.Equals("") ? "text-danger" : "")">
+                                                    <span class="fa-li"><i class="fad fa-user"></i></span>
+                                                    <b>Inasistencias: </b> @Html.Raw(@Model.RespuestasEncuesta[4].Detalles.Equals("") ? "El empleado no capturó las inasistencias" : @Model.RespuestasEncuesta[4].Detalles)
                                                 </li>
                                             }
                                             else
                                             {
                                                 <li class="small mt-3"><span class="fa-li"><i class="fad fa-user"></i></span> <b>Sin Inasistencias </b></li>
                                             }
-                                            </li>
                                             <li class="small mt-3"><span class="fa-li"><i class="fad fa-star"></i></span> <b>Calificación: </b> @Model.Calificacion</li>
                                             <li class="small mt-3"><span class="fa-li"><i class="fas fa-lg fa-user"></i></span> <b>Elaboró: </b> @Model.usuarios.nombre_emp @Model.usuarios.paterno_emp @Model.usuarios.materno_emp</li>
                                             <li class="small mt-3">

@@ -152,5 +152,36 @@ namespace CedulasEvaluacion.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost]
+        [Route("/trasladoExp/Entregables/autoRecha")]
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] Entregables entregables)
+        {
+            int success = await vEntregables.apruebaRechazaEntregable(entregables);
+            if (success != 0)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        [Route("/trasladoExp/entregables/historialEntregable")]
+        public async Task<IActionResult> historialEntregable([FromBody] HistorialEntregables historialEntregables)
+        {
+            int success = 0;
+            success = await vEntregables.capturaHistorial(historialEntregables);
+            if (success != 0)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }

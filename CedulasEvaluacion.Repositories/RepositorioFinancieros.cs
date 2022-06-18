@@ -3,11 +3,13 @@ using CedulasEvaluacion.Entities.MFinancieros;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -404,6 +406,105 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
+
+        //Inserta Acuse del Oficio para Pago
+        public async Task<int> insertaAcuseOficio(Oficio oficio)
+        {
+            DateTime date = DateTime.Now;
+            string date_str = date.ToString("yyyyMMddHHmmss");
+            int id = 0;
+
+
+            if (oficio.Id != 0)
+            {
+                int isDeleted = await eliminaArchivo(oficio);
+            }
+
+            string saveFile = await guardaArchivo(oficio.Archivo, oficio.NumeroOficio.ToString(), date_str);
+            try
+            {
+                if (saveFile.Equals("Ok"))
+                {
+                    using (SqlConnection sql = new SqlConnection(_connectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand("sp_insertarActualizarAcuseOficioFinancieros", sql))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@id", oficio.Id));
+                            cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + oficio.Archivo.FileName)));
+                            cmd.Parameters.Add(new SqlParameter("@fechaTramitado", oficio.FechaTramitado));
+                            cmd.Parameters.Add(new SqlParameter("@importe", oficio.ImporteOficio));
+
+                            await sql.OpenAsync();
+                            await cmd.ExecuteNonQueryAsync();
+                            id = 1;
+
+                            return id;
+                        }
+                    }
+                }
+                return id;
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return 0;
+            }
+        }
+
+        public async Task<string> guardaArchivo(IFormFile archivo, string folio, string date)
+        {
+            long size = archivo.Length;
+            string folderCedula = folio;
+
+            string newPath = Directory.GetCurrentDirectory() + "\\Oficios Financieros\\" + folderCedula;
+            if (!Directory.Exists(newPath))
+            {
+                Directory.CreateDirectory(newPath);
+            }
+            using (var stream = new FileStream(newPath + "\\" + (date + "_" + archivo.FileName), FileMode.Create))
+            {
+                try
+                {
+                    await (archivo).CopyToAsync(stream);
+                    return "Ok";
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message.ToString();
+                }
+            }
+        }
+
+        public async Task<int> eliminaArchivo(Oficio oficio)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_eliminaAcuseOficioFinancieros", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@id", oficio.Id));
+                        cmd.Parameters.Add(new SqlParameter("@archivo", SqlDbType.VarChar, 500)).Direction = System.Data.ParameterDirection.Output;
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+
+                        string archivo = (cmd.Parameters["@archivo"].Value).ToString();
+                        string newPath = Directory.GetCurrentDirectory() + "\\Oficios Financieros\\" + oficio.NumeroOficio + "\\" + archivo;
+                        File.Delete(newPath);
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return 0;
+            }
+        }
+
         //DashBoard de Financieros
         private DashboardFinancieros MapToValue(SqlDataReader reader)
         {
@@ -456,6 +557,9 @@ namespace CedulasEvaluacion.Repositories
                 ServicioId = reader["ServicioId"] != DBNull.Value ? (int)reader["ServicioId"]:0,
                 NumeroOficio = (int)reader["NumeroOficio"],
                 Servicio = reader["Nombre"].ToString(),
+                NombreArchivo = reader["Archivo"] != DBNull.Value ? reader["Archivo"].ToString() : "",
+                ImporteOficio = reader["Importe"] != DBNull.Value ? Convert.ToDecimal(reader["Importe"]) : 0,
+                FechaTramitado = reader["FechaTramitado"] != DBNull.Value ? Convert.ToDateTime(reader["FechaTramitado"]) : Convert.ToDateTime("01/01/0001"),
                 Estatus = reader["Estatus"].ToString(),
                 SubtotalOficio = reader["SubtotalOficio"] != DBNull.Value ? Convert.ToDecimal(reader["SubtotalOficio"]):0,
                 TotalOficio = reader["TotalOficio"] != DBNull.Value ? Convert.ToDecimal(reader["TotalOficio"]) : 0,

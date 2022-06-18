@@ -2172,7 +2172,6 @@
                         }
 
 
-
                         guardaCedula();
 
                         for (let i = 0; i < 7; i++) {
@@ -2312,6 +2311,13 @@
                                 'icon': 'error',
                                 'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
                                 'html': 'Para continuar, capture si el personal está capacitado debídamente para prestar el servicio.'
+                            });
+                            return false;
+                        } else if (model.estatus == "En Proceso") {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
+                                'html': '<p style="text-align: justify">La cédula aún no es enviada por la administración, debe esperar a que la administración envie su cédula a revisión para poder capturar la pregunta de capacitación.</p>'
                             });
                             return false;
                         } else {

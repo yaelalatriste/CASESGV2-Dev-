@@ -59,7 +59,7 @@
                             <th>Año</th>
                             <th>Número de Oficio</th>
                             <th>Estatus</th>
-                            <th>Fecha de Pago</th>                            
+                            <th>Fecha de Pago</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -94,17 +94,35 @@
                                     }
                                     @if (@of.Estatus.Equals("Enviado a DGPPT"))
                                     {
-                                        <a class href="/financieros/revisar/@Model.oficio[0].ServicioId/@of.Id" data-toggle="tooltip" title='Ver detalles del Oficio "@of.Anio/@of.NumeroOficio"'>
+                                        <a href="/financieros/revisar/@Model.oficio[0].ServicioId/@of.Id" data-toggle="tooltip" title='Ver detalles del Oficio "@of.Anio/@of.NumeroOficio"'>
                                             <i class="fas fa-eye text-primary mr-2"></i>
                                         </a>
                                         <a class="cancelarOficio" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-toggle="tooltip" title='Cancelar el Oficio "@of.Anio/@of.NumeroOficio"'>
                                             <i class="fa-solid fa-ban text-danger mr-2"></i>
                                         </a>
+                                        if (@of.NombreArchivo.Equals(""))
+                                        {
+                                            <a class="modalOficio" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-toggle="tooltip"
+                                               title='Adjuntar soporte documental de la solicitud de trámite de pago que acredite la prestación del servicio.'>
+                                                <i class="fa-solid fa-file-exclamation text-warning mr-2"></i>
+                                            </a>
+                                        }
+                                        else if (!@of.NombreArchivo.Equals(""))
+                                        {
+                                            <a class="updateAcuse" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-file="@of.NombreArchivo" data-importe="@of.ImporteOficio"
+                                               data-fechatramitado="@of.FechaTramitado" data-toggle="tooltip" title='Modificar soporte documental que acredita la prestación del servicio con el oficio con número "@of.Anio/@of.NumeroOficio"'>
+                                                <i class="fa-solid fa-file-exclamation text-primary mr-2"></i>
+                                            </a>
+                                            <a class="viewAcuse" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-file="@of.NombreArchivo" data-importe="@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", of.ImporteOficio)"
+                                               data-fechatramitado="@of.FechaTramitado.ToString("dd/MM/yyyy")" data-estatus="@of.Estatus" data-toggle="tooltip" title='Ver el soporte documental que acredita la prestación del servicio con el oficio número "@of.Anio/@of.NumeroOficio"'>
+                                                <i class="fa-solid fa-file-check mr-2 text-success"></i>
+                                            </a>
+                                        }
                                     }
 
                                     @if (@of.Estatus.Equals("Enviado a DGPPT"))
                                     {
-                                        <a class="pagarOficio" href="#" data-id="@of.Id" data-anio="@of.Anio" data-oficio="@of.NumeroOficio"  data-toggle="tooltip" title='Pagar el Oficio "@of.Anio/@of.NumeroOficio"'>
+                                        <a class="pagarOficio" href="#" data-id="@of.Id" data-anio="@of.Anio" data-oficio="@of.NumeroOficio" data-toggle="tooltip" title='Pagar el Oficio "@of.Anio/@of.NumeroOficio"'>
                                             <i class="fa-duotone fa-money-bill-1-wave text-success"></i>
                                         </a>
                                     }
@@ -112,11 +130,17 @@
                                     {
                                         <p class="font-weight-bold text-danger">Oficio Cancelado</p>
                                     }
-                                     @if (@of.Estatus.Equals("Pagado"))
+                                    @if (@of.Estatus.Equals("Pagado"))
                                     {
-                                         <a href="/financieros/revisar/@Model.oficio[0].ServicioId/@of.Id" data-toggle="tooltip" title='Ver detalles del Oficio "@of.Anio/@of.NumeroOficio"'>
+                                        <a href="/financieros/revisar/@Model.oficio[0].ServicioId/@of.Id" data-toggle="tooltip" title='Ver detalles del Oficio "@of.Anio/@of.NumeroOficio"'>
                                             <i class="fas fa-eye text-success mr-2"></i>
                                         </a>
+                                        @if (!@of.NombreArchivo.Equals("")) { 
+                                         <a class="viewAcuse" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-file="@of.NombreArchivo" data-importe="@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", of.ImporteOficio)"
+                                               data-fechatramitado="@of.FechaTramitado.ToString("dd/MM/yyyy")" data-estatus="@of.Estatus" data-toggle="tooltip" title='Ver el soporte documental que acredita la prestación del servicio con el oficio número "@of.Anio/@of.NumeroOficio"'>
+                                            <i class="fa-solid fa-file-check mr-2 text-success"></i>
+                                         </a>
+                                        }
                                         @Html.Raw("<b class='text-success'>Oficio Pagado</b>");
                                     }
                                 </td>
@@ -269,6 +293,84 @@
 </div>
 @*Fin del Modal para Capturar Oficios*@
 
+@*Modal para Capturar Acuse del Oficio*@
+<div class="modal fade" id="modal-acuseOficio">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white" id="tituloAcuse">Carga del Soporte Documental</h4>
+                <button type="button" class="close close-incidencias text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" id="idOficio" />
+                    <input type="hidden" id="carpetaOficio" />
+                    <div class="form-group col-lg-3">
+                        <label for="tipoIncidencia">Fecha de Trámite:</label>
+                        <input type="date" class="form-control" id="fechaOficio" />
+                        <div class="col-sm-12" id="error_fechaOficio">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione la fecha de trámite del oficio
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label for="elegirArchivo">Seleccionar Archivo: </label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" accept=".pdf">
+                            <label class="custom-file-label" for="customFile">Seleccionar Archivo</label>
+                        </div>
+                        <div class="col-sm-12" id="error_customFile">
+                            <small id="dateHelp" class="text-danger">
+                                Por favor seleccione él archivo correspondiente
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="fechaCierre">Importe Oficio:</label><br>
+                        <input id="importeOficio" class="form-control" type="number" />
+                        <div class="col-sm-12" id="error_importe">
+                            <small id="comentariosHelp" class="text-danger">
+                                Por favor capture el importe del oficio
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button type="button" class="btn btn-primary" id="cargarAcuse">Adjuntar Acuse</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@*Fin del Modal para Capturar Oficios*@
+
+@* Modal para la ver el Acuse de Financieros *@
+<div class="modal fade" id="modalVerAcuse">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-joke">
+                <h4 class="modal-title text-white" id="titleAcuseOficio"></h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="tblAcuse"></table>
+                <div class="row" id="objectPdf">
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@*Fin Modal para la ver el Acuse de Financieros *@
+
 @section Scripts{
     <script>
         $(function () {
@@ -280,6 +382,10 @@
             var tbodyC = "";
             var tbodyF = "";
             var model = @Html.Raw(Json.Serialize(@Model));
+
+            $("#error_fechaOficio").css('display','none');
+            $("#error_customFile").css('display','none');
+            $("#error_importe").css('display','none');
 
             $("#anioActual").val(@System.DateTime.Now.Year);
 
@@ -493,6 +599,141 @@
                     });
                 }
             });
+
+            $(".modalOficio").click(function () {
+                $("#idOficio").val($(this).data('id'));
+                $("#carpetaOficio").val($(this).data('oficio'));
+                $("#tituloAcuse").val("Carga del acuse del oficio con número - "+$(this).data('oficio'));
+                $("#modal-acuseOficio").modal('show');
+            });
+
+            /*Carga del Acuse*/
+            $("#customFile").on("change", function () {
+                var fileName = $(this).val().split("\\").pop();
+                var ext = fileName.split('.').pop();
+                if (ext == "pdf") {
+                    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                } else {
+                    Swal.fire({
+                        'icon': 'error',
+                        'title': 'Formato Incorrecto',
+                        'text': 'El archivo que intentas adjuntar no es válido. Favor de solo seleccionar archivos "PDF"'
+                    });
+                    $(".custom-file-label").text("Seleccionar Archivo");
+                    document.getElementById('customFile').value = '';
+                    if ($('#customFile').hasClass('is-valid')) {
+                        $('#customFile').removeClass('is-valid');
+                    }
+
+                    $('#customFile').addClass('is-invalid');
+                    $('#error_customFile').css('display', 'block');
+                }
+            });
+
+            function validaCamposArchivo() {
+
+                if ($('#importeOficio').val() == "" && $('#customFile').val() == "" && $('#fechaOficio').val() == "") {
+                    $('#importeOficio').addClass('is-invalid');
+                    $("#error_importe").css('display', 'block');
+
+                    $('#customFile').addClass('is-invalid');
+                    $('#error_customFile').css('display', 'block');
+
+                    $('#fechaOficio').addClass('is-invalid');
+                    $("#error_fechaOficio").css('display', 'block');
+
+                    return false;
+                }
+
+                if ($('#importeOficio').val() == "") {
+                    $('#importeOficio').addClass('is-invalid');
+                    $('#error_importe').css('display', 'block');
+
+                    return false;
+                }
+
+                if ($('#fechaOficio').val() == "") {
+                    $('#fechaOficio').addClass('is-invalid');
+                    $('#error_fechaOficio').css('display', 'block');
+
+                    return false;
+                }
+
+                if ($('#customFile').val() == "") {
+
+                    $('#customFile').addClass('is-invalid');
+                    $('#error_customFile').css('display', 'block');
+
+                    return false;
+                }
+
+                return true;
+            }
+
+            $('#cargarAcuse').click(function () {
+                var formData = new FormData();
+                var id = $("#idOficio").val();
+                var file = document.getElementById('customFile').files[0];
+                var fechaTramitado = $('#fechaOficio').val();
+                var importe = $('#importeOficio').val();
+                var numeroOficio = $('#carpetaOficio').val();
+
+                formData.append("Id", parseInt(id));
+                formData.append("Archivo", file);
+                formData.append("FechaTramitado", fechaTramitado);
+                formData.append("ImporteOficio", importe);
+                formData.append("NumeroOficio", numeroOficio);
+
+                if (validaCamposArchivo()) {
+                    axios.post('/financieros/insertaAcuse', formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    }).then(response => {
+                        $('#cerrar_modal_sua').trigger('click');
+                        /*Validamos la pregunta a la que se realizo el anexo de evidencia*/
+                        if (response.status == 200) {
+                            Swal.fire({
+                                'icon': "success",
+                                'title': 'Soporte Documental',
+                                'html': '<p style="text-align: justify">Se adjuntó el soporte documental que acredita la prestación del servicio con el oficio número <b>'+numeroOficio+'</b> correctamente.</p>'
+                            }).then(function () {
+                                window.location.reload();
+                            });
+                            $('#customFile').removeClass('is-valid');
+                            $('#comentarios_entregable').removeClass('is-valid');
+                            $('#tipo_entregable').removeClass('is-valid');
+                        }
+                    }).catch(error => {
+                        Swal.fire({
+                            'icon': "error",
+                            'title': 'Soporte Documental',
+                            'html': 'Se presentó un error al intentar adjuntar el soporte documental.'
+                        });
+                    });
+                    document.getElementById('customFile').value = '';
+                    $('#file_id').val("");
+                    $(".custom-file-label").text("Seleccionar Archivo");
+                    $('#tipo_entregable').val('');
+                    $('#comentarios_entregable').val('');
+                } validaCamposArchivo()
+            });
+
+            /*Ver archivo en modal*/
+            $(document).on('click', '.viewAcuse', function () {
+                let numero = $(this).data('oficio');
+                let acuse = $(this).data('file');
+                let tbl = "<tr>"+
+                        "<td><strong>Número de Oficio: </strong>" + $(this).data('oficio')+"</td>"+
+                        "<td><strong>Fecha de Trámite: </strong>"+$(this).data('fechatramitado')+"</td>"+
+                        "<td><strong>Importe: </strong>"+$(this).data('importe')+"</td>"+
+                        "<td><strong>Estatus: </strong>"+$(this).data('estatus')+"</td>"+
+                    "</tr>";
+                let data = "<object width='100%' height='450px' data='/view/acuseFinancieros/" + numero + "/"+acuse+"'></object>";
+                $('#titleAcuseOficio').text("Soporte documental que acredita la prestación del servicio con el oficio número - \"" + numero+ "\"");
+                $('#objectPdf').html(data);
+                $('#tblAcuse').html(tbl);
+                $('#modalVerAcuse').modal('show');
+            });
+            /*FIN de ver archivo en modal*/
 
         });
     </script>

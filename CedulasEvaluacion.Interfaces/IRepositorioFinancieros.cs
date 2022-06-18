@@ -23,5 +23,6 @@ namespace CedulasEvaluacion.Interfaces
         Task<int> CancelarOficio(int id, int servicio);
         Task<int> EliminaCedulasOficio(int oficio, int servicio, int cedula);
         Task<int> PagarOficio(int id, int servicio, DateTime fecha);
+        Task<int> insertaAcuseOficio(Oficio oficio);
     }
 }
