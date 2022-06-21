@@ -9,5 +9,6 @@ namespace CedulasEvaluacion.Interfaces
     public interface IRepositorioReportesFinancieros
     {
         Task<List<ReporteCedula>> GetCedulasFinancieros(string mes, int anio);
+        Task<List<ReporteCedula>> GetReportePagos(string mes, int anio);
     }
 }

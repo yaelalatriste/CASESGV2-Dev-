@@ -530,6 +530,7 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaTraslado", cedulas));
+            local.SetParameters(new[] { new ReportParameter("elaboro", ((List<ReporteCedula>)cedulas)[0].Elaboro + "") });
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }
@@ -644,6 +645,7 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaAgua", cedulas));
+            local.SetParameters(new[] { new ReportParameter("elaboro", ((List<ReporteCedula>)cedulas)[0].Elaboro + "") });
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }
@@ -913,6 +915,7 @@ namespace CedulasEvaluacion.Controllers
                 }
             }
             local.DataSources.Add(new ReportDataSource("CedulaTransporte", cedulas));
+            local.SetParameters(new[] { new ReportParameter("elaboro", ((List<ReporteCedula>)cedulas)[0].Elaboro + "") });
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
         }

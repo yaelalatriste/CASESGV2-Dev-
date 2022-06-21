@@ -261,10 +261,7 @@
                         <label for="Anio">Año del Oficio: </label>
                         <select id="selectAnio" class="form-control">
                             <option value="">Seleccione una opción</option>
-                            @for (var i = 2021; i < anio; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
+                            <option value="@DateTime.Now.Year">@DateTime.Now.Year</option>
                         </select>
                         <div class="col-sm-12" id="error_anio">
                             <small id="dateHelp" class="text-danger">
@@ -475,6 +472,7 @@
             $('#error_servicio').css('display', 'none');
             $('#error_anio').css('display', 'none');
             $('#error_numero').css('display', 'none');
+            $("#error_mes").css('display', 'none');
             /*Fin Errores de Captura de Oficio*/
 
             /*Llenado de la Tabla de Porcentajes*/
@@ -536,7 +534,7 @@
             });
 
             function validaCamposOficio() {
-                if ($("#selectServicio").val() != "" && $("#selectAnio").val() != "" && $("#numeroOficio").val() != "") {
+                if ($("#selectServicio").val() != "" && $("#selectAnio").val() != "" && $("#numeroOficio").val() != "" && $("#selectMes").val() != "") {
                     return true;
                 }
 
@@ -548,6 +546,11 @@
                 if ($('#selectAnio').val() == "") {
                     $('#selectAnio').addClass('is-invalid');
                     $('#error_anio').css('display', 'block');
+                }
+
+                if ($('#selectMes').val() == "") {
+                    $('#selectMes').addClass('is-invalid');
+                    $('#error_mes').css('display', 'block');
                 }
 
                 if ($('#numeroOficio').val() == "") {
@@ -569,6 +572,14 @@
                     $('#selectAnio').removeClass('is-invalid');
                     $('#selectAnio').addClass('is-valid');
                     $('#error_anio').css('display', 'none');
+                }
+            });
+
+            $('#selectMes').change(function () {
+                if ($(this).val() != "") {
+                    $('#selectMes').removeClass('is-invalid');
+                    $('#selectMes').addClass('is-valid');
+                    $('#error_mes').css('display', 'none');
                 }
             });
 
@@ -714,7 +725,7 @@
                     $(".custom-file-label").text("Seleccionar Archivo");
                     $('#tipo_entregable').val('');
                     $('#comentarios_entregable').val('');
-                } validaCamposArchivo()
+                }
             });
 
             /*Ver archivo en modal*/

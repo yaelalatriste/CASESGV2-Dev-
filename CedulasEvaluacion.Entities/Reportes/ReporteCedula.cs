@@ -26,5 +26,10 @@ namespace CedulasEvaluacion.Entities.Reportes
         public string Facturas { get; set; }
         public string Sexo { get; set; }
         public string MontosFacturas { get; set; }
+        public string NumeroOficio { get; set; }
+        public int TotalCedulas { get; set; }
+        public int DiasTranscurridos { get; set; }
+        public DateTime FechaTramitado { get; set; }
+        public DateTime FechaPagado { get; set; }
     }
 }
