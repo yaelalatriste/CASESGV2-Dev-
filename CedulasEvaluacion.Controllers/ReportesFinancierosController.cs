@@ -31,7 +31,7 @@ namespace CedulasEvaluacion.Controllers
             local.ReportPath = path;
             var cedulas = await vReporte.GetCedulasFinancieros(mes, anio);
             local.DataSources.Add(new ReportDataSource("ReportePAT", cedulas));
-            local.SetParameters(new[] { new ReportParameter("mes", ((List<ReporteCedula>)cedulas)[0].Mes + "") });
+            local.SetParameters(new[] { new ReportParameter("mes", mesTraslate(mes)) });
             local.SetParameters(new[] { new ReportParameter("anio", anio + "") });
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
@@ -45,10 +45,63 @@ namespace CedulasEvaluacion.Controllers
             local.ReportPath = path;
             var cedulas = await vReporte.GetReportePagos(mes, anio);
             local.DataSources.Add(new ReportDataSource("ReportePagos", cedulas));
-            local.SetParameters(new[] { new ReportParameter("mes", mes) });
+            local.SetParameters(new[] { new ReportParameter("mes", mesTraslate(mes)) });
             local.SetParameters(new[] { new ReportParameter("anio", anio + "") });
             var pdf = local.Render("PDF");
             return File(pdf, "application/pdf");
+        }
+
+        public string mesTraslate(string mes)
+        {
+            if (mes.Equals("January"))
+            {
+                return "Enero";
+            }
+            else if (mes.Equals("February"))
+            {
+                return "Febrero";
+            }
+            else if (mes.Equals("March"))
+            {
+                return "Marzo";
+            }
+            else if (mes.Equals("April"))
+            {
+                return "Abril";
+            }
+            else if (mes.Equals("May"))
+            {
+                return "Mayo";
+            }
+            else if (mes.Equals("June"))
+            {
+                return "Junio";
+            }
+            else if (mes.Equals("July"))
+            {
+                return "Julio";
+            }
+            else if (mes.Equals("August"))
+            {
+                return "Agosto";
+            }
+            else if (mes.Equals("September"))
+            {
+                return "Septiembre";
+            }
+            else if (mes.Equals("October"))
+            {
+                return "Octubre";
+            }
+            else if (mes.Equals("November"))
+            {
+                return "Noviembre";
+            }
+            else 
+            {
+                return "Diciembre";
+            }
+
         }
 
 
