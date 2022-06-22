@@ -25,7 +25,6 @@ namespace CedulasEvaluacion.Controllers
     public class LimpiezaController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioLimpieza vlimpieza;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioIncidencias vIncidencias;
         private readonly IRepositorioEntregablesCedula vEntregables;
@@ -34,12 +33,11 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
 
-        public LimpiezaController(IRepositorioEvaluacionServicios viCedula, IRepositorioLimpieza iVLimpieza, IRepositorioInmuebles iVInmueble, 
-                                  IRepositorioIncidencias iIncidencias, IRepositorioUsuarios iVUsuario, IRepositorioEntregablesCedula iEntregables, 
-                                  IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas, IRepositorioAlcancesEntregables viAlcances)
+        public LimpiezaController(IRepositorioEvaluacionServicios viCedula, IRepositorioInmuebles iVInmueble, IRepositorioIncidencias iIncidencias, 
+                                  IRepositorioUsuarios iVUsuario, IRepositorioEntregablesCedula iEntregables, IRepositorioPerfiles iRepositorioPerfiles, 
+                                  IRepositorioFacturas iFacturas, IRepositorioAlcancesEntregables viAlcances)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vlimpieza = iVLimpieza ?? throw new ArgumentNullException(nameof(iVLimpieza));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vIncidencias = iIncidencias ?? throw new ArgumentNullException(nameof(iIncidencias));
             this.vEntregables = iEntregables ?? throw new ArgumentNullException(nameof(iEntregables));
@@ -191,7 +189,7 @@ namespace CedulasEvaluacion.Controllers
                 cedLim.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedLim.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedLim.Id);
                 cedLim.historialCedulas = new List<HistorialCedulas>();
-                cedLim.historialCedulas = await vlimpieza.getHistorial(cedLim.Id);
+                cedLim.historialCedulas = await vCedula.getHistorial(cedLim.Id);
                 foreach (var user in cedLim.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -235,7 +233,7 @@ namespace CedulasEvaluacion.Controllers
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
                 }
                 cedLim.historialCedulas = new List<HistorialCedulas>();
-                cedLim.historialCedulas = await vlimpieza.getHistorial(cedLim.Id);
+                cedLim.historialCedulas = await vCedula.getHistorial(cedLim.Id);
                 foreach (var user in cedLim.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -266,14 +264,10 @@ namespace CedulasEvaluacion.Controllers
         //Va guardando las respuestas de la evaluacion
         [HttpPost]
         [Route("/limpieza/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion cedulae)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion cedula)
         {
-            CedulaLimpieza cedula = new CedulaLimpieza();
-            cedula.Id = cedulae.Id;
-            cedula.Estatus = cedulae.Estatus;
-            cedula.ServicioId = cedulae.ServicioId;
             int success = 0;
-            success = await vlimpieza.apruebaRechazaCedula(cedula);
+            success = await vCedula.apruebaRechazaCedula(cedula);
             if (success != 0)
             {
                 return Ok();
@@ -289,7 +283,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialLimpieza([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vlimpieza.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();

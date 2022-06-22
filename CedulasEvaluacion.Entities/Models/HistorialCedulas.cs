@@ -8,6 +8,7 @@ namespace CedulasEvaluacion.Entities.Models
     {
         public string Servicio { get; set; }
         public int CedulaId { get; set; }
+        public int ServicioId { get; set; }
         public int UsuarioId { get; set; }
         public string Estatus { get; set; }
         public string Comentarios { get; set; }

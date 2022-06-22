@@ -1684,6 +1684,7 @@
                             }).then(send => {
                                 if (send.value.length > 0) {
                                     axios.post('/telConvencional/historialConvencional', {
+                                        ServicioId: model.servicioId,
                                         CedulaId: model.id, UsuarioId: model.usuarioId,
                                         Estatus: "Autorizada", Comentarios: send.value
                                     }).then(hist => {
@@ -1755,6 +1756,7 @@
                             }).then(send => {
                                 if (send.value.length > 0) {
                                     axios.post('/telConvencional/historialConvencional', {
+                                        ServicioId: model.servicioId,
                                         CedulaId: model.id, UsuarioId: model.usuarioId,
                                         Estatus: "Rechazada", Comentarios: send.value
                                     }).then(hist => {

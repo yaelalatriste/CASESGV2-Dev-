@@ -18,7 +18,6 @@ namespace CedulasEvaluacion.Controllers
     public class TrasladoExpController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioTrasladoExp vTraslado;
         private readonly IRepositorioEntregablesCedula vEntregables;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioInmuebles vInmuebles;
@@ -27,13 +26,11 @@ namespace CedulasEvaluacion.Controllers
         private readonly IHostingEnvironment environment;
         private readonly IRepositorioFacturas vFacturas;
 
-        public TrasladoExpController(IRepositorioEvaluacionServicios viCedula, IRepositorioTrasladoExp iTraslado, 
-                                     IRepositorioFacturas iFacturas, IRepositorioEntregablesCedula iVEntregables, 
-                                     IRepositorioUsuarios iVUsuario, IRepositorioInmuebles iVInmueble,
-                                     IRepositorioIncidenciasTraslado ivTraslado, IRepositorioPerfiles iPerfiles, IHostingEnvironment environment)
+        public TrasladoExpController(IRepositorioEvaluacionServicios viCedula, IRepositorioFacturas iFacturas, IRepositorioEntregablesCedula iVEntregables, 
+                                     IRepositorioUsuarios iVUsuario, IRepositorioInmuebles iVInmueble, IRepositorioIncidenciasTraslado ivTraslado, 
+                                     IRepositorioPerfiles iPerfiles)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vTraslado= iTraslado ?? throw new ArgumentNullException(nameof(iTraslado));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));
@@ -193,7 +190,7 @@ namespace CedulasEvaluacion.Controllers
                 cedula.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedula.Id);
                 cedula.historialCedulas = new List<HistorialCedulas>();
-                cedula.historialCedulas = await vTraslado.getHistorialTraslado(cedula.Id);
+                cedula.historialCedulas = await vCedula.getHistorial(cedula.Id);
                 foreach (var user in cedula.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -219,7 +216,7 @@ namespace CedulasEvaluacion.Controllers
                 cedula.usuarios = await vUsuarios.getUserById(cedula.UsuarioId);
                 cedula.iEntregables = await vEntregables.getEntregables(cedula.Id);
                 cedula.historialCedulas = new List<HistorialCedulas>();
-                cedula.historialCedulas = await vTraslado.getHistorialTraslado(cedula.Id);
+                cedula.historialCedulas = await vCedula.getHistorial(cedula.Id);
                 foreach (var user in cedula.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -240,7 +237,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialTraslado([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vTraslado.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();
@@ -253,9 +250,9 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("trasladoExp/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] TrasladoExpedientes trasladoExpedientes)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion trasladoExpedientes)
         {
-            int success = await vTraslado.apruebaRechazaCedula(trasladoExpedientes);
+            int success = await vCedula.apruebaRechazaCedula(trasladoExpedientes);
             if (success != 0)
             {
                 return Ok();

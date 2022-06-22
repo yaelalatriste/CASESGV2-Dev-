@@ -448,7 +448,6 @@
                                 'stopKeydownPropagation': false,
                             }).then(pagado => {
                                 var fechaPago = $("#fechaPago").val();
-                                alert(fechaPago);
                                 if (fechaPago != "" || fechaPago != null){
                                     axios.get("/financieros/pagar/oficio/" + model.oficio[0].servicioId + '/' + $(this).data('id') + '/' + fechaPago).then(response => {
                                         if (response.status == 200) {

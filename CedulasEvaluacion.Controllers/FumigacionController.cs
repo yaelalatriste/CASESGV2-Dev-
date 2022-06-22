@@ -18,7 +18,6 @@ namespace CedulasEvaluacion.Controllers
     public class FumigacionController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioFumigacion vFumigacion;
         private readonly IRepositorioIncidenciasFumigacion iFumigacion;
         private readonly IRepositorioEntregablesCedula eFumigacion;
         private readonly IRepositorioInmuebles vInmuebles;
@@ -26,12 +25,11 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
         private readonly IRepositorioFacturas vFacturas;
 
-        public FumigacionController(IRepositorioEvaluacionServicios viCedula, IRepositorioFumigacion iVFumigacion, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
+        public FumigacionController(IRepositorioEvaluacionServicios viCedula, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                     IRepositorioIncidenciasFumigacion iiFumigacion, IRepositorioEntregablesCedula eeFumigacion,
                                     IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vFumigacion = iVFumigacion ?? throw new ArgumentNullException(nameof(iVFumigacion));
             this.iFumigacion = iiFumigacion ?? throw new ArgumentNullException(nameof(iiFumigacion));
             this.eFumigacion = eeFumigacion ?? throw new ArgumentNullException(nameof(eeFumigacion));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
@@ -191,7 +189,7 @@ namespace CedulasEvaluacion.Controllers
                 cedFum.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedFum.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedFum.Id);
                 cedFum.historialCedulas = new List<HistorialCedulas>();
-                cedFum.historialCedulas = await vFumigacion.getHistorialFumigacion(cedFum.Id);
+                cedFum.historialCedulas = await vCedula.getHistorial(cedFum.Id);
                 foreach (var user in cedFum.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -226,7 +224,7 @@ namespace CedulasEvaluacion.Controllers
                 //cedFum.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 //cedFum.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedFum.Id);
                 cedFum.historialCedulas = new List<HistorialCedulas>();
-                cedFum.historialCedulas = await vFumigacion.getHistorialFumigacion(cedFum.Id);
+                cedFum.historialCedulas = await vCedula.getHistorial(cedFum.Id);
                 foreach (var user in cedFum.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -244,9 +242,9 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("/fumigacion/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaFumigacion cedulaFumigacion)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion cedulaFumigacion)
         {
-            int success = await vFumigacion.apruebaRechazaCedula(cedulaFumigacion);
+            int success = await vCedula.apruebaRechazaCedula(cedulaFumigacion);
             if (success != 0)
             {
                 return Ok();
@@ -262,7 +260,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialFumigacion([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vFumigacion.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();

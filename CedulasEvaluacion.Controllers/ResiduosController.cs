@@ -18,7 +18,6 @@ namespace CedulasEvaluacion.Controllers
     public class ResiduosController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioResiduos vResiduos;
         private readonly IRepositorioIncidenciasResiduos iResiduos;
         private readonly IRepositorioEntregablesCedula eResiduos;
         private readonly IRepositorioFacturas vFacturas;
@@ -26,11 +25,10 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vPerfiles;
 
-        public ResiduosController(IRepositorioEvaluacionServicios viCedula, IRepositorioResiduos iResiduos, IRepositorioIncidenciasResiduos ivResiduos, IRepositorioEntregablesCedula ieResiduos, IRepositorioFacturas iFacturas,
+        public ResiduosController(IRepositorioEvaluacionServicios viCedula, IRepositorioIncidenciasResiduos ivResiduos, IRepositorioEntregablesCedula ieResiduos, IRepositorioFacturas iFacturas,
                                  IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, IRepositorioInmuebles iVInmueble)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vResiduos = iResiduos ?? throw new ArgumentNullException(nameof(iResiduos));
             this.iResiduos = ivResiduos ?? throw new ArgumentNullException(nameof(ivResiduos));
             this.eResiduos = ieResiduos ?? throw new ArgumentNullException(nameof(ieResiduos));
             this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
@@ -191,7 +189,7 @@ namespace CedulasEvaluacion.Controllers
                 residuos.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 residuos.RespuestasEncuesta = await vCedula.obtieneRespuestas(residuos.Id);
                 residuos.historialCedulas = new List<HistorialCedulas>();
-                residuos.historialCedulas = await vResiduos.getHistorialResiduos(residuos.Id);
+                residuos.historialCedulas = await vCedula.getHistorial(residuos.Id);
                 foreach (var user in residuos.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -219,7 +217,7 @@ namespace CedulasEvaluacion.Controllers
                 residuos.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 residuos.RespuestasEncuesta = await vCedula.obtieneRespuestas(residuos.Id);
                 residuos.historialCedulas = new List<HistorialCedulas>();
-                residuos.historialCedulas = await vResiduos.getHistorialResiduos(residuos.Id);
+                residuos.historialCedulas = await vCedula.getHistorial(residuos.Id);
                 foreach (var user in residuos.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -237,9 +235,9 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("/residuos/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] Residuos residuos)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion residuos)
         {
-            int success = await vResiduos.apruebaRechazaCedula(residuos);
+            int success = await vCedula.apruebaRechazaCedula(residuos);
             if (success != 0)
             {
                 return Ok();
@@ -255,7 +253,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialResiduos([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vResiduos.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();

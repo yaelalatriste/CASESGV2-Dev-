@@ -18,7 +18,6 @@ namespace CedulasEvaluacion.Controllers
     public partial class CelularController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioCelular vCelular;
         private readonly IRepositorioIncidenciasCelular iCelular;
         private readonly IRepositorioEntregablesCedula eCelular;
         private readonly IRepositorioPerfilCelular vPCelular;
@@ -27,18 +26,16 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioPerfiles vPerfiles;
         private readonly IHostingEnvironment environment;
 
-        public CelularController(IRepositorioEvaluacionServicios viCedula, IRepositorioCelular iCelular, IRepositorioIncidenciasCelular ivCelular, IRepositorioEntregablesCedula ieCelular, IRepositorioFacturas iFacturas, 
-                                 IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, IRepositorioPerfilCelular viPCelular, IHostingEnvironment environment)
+        public CelularController(IRepositorioEvaluacionServicios viCedula, IRepositorioIncidenciasCelular ivCelular, IRepositorioEntregablesCedula ieCelular, 
+                                 IRepositorioFacturas iFacturas, IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, IRepositorioPerfilCelular viPCelular)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vCelular = iCelular ?? throw new ArgumentNullException(nameof(iCelular));
             this.vPCelular = viPCelular ?? throw new ArgumentNullException(nameof(viPCelular));
             this.iCelular = ivCelular ?? throw new ArgumentNullException(nameof(ivCelular));
             this.eCelular = ieCelular ?? throw new ArgumentNullException(nameof(ieCelular)); 
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas)); 
             this.vUsuarios = iUsuarios ?? throw new ArgumentNullException(nameof(iUsuarios)); 
             this.vPerfiles = iPerfiles ?? throw new ArgumentNullException(nameof(iPerfiles)); 
-            this.environment = environment;
         }
 
         //Metodo que regresa las cedulas aceptadas, guardadas o rechazadas 
@@ -198,7 +195,7 @@ namespace CedulasEvaluacion.Controllers
                 telCel.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 telCel.RespuestasEncuesta = await vCedula.obtieneRespuestas(telCel.Id);
                 telCel.historialCedulas = new List<HistorialCedulas>();
-                telCel.historialCedulas = await vCelular.getHistorialCelular(telCel.Id);
+                telCel.historialCedulas = await vCedula.getHistorial(telCel.Id);
                 foreach (var user in telCel.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -243,7 +240,7 @@ namespace CedulasEvaluacion.Controllers
                 telCel.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 telCel.RespuestasEncuesta = await vCedula.obtieneRespuestas(telCel.Id);
                 telCel.historialCedulas = new List<HistorialCedulas>();
-                telCel.historialCedulas = await vCelular.getHistorialCelular(telCel.Id);
+                telCel.historialCedulas = await vCedula.getHistorial(telCel.Id);
                 foreach (var user in telCel.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -255,9 +252,9 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("telCelular/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] TelefoniaCelular telefoniaCelular)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion telefoniaCelular)
         {
-            int success = await vCelular.apruebaRechazaCedula(telefoniaCelular);
+            int success = await vCedula.apruebaRechazaCedula(telefoniaCelular);
             if (success != 0)
             {
                 return Ok();
@@ -273,7 +270,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialCelular([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vCelular.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();

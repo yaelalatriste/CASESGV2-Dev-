@@ -18,7 +18,6 @@ namespace CedulasEvaluacion.Controllers
     public class TransporteController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioTransporte vTransporte;
         private readonly IRepositorioIncidenciasTransporte iTransporte;
         private readonly IRepositorioEntregablesCedula eTransporte;
         private readonly IRepositorioInmuebles vInmuebles;
@@ -26,12 +25,11 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
         private readonly IRepositorioFacturas vFacturas;
 
-        public TransporteController(IRepositorioEvaluacionServicios viCedula, IRepositorioTransporte iVTransporte, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
+        public TransporteController(IRepositorioEvaluacionServicios viCedula, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                     IRepositorioIncidenciasTransporte iiTransporte, IRepositorioEntregablesCedula eeTransporte,
                                     IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vTransporte = iVTransporte ?? throw new ArgumentNullException(nameof(iVTransporte));
             this.iTransporte = iiTransporte ?? throw new ArgumentNullException(nameof(iiTransporte));
             this.eTransporte = eeTransporte ?? throw new ArgumentNullException(nameof(eeTransporte));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
@@ -190,7 +188,7 @@ namespace CedulasEvaluacion.Controllers
                 cedTran.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedTran.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedTran.Id);
                 cedTran.historialCedulas = new List<HistorialCedulas>();
-                cedTran.historialCedulas = await vTransporte.getHistorialTransporte(cedTran.Id);
+                cedTran.historialCedulas = await vCedula.getHistorial(cedTran.Id);
                 foreach (var user in cedTran.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -218,7 +216,7 @@ namespace CedulasEvaluacion.Controllers
                 cedTran.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedTran.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedTran.Id);
                 cedTran.historialCedulas = new List<HistorialCedulas>();
-                cedTran.historialCedulas = await vTransporte.getHistorialTransporte(cedTran.Id);
+                cedTran.historialCedulas = await vCedula.getHistorial(cedTran.Id);
                 foreach (var user in cedTran.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -236,9 +234,9 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("/transporte/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaTransporte cedulaTransporte)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion cedulaTransporte)
         {
-            int success = await vTransporte.apruebaRechazaCedula(cedulaTransporte);
+            int success = await vCedula.apruebaRechazaCedula(cedulaTransporte);
             if (success != 0)
             {
                 return Ok();
@@ -254,7 +252,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialTransporte([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vTransporte.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();

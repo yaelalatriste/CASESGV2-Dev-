@@ -387,7 +387,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@id", cedula.Id));
                         cmd.Parameters.Add(new SqlParameter("@estatus", cedula.Estatus));
-                        cmd.Parameters.Add(new SqlParameter("@servicio", cedula.ServicioId));
+                        cmd.Parameters.Add(new SqlParameter("@servicioId", cedula.ServicioId));
 
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
@@ -411,6 +411,7 @@ namespace CedulasEvaluacion.Repositories
                     using (SqlCommand cmd = new SqlCommand("sp_insertaHistorialCedulas", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@servicio", historialCedulas.ServicioId));
                         cmd.Parameters.Add(new SqlParameter("@cedula", historialCedulas.CedulaId));
                         cmd.Parameters.Add(new SqlParameter("@usuario", historialCedulas.UsuarioId));
                         cmd.Parameters.Add(new SqlParameter("@estatus", historialCedulas.Estatus));
@@ -435,7 +436,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 using (SqlConnection sql = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("sp_getHistorialCedulaEvaluacion", sql))
+                    using (SqlCommand cmd = new SqlCommand("sp_getHistorialCedula", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@cedula", id));

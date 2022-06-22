@@ -19,19 +19,17 @@ namespace CedulasEvaluacion.Controllers
     public class MensajeriaController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioMensajeria vMensajeria;
         private readonly IRepositorioIncidenciasMensajeria viMensajeria;
         private readonly IRepositorioEntregablesCedula veMensajeria;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vPerfiles;
-        public MensajeriaController(IRepositorioEvaluacionServicios viCedula, IRepositorioMensajeria iMensajeria, IRepositorioFacturas iFacturas, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
-                                    IRepositorioIncidenciasMensajeria iiMensajeria, IRepositorioEntregablesCedula ivMensajeria,
-                                    IRepositorioPerfiles iPerfiles)
+        public MensajeriaController(IRepositorioEvaluacionServicios viCedula, IRepositorioFacturas iFacturas, IRepositorioInmuebles iVInmueble, 
+                                    IRepositorioUsuarios iVUsuario,IRepositorioIncidenciasMensajeria iiMensajeria, 
+                                    IRepositorioEntregablesCedula ivMensajeria, IRepositorioPerfiles iPerfiles)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vMensajeria = iMensajeria ?? throw new ArgumentNullException(nameof(iMensajeria));
             this.viMensajeria = iiMensajeria ?? throw new ArgumentNullException(nameof(iiMensajeria));
             this.veMensajeria = ivMensajeria ?? throw new ArgumentNullException(nameof(ivMensajeria));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
@@ -208,7 +206,7 @@ namespace CedulasEvaluacion.Controllers
                 cedMen.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedMen.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedMen.Id);
                 cedMen.historialCedulas = new List<HistorialCedulas>();
-                cedMen.historialCedulas = await vMensajeria.getHistorialMensajeria(cedMen.Id);
+                cedMen.historialCedulas = await vCedula.getHistorial(cedMen.Id);
                 foreach (var user in cedMen.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -253,7 +251,7 @@ namespace CedulasEvaluacion.Controllers
                 cedMen.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedMen.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedMen.Id);
                 cedMen.historialCedulas = new List<HistorialCedulas>();
-                cedMen.historialCedulas = await vMensajeria.getHistorialMensajeria(cedMen.Id);
+                cedMen.historialCedulas = await vCedula.getHistorial(cedMen.Id);
                 foreach (var user in cedMen.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -287,7 +285,7 @@ namespace CedulasEvaluacion.Controllers
                 cedMen.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedMen.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedMen.Id);
                 cedMen.historialCedulas = new List<HistorialCedulas>();
-                cedMen.historialCedulas = await vMensajeria.getHistorialMensajeria(cedMen.Id);
+                cedMen.historialCedulas = await vCedula.getHistorial(cedMen.Id);
                 foreach (var user in cedMen.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -305,9 +303,9 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("mensajeria/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaMensajeria cedulaMensajeria)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion cedulaMensajeria)
         {
-            int success = await vMensajeria.apruebaRechazaCedula(cedulaMensajeria, 0);
+            int success = await vCedula.apruebaRechazaCedula(cedulaMensajeria);
             if (success != 0)
             {
                 return Ok();
@@ -323,7 +321,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialMensajeria([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vMensajeria.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();

@@ -713,6 +713,7 @@
                 }).then(confirm => {
                     if (confirm.isConfirmed) {
                         axios.post('/mensajeria/historialMensajeria', {
+                            ServicioId: model.servicioId,
                             CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
                             Estatus: "En Trámite", Comentarios: "Se validó la cédula por operación."
                         }).then(hist => {
@@ -750,7 +751,8 @@
                     'showCancelButton': true
                 }).then(confirm => {
                     if (confirm.isConfirmed) {
-                        axios.post('/mensajeria/historialMensajeria', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "En Trámite", Comentarios: "Se envió a trámite por parte de la administración."
+                        axios.post('/mensajeria/historialMensajeria', {
+                            ServicioId: model.servicioId, CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "En Trámite", Comentarios: "Se envió a trámite por parte de la administración."
                         }).then(hist => {
                             if (hist.status == 200) {
                                 axios.post('/mensajeria/aprovRechCed', { Id: model.id, Estatus: "En Trámite" }).then(response => {
@@ -788,7 +790,8 @@
                     'showCancelButton': true
                 }).then(confirm => {
                     if (confirm.isConfirmed) {
-                        axios.post('/mensajeria/historialMensajeria', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite de Pago", Comentarios: "Se envió para trámite de pago."
+                        axios.post('/mensajeria/historialMensajeria', {
+                            ServicioId: model.servicioId, CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite de Pago", Comentarios: "Se envió para trámite de pago."
                         }).then(hist => {
                             if (hist.status == 200) {
                                 axios.post('/mensajeria/aprovRechCed', { Id: model.id, Estatus: "Trámite de Pago" }).then(response => {
@@ -833,7 +836,8 @@
                             inputPlaceholder: 'Escriba los comentarios correspondientes'
                         }).then(send => {
                             if (send.value.length > 0) {
-                                axios.post('/mensajeria/historialMensajeria', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite Rechazado", Comentarios: send.value
+                                axios.post('/mensajeria/historialMensajeria', {
+                                    ServicioId: model.servicioId, CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite Rechazado", Comentarios: send.value
                                 }).then(hist => {
                                     if (hist.status == 200) {
                                         axios.post('/mensajeria/aprovRechCed', { Id: model.id, Estatus: "Trámite Rechazado" }).then(response => {
@@ -879,7 +883,8 @@
                     'showCancelButton': true
                 }).then(confirm => {
                     if (confirm.isConfirmed) {
-                        axios.post('/mensajeria/historialMensajeria', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Autorizado CAE", Comentarios: "Se autorizó la documentación por la CAE"
+                        axios.post('/mensajeria/historialMensajeria', {
+                            ServicioId: model.servicioId, CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Autorizado CAE", Comentarios: "Se autorizó la documentación por la CAE"
                         }).then(hist => {
                             if (hist.status == 200) {
                                 axios.post('/mensajeria/aprovRechCed', { Id: model.id, Estatus: "Autorizado CAE" }).then(response => {
@@ -928,7 +933,8 @@
                     'showCancelButton': true
                 }).then(confirm => {
                     if (confirm.isConfirmed) {
-                        axios.post('/mensajeria/historialMensajeria', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Revisión CAE", Comentarios: "Se envía a revisión por la CAE"
+                        axios.post('/mensajeria/historialMensajeria', {
+                            ServicioId: model.servicioId, CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Revisión CAE", Comentarios: "Se envía a revisión por la CAE"
                         }).then(hist => {
                             if (hist.status == 200) {
                                 axios.post('/mensajeria/aprovRechCed', { Id: model.id, Estatus: "Revisión CAE" }).then(response => {

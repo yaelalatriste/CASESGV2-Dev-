@@ -1015,6 +1015,7 @@
                             }).then(send => {
                                 if (send.value.length > 0) {
                                     axios.post('/fumigacion/historialFumigacion', {
+                                        ServicioId: model.servicioId,
                                         CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
                                         Estatus: "Autorizada", Comentarios: send.value
                                     }).then(hist => {
@@ -1086,6 +1087,7 @@
                             }).then(send => {
                                 if (send.value.length > 0) {
                                     axios.post('/fumigacion/historialFumigacion', {
+                                        ServicioId: model.servicioId,
                                         CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
                                         Estatus: "Rechazada", Comentarios: send.value
                                     }).then(hist => {

@@ -18,18 +18,16 @@ namespace CedulasEvaluacion.Controllers
     public class ConvencionalController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioConvencional vConvencional;
         private readonly IRepositorioIncidenciasConvencional iConvencional;
         private readonly IRepositorioEntregablesCedula eConvencional;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vPerfiles;
 
-        public ConvencionalController(IRepositorioEvaluacionServicios viCedula, IRepositorioConvencional iConvencional, IRepositorioIncidenciasConvencional ivConvencional, IRepositorioEntregablesCedula ieConvencional, 
+        public ConvencionalController(IRepositorioEvaluacionServicios viCedula, IRepositorioIncidenciasConvencional ivConvencional, IRepositorioEntregablesCedula ieConvencional, 
                                       IRepositorioFacturas iFacturas, IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vConvencional = iConvencional ?? throw new ArgumentNullException(nameof(iConvencional));
             this.iConvencional = ivConvencional ?? throw new ArgumentNullException(nameof(ivConvencional));
             this.eConvencional = ieConvencional ?? throw new ArgumentNullException(nameof(ieConvencional));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
@@ -209,7 +207,7 @@ namespace CedulasEvaluacion.Controllers
                 telCel.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 telCel.RespuestasEncuesta = await vCedula.obtieneRespuestas(telCel.Id);
                 telCel.historialCedulas = new List<HistorialCedulas>();
-                telCel.historialCedulas = await vConvencional.getHistorialConvencional(telCel.Id);
+                telCel.historialCedulas = await vCedula.getHistorial(telCel.Id);
                 foreach (var user in telCel.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -236,7 +234,7 @@ namespace CedulasEvaluacion.Controllers
                 telCel.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 telCel.RespuestasEncuesta = await vCedula.obtieneRespuestas(telCel.Id);
                 telCel.historialCedulas = new List<HistorialCedulas>();
-                telCel.historialCedulas = await vConvencional.getHistorialConvencional(telCel.Id);
+                telCel.historialCedulas = await vCedula.getHistorial(telCel.Id);
                 foreach (var user in telCel.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -254,9 +252,9 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("/telConvencional/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] TelefoniaConvencional telefoniaConvencional)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion telefoniaConvencional)
         {
-            int success = await vConvencional.apruebaRechazaCedula(telefoniaConvencional);
+            int success = await vCedula.apruebaRechazaCedula(telefoniaConvencional);
             if (success != 0)
             {
                 return Ok();
@@ -272,7 +270,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialConvencional([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vConvencional.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();

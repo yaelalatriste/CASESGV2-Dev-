@@ -659,6 +659,7 @@
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
                             axios.post('/residuos/historialResiduos', {
+                                ServicioId: model.servicioId,
                                 CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
                                 Estatus: "En Trámite", Comentarios: "Se validó la cédula por operación."
                             }).then(hist => {
@@ -696,7 +697,7 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/residuos/historialResiduos', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "En Trámite", Comentarios: "Se envió a trámite por parte de la administración."}).then(hist => {
+                            axios.post('/residuos/historialResiduos', { ServicioId: model.servicioId, CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "En Trámite", Comentarios: "Se envió a trámite por parte de la administración."}).then(hist => {
                                 if (hist.status == 200) {
                                     axios.post('/residuos/aprovRechCed', { Id: model.id, Estatus: "En Trámite" }).then(response => {
                                         if (response.status == 200) {
@@ -733,7 +734,7 @@
                         'showCancelButton': true
                     }).then(confirm => {
                         if (confirm.isConfirmed) {
-                            axios.post('/residuos/historialResiduos', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite de Pago", Comentarios: "Se envió para trámite de pago." }).then(hist => {
+                            axios.post('/residuos/historialResiduos', { ServicioId: model.servicioId, CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite de Pago", Comentarios: "Se envió para trámite de pago." }).then(hist => {
                                 if (hist.status == 200) {
                                     axios.post('/residuos/aprovRechCed', { Id: model.id, Estatus: "Trámite de Pago" }).then(response => {
                                         if (response.status == 200) {
@@ -777,7 +778,8 @@
                                 inputPlaceholder: 'Escriba los comentarios correspondientes'
                             }).then(send => {
                                 if (send.value.length > 0) {
-                                    axios.post('/residuos/historialResiduos', { CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite Rechazado", Comentarios: send.value
+                                    axios.post('/residuos/historialResiduos', {
+                                        ServicioId: model.servicioId, CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value), Estatus: "Trámite Rechazado", Comentarios: send.value
                                     }).then(hist => {
                                         if (hist.status == 200) {
                                             axios.post('/residuos/aprovRechCed', { Id: model.id, Estatus: "Trámite Rechazado" }).then(response => {

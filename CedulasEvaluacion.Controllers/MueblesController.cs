@@ -16,7 +16,6 @@ namespace CedulasEvaluacion.Controllers
     public class MueblesController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioMuebles vMuebles;
         private readonly IRepositorioIncidenciasMuebles iMuebles;
         private readonly IRepositorioEntregablesCedula eMuebles;
         private readonly IRepositorioInmuebles vInmuebles;
@@ -27,17 +26,15 @@ namespace CedulasEvaluacion.Controllers
 
         public MueblesController(IRepositorioEvaluacionServicios viCedula, IRepositorioMuebles iVMuebles, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                     IRepositorioIncidenciasMuebles iiMuebles, IRepositorioEntregablesCedula eeMuebles,
-                                    IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas, IHostingEnvironment environment)
+                                    IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vMuebles = iVMuebles ?? throw new ArgumentNullException(nameof(iVMuebles));
             this.iMuebles = iiMuebles ?? throw new ArgumentNullException(nameof(iiMuebles));
             this.eMuebles = eeMuebles ?? throw new ArgumentNullException(nameof(eeMuebles));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));
             this.vRepositorioPerfiles = iRepositorioPerfiles ?? throw new ArgumentNullException(nameof(iRepositorioPerfiles));
-            this.environment = environment;
         }
 
         //Metodo que regresa las cedulas aceptadas, guardadas o rechazadas 
@@ -185,7 +182,7 @@ namespace CedulasEvaluacion.Controllers
                 cedMuebles.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedMuebles.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedMuebles.Id);
                 cedMuebles.historialCedulas = new List<HistorialCedulas>();
-                cedMuebles.historialCedulas = await vMuebles.getHistorialMuebles(cedMuebles.Id);
+                cedMuebles.historialCedulas = await vCedula.getHistorial(cedMuebles.Id);
                 foreach (var user in cedMuebles.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -222,7 +219,7 @@ namespace CedulasEvaluacion.Controllers
                 cedMuebles.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedMuebles.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedMuebles.Id);
                 cedMuebles.historialCedulas = new List<HistorialCedulas>();
-                cedMuebles.historialCedulas = await vMuebles.getHistorialMuebles(cedMuebles.Id);
+                cedMuebles.historialCedulas = await vCedula.getHistorial(cedMuebles.Id);
                 foreach (var user in cedMuebles.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -240,9 +237,9 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("/muebles/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaMuebles cedulaMuebles)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion cedulaMuebles)
         {
-            int success = await vMuebles.apruebaRechazaCedula(cedulaMuebles);
+            int success = await vCedula.apruebaRechazaCedula(cedulaMuebles);
             if (success != 0)
             {
                 return Ok();
@@ -258,7 +255,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialMuebles([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vMuebles.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();

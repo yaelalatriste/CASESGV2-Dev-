@@ -25,21 +25,17 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
         private readonly IRepositorioFacturas vFacturas;
-        private readonly IHostingEnvironment environment;
 
-        public AguaController(IRepositorioEvaluacionServicios viCedula, IRepositorioAgua iVAgua, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
-                                    IRepositorioIncidenciasAgua iiAgua, IRepositorioEntregablesCedula eeAgua,
-                                    IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas, IHostingEnvironment environment)
+        public AguaController(IRepositorioEvaluacionServicios viCedula, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,IRepositorioIncidenciasAgua iiAgua, 
+                              IRepositorioEntregablesCedula eeAgua, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vAgua = iVAgua ?? throw new ArgumentNullException(nameof(iVAgua));
             this.iAgua = iiAgua ?? throw new ArgumentNullException(nameof(iiAgua));
             this.eAgua = eeAgua ?? throw new ArgumentNullException(nameof(eeAgua));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));
             this.vRepositorioPerfiles = iRepositorioPerfiles ?? throw new ArgumentNullException(nameof(iRepositorioPerfiles));
-            this.environment = environment;
         }
 
         [Route("/agua/index/{servicio?}")]
@@ -192,7 +188,7 @@ namespace CedulasEvaluacion.Controllers
                 cedAgua.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedAgua.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedAgua.Id);
                 cedAgua.historialCedulas = new List<HistorialCedulas>();
-                cedAgua.historialCedulas = await vAgua.getHistorialAgua(cedAgua.Id);
+                cedAgua.historialCedulas = await vCedula.getHistorial(cedAgua.Id);
                 foreach (var user in cedAgua.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -220,7 +216,7 @@ namespace CedulasEvaluacion.Controllers
                 cedAgua.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedAgua.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedAgua.Id);
                 cedAgua.historialCedulas = new List<HistorialCedulas>();
-                cedAgua.historialCedulas = await vAgua.getHistorialAgua(cedAgua.Id);
+                cedAgua.historialCedulas = await vCedula.getHistorial(cedAgua.Id);
                 foreach (var user in cedAgua.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -238,9 +234,9 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("/agua/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaAgua cedulaAgua)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion cedulaAgua)
         {
-            int success = await vAgua.apruebaRechazaCedula(cedulaAgua);
+            int success = await vCedula.apruebaRechazaCedula(cedulaAgua);
             if (success != 0)
             {
                 return Ok();
@@ -256,7 +252,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialAgua([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vAgua.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();

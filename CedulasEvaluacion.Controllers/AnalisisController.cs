@@ -18,7 +18,6 @@ namespace CedulasEvaluacion.Controllers
     public class AnalisisController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioAnalisis vAnalisis;
         private readonly IRepositorioIncidenciasAnalisis iAnalisis;
         private readonly IRepositorioEntregablesCedula eAnalisis;
         private readonly IRepositorioInmuebles vInmuebles;
@@ -27,19 +26,16 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioFacturas vFacturas;
         private readonly IHostingEnvironment environment;
 
-        public AnalisisController(IRepositorioEvaluacionServicios viCedula, IRepositorioAnalisis iVAnalisis, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
-                                    IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioEntregablesCedula eeAnalisis,
-                                    IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas, IHostingEnvironment environment)
+        public AnalisisController(IRepositorioEvaluacionServicios viCedula, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario, IRepositorioIncidenciasAnalisis iiAnalisis, 
+                                  IRepositorioEntregablesCedula eeAnalisis, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
-            this.vAnalisis = iVAnalisis ?? throw new ArgumentNullException(nameof(iVAnalisis));
             this.iAnalisis = iiAnalisis ?? throw new ArgumentNullException(nameof(iiAnalisis));
             this.eAnalisis = eeAnalisis ?? throw new ArgumentNullException(nameof(eeAnalisis));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));
             this.vRepositorioPerfiles = iRepositorioPerfiles ?? throw new ArgumentNullException(nameof(iRepositorioPerfiles));
-            this.environment = environment;
         }
 
         [Route("/analisis/index/{servicio?}")]
@@ -192,7 +188,7 @@ namespace CedulasEvaluacion.Controllers
                 cedAna.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedAna.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedAna.Id);
                 cedAna.historialCedulas = new List<HistorialCedulas>();
-                cedAna.historialCedulas = await vAnalisis.getHistorialAnalisis(cedAna.Id);
+                cedAna.historialCedulas = await vCedula.getHistorial(cedAna.Id);
                 foreach (var user in cedAna.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -220,7 +216,7 @@ namespace CedulasEvaluacion.Controllers
                 cedFum.RespuestasEncuesta = new List<RespuestasEncuesta>();
                 cedFum.RespuestasEncuesta = await vCedula.obtieneRespuestas(cedFum.Id);
                 cedFum.historialCedulas = new List<HistorialCedulas>();
-                cedFum.historialCedulas = await vAnalisis.getHistorialAnalisis(cedFum.Id);
+                cedFum.historialCedulas = await vCedula.getHistorial(cedFum.Id);
                 foreach (var user in cedFum.historialCedulas)
                 {
                     user.usuarios = await vUsuarios.getUserById(user.UsuarioId);
@@ -238,9 +234,9 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpPost]
         [Route("/analisis/aprovRechCed")]
-        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaAnalisis cedulaAnalisis)
+        public async Task<IActionResult> aprovacionRechazoCedula([FromBody] CedulaEvaluacion cedulaAnalisis)
         {
-            int success = await vAnalisis.apruebaRechazaCedula(cedulaAnalisis);
+            int success = await vCedula.apruebaRechazaCedula(cedulaAnalisis);
             if (success != 0)
             {
                 return Ok();
@@ -256,7 +252,7 @@ namespace CedulasEvaluacion.Controllers
         public async Task<IActionResult> historialAnalisis([FromBody] HistorialCedulas historialCedulas)
         {
             int success = 0;
-            success = await vAnalisis.capturaHistorial(historialCedulas);
+            success = await vCedula.capturaHistorial(historialCedulas);
             if (success != 0)
             {
                 return Ok();
