@@ -16,6 +16,6 @@ namespace CedulasEvaluacion.Interfaces
         Task<List<Facturas>> getFacturas(int cedula,int servicio);
         Task<int> deleteFactura(int factura);
         decimal obtieneTotalFacturas(List<Facturas> facturas);
-
+        Task<List<Facturas>> getFacturasPago(int servicio);
     }
 }

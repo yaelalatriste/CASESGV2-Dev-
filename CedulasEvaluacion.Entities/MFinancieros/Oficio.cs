@@ -25,6 +25,11 @@ namespace CedulasEvaluacion.Entities.MFinancieros
         public DateTime FechaActualizacion { get; set; }
         public DateTime FechaEliminacion { get; set; }
         public List<DetalleCedula> cedulasOficio { get; set; }
+        public List<DetalleCedula> facturas { get; set; }
         public List<DetalleCedula> detalleCedulas{ get; set; }
+
+        /*Parametros para Filtros*/
+        public int InmuebleId { get; set; }
+        public string Mes { get; set; }
     }
 }

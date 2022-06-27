@@ -10,9 +10,12 @@ namespace CedulasEvaluacion.Entities.MFinancieros
         public int Id { get; set; }
         public string Inmueble { get; set; }
         public string Folio { get; set; }
+        public string FolioFactura { get; set; }
         public string Mes { get; set; }
+        public string Serie { get; set; }
         public int Anio { get; set; }
         public int ServicioId { get; set; }
+        public int FacturaId { get; set; }
         public string Estatus { get; set; }
         public string Servicio { get; set; }
         public decimal Subtotal{ get; set; }

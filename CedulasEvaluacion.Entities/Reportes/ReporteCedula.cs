@@ -15,6 +15,7 @@ namespace CedulasEvaluacion.Entities.Reportes
         public string Administracion { get; set; }
         public string Servicio { get; set; }
         public string Estatus { get; set; }
+        public string EstatusFactura { get; set; }
         public string Calificacion { get; set; }
         public string Reviso { get; set; }
         public string PuestoReviso { get; set; }

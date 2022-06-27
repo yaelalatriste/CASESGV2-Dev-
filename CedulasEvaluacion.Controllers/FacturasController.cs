@@ -99,5 +99,19 @@ namespace CedulasEvaluacion.Controllers
 
         /************************* Fin Facturas Limpieza *****************************/
 
+        /*Filtros de Facturas*/
+        [HttpGet]
+        [Route("/facturas/getFacturasPago/{servicio}")]
+        public async Task<IActionResult> getInmueblesPago(int servicio)
+        {
+            List<Facturas> inmueble = null;
+            inmueble = await vFacturas.getFacturasPago(servicio);
+            if (inmueble != null)
+            {
+                return Ok(inmueble);
+            }
+            return BadRequest();
+        }
+
     }
 }

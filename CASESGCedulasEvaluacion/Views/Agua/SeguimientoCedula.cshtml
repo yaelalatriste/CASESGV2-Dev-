@@ -377,7 +377,7 @@
                                     <tr>
                                         <td>@hist.Servicio</td>
                                         <td>@hist.usuarios.nombre_emp @hist.usuarios.paterno_emp @hist.usuarios.materno_emp</td>
-                                        <td>@hist.Comentarios</td>
+                                        <td>@Html.Raw(@hist.Comentarios)</td>
                                         <td>@hist.Estatus</td>
                                         <td>@Convert.ToDateTime(@hist.FechaCreacion).ToString("dd/MM/yyyy hh:mm tt")</td>
                                     </tr>

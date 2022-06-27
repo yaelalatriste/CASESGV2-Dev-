@@ -615,6 +615,66 @@ namespace CedulasEvaluacion.Controllers
             return File(toArray, "application/ms-word", "ActaER_Analisis_" + cedula.Mes + ".docx");
         }
 
+        [Route("/documents/actaConvencional/{id?}/{servicio?}")]
+        public async Task<IActionResult> getActaEntregaRecepcionTelConvencional(int id, int servicio)
+        {
+            ActaEntregaRecepcion acta = new ActaEntregaRecepcion();
+            CedulaEvaluacion cedula = new CedulaEvaluacion();
+            cedula = await vCedula.CedulaById(id);
+            acta = await vDocuments.getDatosActa(id, servicio);
+
+            Document document = new Document();
+            var path = @"E:\Plantillas CASESGV2\DocsV2\Acta ER\Acta Entrega - Recepción Telefonía Convencional.docx";
+            document.LoadFromFile(path);
+
+            //Creamos la Tabla
+            Section tablas = document.AddSection();
+
+           
+            document.Replace("|Folio|", cedula.Folio, false, true);
+
+            document.Replace("|MesEval|", cedula.Mes, false, true);
+
+
+            DateTime fechaActual = DateTime.Now;
+            document.Replace("|Dia|", fechaActual.Day + "", false, true);
+            document.Replace("|Mes|", fechaActual.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")), false, true);
+            document.Replace("|Anio|", fechaActual.Year + "", false, true);
+            document.Replace("|Hora|", fechaActual.Hour + ":00", false, true);
+            document.Replace("|DiaActual|", fechaActual.Day + " de " + fechaActual.ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " de " + fechaActual.Year, false, true);
+            document.Replace("|HoraActual|", fechaActual.Hour + ":00", false, true);
+            document.Replace("|Hora|", fechaActual.Hour + ":00", false, true);
+            if ((await iAgua.GetIncidenciasPregunta(id, 2)).Count == 0 && (await iAgua.GetIncidenciasPregunta(id, 3)).Count == 0 && (await iAgua.GetIncidenciasPregunta(id, 4)).Count == 0)
+            {
+                document.Replace("|Declaraciones|", "Se hace constar que los servicios solicitados fueron atendidos a entera satisfacción del Consejo de la Judicatura Federal conforme se visualiza en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
+            }
+            else
+            {
+                document.Replace("|Declaraciones|", "\nSe hace constar que los servicios fueron recibidos por el Consejo de la Judicatura Federal, presentando incidencias, mismas que se vierten en la cédula automatizada para la supervisión y evaluación de servicios generales.", false, true);
+            }
+
+            document.Replace("|ImporteIVA|", acta.Total.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadServicios|", acta.Cantidad.Replace("|", "\n"), false, true);
+            document.Replace("|FechaTimbrado|", acta.FechasTimbrado.Replace("|", "\n"), false, true);
+            document.Replace("|FolioFactura|", acta.Folios.Replace("|", "\n"), false, true);
+
+            //Notas de Crédito
+            document.Replace("|ImporteNota|", acta.TotalNC.Replace("|", "\n"), false, true);
+            document.Replace("|CantidadNota|", acta.CantidadNC.Replace("|", "\n"), false, true);
+            document.Replace("|TimbradoNota|", acta.FechasTimbradoNC.Replace("|", "\n"), false, true);
+            document.Replace("|FolioNota|", acta.FoliosNC.Replace("|", "\n"), false, true);
+
+            //Salvar y Lanzar
+
+            byte[] toArray = null;
+            using (MemoryStream ms1 = new MemoryStream())
+            {
+                document.SaveToStream(ms1, Spire.Doc.FileFormat.Docx2013);
+                toArray = ms1.ToArray();
+            }
+            return File(toArray, "application/ms-word", "ActaER_Analisis_" + cedula.Mes + ".docx");
+        }
+
         private int UserId()
         {
             return Convert.ToInt32(User.Claims.ElementAt(0).Value);

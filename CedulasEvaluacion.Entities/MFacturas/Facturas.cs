@@ -12,6 +12,7 @@ namespace CedulasEvaluacion.Entities.MFacturas
         public int ServicioId { get; set; }
         public string Descripcion { get; set; }
         public string Tipo { get; set; }
+        public string FolioFactura { get; set; }
         public IFormFile Xml { get; set; }
         public int CedulaExistente { get; set; }
         public Comprobante comprobante { get; set; }

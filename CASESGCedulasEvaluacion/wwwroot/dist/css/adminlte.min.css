@@ -2696,6 +2696,10 @@ a.btn.disabled, fieldset:disabled a.btn {
     background-color: #24135F !important;
 }
 
+.bg-oficios {
+    background-color: #956DE5 !important;
+}
+
 
 .btn-primary:hover {
     color: #fff;
@@ -6149,6 +6153,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 }
 
 .modal-body {
+    height: 800px;
     position: relative;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
@@ -6214,14 +6219,70 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 }
 
 @media (min-width:992px) {
-    .modal-lg, .modal-xl {
-        max-width: 800px
+    .modal-xl {
+        max-width: 950px
+    }
+
+    .modal-lg{
+        max-width: 950px
     }
 }
 
 @media (min-width:1200px) {
     .modal-xl {
-        max-width: 1140px
+        max-width: 1140px;
+    }
+}
+
+@media (min-width:1300px) {
+    .modal-xl {
+        max-width: 1240px
+    }
+
+    .modal-lg {
+        max-width: 950px
+    }
+}
+
+@media (min-width:1400px) {
+    .modal-xl {
+        max-width: 1350px
+    }
+}
+
+@media (min-width:1450px) {
+    .modal-xl {
+        max-width: 1400px
+    }
+}
+
+@media (min-width:1500px) {
+    .modal-xl {
+        max-width: 1450px
+    }
+}
+
+@media (min-width:1600px) {
+    .modal-xl {
+        max-width: 1540px
+    }
+}
+
+@media (min-width:1700px) {
+    .modal-xl {
+        max-width: 1650px
+    }
+}
+
+@media (min-width:1800px) {
+    .modal-xl {
+        max-width: 1750px;
+    }
+}
+
+@media (min-width:1900px) {
+    .modal-xl {
+        max-width: 1850px;
     }
 }
 
