@@ -442,6 +442,38 @@ namespace CedulasEvaluacion.Repositories
         }
         /*FIN Metodo para Actualizar los datos de la factura*/
 
+        public async Task<List<Facturas>> getFacturasPago(int servicio)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getFacturasParaPago", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        var response = new List<Facturas>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValuePago(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+
         /*Metodo para eliminar una factura*/
         public async Task<int> deleteFactura(int factura)
         {
@@ -543,6 +575,14 @@ namespace CedulasEvaluacion.Repositories
                 IVA = (decimal)reader["IVA"],
                 datosExtra = de,
                 datosTotales = dt
+            };
+        }
+        private Facturas MapToValuePago(SqlDataReader reader)
+        {
+            return new Facturas()
+            {
+                Id = reader["Id"] != DBNull.Value ? (int)reader["Id"] : 0,
+                FolioFactura = reader["FolioFactura"] != DBNull.Value ? reader["FolioFactura"].ToString() : "",
             };
         }
     }
