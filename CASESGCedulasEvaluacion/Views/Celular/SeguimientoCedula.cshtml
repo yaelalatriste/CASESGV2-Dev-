@@ -94,7 +94,7 @@
                                         }
                                         <p class="text-sm">
                                             @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                            @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
+                                                              @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
                                             }
                                             @if (total > 0)
                                             {
@@ -216,6 +216,12 @@
                                             tipo = "Memorándum";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
+                                        else if (entre.Tipo.Equals("CorreoValidacion"))
+                                        {
+                                            memo = true;
+                                            tipo = "Correo de Validación";
+                                            <td>@Html.DisplayName(tipo)</td>
+                                        }
                                         else
                                         {
                                             tipo = @entre.Tipo;
@@ -265,7 +271,7 @@
                                                 <i class='fas fa-eye text-success'></i>
                                             </a>
                                             @if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite Rechazado")) ||
-                                         (@User.Claims.ElementAt(2).Value).Equals("Administrador"))
+                                        (@User.Claims.ElementAt(2).Value).Equals("Administrador"))
                                             {
                                                 @if (!entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("editar entregables", @Model.ServicioId, @user) != 0)
                                                 {
@@ -277,7 +283,7 @@
                                                 }
                                             }
                                             @if (@Model.Estatus.Equals("En Trámite") && (@entre.Tipo.Equals("Cedula_Firmada") || @entre.Tipo.Equals("Memorandum"))
-                                              && @entre.ValidadoDas == false)
+                                             && @entre.ValidadoDas == false)
                                             {
                                                 @if (entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("validar cédula", @Model.ServicioId, @user) != 0)
                                                 {
@@ -508,7 +514,7 @@
 
 @* Modal para la ver Adjuntos *@
 <div class="modal fade" id="show_pdf">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl-view">
         <div class="modal-content">
             <div class="modal-header bg-joke">
                 <h4 class="modal-title text-white" id="titlePDF"></h4>
@@ -516,12 +522,13 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body-view">
                 <table class="table">
                     <tr>
                         <td><strong>Folio: </strong> @Model.Folio</td>
                         <td><strong>Año: </strong>@Model.Anio</td>
                         <td><strong>Mes: </strong>@Model.Mes</td>
+                        <td><strong>Inmueble: </strong>@Model.inmuebles.Nombre</td>
                         <td><strong>Estatus: </strong>@Model.Estatus </td>
                     </tr>
                 </table>
@@ -561,7 +568,9 @@
                 $('a[href="' + localStorage.getItem('activeTab') + '"]').addClass('active');
                 $("#informacion_general").removeClass("show active");
                 $("#" + idTab).addClass("show active");
-            } else {
+            }
+            else
+            {
                 $('#myTab li:first').addClass('active');
             }
 
@@ -789,7 +798,7 @@
                 $(document).on('click', '.view_file', function () {
                     let nombre = $(this).data('file');
                     let tipo = $(this).data('tipo');
-                    let data = "<object width='100%' height='450px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre+"'></object>";
+                    let data = "<object width='100%' height='710px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre+"'></object>";
                     $('#titlePDF').text("PDF - \"" + tipo + "\"");
                     $('#objectPdf').html(data);
                     $('#show_pdf').modal('show');
@@ -989,7 +998,9 @@
                                     cedFirmada = true;
                                 }
                             }
-
+                            if (memo == false && (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado")) {
+                                options += '<option value="CorreoValidacion">Correo de Validación</option>';
+                            }
                             if (cedFirmada == false && (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado")) {
                                 options += '<option value="Cedula_Firmada">Cédula Firmada (FIREL)</option>';
                             }
@@ -1039,7 +1050,8 @@
                         }
 
                         return true;
-                    }
+            }
+
                     $("#customFile").on("change", function () {
                         var fileName = $(this).val().split("\\").pop();
                         var ext = fileName.split('.').pop();
@@ -1182,6 +1194,13 @@
 
                 /*Editar Entregables*/
                     $(document).on("click", ".update_files", function () {
+                        var options = '<option value="">Seleccione un Entregable</option> <option value="Factura">Factura</option>'+
+                            '<option value="Validación del SAT">Validación del SAT</option>'+
+                            '<option value="Relación de Líneas Activas">Relación de Líneas Activas</option>'+
+                            '<option value="Relación de Altas y Bajas por Perfil">Relación de Altas y Bajas por Perfil</option>'+
+                            '<option value="Detalle de Consumo">Detalle de Consumo</option>'+
+                            '<option value="Resumen de Requerimientos">Resumen de Requerimientos</option><option value="Correo_Validacion">Correo de Validación</option>';
+                        $("#tipo_entregable").html(options);
                         $('#modal_evidencias').modal('show');
                         var id = $(this).data('id');
                         var tipo = $(this).data('tipo');
@@ -1214,21 +1233,23 @@
                     });
 
                     $('#customFile').change(function () {
-                         if ($('#customFile').val() == "") {
-                             $('#customFile').addClass('is-invalid');
-                             $('#error_customFile').css('display', 'block');
-
+                        var fileName = $(this).val().split("\\").pop();
+                        var ext = fileName.split('.').pop();
+                        if (ext == "pdf" || ext == "xls" || ext == "xlsx" || ext == "PDF") {
+                            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                         } else {
-                             var fileName = $("#customFile").val().split("\\").pop();
-                             var ext = fileName.split('.').pop();
-                             if (ext != "pdf") {
-                                 $('#customFile').addClass('is-invalid');
-                                 $('#error_customFile').css('display', 'block');
-                             } else {
-                                 $('#customFile').removeClass('is-invalid');
-                                 $('#customFile').addClass('is-valid');
-                                 $('#error_customFile').css('display', 'none');
-                             }
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Formato Incorrecto',
+                                'text': 'El archivo que intentas adjuntar no es válido. Favor de solo seleccionar archivos "PDF"'
+                            });
+                            $(".custom-file-label").text("Seleccionar Archivo");
+                            document.getElementById('customFile').value = '';
+                            if ($('#customFile').hasClass('is-valid')) {
+                                $('#customFile').removeClass('is-valid');
+                            }
+                            $('#customFile').addClass('is-invalid');
+                            $('#error_customFile').css('display', 'block');
                         }
                     });
 
