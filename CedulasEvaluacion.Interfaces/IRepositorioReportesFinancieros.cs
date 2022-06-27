@@ -10,5 +10,6 @@ namespace CedulasEvaluacion.Interfaces
     {
         Task<List<ReporteCedula>> GetCedulasFinancieros(string mes, int anio);
         Task<List<ReporteCedula>> GetReportePagos(string mes, int anio);
+        Task<List<ReporteCedula>> GetReporteServiciosFacturas(int servicio, string mes);
     }
 }

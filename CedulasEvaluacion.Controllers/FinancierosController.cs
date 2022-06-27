@@ -62,14 +62,25 @@ namespace CedulasEvaluacion.Controllers
 
         [HttpGet]
         [Route("/financieros/oficio/{servicio}/{id}")]
-        public async Task<IActionResult> NuevoOficio(int id, int servicio)
+        public async Task<IActionResult> NuevoOficio(int id, int servicio, [FromQuery(Name = "idc")] int idc, [FromQuery(Name = "mes")] string mes)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
                 Oficio oficio = await vFinancieros.GetOficioById(id);
                 oficio.detalleCedulas = new List<DetalleCedula>();
-                oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id, servicio);
+                oficio.Mes = mes;
+                oficio.InmuebleId = idc;
+                if (idc != 0 || mes != null) 
+                {
+                    oficio.detalleCedulas = await vFinancieros.GetCedulasFiltroPago(idc, mes, servicio);
+                    oficio.facturas = await vFinancieros.GetFacturasFiltroPago(idc, servicio,mes);
+                }
+                else
+                {
+                    oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id, servicio);
+                    oficio.facturas = await vFinancieros.GetFacturasTramitePago(id, servicio);
+                }
                 oficio.cedulasOficio = new List<DetalleCedula>();
                 oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id, servicio);
                 return View(oficio);
@@ -101,7 +112,7 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "crear");
             if (success == 1)
             {
-                int tramitado = await vFinancieros.GetTramiteOficio(id, servicio);
+                int tramitado = await vFinancieros.TramitarOficioDGPPT(id, servicio, UserId());
                 if (tramitado != -1)
                 {
                     return Ok(tramitado);
@@ -146,13 +157,13 @@ namespace CedulasEvaluacion.Controllers
         }
 
         [HttpGet]
-        [Route("/financieros/elimina/cedulasOficio/{oficio}/{servicio}/{cedula}")]
-        public async Task<IActionResult> EliminaCedulasOficio(int oficio, int servicio, int cedula)
+        [Route("/financieros/elimina/cedulasOficio/{oficio}/{servicio}/{factura}")]
+        public async Task<IActionResult> EliminaCedulasOficio(int oficio, int servicio, int factura)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                int elimina = await vFinancieros.EliminaCedulasOficio(oficio, servicio, cedula);
+                int elimina = await vFinancieros.EliminaCedulasOficio(oficio, servicio, factura);
                 if (elimina != -1)
                 {
                     return Ok(elimina);

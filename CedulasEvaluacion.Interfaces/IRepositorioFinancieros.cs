@@ -19,10 +19,13 @@ namespace CedulasEvaluacion.Interfaces
         Task<List<DetalleCedula>> GetCedulasTramitePago(int id, int servicio); // Obtiene el Total de Cédulas que están en Trámite de Pago
         Task<List<DetalleCedula>> GetCedulasOficio(int id, int servicio); // Obtiene las cédulas que ya están dentro de un oficio
         Task<int> insertarCedulasOficio(List<CedulasOficio> cedulas);
-        Task<int> GetTramiteOficio(int id, int servicio);
+        Task<int> TramitarOficioDGPPT(int id, int servicio,int user);
         Task<int> CancelarOficio(int id, int servicio);
-        Task<int> EliminaCedulasOficio(int oficio, int servicio, int cedula);
+        Task<int> EliminaCedulasOficio(int oficio, int servicio, int factura);
         Task<int> PagarOficio(int id, int servicio, DateTime fecha);
         Task<int> insertaAcuseOficio(Oficio oficio);
+        Task<List<DetalleCedula>> GetFacturasTramitePago(int id, int servicio);
+        Task<List<DetalleCedula>> GetCedulasFiltroPago(int id,string mes,int servicio);
+        Task<List<DetalleCedula>> GetFacturasFiltroPago(int id,int servicio, string mes);
     }
 }

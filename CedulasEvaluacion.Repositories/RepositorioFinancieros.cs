@@ -180,6 +180,107 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
+        public async Task<List<DetalleCedula>> GetFacturasTramitePago(int id, int servicio)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getFacturasTramitePagoMes", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        cmd.Parameters.Add(new SqlParameter("@oficio", id));
+                        var response = new List<DetalleCedula>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValueFacturas(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+
+        /*Filtros para Cedulas*/
+        public async Task<List<DetalleCedula>> GetCedulasFiltroPago(int id, string mes,int servicio)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getCedulasPorFiltroOficio", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@factura", id));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        cmd.Parameters.Add(new SqlParameter("@mes", mes));
+                        var response = new List<DetalleCedula>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValueDetalle(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+        public async Task<List<DetalleCedula>> GetFacturasFiltroPago(int id,int servicio, string mes)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getFacturasPorFiltroOficio", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@factura", id));
+                        cmd.Parameters.Add(new SqlParameter("@mes", mes));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        var response = new List<DetalleCedula>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValueFacturas(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return null;
+            }
+        }
+        /*Fin de Filtros para Cedulas*/
         public async Task<List<DetalleCedula>> GetCedulasOficio(int id, int servicio)
         {
             try
@@ -198,7 +299,7 @@ namespace CedulasEvaluacion.Repositories
                         {
                             while (await reader.ReadAsync())
                             {
-                                response.Add(MapToValueDetalle(reader));
+                                response.Add(MapToValueFacturas(reader));
                             }
                         }
 
@@ -315,6 +416,7 @@ namespace CedulasEvaluacion.Repositories
                         {
                             cmd.CommandType = System.Data.CommandType.StoredProcedure;
                             cmd.Parameters.Add(new SqlParameter("@oficio", ced.OficioId));
+                            cmd.Parameters.Add(new SqlParameter("@factura", ced.FacturaId));
                             cmd.Parameters.Add(new SqlParameter("@cedula", ced.CedulaId));
                             cmd.Parameters.Add(new SqlParameter("@servicio", ced.ServicioId));
 
@@ -339,7 +441,7 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-        public async Task<int> EliminaCedulasOficio(int oficio, int servicio, int cedula)
+        public async Task<int> EliminaCedulasOficio(int oficio, int servicio, int factura)
         {
             try
             {
@@ -350,7 +452,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@oficio", oficio));
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
-                        cmd.Parameters.Add(new SqlParameter("@cedula", cedula));
+                        cmd.Parameters.Add(new SqlParameter("@factura", factura));
 
                         await sql.OpenAsync();
                         int i = await cmd.ExecuteNonQueryAsync();
@@ -371,7 +473,7 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-        public async Task<int> GetTramiteOficio(int id, int servicio)
+        public async Task<int> TramitarOficioDGPPT(int id, int servicio, int user)
         {
             int success = -1;
             try
@@ -382,21 +484,13 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@oficio", id));
+                        cmd.Parameters.Add(new SqlParameter("@user", user));
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
 
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
-                        int i = await cmd.ExecuteNonQueryAsync();
-                        if (i > 0)
-                        {
-                            success = 1;
-                        }
-                        else
-                        {
-                            success = -1;
-                        }
-
-                        return success;
+                        
+                        return 1;
                     }
                 }
             }
@@ -541,6 +635,23 @@ namespace CedulasEvaluacion.Repositories
                 Inmueble = reader["Inmueble"].ToString(),
                 Estatus = reader["Estatus"].ToString(),
                 Folio = reader["Folio"].ToString(),
+                Mes = reader["Mes"].ToString(),
+                Anio = (int)reader["Anio"],
+            };
+        }
+        private DetalleCedula MapToValueFacturas(SqlDataReader reader)
+        {
+            return new DetalleCedula
+            {
+                Id = (int)reader["Id"],
+                ServicioId = (int)reader["ServicioId"],
+                FacturaId = (int)reader["FacturaId"],
+                Servicio = reader["Servicio"].ToString(),
+                Serie = reader["Serie"].ToString(),
+                Inmueble = reader["Inmueble"].ToString(),
+                Estatus = reader["Estatus"].ToString(),
+                Folio = reader["Folio"].ToString(),
+                FolioFactura = reader["FolioFactura"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Anio = (int)reader["Anio"],
                 Subtotal = (decimal)reader["Subtotal"],

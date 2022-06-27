@@ -360,7 +360,6 @@ namespace CedulasEvaluacion.Repositories
                 Tipo = reader["Tipo"] != DBNull.Value ? (int)reader["Tipo"]:0,
             };
         }
-
         private Inmueble MapToValueRM(SqlDataReader reader)
         {
             return new Inmueble()
