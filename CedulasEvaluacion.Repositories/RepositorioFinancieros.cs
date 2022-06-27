@@ -622,6 +622,7 @@ namespace CedulasEvaluacion.Repositories
                 Fondo = reader["Fondo"].ToString(),
                 Icono = reader["Icono"].ToString(),
                 Total = (int)reader["Total"],
+                TotalParcial = (int)reader["TotalParcial"],
                 ServicioId = (int)reader["ServicioId"]
             };
         }

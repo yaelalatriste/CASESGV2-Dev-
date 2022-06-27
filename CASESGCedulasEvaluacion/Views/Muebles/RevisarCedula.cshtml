@@ -284,27 +284,27 @@
                 }
                 else
                 {
-                <div class="row mt-4">
-                    <div class="row col-lg-12 mt-3">
-                        <div class="col-lg-9 mt-3 ml-4">
-                            <p class="h3 text-justify text-success">El prestador de servicios cumplió con la maquinaria, equipo y herramientas necesarias para prestar el servicio, evitando la penalización correspondiente.</p>
-                        </div>
-                        <div class="col-lg-2" style="margin-top: -18px;">
-                            <div class="small-box bg-warning">
-                                <div class="icon">
-                                    <i class="fas fa-check-circle text-success"></i>
+                    <div class="row mt-4">
+                        <div class="row col-lg-12 mt-3">
+                            <div class="col-lg-9 mt-3 ml-4">
+                                <p class="h3 text-justify text-success">El prestador de servicios cumplió con la maquinaria, equipo y herramientas necesarias para prestar el servicio, evitando la penalización correspondiente.</p>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: -18px;">
+                                <div class="small-box bg-warning">
+                                    <div class="icon">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-lg-12">
-                        <h5 class="text-success ml-4">
-                            <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
-                        </h5>
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5 class="text-success ml-4">
+                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
+                            </h5>
+                        </div>
                     </div>
-                </div>
                 }
             </div>
             <div class="tab-pane fade" id="transporte" role="tabpanel" aria-labelledby="profile-tab">
@@ -809,7 +809,7 @@
 
 @* Modal para la ver Adjuntos *@
 <div class="modal fade" id="show_pdf">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl-view">
         <div class="modal-content">
             <div class="modal-header bg-joke">
                 <h4 class="modal-title text-white" id="titlePDF"></h4>
@@ -817,16 +817,13 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body-view">
                 <table class="table">
                     <tr>
                         <td><strong>Folio: </strong> @Model.Folio</td>
                         <td><strong>Año: </strong>@Model.Anio</td>
                         <td><strong>Mes: </strong>@Model.Mes</td>
-                        <td><strong>Inmueble Origen: </strong>@Model.inmuebles.Nombre</td>
-                        <td><strong>Inmueble Destino: </strong>@Model.inmuebleDestino.Nombre</td>
-                    </tr>
-                    <tr>
+                        <td><strong>Inmueble: </strong>@Model.inmuebles.Nombre</td>
                         <td><strong>Estatus: </strong>@Model.Estatus </td>
                     </tr>
                 </table>
@@ -878,7 +875,7 @@
             $(document).on('click', '.view_file', function () {
                 let nombre = $(this).data('file');
                 let tipo = $(this).data('tipo');
-                let data = "<object width='100%' height='450px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre+"'></object>";
+                let data = "<object width='100%' height='710px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre+"'></object>";
                 $('#titlePDF').text("PDF - \"" + tipo + "\"");
                 $('#objectPdf').html(data);
                 $('#show_pdf').modal('show');

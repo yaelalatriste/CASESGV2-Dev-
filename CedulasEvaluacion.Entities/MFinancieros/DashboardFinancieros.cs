@@ -14,6 +14,7 @@ namespace CedulasEvaluacion.Entities.MFinancieros
         public string Fondo { get; set; }
         public string Icono { get; set; }
         public int Total { get; set; }
+        public int TotalParcial { get; set; }
         public int ServicioId { get; set; }
         public List<Oficio> oficios { get; set; }
     }

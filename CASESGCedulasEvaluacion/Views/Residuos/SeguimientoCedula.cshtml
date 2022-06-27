@@ -249,7 +249,7 @@
                                         }
                                         <td>@entre.NombreArchivo</td>
                                         <td>@entre.FechaCreacion.ToString("dd-MM-yyyy")</td>
-                                         <td class="text-center @entre.Color font-weight-bold">
+                                        <td class="text-center @entre.Color font-weight-bold">
                                             @if (await sPermisos.GetPermisosByModulo("autorizar entregables", @Model.ServicioId, @user) != 0)
                                             {
                                                 @if (@entre.Estatus.Equals("Rechazado"))
@@ -285,35 +285,35 @@
                                                 @Html.Raw(@entre.Icono) @entre.Estatus
                                             }
                                         </td>
-                                         <td class="text-center">
-                                             <a href='#' class='text-center mr-2 view_file' data-id="@entre.Id" data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo"
-                                                data-toggle="tooltip" title="Vista Previa de(la) @tipo" data-placement="top">
-                                                 <i class='fas fa-eye text-success'></i>
-                                             </a>
-                                             @if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite Rechazado")) ||
-                                           (@User.Claims.ElementAt(2).Value).Equals("Administrador"))
-                                             {
-                                                 @if (!entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("editar entregables", @Model.ServicioId, @user) != 0)
-                                                 {
-                                                     <a href='#' class="text-center mr-2 update_files" data-id="@entre.Id" data-coments="@entre.Comentarios"
-                                                        data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo" data-toggle="tooltip" title="Actualizar @entre.Tipo"
-                                                        data-placement="top">
-                                                         <i class='fas fa-check-circle text-primary'></i>
-                                                     </a>
-                                                 }
-                                             }
-                                             @if (@Model.Estatus.Equals("En Trámite") && (@entre.Tipo.Equals("Cedula_Firmada") || @entre.Tipo.Equals("Memorandum"))
-                                                && @entre.ValidadoDas == false)
-                                             {
-                                                 @if (entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("validar cédula", @Model.ServicioId, @user) != 0)
-                                                 {
-                                                     <a href='#' class="text-center mr-2 valida_cedula" data-id="@entre.Id" data-tipo="@tipo" data-toggle="tooltip" title="Validar Cédula de Evaluación"
-                                                        data-placement="top">
-                                                         <i class='fas fa-check text-cjf'></i>
-                                                     </a>
-                                                 }
-                                             }
-                                         </td>
+                                        <td class="text-center">
+                                            <a href='#' class='text-center mr-2 view_file' data-id="@entre.Id" data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo"
+                                               data-toggle="tooltip" title="Vista Previa de(la) @tipo" data-placement="top">
+                                                <i class='fas fa-eye text-success'></i>
+                                            </a>
+                                            @if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite Rechazado")) ||
+                                         (@User.Claims.ElementAt(2).Value).Equals("Administrador"))
+                                            {
+                                                @if (!entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("editar entregables", @Model.ServicioId, @user) != 0)
+                                                {
+                                                    <a href='#' class="text-center mr-2 update_files" data-id="@entre.Id" data-coments="@entre.Comentarios"
+                                                       data-file="@entre.NombreArchivo" data-tipo="@entre.Tipo" data-toggle="tooltip" title="Actualizar @entre.Tipo"
+                                                       data-placement="top">
+                                                        <i class='fas fa-check-circle text-primary'></i>
+                                                    </a>
+                                                }
+                                            }
+                                            @if (@Model.Estatus.Equals("En Trámite") && (@entre.Tipo.Equals("Cedula_Firmada") || @entre.Tipo.Equals("Memorandum"))
+                                              && @entre.ValidadoDas == false)
+                                            {
+                                                @if (entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("validar cédula", @Model.ServicioId, @user) != 0)
+                                                {
+                                                    <a href='#' class="text-center mr-2 valida_cedula" data-id="@entre.Id" data-tipo="@tipo" data-toggle="tooltip" title="Validar Cédula de Evaluación"
+                                                       data-placement="top">
+                                                        <i class='fas fa-check text-cjf'></i>
+                                                    </a>
+                                                }
+                                            }
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -534,7 +534,7 @@
 
 @* Modal para la ver Adjuntos *@
 <div class="modal fade" id="show_pdf">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl-view">
         <div class="modal-content">
             <div class="modal-header bg-joke">
                 <h4 class="modal-title text-white" id="titlePDF"></h4>
@@ -542,7 +542,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body-view">
                 <table class="table">
                     <tr>
                         <td><strong>Folio: </strong> @Model.Folio</td>
@@ -818,7 +818,7 @@
             $(document).on('click', '.view_file', function () {
                 let nombre = $(this).data('file');
                 let tipo = $(this).data('tipo');
-                let data = "<object width='100%' height='450px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre + "'></object>";
+                let data = "<object width='100%' height='710px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre + "'></object>";
                 $('#titlePDF').text("PDF - \"" + tipo + "\"");
                 $('#objectPdf').html(data);
                 $('#show_pdf').modal('show');

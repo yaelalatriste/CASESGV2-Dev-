@@ -501,8 +501,8 @@
 @*Fin Modal para la captura de Incidencias *@
 
 @* Modal para la ver Adjuntos *@
-<div class="modal fade" id="modal_pdf" style="height: 1900px">
-    <div class="modal-dialog modal-xl">
+<div class="modal fade" id="show_pdf">
+    <div class="modal-dialog modal-xl-view">
         <div class="modal-content">
             <div class="modal-header bg-joke">
                 <h4 class="modal-title text-white" id="titlePDF"></h4>
@@ -510,19 +510,18 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body-view">
                 <table class="table">
                     <tr>
                         <td><strong>Folio: </strong> @Model.Folio</td>
                         <td><strong>Año: </strong>@Model.Anio</td>
                         <td><strong>Mes: </strong>@Model.Mes</td>
                         <td><strong>Inmueble: </strong>@Model.inmuebles.Nombre</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"><strong>Estatus: </strong>@Model.Estatus </td>
+                        <td><strong>Estatus: </strong>@Model.Estatus </td>
                     </tr>
                 </table>
-                <div class="row" id="entregablePDF"></div>
+                <div class="row" id="objectPdf">
+                </div>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -1300,7 +1299,7 @@
 
                 $(document).on("click", ".delete_incidencia", function(){
                     var id = $(this).data("id");
-                    
+
                     Swal.fire({
                             'icon': 'warning',
                             'title': 'Servicio de Agua para Beber',
@@ -1581,7 +1580,7 @@
                     $(document).on('click', '.view_file', function () {
                         let nombre = $(this).data('file');
                         let tipo = $(this).data('tipo');
-                        let url = '<object class="objectPdf" width="100%" height="640" embedded=True data="' + '/cedLimpieza/verArchivo/' + model.folio + '/' + nombre + '"></object>';
+                        let url = '<object class="objectPdf" width="100%" height="710" embedded=True data="' + '/cedLimpieza/verArchivo/' + model.folio + '/' + nombre + '"></object>';
                         $('#titlePDF').text("PDF - \"" + tipo + "\"");
                         $('#entregablePDF').html(url);
                         $('#modal_pdf').modal('show');
@@ -1825,7 +1824,7 @@
                                 'title': 'Servicio de Agua Para Beber',
                                 'html': 'No ha capturado la fecha de entrega en la <strong>Pregunta ' + (i + 1) + '</strong>'
                             });
-                        } 
+                        }
                     } else if (i == 0) {
                         Swal.fire({
                             'icon': 'error',
