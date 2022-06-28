@@ -1,5 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MMensajeria;
-using CedulasEvaluacion.Interfaces;
+﻿using CedulasEvaluacion.Interfaces;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ExcelDataReader;
+using CedulasEvaluacion.Entities.MIncidencias;
 
 namespace CedulasEvaluacion.Repositories
 {

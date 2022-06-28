@@ -76,51 +76,83 @@
                                         </ul>
                                     </div>
                                     <div class="col-5">
-                                        @if (@Model.Estatus.Equals("Revisión"))
+                                        @if (@Model.Estatus.Equals("Enviado a DAS"))
+                                        {
+                                            <h5 class="text-enviadoDAS lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Revisión CAE"))
                                         {
                                             <h5 class="text-primary lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else if (@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Trámite de Pago"))
+                                        else if (@Model.Estatus.Equals("En Trámite"))
                                         {
-                                            <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <h5 class="text-info lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else if (@Model.Estatus.Equals("Rechazada") || Model.Estatus.Equals("Trámite Rechazado"))
+                                        else if (@Model.Estatus.Equals("Rechazada"))
                                         {
-                                            <h5 class="text-danger lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <h5 class="text-danger lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        else
+                                        else if (@Model.Estatus.Equals("Trámite Rechazado"))
                                         {
-                                            <h5 class="text-info lblEstatus"><strong>Estatus: </strong> @Model.Estatus </h5>
+                                            <h5 class="text-tramiteRechazado lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        <p class="text-sm">
-                                            @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                              @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion);
-                                            }
-                                            @if (total > 0)
-                                            {
-                                                <h5 class="text-danger">
-                                                    <b>Total Penalizable:</b> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total)
-                                                </h5>
-                                            }
-                                            else
-                                            {
-                                                <h5 class="text-danger">
-                                                    @*<b>No hay Monto Penalizable</b>*@
-                                                    <b>** Penalizaciones en Construcción **</b>
-                                                </h5>
-                                            }
-                                        </p>
-                                        @*<ul class="ml-4 mb-0 fa-ul">
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Recolección: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[0].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Entrega: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Acuses: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Mal Estado: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Extraviadas: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[4].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Penalización en Material: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[5].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Penalización en Calidad y Eficiencia: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
-                                            </ul>*@
-                                        <div>
-                                            <img src="~/img/web1.jpg" alt="Alternate Text" width="40%" />
+                                        else if (@Model.Estatus.Equals("Autorizada"))
+                                        {
+                                            <h5 class="text-autorizado lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Autorizado CAE"))
+                                        {
+                                            <h5 class="text-autorizadoCAE lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Trámite de Pago"))
+                                        {
+                                            <h5 class="text-tramitePago lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Enviada a DGPPT"))
+                                        {
+                                            <h5 class="text-dgppt lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        else if (@Model.Estatus.Equals("Pagada"))
+                                        {
+                                            <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
+                                        }
+                                        <div class="col-lg-4" style="margin-top: -18px;">
+                                            <div class="small-box">
+                                                <div class="icon">
+                                                    @if (@Model.Estatus.Equals("Enviado a DAS"))
+                                                    {
+                                                        <i class="fa-regular fa-ballot-check text-enviadoDAS"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("En Trámite"))
+                                                    {
+                                                        <i class="fas fa-tasks text-info"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Rechazada"))
+                                                    {
+                                                        <i class="fas fa-times text-danger"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Trámite Rechazado"))
+                                                    {
+                                                        <i class="fal fa-window-close text-tramiteRechazado"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Autorizada"))
+                                                    {
+                                                        <i class="fas fa-check text-autorizado"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Trámite de Pago"))
+                                                    {
+                                                        <i class="fal fa-money-check-edit-alt text-tramitePago"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Enviada a DGPPT"))
+                                                    {
+                                                        <i class="fa-light fa-cash-register text-dgppt"></i>
+                                                    }
+                                                    else if (@Model.Estatus.Equals("Pagada"))
+                                                    {
+                                                        <i class="fa-light fa-sack-dollar text-success"></i>
+                                                    }
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -210,12 +242,6 @@
                                             tipo = "Cédula Firmada";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
-                                        else if (entre.Tipo.Equals("Memorandum"))
-                                        {
-                                            memo = true;
-                                            tipo = "Memorándum";
-                                            <td>@Html.DisplayName(tipo)</td>
-                                        }
                                         else if (entre.Tipo.Equals("CorreoValidacion"))
                                         {
                                             memo = true;
@@ -282,7 +308,7 @@
                                                     </a>
                                                 }
                                             }
-                                            @if (@Model.Estatus.Equals("En Trámite") && (@entre.Tipo.Equals("Cedula_Firmada") || @entre.Tipo.Equals("Memorandum"))
+                                            @if (@Model.Estatus.Equals("En Trámite") && (@entre.Tipo.Equals("Cedula_Firmada") || @entre.Tipo.Equals("CorreoValidacion"))
                                              && @entre.ValidadoDas == false)
                                             {
                                                 @if (entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("validar cédula", @Model.ServicioId, @user) != 0)
@@ -590,6 +616,7 @@
 
             if (model.estatus == 'Autorizada') {
                 axios.get('/entregables/flujo/car/' + model.id + '/' + model.estatus).then(btn => {
+                    console.log(btn);
                     if (btn.data != -1) {
                         $('.tramitar_cedula').css('display', 'block');
                     }
@@ -991,14 +1018,18 @@
                         var options = '<option value="">Seleccione un Entregable</option>';
                         axios.get("/telCelular/getListadoEntregables/" + model.id).then(response => {
                             response = response.data;
-                            var memo = false;
+                            var correo = false;
                             var cedFirmada = false;
                             for (var i = 0; i < response.length; i++) {
                                 if (response[i].tipo == "Cedula_Firmada") {
                                     cedFirmada = true;
                                 }
+
+                                if (response[i].tipo == "CorreoValidacion") {
+                                    correo= true;
+                                }
                             }
-                            if (memo == false && (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado")) {
+                            if (correo == false && (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado")) {
                                 options += '<option value="CorreoValidacion">Correo de Validación</option>';
                             }
                             if (cedFirmada == false && (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado")) {

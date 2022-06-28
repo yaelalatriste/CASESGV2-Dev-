@@ -1,5 +1,4 @@
 ﻿using CedulasEvaluacion.Entities.MCedula;
-using CedulasEvaluacion.Entities.MMensajeria;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;

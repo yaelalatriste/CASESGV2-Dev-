@@ -1,5 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MMensajeria;
-using CedulasEvaluacion.Entities.Reportes;
+﻿using CedulasEvaluacion.Entities.Reportes;
 using CedulasEvaluacion.Entities.Vistas;
 using System;
 using System.Collections.Generic;

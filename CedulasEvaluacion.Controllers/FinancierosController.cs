@@ -212,30 +212,46 @@ namespace CedulasEvaluacion.Controllers
             var columnas = new List<string>();
             var filas = new List<List<string>>();
             double total = 0;
+            var text = "text-black";
 
             for (var i = 0; i < meses.Count; i++)
             {
                 columnas = generaColumnas(estatus);
                 for (var j = 0; j < resultado.Count; j++)
                 {
+                    text = "text-black";
                     if (meses[i] == resultado[j].Mes)
                     {
                         total = (resultado[j].Total * 100.0) / totales[i];
                         if (obtienePosicion(estatus, resultado[j].Estatus) != -1)
                         {
+                            if (((resultado[j].Total * 100) / totales[i]) >= 63.0 && !resultado[j].Estatus.Equals("En Proceso"))
+                            {
+                                text = "text-light";
+                            }
+
                             columnas[obtienePosicion(estatus, resultado[j].Estatus)] =
-                                "<td>" +
-                                    "<div class='row col-lg-12'>" +
-                                        "<div class='col-lg-8 mt-2'>" +
-                                            "<div class='progress progress-md'>" +
-                                                "<div class='progress-bar " + resultado[j].Fondo + "' style = 'width:" + ((resultado[j].Total * 100) / totales[i]) + "%'></div>" +
-                                            "</div>" +
-                                        "</div>" +
-                                        "<div class='col-lg-3'>" +
-                                            "<span class='badge " + resultado[j].Fondo + "'>(" + resultado[j].Total + ") " + total.ToString("n2") + "%</span>" +
-                                        "</div>" +
-                                    "</div>" +
-                                "</td>";
+                               "<td>" +
+                                   "<div class='row col-lg-12'>" +
+                                       "<div class='col-lg-12 mt-2'>" +
+                                           "<div class='progress'>" +
+                                               "<div class='progress-bar progress-bar-success progress-bar-striped progress-bar-animated "+ resultado[j].Fondo + "' role='progressbar' " +
+                                               "style='width: " + ((resultado[j].Total * 100) / totales[i]) + "%' aria-valuenow='"+ ((resultado[j].Total * 100) / totales[i]) + 
+                                               "' aria-valuemin='0' aria-valuemax='100'>"+
+                                                    "<span class='"+text+" font-weight-bold'> Avance de " + total.ToString("n2") + " % </span>" +
+                                               "</div>" +
+                                           "</div>" +
+                                       "</div>" +
+                                       (resultado[j].TotalParcial != 0 ? "<div class='col-lg-12 mt-2'>" +
+                                           "<div class='progress'>" +
+                                               "<div class='progress-bar progress-bar-success progress-bar-striped progress-bar-animated bg-cedulasParciales' role='progressbar' " +
+                                               "style='width: 100%'; >" +
+                                                    "<span class='text-light font-weight-bold'>" + resultado[j].TotalParcial + " - cédula(s) parcialmente pagada(s)</span>" +
+                                               "</div>" +
+                                           "</div>" +
+                                       "</div>":"")+
+                                   "</div>" +
+                               "</td>";
                         }
                     }
                 }

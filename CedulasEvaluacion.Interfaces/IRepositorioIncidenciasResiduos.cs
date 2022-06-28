@@ -1,4 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MResiduos;
+﻿using CedulasEvaluacion.Entities.MIncidencias;
 using System;
 using System.Collections.Generic;
 using System.Text;

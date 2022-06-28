@@ -1,6 +1,5 @@
 ﻿using CedulasEvaluacion.Entities.MCedula;
 using CedulasEvaluacion.Entities.Models;
-using CedulasEvaluacion.Entities.TrasladoExp;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.AspNetCore.Authorization;

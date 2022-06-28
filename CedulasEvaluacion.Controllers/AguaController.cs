@@ -1,5 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MAgua;
-using CedulasEvaluacion.Entities.MCedula;
+﻿using CedulasEvaluacion.Entities.MCedula;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
@@ -18,7 +17,6 @@ namespace CedulasEvaluacion.Controllers
     public class AguaController : Controller
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
-        private readonly IRepositorioAgua vAgua;
         private readonly IRepositorioIncidenciasAgua iAgua;
         private readonly IRepositorioEntregablesCedula eAgua;
         private readonly IRepositorioInmuebles vInmuebles;

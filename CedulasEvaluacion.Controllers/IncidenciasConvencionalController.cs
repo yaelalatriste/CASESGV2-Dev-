@@ -1,4 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MConvencional;
+﻿using CedulasEvaluacion.Entities.MIncidencias;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

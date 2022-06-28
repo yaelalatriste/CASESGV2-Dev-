@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CedulasEvaluacion.Entities.MFumigacion
+namespace CedulasEvaluacion.Entities.MIncidencias
 {
     public class IncidenciasFumigacion
     {

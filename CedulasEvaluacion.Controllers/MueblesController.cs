@@ -1,5 +1,4 @@
 ﻿using CedulasEvaluacion.Entities.MCedula;
-using CedulasEvaluacion.Entities.MMuebles;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
@@ -24,7 +23,7 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioFacturas vFacturas;
         private readonly IHostingEnvironment environment;
 
-        public MueblesController(IRepositorioEvaluacionServicios viCedula, IRepositorioMuebles iVMuebles, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
+        public MueblesController(IRepositorioEvaluacionServicios viCedula, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                     IRepositorioIncidenciasMuebles iiMuebles, IRepositorioEntregablesCedula eeMuebles,
                                     IRepositorioPerfiles iRepositorioPerfiles, IRepositorioFacturas iFacturas)
         {

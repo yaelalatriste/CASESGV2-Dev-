@@ -109,7 +109,8 @@ namespace CedulasEvaluacion.Repositories
                             cmd.Parameters.Add(new SqlParameter("@id", entregables.Id)).Direction = System.Data.ParameterDirection.Output;
                             if (entregables.Id != 0)
                                 cmd.Parameters.Add(new SqlParameter("@ids", entregables.Id));
-
+                            if(entregables.FechaPresentacion.ToString("yyyy-MM-dd") != "1990-01-01")
+                                cmd.Parameters.Add(new SqlParameter("@fechaPresentacion", entregables.FechaPresentacion));
                             cmd.Parameters.Add(new SqlParameter("@cedulaId", entregables.CedulaEvaluacionId));
                             cmd.Parameters.Add(new SqlParameter("@tipo", entregables.Tipo));
                             cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + entregables.Archivo.FileName)));
@@ -413,7 +414,8 @@ namespace CedulasEvaluacion.Repositories
                 FechaActualizacion = reader["FechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaActualizacion"].ToString()) : Convert.ToDateTime("01/01/1990"),
                 Comentarios = reader["Comentarios"].ToString(),
                 Icono = reader["Icono"].ToString(),
-                Color = reader["Color"].ToString()
+                Color = reader["Color"].ToString(),
+                Firmado = reader["Firmado"] != DBNull.Value ? (bool)reader["Firmado"] : false,
             };
         }
 

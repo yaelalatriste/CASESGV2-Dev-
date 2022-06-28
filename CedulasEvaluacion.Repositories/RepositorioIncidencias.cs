@@ -1,4 +1,5 @@
-﻿using CedulasEvaluacion.Entities.Models;
+﻿using CedulasEvaluacion.Entities.MIncidencias;
+using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.Data.SqlClient;

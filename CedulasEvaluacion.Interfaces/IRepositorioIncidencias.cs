@@ -1,4 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MCelular;
+﻿using CedulasEvaluacion.Entities.MIncidencias;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using System;

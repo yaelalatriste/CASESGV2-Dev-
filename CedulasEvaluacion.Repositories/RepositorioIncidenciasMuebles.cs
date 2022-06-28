@@ -1,4 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MMuebles;
+﻿using CedulasEvaluacion.Entities.MIncidencias;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;

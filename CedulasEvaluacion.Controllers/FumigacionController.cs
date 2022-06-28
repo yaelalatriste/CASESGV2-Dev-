@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
-using CedulasEvaluacion.Entities.MFumigacion;
 using CedulasEvaluacion.Entities.MCedula;
 
 namespace CedulasEvaluacion.Controllers

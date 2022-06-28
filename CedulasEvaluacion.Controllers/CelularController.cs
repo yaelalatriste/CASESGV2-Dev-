@@ -1,5 +1,4 @@
 ﻿using CedulasEvaluacion.Entities.MCedula;
-using CedulasEvaluacion.Entities.MCelular;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
@@ -21,18 +20,21 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioIncidenciasCelular iCelular;
         private readonly IRepositorioEntregablesCedula eCelular;
         private readonly IRepositorioPerfilCelular vPCelular;
+        private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vPerfiles;
         private readonly IHostingEnvironment environment;
 
         public CelularController(IRepositorioEvaluacionServicios viCedula, IRepositorioIncidenciasCelular ivCelular, IRepositorioEntregablesCedula ieCelular, 
-                                 IRepositorioFacturas iFacturas, IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, IRepositorioPerfilCelular viPCelular)
+                                 IRepositorioFacturas iFacturas, IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, 
+                                 IRepositorioPerfilCelular viPCelular, IRepositorioInmuebles iVInmueble)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vPCelular = viPCelular ?? throw new ArgumentNullException(nameof(viPCelular));
             this.iCelular = ivCelular ?? throw new ArgumentNullException(nameof(ivCelular));
-            this.eCelular = ieCelular ?? throw new ArgumentNullException(nameof(ieCelular)); 
+            this.eCelular = ieCelular ?? throw new ArgumentNullException(nameof(ieCelular));
+            this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas)); 
             this.vUsuarios = iUsuarios ?? throw new ArgumentNullException(nameof(iUsuarios)); 
             this.vPerfiles = iPerfiles ?? throw new ArgumentNullException(nameof(iPerfiles)); 
@@ -128,6 +130,7 @@ namespace CedulasEvaluacion.Controllers
                     return Redirect("/error/cedSend");
                 }
                 cedula.URL = Request.QueryString.Value;
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
                 cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
                 cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
@@ -173,6 +176,7 @@ namespace CedulasEvaluacion.Controllers
         {
             CedulaEvaluacion telCel = await vCedula.CedulaById(id);
             telCel.URL = Request.QueryString.Value;
+            telCel.inmuebles = await vInmuebles.inmuebleById(telCel.InmuebleId);
             telCel.incidencias = new Entities.MIncidencias.ModelsIncidencias();
             telCel.incidencias.celular = await iCelular.getIncidenciasCelular(id);
             return View(telCel);
@@ -188,6 +192,7 @@ namespace CedulasEvaluacion.Controllers
                 CedulaEvaluacion telCel = null;
                 telCel = await vCedula.CedulaById(id);
                 telCel.URL = Request.QueryString.Value;
+                telCel.inmuebles = await vInmuebles.inmuebleById(telCel.InmuebleId);
                 telCel.facturas = await vFacturas.getFacturas(id, telCel.ServicioId);//
                 telCel.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telCel.facturas);
                 telCel.usuarios = await vUsuarios.getUserById(telCel.UsuarioId);
@@ -221,6 +226,7 @@ namespace CedulasEvaluacion.Controllers
                 CedulaEvaluacion telCel = null;
                 telCel = await vCedula.CedulaById(id);
                 telCel.URL = Request.QueryString.Value;
+                telCel.inmuebles = await vInmuebles.inmuebleById(telCel.InmuebleId);
                 telCel.facturas = await vFacturas.getFacturas(id, telCel.ServicioId);//
                 telCel.TotalMontoFactura = vFacturas.obtieneTotalFacturas(telCel.facturas);
                 telCel.usuarios = await vUsuarios.getUserById(telCel.UsuarioId);

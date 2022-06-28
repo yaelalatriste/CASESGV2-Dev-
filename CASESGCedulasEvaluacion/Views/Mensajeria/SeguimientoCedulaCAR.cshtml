@@ -849,15 +849,15 @@
                     var tipo = $(this).data('tipo');
                     var id = $(this).data('id');
 
-                        if (model.estatus == "Autorizada") {
-                            Swal.fire({
-                                'icon': 'error',
-                                'title': 'Servicio de Mensajería Acelerada',
-                                'html': 'No puedes autorizar o rechazar ningún entregable hasta que la cédula esté en trámite.'
-                            });
+                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de RPBI',
+                            'html': 'No puedes autorizar o rechazar ningún entregable hasta que la cédula esté en trámite.'
+                        });
 
-                            return false;
-                        }
+                        return false;
+                    }
 
                     Swal.fire({
                         'icon': 'warning',
@@ -903,10 +903,10 @@
                 $(document).on('click', '.failed_entregable', function () {
                     var tipo = $(this).data('tipo');
                     var id = $(this).data('id');
-                    if (model.estatus == "Autorizada") {
+                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                         Swal.fire({
                             'icon': 'error',
-                            'title': 'Servicio de Mensajería Acelerada',
+                            'title': 'Servicio de RPBI',
                             'html': 'No puedes autorizar o rechazar ningún entregable hasta que la cédula esté en trámite.'
                         });
 

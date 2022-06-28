@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CedulasEvaluacion.Entities.MCelular
+namespace CedulasEvaluacion.Entities.MIncidencias
 {
     public partial class PerfilesCelular
     {

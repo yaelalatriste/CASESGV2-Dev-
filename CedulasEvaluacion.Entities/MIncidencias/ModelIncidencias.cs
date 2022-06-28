@@ -1,14 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MAgua;
-using CedulasEvaluacion.Entities.MAnalisis;
-using CedulasEvaluacion.Entities.MCelular;
-using CedulasEvaluacion.Entities.MConvencional;
-using CedulasEvaluacion.Entities.MFumigacion;
-using CedulasEvaluacion.Entities.MMensajeria;
-using CedulasEvaluacion.Entities.MMuebles;
-using CedulasEvaluacion.Entities.Models;
-using CedulasEvaluacion.Entities.MResiduos;
-using CedulasEvaluacion.Entities.MTransporte;
-using CedulasEvaluacion.Entities.TrasladoExp;
+﻿using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using System;
 using System.Collections.Generic;

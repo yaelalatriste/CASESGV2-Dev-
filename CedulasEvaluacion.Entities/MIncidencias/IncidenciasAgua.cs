@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CedulasEvaluacion.Entities.MAgua
+namespace CedulasEvaluacion.Entities.MIncidencias
 {
     public partial class IncidenciasAgua
     {

@@ -1,4 +1,4 @@
-﻿using CedulasEvaluacion.Entities.MMensajeria;
+﻿using CedulasEvaluacion.Entities.MIncidencias;
 using CedulasEvaluacion.Entities.Vistas;
 using CedulasEvaluacion.Interfaces;
 using Microsoft.AspNetCore.Hosting;
@@ -13,18 +13,16 @@ namespace CedulasEvaluacion.Controllers
     public class IncidenciasMensajeriaController : Controller
     {
         private readonly IRepositorioIncidenciasMensajeria vIMensajeria;
-        private readonly IRepositorioMensajeria vMensajeria;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IHostingEnvironment environment;
 
         public IncidenciasMensajeriaController(IRepositorioIncidenciasMensajeria iiMensajeria, IRepositorioFacturas iFacturas, 
-                                               IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario, IRepositorioMensajeria iMensajeria,
+                                               IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                                IHostingEnvironment environment)
         {
             this.vIMensajeria = iiMensajeria ?? throw new ArgumentNullException(nameof(iiMensajeria));
-            this.vMensajeria = iMensajeria ?? throw new ArgumentNullException(nameof(iMensajeria));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
             this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));

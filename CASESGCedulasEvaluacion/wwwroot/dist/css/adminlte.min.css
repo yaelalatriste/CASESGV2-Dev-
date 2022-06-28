@@ -5488,6 +5488,7 @@ a.badge-dark.focus, a.badge-dark:focus {
 }
 
 .progress {
+    position: relative;
     display: -ms-flexbox;
     display: flex;
     height: 1rem;
@@ -5496,6 +5497,13 @@ a.badge-dark.focus, a.badge-dark:focus {
     background-color: #D5D5D5;
     border-radius: .25rem;
     box-shadow: inset 0 .1rem .1rem rgba(0,0,0,.1)
+}
+
+.progress span {
+        position: absolute;
+        display: block;
+        width: 100%;
+        color: black;
 }
 
 .progress-bar {
@@ -6862,6 +6870,11 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 .bg-bluecjf {
     background-color: #787777 !important;
+    color: #ffffff !important;
+}
+
+.bg-cedulasParciales {
+    background-color: #FA31EE!important;
     color: #ffffff !important;
 }
 

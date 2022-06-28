@@ -40,13 +40,8 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioUsuarios, RepositorioUsuarios>();
             services.AddScoped<IRepositorioPerfiles, RepositorioPerfiles>();
             services.AddScoped<IRepositorioAreas, RepositorioAreas>();
-            services.AddScoped<IRepositorioCelular, RepositorioCelular>();
-            services.AddScoped<IRepositorioAgua, RepositorioAgua>();
-            services.AddScoped<IRepositorioAnalisis, RepositorioAnalisis>();
-            services.AddScoped<IRepositorioResiduos, RepositorioResiduos>();
             services.AddScoped<IRepositorioFacturas, RepositorioFacturas>();
             services.AddScoped<IRepositorioDocuments, RepositorioDocuments>();
-            services.AddScoped<IRepositorioMuebles, RepositorioMuebles>();
             services.AddScoped<IRepositorioPerfilCelular, RepositorioPerfilCelular>();
             services.AddScoped<IRepositorioFinancieros, RepositorioFinancieros>();
             services.AddScoped<IRepositorioOperacionesPerfil, RepositorioOperacionesPerfil>();
@@ -56,15 +51,7 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioContratosServicio, RepositorioContratosServicio>();
 
             services.AddScoped<IRepositorioInmuebles, RepositorioInmuebles>();
-            services.AddScoped<IRepositorioLimpieza, RepositorioLimpieza>();
-            services.AddScoped<IRepositorioFumigacion, RepositorioFumigacion>();
-            services.AddScoped<IRepositorioMensajeria, RepositorioMensajeria>();
-            services.AddScoped<IRepositorioCelular, RepositorioCelular>();
-            services.AddScoped<IRepositorioConvencional, RepositorioConvencional>();
             services.AddScoped<IRepositorioIncidencias, RepositorioIncidencias>();
-            services.AddScoped<IRepositorioTrasladoExp, RepositorioTrasladoExp>();
-            services.AddScoped<IRepositorioTransporte, RepositorioTransporte>();
-
             services.AddScoped<IRepositorioIncidenciasMensajeria, RepositorioIncidenciasMensajeria>();
             services.AddScoped<IRepositorioIncidenciasAnalisis, RepositorioIncidenciasAnalisis>();
             services.AddScoped<IRepositorioIncidenciasMuebles, RepositorioIncidenciasMuebles>();
@@ -77,18 +64,6 @@ namespace CASESGCedulasEvaluacion
             services.AddScoped<IRepositorioIncidenciasAgua, RepositorioIncidenciasAgua>();
             services.AddScoped<IRepositorioIncidenciasAnalisis, RepositorioIncidenciasAnalisis>();
             
-            services.AddScoped<IRepositorioEntregables, RepositorioEntregablesLimpieza>();
-            services.AddScoped<IRepositorioEntregablesAnalisis, RepositorioEntregablesAnalisis>();
-            services.AddScoped<IRepositorioEntregablesTrasladoExp, RepositorioEntregablesTrasladoExp>();
-            services.AddScoped<IRepositorioEntregablesMensajeria, RepositorioEntregablesMensajeria>();
-            services.AddScoped<IRepositorioEntregablesCelular, RepositorioEntregablesCelular>();
-            services.AddScoped<IRepositorioEntregablesConvencional, RepositorioEntregablesConvencional>();
-            services.AddScoped<IRepositorioEntregablesResiduos, RepositorioEntregablesResiduos>();
-            services.AddScoped<IRepositorioEntregablesFumigacion, RepositorioEntregablesFumigacion>();
-            services.AddScoped<IRepositorioEntregablesAgua, RepositorioEntregablesAgua>();
-            services.AddScoped<IRepositorioEntregablesTransporte, RepositorioEntregablesTransporte>();
-            services.AddScoped<IRepositorioEntregablesAnalisis, RepositorioEntregablesAnalisis>();
-            services.AddScoped<IRepositorioEntregablesMuebles, RepositorioEntregablesMuebles>();
             services.AddScoped<IRepositorioEntregablesContrato, RepositorioEntregablesContrato>();
             
             services.AddScoped<IRepositorioReporteCedula, RepositorioReporteCedula>();

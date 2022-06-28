@@ -8,16 +8,12 @@ using System.Threading.Tasks;
 using System.Data;
 using System.ComponentModel;
 using CedulasEvaluacion.Entities.Reportes;
-using CedulasEvaluacion.Entities.MMensajeria;
 using CedulasEvaluacion.Entities.Models;
 using CedulasEvaluacion.Entities.Vistas;
 using System.Globalization;
 using System.IO;
 using Microsoft.Reporting.NETCore;
-using CedulasEvaluacion.Entities.MMuebles;
-using CedulasEvaluacion.Entities.MCelular;
-using CedulasEvaluacion.Entities.MConvencional;
-using CedulasEvaluacion.Entities.MFumigacion;
+using CedulasEvaluacion.Entities.MIncidencias;
 
 namespace CedulasEvaluacion.Controllers
 {

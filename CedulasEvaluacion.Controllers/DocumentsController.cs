@@ -15,17 +15,7 @@ using Spire.Doc.Fields;
 using System.Linq;
 using System.Globalization;
 using CedulasEvaluacion.Entities.MFacturas;
-using CedulasEvaluacion.Entities.MMensajeria;
-using CedulasEvaluacion.Entities.MCelular;
-using CedulasEvaluacion.Entities.MConvencional;
 using Microsoft.AspNetCore.Authorization;
-using CedulasEvaluacion.Entities.MFumigacion;
-using CedulasEvaluacion.Entities.MAgua;
-using CedulasEvaluacion.Entities.MResiduos;
-using CedulasEvaluacion.Entities.MTransporte;
-using CedulasEvaluacion.Entities.MMuebles;
-using CedulasEvaluacion.Entities.TrasladoExp;
-using CedulasEvaluacion.Entities.MAnalisis;
 using CedulasEvaluacion.Entities.MCedula;
 
 namespace CedulasEvaluacion.Controllers
@@ -35,55 +25,33 @@ namespace CedulasEvaluacion.Controllers
     {
         private readonly IRepositorioEvaluacionServicios vCedula;
 
-        private readonly IRepositorioLimpieza vlimpieza;
         private readonly IRepositorioIncidencias vIncidencias;
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioDocuments vDocuments;
         private readonly IRepositorioEntregables vEntregables;
 
-        private readonly IRepositorioMensajeria vMensajeria;
         private readonly IRepositorioIncidenciasMensajeria iMensajeria;
-
-        private readonly IRepositorioCelular vCelular;
         private readonly IRepositorioIncidenciasCelular iCelular;
-
-        private readonly IRepositorioTrasladoExp vTraslado;
         private readonly IRepositorioIncidenciasTraslado iTraslado;
-
-        private readonly IRepositorioFumigacion vFumigacion;
         private readonly IRepositorioIncidenciasFumigacion iFumigacion;
-
-        private readonly IRepositorioAnalisis vAnalisis;
         private readonly IRepositorioIncidenciasAnalisis iAnalisis;
-
-        private readonly IRepositorioMuebles vMuebles;
         private readonly IRepositorioIncidenciasMuebles iMuebles;
-
-        private readonly IRepositorioTransporte vTransporte;
         private readonly IRepositorioIncidenciasTransporte iTransporte;
-
-        private readonly IRepositorioAgua vAgua;
         private readonly IRepositorioIncidenciasAgua iAgua;
-
-        private readonly IRepositorioResiduos vResiduos;
         private readonly IRepositorioIncidenciasResiduos iResiduos;
-
-        private readonly IRepositorioConvencional vConvencional;
         private readonly IRepositorioIncidenciasConvencional iConvencional;
-        private readonly IRepositorioEntregablesConvencional eConvencional;
 
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioPerfiles vRepositorioPerfiles;
 
-        public DocumentsController(IRepositorioEvaluacionServicios viCedula, IRepositorioFumigacion iVFumigacion, IRepositorioAgua iVAgua, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
+        public DocumentsController(IRepositorioEvaluacionServicios viCedula, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                     IRepositorioIncidenciasFumigacion iIncidenciasFumigacion, IRepositorioIncidenciasAgua iIncidenciasAgua, IRepositorioIncidenciasResiduos iiResiduos,
-                                    IRepositorioResiduos ivResiduos, IRepositorioTransporte ivTransporte, IRepositorioIncidenciasTransporte iiTransporte, IRepositorioIncidenciasTraslado iiTraslado,
-                                   IRepositorioEntregables iVEntregables, IRepositorioPerfiles iRepositorioPerfiles, IRepositorioTrasladoExp ivTraslado,
-                                    IRepositorioFacturas iFacturas, IRepositorioCelular iCelular, IRepositorioIncidenciasMensajeria iiMensajeria,
-                                    IRepositorioIncidenciasCelular ivCelular, IRepositorioConvencional iConvencional, IRepositorioIncidenciasConvencional ivConvencional,
-                                    IRepositorioEntregablesConvencional ieConvencional, IRepositorioDocuments ivDocuments, IRepositorioIncidenciasMuebles iiMuebles,
-                                    IRepositorioMuebles iVMuebles, IRepositorioAnalisis ivAnalisis, IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioInmuebles viInmuebles,
+                                    IRepositorioIncidenciasTransporte iiTransporte, IRepositorioIncidenciasTraslado iiTraslado,
+                                   IRepositorioEntregables iVEntregables, IRepositorioPerfiles iRepositorioPerfiles,IRepositorioFacturas iFacturas, IRepositorioIncidenciasMensajeria iiMensajeria,
+                                    IRepositorioIncidenciasCelular ivCelular, IRepositorioIncidenciasConvencional ivConvencional,
+                                    IRepositorioDocuments ivDocuments, IRepositorioIncidenciasMuebles iiMuebles,
+                                    IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioInmuebles viInmuebles,
                                     IRepositorioFacturas viFacturas, IRepositorioIncidencias iiIncidencias)
         {
 
@@ -91,34 +59,23 @@ namespace CedulasEvaluacion.Controllers
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
             this.vDocuments = ivDocuments ?? throw new ArgumentNullException(nameof(ivDocuments));
 
-            this.vCelular = iCelular ?? throw new ArgumentNullException(nameof(iCelular));
             this.iCelular = ivCelular ?? throw new ArgumentNullException(nameof(ivCelular));
             this.iMensajeria = iiMensajeria ?? throw new ArgumentNullException(nameof(iiMensajeria));
 
-            this.vResiduos = ivResiduos ?? throw new ArgumentNullException(nameof(ivResiduos));
             this.iResiduos = iiResiduos ?? throw new ArgumentNullException(nameof(iiResiduos));
 
-            this.vTransporte = ivTransporte ?? throw new ArgumentNullException(nameof(ivTransporte));
-            this.iTransporte = iiTransporte ?? throw new ArgumentNullException(nameof(ivTransporte));
+            this.iTransporte = iiTransporte ?? throw new ArgumentNullException(nameof(iiTransporte));
 
-            this.vTraslado = ivTraslado ?? throw new ArgumentNullException(nameof(ivTraslado));
             this.iTraslado = iiTraslado ?? throw new ArgumentNullException(nameof(iiTraslado));
 
-            this.vAgua = iVAgua ?? throw new ArgumentNullException(nameof(iVAgua));
             this.iAgua = iIncidenciasAgua ?? throw new ArgumentNullException(nameof(iIncidenciasAgua));
-
-            this.vAnalisis = ivAnalisis ?? throw new ArgumentNullException(nameof(ivAnalisis));
             this.iAnalisis = iiAnalisis ?? throw new ArgumentNullException(nameof(iiAnalisis));
 
-            this.vFumigacion = iVFumigacion ?? throw new ArgumentNullException(nameof(iVFumigacion));
             this.iFumigacion = iIncidenciasFumigacion ?? throw new ArgumentNullException(nameof(iIncidenciasFumigacion));
 
-            this.vMuebles = iVMuebles ?? throw new ArgumentNullException(nameof(iVMuebles));
             this.iMuebles = iiMuebles ?? throw new ArgumentNullException(nameof(iiMuebles));
 
-            this.vConvencional = iConvencional ?? throw new ArgumentNullException(nameof(iConvencional));
             this.iConvencional = ivConvencional ?? throw new ArgumentNullException(nameof(ivConvencional));
-            this.eConvencional = ieConvencional ?? throw new ArgumentNullException(nameof(ieConvencional));
 
             this.vInmuebles = viInmuebles ?? throw new ArgumentNullException(nameof(viInmuebles));
 

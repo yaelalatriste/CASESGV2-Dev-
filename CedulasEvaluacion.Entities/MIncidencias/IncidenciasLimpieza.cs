@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CedulasEvaluacion.Entities.Models;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace CedulasEvaluacion.Entities.Models
+namespace CedulasEvaluacion.Entities.MIncidencias
 {
     public partial class IncidenciasLimpieza
     {
