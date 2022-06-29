@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CASESGCedulasEvaluacion", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDLC", "RDLC\RDLC.csproj", "{CC2DE4D9-EB87-4C41-AAFD-289DFA1C9704}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CedulasEvaluacion.Services", "CedulasEvaluacion.Services\CedulasEvaluacion.Services.csproj", "{E64819DE-B750-459E-919B-1A1CD4069D0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CedulasEvaluacion.Services", "CedulasEvaluacion.Services\CedulasEvaluacion.Services.csproj", "{E64819DE-B750-459E-919B-1A1CD4069D0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

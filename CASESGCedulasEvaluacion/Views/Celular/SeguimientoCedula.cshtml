@@ -242,10 +242,10 @@
                                             tipo = "Cédula Firmada";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
-                                        else if (entre.Tipo.Equals("CorreoValidacion"))
+                                        else if (entre.Tipo.Equals("SolicitudPago"))
                                         {
                                             memo = true;
-                                            tipo = "Correo de Validación";
+                                            tipo = "Solicitud de Pago";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
                                         else
@@ -308,7 +308,7 @@
                                                     </a>
                                                 }
                                             }
-                                            @if (@Model.Estatus.Equals("En Trámite") && (@entre.Tipo.Equals("Cedula_Firmada") || @entre.Tipo.Equals("CorreoValidacion"))
+                                            @if (@Model.Estatus.Equals("En Trámite") && (@entre.Tipo.Equals("Cedula_Firmada") || @entre.Tipo.Equals("SolicitudPago"))
                                              && @entre.ValidadoDas == false)
                                             {
                                                 @if (entre.Estatus.Equals("Autorizado") && await sPermisos.GetPermisosByModulo("validar cédula", @Model.ServicioId, @user) != 0)
@@ -654,6 +654,13 @@
 
             /*Tramitar Cedula*/
                 $(document).on('click', '.valida_cedula', function () {
+                    let tipoe = "";
+                    if ($(this).data('tipo') == 'Cedula_Firmada') {
+                        tipoe = "Cédula Firmada";
+                    } else {
+                        tipoe = "Solicitud de Pago";
+                    }
+
                     Swal.fire({
                         'icon': 'warning',
                         'title': 'Servicio de Telefonía Celular',
@@ -668,7 +675,7 @@
                             axios.post('/telCelular/historialCelular', {
                                 ServicioId: model.servicioId,
                                 CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
-                                Estatus: "En Trámite", Comentarios: "Se validó la cédula por operación."
+                                Estatus: "En Trámite", Comentarios: "Se validó la " + $(this).data('tipo') + " por operación."
                             }).then(hist => {
                                 axios.get('/entregables/validaCedula/'+$(this).data('id')).then(valid => {
                                     if (valid.status == 200) {
@@ -836,7 +843,7 @@
             $(document).on('click', '.success_entregable', function () {
                 var tipo = $(this).data('tipo');
                 var id = $(this).data('id');
-                if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
+                if (model.estatus == "Enviado a DAS" || model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                     Swal.fire({
                         'icon': 'error',
                         'title': 'Servicio de Telefonía Celular',
@@ -911,7 +918,7 @@
                 $(document).on('click', '.failed_entregable', function () {
                 var tipo = $(this).data('tipo');
                 var id = $(this).data('id');
-                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
+                    if (model.estatus == "Enviado a DAS" || model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de Telefonía Celular',
@@ -1018,19 +1025,19 @@
                         var options = '<option value="">Seleccione un Entregable</option>';
                         axios.get("/telCelular/getListadoEntregables/" + model.id).then(response => {
                             response = response.data;
-                            var correo = false;
+                            var solicitud = false;
                             var cedFirmada = false;
                             for (var i = 0; i < response.length; i++) {
                                 if (response[i].tipo == "Cedula_Firmada") {
                                     cedFirmada = true;
                                 }
 
-                                if (response[i].tipo == "CorreoValidacion") {
-                                    correo= true;
+                                if (response[i].tipo == "SolicitudPago") {
+                                    solicitud= true;
                                 }
                             }
-                            if (correo == false && (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado")) {
-                                options += '<option value="CorreoValidacion">Correo de Validación</option>';
+                            if (solicitud == false && (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado")) {
+                                options += '<option value="SolicitudPago">Solicitud de Pago</option>';
                             }
                             if (cedFirmada == false && (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado")) {
                                 options += '<option value="Cedula_Firmada">Cédula Firmada (FIREL)</option>';
@@ -1230,7 +1237,7 @@
                             '<option value="Relación de Líneas Activas">Relación de Líneas Activas</option>'+
                             '<option value="Relación de Altas y Bajas por Perfil">Relación de Altas y Bajas por Perfil</option>'+
                             '<option value="Detalle de Consumo">Detalle de Consumo</option>'+
-                            '<option value="Resumen de Requerimientos">Resumen de Requerimientos</option><option value="Correo_Validacion">Correo de Validación</option>';
+                            '<option value="Resumen de Requerimientos">Resumen de Requerimientos</option><option value="SolicitudPago">Solicitud de Pago</option>';
                         $("#tipo_entregable").html(options);
                         $('#modal_evidencias').modal('show');
                         var id = $(this).data('id');

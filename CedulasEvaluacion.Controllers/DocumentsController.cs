@@ -29,7 +29,7 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioDocuments vDocuments;
-        private readonly IRepositorioEntregables vEntregables;
+        private readonly IRepositorioEntregablesCedula vEntregables;
 
         private readonly IRepositorioIncidenciasMensajeria iMensajeria;
         private readonly IRepositorioIncidenciasCelular iCelular;
@@ -48,7 +48,7 @@ namespace CedulasEvaluacion.Controllers
         public DocumentsController(IRepositorioEvaluacionServicios viCedula, IRepositorioInmuebles iVInmueble, IRepositorioUsuarios iVUsuario,
                                     IRepositorioIncidenciasFumigacion iIncidenciasFumigacion, IRepositorioIncidenciasAgua iIncidenciasAgua, IRepositorioIncidenciasResiduos iiResiduos,
                                     IRepositorioIncidenciasTransporte iiTransporte, IRepositorioIncidenciasTraslado iiTraslado,
-                                   IRepositorioEntregables iVEntregables, IRepositorioPerfiles iRepositorioPerfiles,IRepositorioFacturas iFacturas, IRepositorioIncidenciasMensajeria iiMensajeria,
+                                    IRepositorioPerfiles iRepositorioPerfiles,IRepositorioFacturas iFacturas, IRepositorioIncidenciasMensajeria iiMensajeria,
                                     IRepositorioIncidenciasCelular ivCelular, IRepositorioIncidenciasConvencional ivConvencional,
                                     IRepositorioDocuments ivDocuments, IRepositorioIncidenciasMuebles iiMuebles,
                                     IRepositorioIncidenciasAnalisis iiAnalisis, IRepositorioInmuebles viInmuebles,
@@ -80,7 +80,6 @@ namespace CedulasEvaluacion.Controllers
             this.vInmuebles = viInmuebles ?? throw new ArgumentNullException(nameof(viInmuebles));
 
             this.vUsuarios = iVUsuario ?? throw new ArgumentNullException(nameof(iVUsuario));
-            this.vEntregables = iVEntregables ?? throw new ArgumentNullException(nameof(iVEntregables));
             this.vRepositorioPerfiles = iRepositorioPerfiles ?? throw new ArgumentNullException(nameof(iRepositorioPerfiles));
             this.vFacturas = viFacturas ?? throw new ArgumentNullException(nameof(viFacturas));
         }

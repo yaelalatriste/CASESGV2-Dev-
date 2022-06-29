@@ -340,11 +340,11 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se entregó el listado de personal por parte del prestador del servicio.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "No se entregó el listado del personal por parte del prestador del servicio.") });
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El reporte de servicios se entregó el listado del personal " +
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El listado del personal se entregó " +
                             "el " + Convert.ToDateTime(respuestas[i].Detalles).ToString("dd") +
                                    " de " + Convert.ToDateTime(respuestas[i].Detalles).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")) + " " +
                                    Convert.ToDateTime(respuestas[i].Detalles).ToString("yyyy") + ".")});

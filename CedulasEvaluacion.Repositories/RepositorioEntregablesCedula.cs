@@ -109,8 +109,10 @@ namespace CedulasEvaluacion.Repositories
                             cmd.Parameters.Add(new SqlParameter("@id", entregables.Id)).Direction = System.Data.ParameterDirection.Output;
                             if (entregables.Id != 0)
                                 cmd.Parameters.Add(new SqlParameter("@ids", entregables.Id));
-                            if(entregables.FechaPresentacion.ToString("yyyy-MM-dd") != "1990-01-01")
+                            if(!entregables.FechaPresentacion.ToString("yyyy").Equals("0001"))
                                 cmd.Parameters.Add(new SqlParameter("@fechaPresentacion", entregables.FechaPresentacion));
+                            if(entregables.Firmado)
+                                cmd.Parameters.Add(new SqlParameter("@firmado", entregables.Firmado));
                             cmd.Parameters.Add(new SqlParameter("@cedulaId", entregables.CedulaEvaluacionId));
                             cmd.Parameters.Add(new SqlParameter("@tipo", entregables.Tipo));
                             cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + entregables.Archivo.FileName)));

@@ -184,7 +184,7 @@
                 <div class="row col-lg-12 mt-1 h6">
                     <div class="col-lg-12">
                         <div class="col-lg-12 mb-3">
-                            @if ((@Model.Estatus.Equals("Autorizada")) || (@User.Claims.ElementAt(2).Value).Equals("Administrador"))
+                            @if ((@Model.Estatus.Equals("Autorizada") && (@User.Claims.ElementAt(2).Value).Contains("Evaluador")) || !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                             {
                                 <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
                             }
@@ -207,7 +207,7 @@
                                     <tr>
                                         @if (entre.Tipo.Equals("ActaER"))
                                         {
-                                            tipo = "Acta Entrega - Recepción";
+                                            tipo = entre.Firmado == true ? "Acta Entrega - Recepción (Firmada)":"Acta Entrega - Recepción";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
                                         else if (entre.Tipo.Equals("Factura"))
@@ -238,16 +238,6 @@
                                         else if (entre.Tipo.Equals("Memorandum"))
                                         {
                                             tipo = "Memorándum";
-                                            <td>@Html.DisplayName(tipo)</td>
-                                        }
-                                        else if (entre.Tipo.Equals("AlcanceMO"))
-                                        {
-                                            tipo = "Alcance a Memorándum/Oficio";
-                                            <td>@Html.DisplayName(tipo)</td>
-                                        }
-                                        else if (entre.Tipo.Equals("AlcanceAER"))
-                                        {
-                                            tipo = "Alcance a Acta E-R";
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
                                         else
@@ -575,6 +565,7 @@
         $(function () {
             var model = @Html.Raw(Json.Serialize(@Model));
             var usuario = @Html.Raw(Json.Serialize(@User.Claims.ElementAt(2).Value));
+            var tramitePago = false;
 
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -660,7 +651,7 @@
                             axios.post('/mensajeria/historialMensajeria', {
                                 ServicioId: model.servicioId,
                                 CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
-                                Estatus: "En Trámite", Comentarios: "Se validó la cédula por operación."
+                                Estatus: "En Trámite", Comentarios: "Se validó la " + $(this).data('tipo') + " por operación."
                             }).then(hist => {
                                 axios.get('/entregables/validaCedula/'+$(this).data('id')).then(valid => {
                                     if (valid.status == 200) {
@@ -742,6 +733,16 @@
                  });
 
                 $(document).on('click', '.tramitar_pago', function () {
+
+                    /*if (tramitePago == false) {
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Servicio de Mensajería Acelerada',
+                            'html': '<p style="text-align: justify">La cédula aún no puede enviarse a <b>"Trámite de pago"</b> ya que aún no se ha cargado el <b>"Acta Entrega - Recepción" firmada por el prestador de servicios.</b> Favor de revisar con el área de operación.</p>'
+                        });
+                        return false;
+                    }*/
+
                     Swal.fire({
                         'icon': 'warning',
                         'title': 'Servicio de Mensajería Acelerada',
@@ -849,7 +850,7 @@
                     var tipo = $(this).data('tipo');
                     var id = $(this).data('id');
 
-                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
+                    if (model.estatus == "Enviado a DAS" || model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de RPBI',
@@ -903,7 +904,7 @@
                 $(document).on('click', '.failed_entregable', function () {
                     var tipo = $(this).data('tipo');
                     var id = $(this).data('id');
-                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
+                    if (model.estatus == "Enviado a DAS" || model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de RPBI',
@@ -1073,9 +1074,11 @@
                     $('.btn_addFile').click(function () {
                         var options = '<option value="">Seleccione un Entregable</option>';
                         axios.get("/mensajeria/getListadoEntregables/" + model.id).then(response => {
+                            console.log(response);
                             response = response.data;
                             var memo = false;
                             var cedFirmada = false;
+                            var actaFirmada = false;
                             for (var i = 0; i < response.length; i++) {
                                 if (response[i].tipo == "Memorandum") {
                                     memo = true;
@@ -1085,11 +1088,14 @@
                                     cedFirmada = true;
                                 }
 
-                                if (response[i].tipo == "ActaER" && response[i].firmado == false) {
-                                    if (usuario == "Administrador" || usuario.indexOf("Evaluador") != 0) {
-                                        options += '<option value="ActaER">Acta Entrega-Recepción (Firmada)</option>';
-                                    }
+                                if (response[i].tipo == "ActaER" && response[i].firmado == true) {
+                                    actaFirmada = true;
+                                    tramitePago = true;
                                 }
+                            }
+
+                            if (actaFirmada == false && (usuario == "Administrador" || usuario.indexOf("Evaluador"))) {
+                                options += '<option value="ActaER">Acta Entrega-Recepción (Firmada)</option>';
                             }
 
                             if (memo == false && (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado")) {

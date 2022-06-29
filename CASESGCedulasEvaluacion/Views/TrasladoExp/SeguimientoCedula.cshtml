@@ -612,7 +612,7 @@
                             axios.post('/trasladoExp/historialTraslado', {
                                 ServicioId: model.servicioId,
                                 CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
-                                Estatus: "En Trámite", Comentarios: "Se validó la cédula por operación."
+                                Estatus: "En Trámite", Comentarios: "Se validó la " + $(this).data('tipo') + " por operación."
                             }).then(hist => {
                                 axios.get('/entregables/validaCedula/'+$(this).data('id')).then(valid => {
                                     if (valid.status == 200) {
@@ -781,7 +781,7 @@
                 var tipo = $(this).data('tipo');
                 var id = $(this).data('id');
                 var mensaje = '';
-                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
+                    if (model.estatus == "Enviado a DAS" || model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de Traslado de Expedientes',
@@ -835,7 +835,7 @@
                     var tipo = $(this).data('tipo');
                     var id = $(this).data('id');
 
-                    if (model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
+                    if (model.estatus == "Enviado a DAS" || model.estatus == "Autorizada" || model.estatus == "Trámite Rechazado" || model.estatus == "Rechazada") {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Servicio de Mensajería Acelerada',

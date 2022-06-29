@@ -187,7 +187,8 @@
                 <div class="row col-lg-12 mt-1 h6">
                     <div class="col-lg-12">
                         <div class="col-lg-12 mb-3">
-                            @if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Autorizado CAE") || (@User.Claims.ElementAt(2).Value).Contains("Evaluador")))
+                            @if ((@Model.Estatus.Equals("Autorizada") || @Model.Estatus.Equals("Autorizado CAE") && (@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
+                                || !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                             {
                                 <a href="#" type='button' class='btn-sm btn-success mr-2 float-right btn_addFile' data-toggle="tooltip" title="Adjuntar Entregable"><i class="fas fa-plus"></i></a>
                             }
@@ -587,6 +588,7 @@
     $(function () {
         var model = @Html.Raw(Json.Serialize(@Model));
         var usuario = @Html.Raw(Json.Serialize(@User.Claims.ElementAt(2).Value));
+        var tramitePago = false;
         $("#divAvisoFinancieros").css('display', 'none');
 
         $('[data-toggle="tooltip"]').tooltip();
@@ -710,7 +712,7 @@
                         axios.post('/mensajeria/historialMensajeria', {
                             ServicioId: model.servicioId,
                             CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
-                            Estatus: "En Trámite", Comentarios: "Se validó la cédula por operación."
+                            Estatus: "En Trámite", Comentarios: "Se validó la " + $(this).data('tipo') + " por operación."
                         }).then(hist => {
                             axios.get('/entregables/validaCedula/'+$(this).data('id')).then(valid => {
                                 if (valid.status == 200) {
@@ -774,6 +776,15 @@
             });
 
             $(document).on('click', '.tramitar_pago', function () {
+                /*if (tramitePago == false) {
+                    Swal.fire({
+                        'icon': 'error',
+                        'title': 'Servicio de Mensajería Acelerada',
+                        'html': '<p style="text-align: justify">La cédula aún no puede enviarse a <b>"Trámite de pago"</b> ya que aún no se ha cargado el <b>"Acta Entrega - Recepción" firmada por el prestador de servicios.</b> Favor de revisar con el área de operación.</p>'
+                    });
+                    return false;
+                }*/
+
                 Swal.fire({
                     'icon': 'warning',
                     'title': 'Servicio de Mensajería Acelerada',
@@ -1201,6 +1212,7 @@
                     response = response.data;
                     var memo = false;
                     var cedFirmada = false;
+                    var actaFirmada = false;
                     for (var i = 0; i < response.length; i++) {
                         if (response[i].estatus == '' && response[i].tipo == "Memorandum") {
                             memo = true;
@@ -1210,11 +1222,14 @@
                             cedFirmada = true;
                         }
 
-                        if (response[i].tipo == "ActaER" && response[i].firmado == false) {
-                            if (usuario == "Administrador" || usuario.indexOf("Evaluador") != 0) {
-                                options += '<option value="ActaER">Acta Entrega-Recepción (Firmada)</option>';
-                            }
+                        if (response[i].tipo == "ActaER" && response[i].firmado == true) {
+                            actaFirmada = true;
+                            tramitePago = true;
                         }
+                    }
+
+                    if (actaFirmada == false && (usuario == "Administrador" || usuario.indexOf("Evaluador"))) {
+                        options += '<option value="ActaER">Acta Entrega-Recepción (Firmada)</option>';
                     }
 
                     if (memo == false && model.estatus == "Autorizado CAE") {
