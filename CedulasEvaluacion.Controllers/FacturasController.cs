@@ -34,23 +34,24 @@ namespace CedulasEvaluacion.Controllers
         /************************* Modulo Facturas *****************************/
         [HttpGet]
         [Route("/facturas/index")]
-        public async Task<IActionResult> Index([FromQuery(Name = "Servicio")] int Servicio, [FromQuery(Name = "Mes")] string Mes, 
+        public async Task<IActionResult> Index([FromQuery(Name = "Anio")] int anio, [FromQuery(Name = "Servicio")] int Servicio, [FromQuery(Name = "Mes")] string Mes, 
             [FromQuery(Name = "Tipo")] string Tipo)
         {
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "ver");
             if (success == 1)
             {
                 ModelsFacturas resultado = new ModelsFacturas();
-                resultado.facturasMes = await vFacturas.getFacturasTipo("Mes");
-                resultado.facturasServicio = await vFacturas.getFacturasTipo("Servicio");
-                resultado.facturasParciales = await vFacturas.getFacturasTipo("Parciales");
+                resultado.Anio = anio;
+                resultado.facturasMes = await vFacturas.getFacturasTipo("Mes",anio);
+                resultado.facturasServicio = await vFacturas.getFacturasTipo("Servicio",anio);
+                resultado.facturasParciales = await vFacturas.getFacturasTipo("Parciales",anio);
                 if (Servicio != 0)
                 {
                     if (Mes!= null && Tipo != null)
                     {
-                        resultado.detalle = await vFacturas.getDetalleFacturacion(Servicio,Mes,Tipo);
+                        resultado.detalle = await vFacturas.getDetalleFacturacion(Servicio,Mes,Tipo,anio);
                     }
-                    resultado.desgloceServicio = await vFacturas.getDesgloceFacturacion(Servicio);
+                    resultado.desgloceServicio = await vFacturas.getDesgloceFacturacion(Servicio,anio);
                 }
                 return View(resultado);
             }

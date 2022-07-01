@@ -11,5 +11,6 @@ namespace CedulasEvaluacion.Entities.MFacturas
         public List<DashboardFacturas> facturasParciales { get; set; }
         public List<DesgloceServicio> desgloceServicio { get; set; }
         public List<DesgloceServicio> detalle { get; set; }
+        public int Anio { get; set; }
     }
 }

@@ -7051,6 +7051,11 @@ a.bg-warning:focus, a.bg-warning:hover, button.bg-warning:focus, button.bg-warni
     color: white;
 }
 
+.bg-oficios {
+    background-color: #7330f2 !important;
+    color: white;
+}
+
 
 
 /*Fin del fondo para los servicios*/

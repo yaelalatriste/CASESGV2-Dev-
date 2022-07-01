@@ -10,163 +10,253 @@
 }
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card-header">
-                <h4>Facturación General</h4>
-            </div>
-            <div class="card-body">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width:100%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
-                    </div>
-                </div>
-                <h5 class="mt-3">Facturas Cargadas: @totalFacturas</h5>
-            </div>
-        </div>
-    </div>
-    <div class="row" id="Prrueba">
-        <div class="col-lg-12">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Facturas por Servicio</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#facturasMes" role="tab" aria-controls="profile" aria-selected="false">Facturas por Mes</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#facturasParciales" role="tab" aria-controls="contact" aria-selected="false">Facturas Parcialmente Pagadas</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade mt-2 ml-3 show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <h4 class="mt-4">Facturas por Servicio</h4>
-                    <div class="row col-lg-12">
-                        @foreach (var servicio in Model.facturasServicio)
-                        {
-                            <div class="col-md-1 text-center mt-3">
-                                <input type="text" class="facturasServicio" value="@servicio.TotalFacturas" data-width="90" data-height="90" data-fgColor="@servicio.Fondo"
-                                       data-readonly="true"  /><br />
-                                <a href="#" class="font-weight-bold btnServicio" style="color: @servicio.Fondo" data-servicio="@servicio.Id"
-                                   data-total="@servicio.TotalFacturas">
-                                    @servicio.TotalFacturas - @servicio.Servicio
-                                </a>
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div class="tab-pane fade mt-2 ml-3" id="facturasMes" role="tabpanel" aria-labelledby="profile-tab">
-                    <h4 class="mt-4">Facturas por Mes</h4>
-                    <div class="row col-lg-12">
-                        @foreach (var mes in Model.facturasMes)
-                        {
-                            <div class="col-1 text-center mt-3">
-                                <input type="text" class="facturasMes" value="@mes.TotalFacturas" data-width="90" data-height="90" data-fgColor="@mes.Fondo"
-                                       data-readonly="true" data-max="@mes.TotalFacturas" />
-                                <h6 class="font-weight-bold" style="color: @mes.Fondo">@mes.TotalFacturas - @mes.Mes</h6>
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div class="tab-pane fade mt-2 ml-3" id="facturasParciales" role="tabpanel" aria-labelledby="contact-tab">
-                    <h4 class="mt-4">Facturas Parcialmente Pagadas</h4>
-                    <div class="row col-lg-12">
-                        @foreach (var parcial in Model.facturasParciales)
-                        {
-                            <div class="col-1 text-center mt-3">
-                                <input type="text" class="facturasParciales" value="@parcial.TotalFacturas" data-width="90" data-height="90" data-fgColor="@parcial.Fondo"
-                                       data-readonly="true" data-max="@parcial.TotalFacturas" />
-                                <h6 class="font-weight-bold" style="color: @parcial.Fondo">@parcial.TotalFacturas - @parcial.Servicio</h6>
-                            </div>
-                        }
-                    </div>
-                </div>
+    <div class="row col-lg-4">
+        <label for="facturasAnio">Consultar Información del Año: </label>
+        <div class="input-group mb-3">
+            <select class="form-control" id="anioActual">
+                <option value="">Seleccione el Año</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+            </select>
+            <div class="row">
+                <button class="btn btn-primary ml-3" id="consultarFacturas">Consultar Información</button>
             </div>
         </div>
     </div>
-    <div class="row col-lg-12 mt-3 justify-content-center">
-        @if (Model.desgloceServicio != null)
-        {
-            <div class="row col-lg-10">
-                <h4>Factura(s) por Mes</h4>
-                <div class="row col-lg-12 mt-3">
-                    @foreach (var servicio in Model.desgloceServicio)
-                    {
-                        @if (servicio.Tipo.Equals("Factura"))
-                        {
-                            <div class="col-md-3 text-center mt-3">
-                                <p class="font-weight-bold" style="color: @servicio.Fondo">@servicio.Mes</p>
-                                <input type="text" class="desgloceServicio" value="@servicio.Total-50" data-width="90" data-height="90" data-fgColor="@servicio.Fondo"
-                                       data-readonly="true" data-max="@servicio.Total" /><br />
-                                <a href="#" class="font-weight-bold btnDetalle" style="color: @servicio.Fondo" data-tipo="@servicio.Tipo" data-mes="@servicio.Mes"
-                                   data-servicio="@servicio.Id">
-                                    <div class="text-justify">
-                                    Facturas en Proceso - @servicio.FacturasProceso<br />
-                                    Facturas Pendientes - @servicio.PendientePago<br />
-                                    Facturas enviadas a DGPPT - @servicio.FacturasDGPPT<br />
-                                    Facturas Pagadas - @servicio.TotalPagado<br />
-                                    </div>
-                                </a>
-                            </div>
-                        }
-                    }
+    @if (Model.Anio != 0)
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-header">
+                    <h4>Facturación General</h4>
+                </div>
+                <div class="card-body">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width:100%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                    <h5 class="mt-3">Facturas Cargadas: @totalFacturas</h5>
                 </div>
             </div>
-            <div class="row col-lg-10 mt-3">
-                <h4>Nota(s) de Crédito por Mes</h4>
-                <div class="row col-lg-12 mt-3">
-                    @foreach (var servicio in Model.desgloceServicio)
-                    {
-                        @if (servicio.Tipo.Equals("NC"))
-                        {
-                            <div class="col-md-3 text-center mt-3">
-                                <input type="text" class="facturasServicio" value="@servicio.Total" data-width="90" data-height="90" data-fgColor="@servicio.Fondo"
-                                       data-readonly="true" data-max="@servicio.Total" /><br />
-                                <a href="#" class="font-weight-bold btnDetalle" style="color: @servicio.Fondo" data-tipo="@servicio.Tipo" mes="@servicio.Mes"
-                                   data-servicio="@servicio.Id">
-                                    @servicio.Mes -  @servicio.MontoTotal
-                                </a>
-                            </div>
-                        }
-                    }
-                </div>
-            </div>
-        }
-    </div>
-    <div class="row col-lg-12 mt-3 justify-content-center">
-        @if (Model.detalle != null)
-        {
-            <div class="row col-lg-10">
-                <h4>Detalle de Facturas/Nota(s) de Crédito</h4>
-                <div class="row col-lg-12 mt-3">
-                    <table class="table table-bordered" id="tblDetalleFacturas">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Mes</th>
-                                <th>Anio</th>
-                                <th>Folio</th>
-                                <th>Estatus</th>
-                                <th>Empresa</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var dt in Model.detalle)
+        </div>
+        <div class="row" id="Prrueba">
+            <div class="col-lg-12">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Facturas por Servicio</a>
+                    </li>
+                    @*<li class="nav-item" role="presentation">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#facturasMes" role="tab" aria-controls="profile" aria-selected="false">Facturas por Mes</a>
+                    </li>*@
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#facturasParciales" role="tab" aria-controls="contact" aria-selected="false">Facturas Parcialmente Pagadas</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade mt-2 ml-3 show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h4 class="mt-4">Facturas por Servicio</h4>
+                        <div class="row col-lg-12">
+                            @foreach (var servicio in Model.facturasServicio)
                             {
-                                <tr>
-                                    <td>1</td>
-                                    <td>@dt.Mes</td>
-                                    <td>@dt.Anio</td>
-                                    <td>@dt.Folio</td>
-                                    <td>@dt.Estatus</td>
-                                    <td>@dt.Empresa</td>
-                                </tr>
+                                <div class="col-md-2 text-center mt-3">
+                                    <input type="text" class="facturasServicio" value="@servicio.TotalFacturas" data-width="90" data-height="90" data-fgColor="@servicio.Fondo"
+                                           data-readonly="true" /><br />
+                                    <a href="#" class="font-weight-bold btnServicio" style="color: @servicio.Fondo" data-servicio="@servicio.Id"
+                                       data-total="@servicio.TotalFacturas">
+                                        @servicio.TotalFacturas - @servicio.Servicio
+                                    </a>
+                                </div>
                             }
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
+                    @*<div class="tab-pane fade mt-2 ml-3" id="facturasMes" role="tabpanel" aria-labelledby="profile-tab">
+                        <h4 class="mt-4">Facturas por Mes</h4>
+                        <div class="row col-lg-12">
+                            @foreach (var mes in Model.facturasMes)
+                            {
+                                <div class="col-1 text-center mt-3">
+                                    <input type="text" class="facturasMes" value="@mes.TotalFacturas" data-width="90" data-height="90" data-fgColor="@mes.Fondo"
+                                           data-readonly="true" data-max="@mes.TotalFacturas" />
+                                    <h6 class="font-weight-bold" style="color: @mes.Fondo">@mes.TotalFacturas - @mes.Mes</h6>
+                                </div>
+                            }
+                        </div>
+                    </div>*@
+                    <div class="tab-pane fade mt-2 ml-3" id="facturasParciales" role="tabpanel" aria-labelledby="contact-tab">
+                        <h4 class="mt-4">Facturas Parcialmente Pagadas</h4>
+                        @if (Model.facturasParciales.Count != 0)
+                        {
+                            <div class="row col-lg-12">
+                                @foreach (var parcial in Model.facturasParciales)
+                                {
+                                    <div class="col-1 text-center mt-3">
+                                        <input type="text" class="facturasParciales" value="@parcial.TotalFacturas" data-width="90" data-height="90" data-fgColor="@parcial.Fondo"
+                                            data-readonly="true" data-max="@parcial.TotalFacturas" />
+                                        <h6 class="font-weight-bold" style="color: @parcial.Fondo">@parcial.TotalFacturas - @parcial.Servicio</h6>
+                                    </div>
+                                 }
+                            </div>
+                        }
+                        else 
+                        { 
+                            <div class="col-lg-12">
+                                <div class="justify-content-center text-center">
+                                    <p class="text-success font-weight-bold">No hay facturas pagadas parcialmente</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
-        }
-    </div>
+        </div>
+        <div class="row col-lg-12 mt-3 justify-content-center" id="divDesgloce">
+            @if (Model.desgloceServicio != null)
+            {
+                <div class="row col-lg-10">
+                    <h4>Factura(s) por Mes</h4>
+                    <div class="row col-lg-12 mt-3">
+                        @foreach (var servicio in Model.desgloceServicio)
+                        {
+                            @if (servicio.Tipo.Equals("Factura"))
+                            {
+                                var total = 0.0;
+
+                                if (@servicio.TotalFacturas != 0)
+                                {
+                                    total = (@servicio.FacturasPagadas * 100.0) / @servicio.TotalFacturas;
+                                }
+                                <div class="col-md-2 text-center mt-3">
+                                    <p class="font-weight-bold" style="color: @servicio.Fondo">@servicio.Mes</p>
+                                    <input type="text" class="desgloceServicio" value="@total.ToString("n2")" data-width="100" data-height="100" data-fgColor="@servicio.Fondo"
+                                           data-readonly="true" data-max="100" data-pp="28" /><br />
+                                    <a href="#" class="font-weight-bold btnDetalle" style="color: @servicio.Fondo" data-tipo="@servicio.Tipo" data-mes="@servicio.Mes"
+                                       data-servicio="@servicio.Id">
+                                    </a>
+                                </div>
+                                <div class="text-justify col-md-4">
+                                    @if (servicio.FacturasDGPPT != 0 || servicio.FacturasPagadas != 0 || servicio.FacturasPendientes != 0)
+                                    {
+                                        <table class="table">
+                                            <thead>
+                                                <tr class="h6">
+                                                    <th>Facturas</th>
+                                                    <th>Monto de la(s) Factura(s)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (@servicio.FacturasPagadas != 0)
+                                                {
+                                                    <tr class="h6">
+                                                        <td><i class="fas fa-check text-success"></i> @servicio.FacturasPagadas Facturas pagadas</td>
+                                                        <td><i class="fas fa-check text-success"></i> @servicio.TotalPagado</td>
+                                                    </tr>
+                                                }
+                                                @if (@servicio.FacturasPendientes != 0)
+                                                {
+                                                    <tr class="h6">
+                                                        <td><i class="fas fa-times text-danger"></i> @servicio.FacturasPendientes Facturas no pagadas</td>
+                                                        <td><i class="fas fa-times text-danger"></i> @servicio.TotalPendiente</td>
+                                                    </tr>
+                                                }
+                                                @if (@servicio.FacturasDGPPT != 0)
+                                                {
+                                                    <tr class="h6">
+                                                        <td><i class="fas fa-vault text-warning"></i> @servicio.FacturasDGPPT Bloqueado P/ Pago</td>
+                                                        <td><i class="fas fa-vault text-warning"></i> @servicio.TotalDGPPT</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfooter>
+                                                <tr>
+                                                    <td>
+                                                        <b>Total: </b>@servicio.TotalFacturas Factura(s)
+                                                    </td>
+                                                    <td>
+                                                        @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @servicio.TotalFinal)
+                                                    </td>
+                                                </tr>
+                                            </tfooter>
+                                        </table>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row col-lg-10 mt-3">
+                    <h4>Nota(s) de Crédito por Mes</h4>
+                    <div class="row col-lg-12 mt-3">
+                        @foreach (var servicio in Model.desgloceServicio)
+                        {
+                            @if (servicio.Tipo.Equals("NC"))
+                            {
+                                var total = 0.0;
+
+                                if (@servicio.TotalFacturas != 0)
+                                {
+                                   total = (@servicio.FacturasPagadas * 100.0) / @servicio.TotalFacturas;
+                                }
+                                
+                                <div class="col-md-2 text-center mt-3">
+                                    <input type="text" class="facturasServicio" value="@total.ToString("n2")" data-width="100" data-height="100" data-fgColor="@servicio.Fondo"
+                                           data-readonly="true" data-max="100" data-pp="28" /><br />
+                                    <a href="#" class="font-weight-bold btnDetalle" style="color: @servicio.Fondo" data-tipo="@servicio.Tipo" mes="@servicio.Mes"
+                                       data-servicio="@servicio.Id">
+                                    </a>
+                                </div>
+                                <div class="text-justify col-md-4">
+                                    @if (servicio.FacturasDGPPT != 0 || servicio.FacturasPagadas != 0 || servicio.FacturasPendientes != 0)
+                                    {
+                                        <table class="table">
+                                            <thead>
+                                                <tr class="h6">
+                                                    <th>Nota(s) de Crédito</th>
+                                                    <th>Monto de la(s) Nota(s) de Crédito</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (@servicio.FacturasPagadas != 0)
+                                                {
+                                                    <tr class="h6">
+                                                        <td><i class="fas fa-check text-success"></i> @servicio.FacturasPagadas Aplicadas</td>
+                                                        <td><i class="fas fa-check text-success"></i> @servicio.TotalPagado</td>
+                                                    </tr>
+                                                }
+                                                @if (@servicio.FacturasPendientes != 0)
+                                                {
+                                                    <tr class="h6">
+                                                        <td><i class="fas fa-times text-danger"></i> @servicio.FacturasPendientes No aplicadas</td>
+                                                        <td><i class="fas fa-times text-danger"></i> @servicio.TotalPendiente</td>
+                                                    </tr>
+                                                }
+                                                @if (@servicio.FacturasDGPPT != 0)
+                                                {
+                                                    <tr class="h6">
+                                                        <td><i class="fa-solid fa-piggy-bank text-warning"></i> @servicio.FacturasDGPPT Por aplicar</td>
+                                                        <td><i class="fa-solid fa-piggy-bank text-warning"></i>    @servicio.TotalDGPPT</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfooter>
+                                                <tr class="h6">
+                                                    <td>
+                                                        <b>Total: </b>@servicio.TotalFacturas Nota(s)
+                                                    </td>
+                                                    <td>
+                                                        @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @servicio.TotalFinal)
+                                                    </td>
+                                                </tr>
+                                            </tfooter>
+                                        </table>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
 </div>
 
 <style>
@@ -190,10 +280,16 @@
             var totalFacturas = @totalFacturas;
             var desgloceService = 0;
 
+            $("#anioActual").val(@DateTime.Now.Year);
+
+            $("#consultarFacturas").click(function () {
+                window.location.href = "?Anio="+$("#anioActual").val();
+            });
+
+
             $('.btnServicio').click(function () {
                 desgloceService = $(this).data('total');
-                alert(desgloceService);
-                window.location.href = '?Servicio=' + $(this).data('servicio');
+                window.location.href = '?Servicio=' + $(this).data('servicio') + "&Anio=" + $("#anioActual").val();
             });
 
             $('.totalFacturas').knob({
@@ -226,9 +322,8 @@
             });
 
             $('.desgloceServicio').knob({
-                max: 143,
                 format: function (value) {
-                    return ((value * 100) / totalFacturas).toFixed(2) + '%';
+                    return value+'%';
                 },
                 draw: function () {
                     $(this.i).css('transform', 'rotate(0deg)').css('font-size', '11pt');
@@ -252,13 +347,12 @@
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
                 },
-                "columnDefs": [
-                    {
-                        "targets": [cuentaTramites() > 0 ? 7 : null],
-                        "visible": cuentaTramites() > 0 ? true : false,
-                        "searchable": false
-                    },
-                ]
+            });
+
+            $(".nav-link").click(function () {
+                if ($(this).attr("href") == "#facturasParciales") {
+                    $("#divDesgloce").css('display','none');
+                }
             });
     
         });

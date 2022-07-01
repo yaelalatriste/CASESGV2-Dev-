@@ -129,7 +129,7 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                int cancelado = await vFinancieros.CancelarOficio(id, servicio);
+                int cancelado = await vFinancieros.CancelarOficio(id, servicio, UserId());
                 if (cancelado != -1)
                 {
                     return Ok(cancelado);
@@ -146,7 +146,7 @@ namespace CedulasEvaluacion.Controllers
             int success = await vPerfiles.getPermiso(UserId(), modulo(), "actualizar");
             if (success == 1)
             {
-                int cancelado = await vFinancieros.PagarOficio(id, servicio,fecha);
+                int cancelado = await vFinancieros.PagarOficio(id, servicio,fecha,UserId());
                 if (cancelado != -1)
                 {
                     return Ok(cancelado);
@@ -233,16 +233,17 @@ namespace CedulasEvaluacion.Controllers
                             columnas[obtienePosicion(estatus, resultado[j].Estatus)] =
                                "<td>" +
                                    "<div class='row col-lg-12'>" +
-                                       "<div class='col-lg-12 mt-2'>" +
+                                       "<div class='col-lg-12 text-center'>" +
+                                       "<span class='mb-2 badge " + resultado[j].Fondo + "'>" + resultado[j].Total + " Cédula(s)</span>" +
                                            "<div class='progress'>" +
-                                               "<div class='progress-bar progress-bar-success progress-bar-striped progress-bar-animated "+ resultado[j].Fondo + "' role='progressbar' " +
+                                               "<div class='progress-bar progress-bar-success progress-bar-striped progress-bar-animated " + resultado[j].Fondo + "' role='progressbar' " +
                                                "style='width: " + ((resultado[j].Total * 100) / totales[i]) + "%' aria-valuenow='"+ ((resultado[j].Total * 100) / totales[i]) + 
                                                "' aria-valuemin='0' aria-valuemax='100'>"+
                                                     "<span class='"+text+" font-weight-bold'> Avance de " + total.ToString("n2") + " % </span>" +
                                                "</div>" +
                                            "</div>" +
                                        "</div>" +
-                                       (resultado[j].TotalParcial != 0 ? "<div class='col-lg-12 mt-2'>" +
+                                       (resultado[j].TotalParcial != 0 ? "<div class='col-lg-12'>" +
                                            "<div class='progress'>" +
                                                "<div class='progress-bar progress-bar-success progress-bar-striped progress-bar-animated bg-cedulasParciales' role='progressbar' " +
                                                "style='width: 100%'; >" +

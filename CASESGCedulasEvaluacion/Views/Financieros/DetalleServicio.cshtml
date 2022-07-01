@@ -110,7 +110,7 @@
                                         else if (!@of.NombreArchivo.Equals(""))
                                         {
                                             <a class="updateAcuse" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-file="@of.NombreArchivo" data-importe="@of.ImporteOficio"
-                                               data-fechatramitado="@of.FechaTramitado" data-toggle="tooltip" title='Modificar soporte documental que acredita la prestación del servicio con el oficio con número "@of.Anio/@of.NumeroOficio"'>
+                                               data-fechatramitado="@of.FechaTramitado.ToString("yyyy-MM-dd")" data-importepenas="@of.ImportePenas" data-toggle="tooltip" title='Modificar soporte documental que acredita la prestación del servicio con el oficio con número "@of.Anio/@of.NumeroOficio"'>
                                                 <i class="fa-solid fa-file-exclamation text-primary mr-2"></i>
                                             </a>
                                             <a class="viewAcuse" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-file="@of.NombreArchivo" data-importe="@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", of.ImporteOficio)"
@@ -135,11 +135,16 @@
                                         <a href="/financieros/revisar/@Model.oficio[0].ServicioId/@of.Id" data-toggle="tooltip" title='Ver detalles del Oficio "@of.Anio/@of.NumeroOficio"'>
                                             <i class="fas fa-eye text-success mr-2"></i>
                                         </a>
+
                                         @if (!@of.NombreArchivo.Equals("")) { 
                                          <a class="viewAcuse" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-file="@of.NombreArchivo" data-importe="@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", of.ImporteOficio)"
                                                data-fechatramitado="@of.FechaTramitado.ToString("dd/MM/yyyy")" data-estatus="@of.Estatus" data-toggle="tooltip" title='Ver el soporte documental que acredita la prestación del servicio con el oficio número "@of.Anio/@of.NumeroOficio"'>
                                             <i class="fa-solid fa-file-check mr-2 text-success"></i>
                                          </a>
+                                         <a class="updateAcuse" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-file="@of.NombreArchivo" data-importe="@of.ImporteOficio"
+                                               data-fechatramitado="@of.FechaTramitado.ToString("yyyy-MM-dd")" data-importepenas="@of.ImportePenas" data-toggle="tooltip" title='Modificar soporte documental que acredita la prestación del servicio con el oficio con número "@of.Anio/@of.NumeroOficio"'>
+                                                <i class="fa-solid fa-file-exclamation text-primary mr-2"></i>
+                                            </a>
                                         }
                                         @Html.Raw("<b class='text-success'>Oficio Pagado</b>");
                                     }
@@ -334,6 +339,15 @@
                             </small>
                         </div>
                     </div>
+                    <div class="form-group col-md-3">
+                        <label for="fechaCierre">Importe Penas y Deductivas:</label><br>
+                        <input id="importePenas" class="form-control" type="number" />
+                        <div class="col-sm-12" id="error_importePenas">
+                            <small id="comentariosHelp" class="text-danger">
+                                Por favor capture el importe de las penas y deductivas
+                            </small>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-end">
@@ -348,7 +362,7 @@
 
 @* Modal para la ver el Acuse de Financieros *@
 <div class="modal fade" id="modalVerAcuse">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl-view">
         <div class="modal-content">
             <div class="modal-header bg-joke">
                 <h4 class="modal-title text-white" id="titleAcuseOficio"></h4>
@@ -356,7 +370,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body-view">
                 <table class="table" id="tblAcuse"></table>
                 <div class="row" id="objectPdf">
                 </div>
@@ -383,6 +397,7 @@
             $("#error_fechaOficio").css('display','none');
             $("#error_customFile").css('display','none');
             $("#error_importe").css('display','none');
+            $("#error_importePenas").css('display','none');
 
             $("#anioActual").val(@System.DateTime.Now.Year);
 
@@ -641,8 +656,7 @@
             });
 
             function validaCamposArchivo() {
-
-                if ($('#importeOficio').val() == "" && $('#customFile').val() == "" && $('#fechaOficio').val() == "") {
+                if ($('#importeOficio').val() == "" && $('#importePenas').val() == "" && ($('#customFile').val() == "" && $('.custom-file-label').text() == "") && $('#fechaOficio').val() == "") {
                     $('#importeOficio').addClass('is-invalid');
                     $("#error_importe").css('display', 'block');
 
@@ -662,6 +676,13 @@
                     return false;
                 }
 
+                if ($('#importePenas').val() == "") {
+                    $('#importePenas').addClass('is-invalid');
+                    $('#error_importePenas').css('display', 'block');
+
+                    return false;
+                }
+
                 if ($('#fechaOficio').val() == "") {
                     $('#fechaOficio').addClass('is-invalid');
                     $('#error_fechaOficio').css('display', 'block');
@@ -669,7 +690,7 @@
                     return false;
                 }
 
-                if ($('#customFile').val() == "") {
+                if (($('#customFile').val() == "" && $('.custom-file-label').text() == "")) {
 
                     $('#customFile').addClass('is-invalid');
                     $('#error_customFile').css('display', 'block');
@@ -686,12 +707,15 @@
                 var file = document.getElementById('customFile').files[0];
                 var fechaTramitado = $('#fechaOficio').val();
                 var importe = $('#importeOficio').val();
+                var importePenas = $('#importePenas').val();
                 var numeroOficio = $('#carpetaOficio').val();
 
                 formData.append("Id", parseInt(id));
+
                 formData.append("Archivo", file);
                 formData.append("FechaTramitado", fechaTramitado);
                 formData.append("ImporteOficio", importe);
+                formData.append("ImportePenas", importePenas);
                 formData.append("NumeroOficio", numeroOficio);
 
                 if (validaCamposArchivo()) {
@@ -737,11 +761,28 @@
                         "<td><strong>Importe: </strong>"+$(this).data('importe')+"</td>"+
                         "<td><strong>Estatus: </strong>"+$(this).data('estatus')+"</td>"+
                     "</tr>";
-                let data = "<object width='100%' height='450px' data='/view/acuseFinancieros/" + numero + "/"+acuse+"'></object>";
+                let data = "<object width='100%' height='700px' data='/view/acuseFinancieros/" + numero + "/"+acuse+"'></object>";
                 $('#titleAcuseOficio').text("Soporte documental que acredita la prestación del servicio con el oficio número - \"" + numero+ "\"");
                 $('#objectPdf').html(data);
                 $('#tblAcuse').html(tbl);
                 $('#modalVerAcuse').modal('show');
+            });
+            /*FIN de ver archivo en modal*/
+
+            /*Ver archivo en modal*/
+            $(document).on('click', '.updateAcuse', function () {
+                $("#idOficio").val($(this).data('id'));
+                let acuse = $(this).data('file');
+                let oficio = $(this).data('oficio');
+                let importe = $(this).data('importe');
+                let importePenas = $(this).data('importepenas');
+                let fechaTramitado = $(this).data('fechatramitado');
+                $(".custom-file-label").text(acuse);
+                $('#fechaOficio').val(fechaTramitado);
+                $('#importeOficio').val(importe);
+                $('#importePenas').val(importePenas);
+                $('#carpetaOficio').val(oficio);
+                $('#modal-acuseOficio').modal('show');
             });
             /*FIN de ver archivo en modal*/
 

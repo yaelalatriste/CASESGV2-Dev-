@@ -19,8 +19,8 @@ namespace CedulasEvaluacion.Interfaces
         Task<List<Facturas>> getFacturasPago(int servicio);
 
         /******************* Módulo de Facturas *******************/
-        Task<List<DashboardFacturas>> getFacturasTipo(string tipo);
-        Task<List<DesgloceServicio>> getDesgloceFacturacion(int servicio);
-        Task<List<DesgloceServicio>> getDetalleFacturacion(int servicio, string mes, string tipo);
+        Task<List<DashboardFacturas>> getFacturasTipo(string tipo,int anio);
+        Task<List<DesgloceServicio>> getDesgloceFacturacion(int servicio,int anio);
+        Task<List<DesgloceServicio>> getDetalleFacturacion(int servicio, string mes, string tipo,int anio);
     }
 }

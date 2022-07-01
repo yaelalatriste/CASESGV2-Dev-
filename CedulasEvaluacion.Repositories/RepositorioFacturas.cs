@@ -515,7 +515,7 @@ namespace CedulasEvaluacion.Repositories
 
 
         /************************* Módulo de Facturas *****************************/
-        public async Task<List<DashboardFacturas>> getFacturasTipo(string tipo)
+        public async Task<List<DashboardFacturas>> getFacturasTipo(string tipo,int anio)
         {
             try
             {
@@ -524,6 +524,7 @@ namespace CedulasEvaluacion.Repositories
                     using (SqlCommand cmd = new SqlCommand("sp_dashboardFacturas", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@anio", anio));
                         cmd.Parameters.Add(new SqlParameter("@tipo", tipo));
                         var response = new List<DashboardFacturas>();
                         await sql.OpenAsync();
@@ -558,7 +559,7 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
-        public async Task<List<DesgloceServicio>> getDesgloceFacturacion(int servicio)
+        public async Task<List<DesgloceServicio>> getDesgloceFacturacion(int servicio, int anio)
         {
             try
             {
@@ -567,6 +568,7 @@ namespace CedulasEvaluacion.Repositories
                     using (SqlCommand cmd = new SqlCommand("sp_getDesloceFacturasServicio", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@anio", anio));
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
                         var response = new List<DesgloceServicio>();
                         await sql.OpenAsync();
@@ -590,7 +592,7 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
-        public async Task<List<DesgloceServicio>> getDetalleFacturacion(int servicio, string mes,string tipo)
+        public async Task<List<DesgloceServicio>> getDetalleFacturacion(int servicio, string mes,string tipo,int anio)
         {
             try
             {
@@ -599,6 +601,7 @@ namespace CedulasEvaluacion.Repositories
                     using (SqlCommand cmd = new SqlCommand("sp_getDetalleFacturasServicio", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@anio", anio));
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
                         cmd.Parameters.Add(new SqlParameter("@mes", mes));
                         cmd.Parameters.Add(new SqlParameter("@tipo", tipo));
@@ -627,7 +630,24 @@ namespace CedulasEvaluacion.Repositories
         /********************* Fin del Módulo de Facturas *************************/
 
         /************************* Fin Facturas Limpieza **************************/
-
+        private DesgloceServicio MapToValueDesgloceTipo(SqlDataReader reader)
+        {
+            return new DesgloceServicio
+            {
+                Id = (int)reader["Id"],
+                Mes = reader["Mes"].ToString(),
+                Fondo = reader["Fondo"].ToString(),
+                Tipo = reader["Tipo"].ToString(),
+                FacturasPendientes = (int)reader["FacturasPendientes"],
+                TotalPendiente = reader["TotalPendiente"].ToString(),
+                FacturasPagadas = (int)reader["FacturasPagadas"],
+                TotalPagado = reader["TotalPagado"].ToString(),
+                FacturasDGPPT = (int)reader["FacturasDGPPT"],
+                TotalDGPPT = reader["TotalDGPPT"].ToString(),
+                TotalFacturas = (int)reader["TotalFacturas"],
+                TotalFinal = (decimal)reader["TotalFinal"],
+            };
+        }
         private DashboardFacturas MapToValueTipoMes(SqlDataReader reader)
         {
             return new DashboardFacturas
@@ -658,37 +678,18 @@ namespace CedulasEvaluacion.Repositories
                 TotalFacturas = (int)reader["TotalFacturas"],
             };
         }        
-        private DesgloceServicio MapToValueDesgloceTipo(SqlDataReader reader)
-        {
-            return new DesgloceServicio
-            {
-                Id = (int)reader["Id"],
-                Mes = reader["Mes"].ToString(),
-                Fondo = reader["Fondo"].ToString(),
-                Tipo = reader["Tipo"].ToString(),
-                Total = reader["Total"].ToString(),
-                TotalPagado = reader["TotalPagado"].ToString(),
-                PendientePago = reader["PendientePago"].ToString(),
-                FacturasDGPPT = reader["FacturasDGPPT"].ToString(),
-                FacturasProceso= reader["FacturasProceso"].ToString(),                
-            };
-        }
-
         private DesgloceServicio MapToValueDetalle(SqlDataReader reader)
         {
             return new DesgloceServicio
             {
                 Id = (int)reader["Id"],
                 Mes = reader["Mes"].ToString(),
-                Anio = (int)reader["Anio"],
                 Folio = reader["Folio"].ToString(),
                 Empresa = reader["Empresa"].ToString(),
                 Estatus = reader["Estatus"].ToString(),
                 EstatusFactura = reader["EstatusFactura"].ToString(),
                 Serie = reader["Serie"].ToString(),
                 FolioFactura = reader["FolioFactura"].ToString(),
-                MontoTotal = reader["MontoTotal"].ToString(),
-
             };
         }
 

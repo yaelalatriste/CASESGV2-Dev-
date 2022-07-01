@@ -212,7 +212,6 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-
         /*Filtros para Cedulas*/
         public async Task<List<DetalleCedula>> GetCedulasFiltroPago(int id, string mes,int servicio)
         {
@@ -340,7 +339,7 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-        public async Task<int> CancelarOficio(int id, int servicio)
+        public async Task<int> CancelarOficio(int id, int servicio,int user)
         {
             try
             {
@@ -350,6 +349,7 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@oficio", id));
+                        cmd.Parameters.Add(new SqlParameter("@user", user));
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
 
                         await sql.OpenAsync();
@@ -371,7 +371,7 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-        public async Task<int> PagarOficio(int id, int servicio, DateTime fecha)
+        public async Task<int> PagarOficio(int id, int servicio, DateTime fecha,int user)
         {
             try
             {
@@ -383,6 +383,7 @@ namespace CedulasEvaluacion.Repositories
                         cmd.Parameters.Add(new SqlParameter("@oficio", id));
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
                         cmd.Parameters.Add(new SqlParameter("@fechaPagado", fecha));
+                        cmd.Parameters.Add(new SqlParameter("@user", user));
 
                         await sql.OpenAsync();
                         int i = await cmd.ExecuteNonQueryAsync();
@@ -506,6 +507,7 @@ namespace CedulasEvaluacion.Repositories
         {
             DateTime date = DateTime.Now;
             string date_str = date.ToString("yyyyMMddHHmmss");
+            string saveFile = "";
             int id = 0;
 
 
@@ -513,21 +515,24 @@ namespace CedulasEvaluacion.Repositories
             {
                 int isDeleted = await eliminaArchivo(oficio);
             }
-
-            string saveFile = await guardaArchivo(oficio.Archivo, oficio.NumeroOficio.ToString(), date_str);
+            
+            if(oficio.Archivo != null)
+                saveFile = await guardaArchivo(oficio.Archivo, oficio.NumeroOficio.ToString(), date_str);
             try
             {
-                if (saveFile.Equals("Ok"))
+                if (saveFile.Equals("Ok") || oficio.Archivo == null)
                 {
                     using (SqlConnection sql = new SqlConnection(_connectionString))
                     {
-                        using (SqlCommand cmd = new SqlCommand("sp_insertarActualizarAcuseOficioFinancieros", sql))
+                        using (SqlCommand cmd = new SqlCommand("sp_insertarAcuseOficio", sql))
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.Add(new SqlParameter("@id", oficio.Id));
-                            cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + oficio.Archivo.FileName)));
+                            if (oficio.Archivo != null)
+                                cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + oficio.Archivo.FileName)));
                             cmd.Parameters.Add(new SqlParameter("@fechaTramitado", oficio.FechaTramitado));
                             cmd.Parameters.Add(new SqlParameter("@importe", oficio.ImporteOficio));
+                            cmd.Parameters.Add(new SqlParameter("@importePenas", oficio.ImportePenas));
 
                             await sql.OpenAsync();
                             await cmd.ExecuteNonQueryAsync();
@@ -671,6 +676,7 @@ namespace CedulasEvaluacion.Repositories
                 Servicio = reader["Nombre"].ToString(),
                 NombreArchivo = reader["Archivo"] != DBNull.Value ? reader["Archivo"].ToString() : "",
                 ImporteOficio = reader["Importe"] != DBNull.Value ? Convert.ToDecimal(reader["Importe"]) : 0,
+                ImportePenas = reader["ImportePenas"] != DBNull.Value ? Convert.ToDecimal(reader["ImportePenas"]) : 0,
                 FechaTramitado = reader["FechaTramitado"] != DBNull.Value ? Convert.ToDateTime(reader["FechaTramitado"]) : Convert.ToDateTime("01/01/0001"),
                 Estatus = reader["Estatus"].ToString(),
                 SubtotalOficio = reader["SubtotalOficio"] != DBNull.Value ? Convert.ToDecimal(reader["SubtotalOficio"]):0,

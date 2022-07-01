@@ -19,6 +19,7 @@ namespace CedulasEvaluacion.Entities.MFinancieros
         public decimal SubtotalOficio { get; set; }
         public decimal TotalOficio { get; set; }
         public decimal ImporteOficio { get; set; }
+        public decimal ImportePenas { get; set; }
         public DateTime FechaTramitado { get; set; }
         public DateTime FechaPagado { get; set; }
         public DateTime FechaCreacion { get; set; }
