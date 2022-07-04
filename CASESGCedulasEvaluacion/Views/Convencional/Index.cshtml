@@ -85,6 +85,7 @@
                             {
                                 <th>Validación OP</th>
                             }
+                            <th>Última Actualización</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -184,6 +185,7 @@
                                         </td>
                                     }
                                 }
+                                <td>@item.FechaActualizacion.ToString("dd/MM/yyyy hh:mm tt")</td>
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
@@ -205,7 +207,7 @@
                                     }
                                     @if (!item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" data-inmueble="@item.InmuebleId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
                                             @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
                                             {
                                                 <i class="fal fa-file-pdf text-success"></i>
@@ -252,6 +254,7 @@
                             {
                                 <th>Validación OP</th>
                             }
+                            <th>Última Actualización</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -351,6 +354,7 @@
                                         </td>
                                     }
                                 }
+                                <td>@item.FechaActualizacion.ToString("dd/MM/yyyy hh:mm tt")</td>
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
@@ -372,7 +376,7 @@
                                     }
                                     @if (!item.Estatus.Equals("En Proceso"))
                                     {
-                                        <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
+                                        <a href="#" data-id="@item.Id" data-estatus="@item.Estatus" data-servicio="@item.ServicioId" data-inmueble="@item.InmuebleId" class="text-center pdf ml-2 btn_pdf" data-toggle="tooltip" title="Generar Cédula" data-placement="top">
                                             @if (item.Estatus.Equals("Autorizada") || item.Estatus.Equals("En Trámite"))
                                             {
                                                 <i class="fal fa-file-pdf text-success"></i>

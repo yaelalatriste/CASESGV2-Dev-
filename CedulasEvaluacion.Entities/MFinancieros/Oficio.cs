@@ -32,5 +32,9 @@ namespace CedulasEvaluacion.Entities.MFinancieros
         /*Parametros para Filtros*/
         public int InmuebleId { get; set; }
         public string Mes { get; set; }
+
+        /*Datos Finales*/
+        public decimal ImporteFacturado { get; set; }
+        public decimal ImporteNC { get; set; }
     }
 }

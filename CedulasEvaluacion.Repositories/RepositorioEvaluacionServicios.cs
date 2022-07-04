@@ -513,7 +513,8 @@ namespace CedulasEvaluacion.Repositories
                 CedulaValidada = reader["CedulaValidada"] != DBNull.Value ? (bool)reader["CedulaValidada"] : false,
                 MemoValidado = reader["MemoValidado"] != DBNull.Value ? (bool) reader["MemoValidado"] : false,
                 Servicio = reader["Servicio"].ToString(),
-                Estatus = reader["Estatus"].ToString()
+                Estatus = reader["Estatus"].ToString(),
+                FechaActualizacion = reader["FechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaActualizacion"]): Convert.ToDateTime(reader["FechaCreacion"])
             };
         }
         private VCedulasEvaluacion MapToValueEstatus(SqlDataReader reader)

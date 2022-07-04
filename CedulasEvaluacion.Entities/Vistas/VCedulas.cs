@@ -21,6 +21,7 @@ namespace CedulasEvaluacion.Entities.Vistas
         public string NumFactura { get; set; }
         public string Servicio { get; set; }
         public string Estatus { get; set; }
+        public DateTime FechaActualizacion { get; set; }
 
     }
 }

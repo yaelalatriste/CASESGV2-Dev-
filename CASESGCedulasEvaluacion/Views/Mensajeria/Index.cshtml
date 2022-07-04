@@ -82,6 +82,7 @@
                             {
                                 <th>Validación OP</th>
                             }
+                            <th>Última Actualización</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -181,6 +182,7 @@
                                         </td>
                                     }
                                 }
+                                <td>@item.FechaActualizacion.ToString("dd/MM/yyyy hh:mm tt")</td>
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
@@ -249,6 +251,7 @@
                             {
                                 <th>Validación OP</th>
                             }
+                            <th>Última Actualización</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -348,6 +351,7 @@
                                         </td>
                                     }
                                 }
+                                <td>@item.FechaActualizacion.ToString("dd/MM/yyyy hh:mm tt")</td>
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {

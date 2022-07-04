@@ -82,7 +82,7 @@ namespace CedulasEvaluacion.Controllers
                     oficio.facturas = await vFinancieros.GetFacturasTramitePago(id, servicio);
                 }
                 oficio.cedulasOficio = new List<DetalleCedula>();
-                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id, servicio);
+                oficio.cedulasOficio = await vFinancieros.GetFacturasOficio(id, servicio);
                 return View(oficio);
             }
             return Redirect("/error/denied");
@@ -99,7 +99,7 @@ namespace CedulasEvaluacion.Controllers
                 oficio.detalleCedulas = new List<DetalleCedula>();
                 oficio.detalleCedulas = await vFinancieros.GetCedulasTramitePago(id, servicio);
                 oficio.cedulasOficio = new List<DetalleCedula>();
-                oficio.cedulasOficio = await vFinancieros.GetCedulasOficio(id, servicio);
+                oficio.cedulasOficio = await vFinancieros.GetFacturasOficio(id, servicio);
                 return View(oficio);
             }
             return Redirect("/error/denied");
@@ -172,7 +172,6 @@ namespace CedulasEvaluacion.Controllers
             }
             return Redirect("/error/denied");
         }
-
 
         [HttpPost]
         [Route("/financieros/inserta/oficio")]

@@ -9,11 +9,25 @@
     <div class="row col-lg-12 mt-5">
         <table class="table">
             <tr>
-                <td data-toggle="tooltip" title="Folio del Oficio para Trámite de Pago de Servicios" data-placement="top"><strong>Número de Oficio: </strong> @Model.NumeroOficio/@Model.Anio</td>
-                <td data-toggle="tooltip" title="Año del Oficio" data-placement="top"><strong>Año: </strong>@Model.Anio</td>
-                <td><strong data-toggle="tooltip" title="Servicio Evaluado" data-placement="top">Servicio: </strong>@Model.Servicio</td>
-                <td data-toggle="tooltip" title="Estatus del Oficio para Trámite" data-placement="top"><strong>Estatus: </strong>@Model.Estatus</td>
-                <td data-toggle="tooltip" title="Monto total del Oficio" data-placement="top"><strong>Monto total del Oficio: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.TotalOficio)</td>
+                <td data-toggle="tooltip" title="Folio del oficio para trámite de pago del servicio" data-placement="top"><strong>Número de Oficio: </strong> @Model.NumeroOficio/@Model.Anio</td>
+                <td data-toggle="tooltip" title="Año del oficio" data-placement="top"><strong>Año: </strong>@Model.Anio</td>
+                <td><strong data-toggle="tooltip" title="Servicio evaluado" data-placement="top">Servicio: </strong>@Model.Servicio</td>
+                <td data-toggle="tooltip" title="Estatus del oficio para trámite" data-placement="top"><strong>Estatus: </strong>@Model.Estatus</td>
+                <td data-toggle="tooltip" title='Monto total del oficio "@Model.NumeroOficio"' data-placement="top"><strong>Monto total del Oficio: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.TotalOficio)</td>
+            </tr>
+            <tr>
+                <td data-toggle="tooltip" title='Monto total de facturas del oficio "@Model.NumeroOficio"' data-placement="top">
+                    <strong>Monto total de la(s) factura(s): </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.ImporteFacturado)
+                </td>
+                <td data-toggle="tooltip" title='Monto facturado de nota(s) de crédito en el oficio "@Model.NumeroOficio"' data-placement="top">
+                    <strong>Monto total de la(s) Nota(s) de Crédito: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.ImporteNC)
+                </td>
+                <td data-toggle="tooltip" title='Penas y Deductivas en el oficio "@Model.NumeroOficio"' data-placement="top">
+                    <strong>Monto total de la(s) Nota(s) de Crédito: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.ImportePenas)
+                </td>
+                <td data-toggle="tooltip" title="Monto total a pagar al prestador del servicio" data-placement="top" colspan="2">
+                    <strong>Monto total a pagar: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", (Model.ImporteFacturado - Model.ImporteNC - Model.ImportePenas))
+                </td>
             </tr>
         </table>
     </div>
@@ -58,7 +72,7 @@
                                                 <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.Subtotal)</td>
                                                 <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.IVA)</td>
                                                 <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @ced.Total)</td>
-                                                <td>@ced.Estatus</td>
+                                                <td>@ced.EstatusCedula</td>
                                             </tr>
                                         }
                                     </tbody>
@@ -78,7 +92,7 @@
         $(function () {
             var model = @Html.Raw(Json.Serialize(@Model));
 
-            console.log(model);
+            $('[data-toggle="tooltip"]').tooltip();
 
             $("#tblPendientes").DataTable({
                 paging: true,

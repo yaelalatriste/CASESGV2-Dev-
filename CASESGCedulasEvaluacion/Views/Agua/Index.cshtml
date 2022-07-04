@@ -84,6 +84,7 @@
                             {
                                 <th>Validación OP</th>
                             }
+                            <th>Última Actualización</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -183,6 +184,7 @@
                                         </td>
                                     }
                                 }
+                                <td>@item.FechaActualizacion.ToString("dd/MM/yyyy")</td>
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
@@ -251,6 +253,7 @@
                             {
                                 <th>Validación OP</th>
                             }
+                            <th>Última Actualización</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -350,6 +353,7 @@
                                         </td>
                                     }
                                 }
+                                <td>@item.FechaActualizacion.ToString("dd/MM/yyyy")</td>
                                 <td>
                                     @if (!item.Estatus.Equals("En Proceso") && !(@User.Claims.ElementAt(2).Value).Contains("Evaluador"))
                                     {
@@ -464,6 +468,7 @@
 @section Scripts{
     <script>
         $(function () {
+
             var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             var model = @Html.Raw(Json.Serialize(@Model));
             var idUsuario = @User.Claims.ElementAt(0).Value;

@@ -1833,22 +1833,28 @@
                                 });
                                 return false;
                             } else {
-                                axios.post("/telConvencional/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
-                                    if (response.status == 200) {
-                                        Swal.fire({
-                                            'icon': "success",
-                                            'title': "Servicio de Telefonía Convencional",
-                                            'html': "Se envíó la cédula para su revisión correctamente."
-                                        }).then(function () {
-                                            window.location.href = "/telConvencional/index/"+model.servicioId;
-                                        });
-                                    } else {
-                                        Swal.fire({
-                                            'icon': "error",
-                                            'title': "Servicio de Telefonía Convencional",
-                                            'html': "Hubo un error al guardar las respuestas de la cédula. Contacte al Administrador del Sistema"
-                                        });
-                                    }
+                                axios.post('/telConvencional/historialConvencional', {
+                                    ServicioId: model.servicioId,
+                                    CedulaId: model.id, UsuarioId: parseInt(@User.Claims.ElementAt(0).Value),
+                                    Estatus: "Enviado a DAS", Comentarios: "Se envía la cédula a la DAS para su revisión."
+                                }).then(response => {
+                                    axios.post("/telConvencional/sendCedula/" + model.servicioId + "/" + model.id).then(response => {
+                                        if (response.status == 200) {
+                                            Swal.fire({
+                                                'icon': "success",
+                                                'title': "Servicio de Telefonía Convencional",
+                                                'html': "Se envíó la cédula para su revisión correctamente."
+                                            }).then(function () {
+                                                window.location.href = "/telConvencional/index/" + model.servicioId;
+                                            });
+                                        } else {
+                                            Swal.fire({
+                                                'icon': "error",
+                                                'title': "Servicio de Telefonía Convencional",
+                                                'html': "Hubo un error al guardar las respuestas de la cédula. Contacte al Administrador del Sistema"
+                                            });
+                                        }
+                                    });
                                 });
                             }
                         });

@@ -137,6 +137,9 @@ namespace CedulasEvaluacion.Repositories
                             }
                         }
 
+                        response.ImporteFacturado = await importeFacturado(id,response.ServicioId);
+                        response.ImporteNC = await importeNC(id,response.ServicioId);
+
                         return response;
                     }
                 }
@@ -280,13 +283,13 @@ namespace CedulasEvaluacion.Repositories
             }
         }
         /*Fin de Filtros para Cedulas*/
-        public async Task<List<DetalleCedula>> GetCedulasOficio(int id, int servicio)
+        public async Task<List<DetalleCedula>> GetFacturasOficio(int id, int servicio)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("sp_getCedulasOficio", sql))
+                    using (SqlCommand cmd = new SqlCommand("sp_getFacturasOficio", sql))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@oficio", id));
@@ -604,6 +607,35 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
+        /*Calculos Finales*/
+        public async Task<decimal> importeFacturado(int oficio, int servicio)
+        {
+            decimal total = 0;
+            var facturas = await GetFacturasOficio(oficio, servicio);
+            foreach (var tl in facturas)
+            {
+                if (tl.Tipo.Equals("Factura"))
+                {
+                    total += tl.Total;
+                }
+            }
+            return total;
+        }
+
+        public async Task<decimal> importeNC(int oficio, int servicio)
+        {
+            decimal total = 0;
+            var facturas = await GetFacturasOficio(oficio, servicio);
+            foreach (var tl in facturas)
+            {
+                if (!tl.Tipo.Equals("Factura"))
+                {
+                    total += tl.Total;
+                }
+            }
+            return total;
+        }
+
         //DashBoard de Financieros
         private DashboardFinancieros MapToValue(SqlDataReader reader)
         {
@@ -639,7 +671,7 @@ namespace CedulasEvaluacion.Repositories
                 ServicioId = (int)reader["ServicioId"],
                 Servicio = reader["Servicio"].ToString(),
                 Inmueble = reader["Inmueble"].ToString(),
-                Estatus = reader["Estatus"].ToString(),
+                EstatusCedula = reader["EstatusCedula"].ToString(),
                 Folio = reader["Folio"].ToString(),
                 Mes = reader["Mes"].ToString(),
                 Anio = (int)reader["Anio"],
@@ -653,9 +685,11 @@ namespace CedulasEvaluacion.Repositories
                 ServicioId = (int)reader["ServicioId"],
                 FacturaId = (int)reader["FacturaId"],
                 Servicio = reader["Servicio"].ToString(),
+                Tipo = reader["Tipo"] != DBNull.Value ? reader["Tipo"].ToString():"",
                 Serie = reader["Serie"].ToString(),
                 Inmueble = reader["Inmueble"].ToString(),
-                Estatus = reader["Estatus"].ToString(),
+                EstatusCedula = reader["EstatusCedula"].ToString(),
+                EstatusFactura = reader["EstatusFactura"].ToString(),
                 Folio = reader["Folio"].ToString(),
                 FolioFactura = reader["FolioFactura"].ToString(),
                 Mes = reader["Mes"].ToString(),
@@ -678,7 +712,7 @@ namespace CedulasEvaluacion.Repositories
                 ImporteOficio = reader["Importe"] != DBNull.Value ? Convert.ToDecimal(reader["Importe"]) : 0,
                 ImportePenas = reader["ImportePenas"] != DBNull.Value ? Convert.ToDecimal(reader["ImportePenas"]) : 0,
                 FechaTramitado = reader["FechaTramitado"] != DBNull.Value ? Convert.ToDateTime(reader["FechaTramitado"]) : Convert.ToDateTime("01/01/0001"),
-                Estatus = reader["Estatus"].ToString(),
+                Estatus = reader["Estatus"] != DBNull.Value ? reader["Estatus"].ToString():"",
                 SubtotalOficio = reader["SubtotalOficio"] != DBNull.Value ? Convert.ToDecimal(reader["SubtotalOficio"]):0,
                 TotalOficio = reader["TotalOficio"] != DBNull.Value ? Convert.ToDecimal(reader["TotalOficio"]) : 0,
                 FechaPagado = reader["FechaPagado"] != DBNull.Value ? Convert.ToDateTime(reader["FechaPagado"]):Convert.ToDateTime("01/01/0001"),
