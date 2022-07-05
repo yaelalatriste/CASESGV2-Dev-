@@ -231,6 +231,20 @@ namespace CASESGCedulasEvaluacion.Controllers
             }
             return BadRequest();
         }
+        
+        [HttpGet]
+        [Route("/inmuebles/filtros/{servicio}")]
+        public async Task<IActionResult> getFiltrosInmuebles(int servicio)
+        {
+            List<Inmueble> inmueble = null;
+            int user = Convert.ToInt32(User.Claims.ElementAt(0).Value);
+            inmueble = await vInmuebles.getFiltrosInmuebles(UserId(),servicio);
+            if (inmueble != null)
+            {
+                return Ok(inmueble);
+            }
+            return BadRequest();
+        }
 
         private int UserId()
         {

@@ -1361,7 +1361,7 @@
                             return false;
                         }
 
-                        if ($('#customFile').val() == "") {
+                        if (($('#customFile').val() == "" && $('.custom-file-label').text() == "")) {
 
                             $('#customFile').addClass('is-invalid');
                             $('#error_customFile').css('display', 'block');
@@ -1410,7 +1410,8 @@
 
                         formData.append("Id", id);
                         formData.append("CedulaEvaluacionId", model.id);
-                        formData.append("Archivo", file);
+                        if (file != null)
+                            formData.append("Archivo", file);
                         formData.append("Folio", folio);
                         formData.append("Tipo", tipo);
                         formData.append("Comentarios", comentarios);

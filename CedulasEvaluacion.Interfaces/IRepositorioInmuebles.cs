@@ -20,5 +20,7 @@ namespace CedulasEvaluacion.Interfaces
         Task<int> insertaDireccionBM(Inmueble inmueble);        
         Task<List<Inmueble>> getEstadosRM();
         Task<List<Inmueble>> getDireccionesAlternasBM();
+
+        Task<List<Inmueble>> getFiltrosInmuebles(int user, int servicio);
     }
 }

@@ -1178,7 +1178,7 @@
                             return false;
                         }
 
-                        if ($('#customFile').val() == "") {
+                        if (($('#customFile').val() == "" && $('.custom-file-label').text() == "")) {
 
                             $('#customFile').addClass('is-invalid');
                             $('#error_customFile').css('display', 'block');
@@ -1228,8 +1228,9 @@
 
                         formData.append("Id", id);
                         formData.append("CedulaEvaluacionId", model.id);
-                        //formData.append("Firmado", firmado);
-                        formData.append("Archivo", file);
+                        formData.append("Firmado", firmado);
+                        if(file != null)
+                            formData.append("Archivo", file);
                         formData.append("Folio", folio);
                         formData.append("Tipo", tipo);
                         formData.append("Comentarios", comentarios);
@@ -1271,6 +1272,12 @@
                                 $(".custom-file-label").text("Seleccionar Archivo");
                                 $('#tipo_entregable').val('');
                                 $('#comentarios_entregable').val('');
+                                $("#arFirmada").prop('checked', false);
+                                if ($("#divArFirmada > .i-checks > .toggle").hasClass("btn-success")) {
+                                    $("#divArFirmada > .i-checks > .toggle").removeClass("btn-success");
+                                    $("#divArFirmada > .i-checks > .toggle").addClass("btn-danger off");
+                                }
+
                             } else {
                                 axios.get('/mensajeria/buscaEntregable/' + model.id + '/' + tipo).then(exist => {
                                     if (exist.data == 0) {
@@ -1309,6 +1316,10 @@
                                         $(".custom-file-label").text("Seleccionar Archivo");
                                         $('#tipo_entregable').val('');
                                         $('#comentarios_entregable').val('');
+                                        if ($("#divArFirmada > .i-checks > .toggle").hasClass("btn-success")) {
+                                            $("#divArFirmada > .i-checks > .toggle").removeClass("btn-success");
+                                            $("#divArFirmada > .i-checks > .toggle").addClass("btn-danger off");
+                                        }
                                     } else {
                                         Swal.fire({
                                             'icon': "error",
@@ -1345,6 +1356,9 @@
                         var tipo = $(this).data('tipo');
                         var coments = $(this).data('coments');
                         var file = $(this).data('file');
+                        if (tipo == "ActaER") {
+                            $("#divArFirmada").css('display','block');
+                        }
                         $('#file_id').val(parseInt(id));
                         $(".custom-file-label").text(file);
                         $('#tipo_entregable').val(tipo);
@@ -1395,16 +1409,14 @@
                     });
                  /*FIN de elimina entregables*/
 
-                /*Ver archivo en modal (REVISAR PARA AJUSTAR)*/
-                    $(document).on('click', '.view_file', function () {
-                        let nombre = $(this).data('file');
-                        let tipo = $(this).data('tipo');
-                        let url = '<object class="objectPdf" width="100%" height="710" embedded=True data="' + '/cedLimpieza/verArchivo/' + model.folio + '/' + nombre + '"></object>';
-                        $('#titlePDF').text("PDF - \"" + tipo + "\"");
-                        $('#entregablePDF').html(url);
-                        $('#modal_pdf').modal('show');
-                    });
-                /*FIN de ver archivo en modal*/
+                $(document).on('click', '.view_file', function () {
+                    let nombre = $(this).data('file');
+                    let tipo = $(this).data('tipo');
+                    let data = "<object width='100%' height='710px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre + "'></object>";
+                    $('#titlePDF').text("PDF - \"" + tipo + "\"");
+                    $('#objectPdf').html(data);
+                    $('#show_pdf').modal('show');
+                });
 
                 /*Validaciones Entregables*/
                     $('#tipo_entregable').change(function () {

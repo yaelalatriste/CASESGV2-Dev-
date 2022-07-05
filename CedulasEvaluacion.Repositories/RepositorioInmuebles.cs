@@ -347,6 +347,39 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
+        
+        //obtenemos los inmuebles a para los filtros de búsqueda en la cédula
+        public async Task<List<Inmueble>> getFiltrosInmuebles(int user, int servicio)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_getInmueblesFiltros", sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@usuario", user));
+                        cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        var response = new List<Inmueble>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValue(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
         private Inmueble MapToValue(SqlDataReader reader)
         {

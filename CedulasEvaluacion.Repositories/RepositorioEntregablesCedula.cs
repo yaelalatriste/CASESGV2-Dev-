@@ -89,17 +89,20 @@ namespace CedulasEvaluacion.Repositories
             DateTime date = DateTime.Now;
             string date_str = date.ToString("yyyyMMddHHmmss");
             int id = 0;
+            string saveFile = "";
 
 
-            if (entregables.Id != 0)
+            if (entregables.Id != 0 && entregables.Archivo != null)
             {
                 int isDeleted = await eliminaEntregable(entregables);
             }
 
-            string saveFile = await guardaArchivo(entregables.Archivo, entregables.Folio, date_str);
+            if (entregables.Archivo != null) {
+                saveFile = await guardaArchivo(entregables.Archivo, entregables.Folio, date_str);
+            }
             try
             {
-                if (saveFile.Equals("Ok"))
+                if (saveFile.Equals("Ok") || entregables.Archivo == null)
                 {
                     using (SqlConnection sql = new SqlConnection(_connectionString))
                     {
@@ -115,8 +118,11 @@ namespace CedulasEvaluacion.Repositories
                                 cmd.Parameters.Add(new SqlParameter("@firmado", entregables.Firmado));
                             cmd.Parameters.Add(new SqlParameter("@cedulaId", entregables.CedulaEvaluacionId));
                             cmd.Parameters.Add(new SqlParameter("@tipo", entregables.Tipo));
-                            cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + entregables.Archivo.FileName)));
-                            cmd.Parameters.Add(new SqlParameter("@tamanio", entregables.Archivo.Length));
+                            if (entregables.Archivo != null)
+                            {
+                                cmd.Parameters.Add(new SqlParameter("@archivo", (date_str + "_" + entregables.Archivo.FileName)));
+                                cmd.Parameters.Add(new SqlParameter("@tamanio", entregables.Archivo.Length));
+                            }
                             cmd.Parameters.Add(new SqlParameter("@comentarios", entregables.Comentarios));
 
                             await sql.OpenAsync();

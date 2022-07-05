@@ -1567,7 +1567,7 @@
                             return false;
                         }
 
-                        if ($('#customFile').val() == "") {
+                        if (($('#customFile').val() == "" && $('.custom-file-label').text() == "")) {
 
                             $('#customFile').addClass('is-invalid');
                             $('#error_customFile').css('display', 'block');
@@ -1576,7 +1576,7 @@
                         }
 
                         return true;
-                }
+                    }
 
                     $("#customFile").on("change", function () {
                         var fileName = $(this).val().split("\\").pop();

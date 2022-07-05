@@ -505,7 +505,7 @@
                 let optionsInmueble = "<option value=''>Seleccione el Inmueble</option>";
                 if (@user == false) {
                     $('#select_inmuebleOrigen').prop("disabled", false);
-                    axios.get('/inmuebles/getInmuebles').then(response => {
+                    axios.get('/inmuebles/filtros/' + model.servicioId).then(response => {
                         response = response.data;
                         response.forEach(function (inm) {
                             optionsInmueble += "<option value=" + inm.id + " data-direccion='" + inm.direccion + "'" +
@@ -514,7 +514,7 @@
                         $("#selectInmueble").html(optionsInmueble);
                     });
                 } else {
-                    axios.get('/inmuebles/evaluar').then(response => {
+                    axios.get('/inmuebles/filtros/' + model.servicioId).then(response => {
                         response = response.data;
                         response.forEach(function (inm) {
                             optionsInmueble += "<option value=" + inm.id + ">" + inm.nombre + "</option>"
