@@ -16,16 +16,16 @@
             </tr>
             <tr>
                 <td data-toggle="tooltip" title='Monto total de facturas del oficio "@Model.NumeroOficio"' data-placement="top">
-                    <strong>Monto total de la(s) factura(s): </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.ImporteFacturado)
+                    <strong class="text-success">Monto total de la(s) factura(s): </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.ImporteFacturado)
                 </td>
                 <td data-toggle="tooltip" title='Monto facturado de nota(s) de crédito en el oficio "@Model.NumeroOficio"' data-placement="top">
-                    <strong>Monto total de la(s) Nota(s) de Crédito: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.ImporteNC)
+                    <strong class="text-danger">Monto total de la(s) Nota(s) de Crédito: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.ImporteNC)
                 </td>
                 <td data-toggle="tooltip" title='Penas y Deductivas en el oficio "@Model.NumeroOficio"' data-placement="top">
-                    <strong>Penas y Deductivas: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.ImportePenas)
+                    <strong class="text-danger">Penas y Deductivas: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", Model.ImportePenas)
                 </td>
                 <td data-toggle="tooltip" title="Monto total a pagar al prestador del servicio" data-placement="top">
-                    <strong>Monto total a pagar: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", (Model.ImporteFacturado - Model.ImporteNC - Model.ImportePenas))
+                    <strong class="text-success">Monto total a pagar: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", (Model.ImporteFacturado - Model.ImporteNC - Model.ImportePenas))
                 </td>
             </tr>
         </table>

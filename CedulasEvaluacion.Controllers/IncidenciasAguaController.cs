@@ -36,9 +36,9 @@ namespace CedulasEvaluacion.Controllers
         [Route("/agua/tablaIncidencias/{id?}/{pregunta?}")]
         public async Task<IActionResult> generaTablaincidencias(int id, int pregunta)
         {
-            string theadp2 = "<thead><tr><th>#</th><th>Tipo</th><th>Fecha Programada</th><th>Fecha Realizada</th><th>Comentarios</th><th>Acciones</th></tr></thead><tbody>";
-            string theadp3 = "<thead><tr><th>#</th><th>Tipo</th><th>Fecha Programada</th><th>Hora Programada</th><th>Hora Realizada</th><th>Comentarios</th><th>Acciones</th></tr></thead><tbody>";
-            string theadp4 = "<thead><tr><th>#</th><th>Tipo</th><th>Fecha Programada</th><th>Fecha Realizada</th><th>Comentarios</th><th>Acciones</th></tr></thead><tbody>";
+            string theadp2 = "<thead><tr><th>#</th><th>Tipo</th><th>Fecha Programada</th><th>Fecha Realizada</th><th>Garrafones</th><th>Comentarios</th><th>Acciones</th></tr></thead><tbody>";
+            string theadp3 = "<thead><tr><th>#</th><th>Tipo</th><th>Fecha Programada</th><th>Hora Programada</th><th>Hora Realizada</th><th>Garrafones</th><th>Comentarios</th><th>Acciones</th></tr></thead><tbody>";
+            string theadp4 = "<thead><tr><th>#</th><th>Tipo</th><th>Fecha Programada</th><th>Fecha Realizada</th><th>Garrafones</th><th>Comentarios</th><th>Acciones</th></tr></thead><tbody>";
             string tbody = "";
             string table = "";
             List<IncidenciasAgua> incidencias = await iAgua.GetIncidenciasPregunta(id, pregunta);
@@ -55,10 +55,11 @@ namespace CedulasEvaluacion.Controllers
                                 "<td>" + inc.Tipo + "</td>" +
                                 "<td>" + inc.FechaProgramada.ToString("dd/MM/yyyy") + "</td>" +
                                 "<td>" + inc.FechaRealizada.ToString("dd/MM/yyyy") + "</td>" +
+                                "<td>" + inc.Garrafones + "</td>" +
                                 "<td>" + inc.Comentarios + "</td>" +
                                 "<td>" +
                                     "<a href='#' class='text-center mr-2 update_incidencia' data-id='" + inc.Id + "' data-tipo='" + inc.Tipo + "' data-fechareal='" + inc.FechaRealizada.ToString("yyyy-MM-dd") + "'" +
-                                    " data-fechaprog='" + inc.FechaProgramada.ToString("yyyy-MM-dd") + "' data-coment='" + inc.Comentarios + "'>" +
+                                    " data-fechaprog='" + inc.FechaProgramada.ToString("yyyy-MM-dd") + "' data-coment='" + inc.Comentarios + "' data-garrafones='" + inc.Garrafones + "'>" +
                                         "<i class='fas fa-edit text-primary'></i>" +
                                     "</a>" +
                                     "<a href='#' class='text-center mr-2 delete_incidencia' data-id='" + inc.Id + "'><i class='fas fa-times text-danger'></i></a>" +
@@ -74,10 +75,11 @@ namespace CedulasEvaluacion.Controllers
                                 "<td>" + inc.FechaProgramada.ToString("dd/MM/yyyy") + "</td>" +
                                 "<td>" + inc.HoraProgramada + "</td>" +
                                 "<td>" + inc.HoraRealizada + "</td>" +
+                                "<td>" + inc.Garrafones+ "</td>" +
                                 "<td>" + inc.Comentarios + "</td>" +
                                 "<td>" +
                                     "<a href='#' class='text-center mr-2 update_incidencia' data-id='" + inc.Id + "' data-tipo='" + inc.Tipo + "' data-fechaprog='" + inc.FechaProgramada.ToString("yyyy-MM-dd") +
-                                    "' data-horap='" + inc.HoraProgramada + "' data-horar='" + inc.HoraRealizada + "' data-coment='" + inc.Comentarios + "'>" +
+                                    "' data-horap='" + inc.HoraProgramada + "' data-horar='" + inc.HoraRealizada + "' data-coment='" + inc.Comentarios + "' data-garrafones='" + inc.Garrafones + "'>" +
                                         "<i class='fas fa-edit text-primary'></i>" +
                                     "</a>" +
                                     "<a href='#' class='text-center mr-2 delete_incidencia' data-id='" + inc.Id + "'><i class='fas fa-times text-danger'></i></a>" +
@@ -92,10 +94,11 @@ namespace CedulasEvaluacion.Controllers
                                 "<td>" + inc.Tipo + "</td>" +
                                 "<td>" + inc.FechaProgramada.ToString("dd/MM/yyyy") + "</td>" +
                                 "<td>" + inc.FechaRealizada.ToString("dd/MM/yyyy") + "</td>" +
+                                "<td>" + inc.Garrafones + "</td>" +
                                 "<td>" + inc.Comentarios.Replace("|", "<br>") + "</td>" +
                                 "<td>" +
                                     "<a href='#' class='text-center mr-2 update_incidencia' data-id='" + inc.Id + "' data-tipo='" + inc.Tipo + "' data-fechareal='" + inc.FechaRealizada.ToString("yyyy-MM-dd") + "'" +
-                                    " data-fechaprog='" + inc.FechaProgramada.ToString("yyyy-MM-dd") + "' data-coment='" + inc.Comentarios + "'>" +
+                                    " data-fechaprog='" + inc.FechaProgramada.ToString("yyyy-MM-dd") + "' data-coment='" + inc.Comentarios + "' data-garrafones='" + inc.Garrafones + "'>" +
                                         "<i class='fas fa-edit text-primary'></i>" +
                                     "</a>" +
                                     "<a href='#' class='text-center mr-2 delete_incidencia' data-id='" + inc.Id + "'><i class='fas fa-times text-danger'></i></a>" +

@@ -123,12 +123,12 @@
 
                                 if (@servicio.TotalFacturas != 0)
                                 {
-                                    total = (@servicio.FacturasPagadas * 100.0) / @servicio.TotalFacturas;
+                                    total = (Convert.ToDouble(@servicio.TotalPagado)/ Convert.ToDouble(@servicio.TotalFinal)) * 100.0;
                                 }
                                 <div class="col-md-2 text-center mt-3">
                                     <p class="font-weight-bold" style="color: @servicio.Fondo">@servicio.Mes</p>
-                                    <input type="text" class="desgloceServicio" value="@total.ToString("n2")" data-width="100" data-height="100" data-fgColor="@servicio.Fondo"
-                                           data-readonly="true" data-max="100" data-pp="28" /><br />
+                                    <input type="text" class="desgloceServicio" value="@total.ToString("n2")" data-width="100" data-height="100" 
+                                           data-fgColor="@servicio.Fondo" data-readonly="true" data-max="100" data-pp="28" /><br />
                                     <a href="#" class="font-weight-bold btnDetalle" style="color: @servicio.Fondo" data-tipo="@servicio.Tipo" data-mes="@servicio.Mes"
                                        data-servicio="@servicio.Id">
                                     </a>
@@ -147,8 +147,8 @@
                                                 @if (@servicio.FacturasPagadas != 0)
                                                 {
                                                     <tr class="h6">
-                                                        <td><i class="fas fa-check text-success"></i> @servicio.FacturasPagadas Facturas pagadas</td>
-                                                        <td><i class="fas fa-check text-success"></i> @servicio.TotalPagado</td>
+                                                        <td><i class="fas fa-check text-success"></i> @servicio.FacturasPagadas Factura(s) pagadas</td>
+                                                        <td><i class="fas fa-check text-success"></i> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @servicio.TotalPagado)</td>
                                                     </tr>
                                                 }
                                                 @if (@servicio.FacturasPendientes != 0)

@@ -105,6 +105,8 @@ namespace CedulasEvaluacion.Repositories
                             cmd.Parameters.Add(new SqlParameter("@horaProgramada", incidenciasAgua.HoraProgramada));
                         if (incidenciasAgua.HoraRealizada.TotalSeconds != 0)
                             cmd.Parameters.Add(new SqlParameter("@horaRealizada", incidenciasAgua.HoraRealizada));
+                        if (incidenciasAgua.Garrafones != 0)
+                            cmd.Parameters.Add(new SqlParameter("@garrafones", incidenciasAgua.Garrafones));
                         cmd.Parameters.Add(new SqlParameter("@comentarios", incidenciasAgua.Comentarios));
 
 
@@ -144,6 +146,8 @@ namespace CedulasEvaluacion.Repositories
                             cmd.Parameters.Add(new SqlParameter("@horaProgramada", incidenciasAgua.HoraProgramada));
                         if (incidenciasAgua.HoraRealizada.TotalSeconds != 0)
                             cmd.Parameters.Add(new SqlParameter("@horaRealizada", incidenciasAgua.HoraRealizada));
+                        if (incidenciasAgua.Garrafones != 0)
+                            cmd.Parameters.Add(new SqlParameter("@garrafones", incidenciasAgua.Garrafones));
                         cmd.Parameters.Add(new SqlParameter("@comentarios", incidenciasAgua.Comentarios));
 
 
@@ -222,6 +226,7 @@ namespace CedulasEvaluacion.Repositories
                 CedulaAguaId = (int)reader["CedulaAguaId"],
                 Tipo = reader["Tipo"].ToString(),
                 Pregunta = reader["Pregunta"].ToString(),
+                Garrafones = reader["Garrafones"] != DBNull.Value ? (int)reader["Garrafones"] : 0,
                 FechaProgramada = reader["FechaProgramada"] != DBNull.Value ? Convert.ToDateTime(reader["FechaProgramada"]) : DateTime.Now,
                 FechaRealizada = reader["FechaRealizada"] != DBNull.Value ? Convert.ToDateTime(reader["FechaRealizada"]) : DateTime.Now,
                 HoraProgramada = reader["HoraProgramada"] != DBNull.Value ? (TimeSpan)(reader["HoraProgramada"]) : TimeSpan.Parse("00:00:00"),

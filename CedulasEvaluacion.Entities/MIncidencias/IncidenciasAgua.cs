@@ -14,6 +14,7 @@ namespace CedulasEvaluacion.Entities.MIncidencias
         public DateTime FechaRealizada { get; set; }
         public TimeSpan HoraProgramada { get; set; }
         public TimeSpan HoraRealizada { get; set; }
+        public int Garrafones { get; set; }
         public string Comentarios { get; set; }
         public bool Penalizable { get; set; }
         public decimal MontoPenalizacion { get; set; }

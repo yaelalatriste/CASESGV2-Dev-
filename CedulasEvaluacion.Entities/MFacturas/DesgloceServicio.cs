@@ -19,7 +19,7 @@ namespace CedulasEvaluacion.Entities.MFacturas
         public int FacturasPendientes{ get; set; }
         public string TotalPendiente { get; set; }
         public int FacturasPagadas{ get; set; }
-        public string TotalPagado{ get; set; }
+        public decimal TotalPagado{ get; set; }
         public int FacturasDGPPT { get; set; }
         public string TotalDGPPT{ get; set; }
         public int TotalFacturas { get; set; }

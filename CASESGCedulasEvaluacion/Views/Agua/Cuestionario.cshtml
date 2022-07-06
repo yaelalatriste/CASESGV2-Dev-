@@ -372,6 +372,20 @@
                             </small>
                         </div>
                     </div>
+                    <div class="col col-lg-2">
+                        <label>Cantidad de Garrafones: </label>
+                        <div class="col-xs-2 col-xs-offset-3">
+                            <div class="input-group number-spinner">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" data-dir="dwn"><span class="fas fa-minus"></span></button>
+                                </span>
+                                <input type="number" class="form-control text-center cantidadGarrafones" value="1">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" data-dir="up"><span class="fas fa-plus"></span></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group col-md-3" id="divCaracGarrafones">
                         <label for="fechaSolicitud">Característica del Garrafón: </label>
                         <select id="caracGarrafones" class="form-control">
@@ -548,6 +562,25 @@
             $('.error_tipoFactura').css('display', 'none');
 
             $('[data-toggle="tooltip"]').tooltip();
+
+            /*Spinner para el input number*/
+            $(document).on('click', '.number-spinner button', function () {
+                var btn = $(this),
+                    oldValue = btn.closest('.number-spinner').find('input').val().trim(),
+                    newVal = 0;
+
+                if (btn.attr('data-dir') == 'up') {
+                    newVal = parseInt(oldValue) + 1;
+                } else {
+                    if (oldValue > 0) {
+                        newVal = parseInt(oldValue) - 1;
+                    } else {
+                        newVal = 0;
+                    }
+                }
+                btn.closest('.number-spinner').find('input').val(newVal);
+            });
+            /*FIn Spinner para el input number*/
 
             /*Detalles de Incidencias*/
                 $('#diviPregunta2').css('display', 'none');
@@ -1081,7 +1114,7 @@
 
                     if (pregunta == 2) {
                         $("#categoria").val('Fechas');
-                        $("#lblComentarios").text("Comentarios (Indicar el número de garrafones no entregados):");
+                        $("#lblComentarios").text("Comentarios:");
                         $('#divFechaProgramada').css('display', 'block');
                         $('#divFechaRealizada').css('display', 'block');
                         $('#divInciComentarios').css('display', 'block');
@@ -1191,6 +1224,7 @@
                     let html = "";
                     let id = $('#id_incidencia').val();
                     let tipo = $('#categoria').val();
+                    let garrafones= $('.cantidadGarrafones').val();
                     let pregunta = $('#pregunta').val() != "" ? $('#pregunta').val(): 0;
                     let fechaProgramada = $('#fechaProgramada').val() != '' ? $('#fechaProgramada').val() : '1990-01-01';
                     let fechaRealizada = $('#fechaRealizada').val() != '' ? $('#fechaRealizada').val() : '1990-01-01';
@@ -1209,7 +1243,7 @@
                     if (validaIncidencias()) {
                         if (id == 0) {
                             axios.post("/agua/inserta/incidencia", {
-                                Id: parseInt(id), CedulaAguaId: parseInt(model.id), Tipo: tipo, Pregunta: pregunta,
+                                Id: parseInt(id), CedulaAguaId: parseInt(model.id), Tipo: tipo, Pregunta: pregunta, Garrafones: parseInt(garrafones),
                                 FechaProgramada: fechaProgramada, fechaRealizada,
                                 HoraProgramada: horaProgramada, HoraRealizada: horaRealizada, Comentarios: comentarios
                             }).then(response => {
@@ -1229,7 +1263,8 @@
                                 });
                             });
                         } else {
-                            axios.post("/agua/actualiza/incidencia", { Id: parseInt(id), Tipo: tipo, FechaProgramada: fechaProgramada, fechaRealizada,
+                            axios.post("/agua/actualiza/incidencia", {
+                                Id: parseInt(id), Tipo: tipo, FechaProgramada: fechaProgramada, fechaRealizada, Garrafones: parseInt(garrafones),
                                                                              HoraProgramada: horaProgramada, HoraRealizada: horaRealizada, Comentarios: comentarios
                             }).then(response => {
                                 if (response.status == 200) {
@@ -1256,6 +1291,7 @@
                         $('#horaProgramada').val('');
                         $('#horaRealizada').val('');
                         $('#inciComentarios').val('');
+                        $('.cantidadGarrafones').val(0);
                     }
                 });
 
@@ -1267,12 +1303,15 @@
                     if (tipo == "Fechas") {
                         $('#fechaProgramada').val($(this).data('fechaprog'));
                         $('#fechaRealizada').val($(this).data('fechareal'));
+                        $('.cantidadGarrafones').val($(this).data('garrafones'));
                         $('#inciComentarios').val($(this).data('coment'))
                         $('#divFechaProgramada').css('display', 'block');
                         $('#divFechaRealizada').css('display', 'block');
                         $('#divInciComentarios').css('display', 'block');
+                        $('#divCaracGarrafones').css('display', 'none');
                     } else if (tipo == "Horas") {
                         $('#fechaProgramada').val($(this).data('fechaprog'));
+                        $('.cantidadGarrafones').val($(this).data('garrafones'));
                         $('#horaProgramada').val($(this).data('horap'));
                         $('#horaRealizada').val($(this).data('horar'));
                         $('#inciComentarios').val($(this).data('coment'))
@@ -1282,6 +1321,7 @@
                         $('#divInciComentarios').css('display', 'block');
                     } else if (tipo == "Garrafones") {
                         let comentarios = $(this).data('coment').split("|");
+                        $('.cantidadGarrafones').val($(this).data('garrafones'));
                         $('#fechaProgramada').val($(this).data('fechaprog'));
                         $('#fechaRealizada').val($(this).data('fechareal'));
                         $('#caracGarrafones').val(comentarios[0]);

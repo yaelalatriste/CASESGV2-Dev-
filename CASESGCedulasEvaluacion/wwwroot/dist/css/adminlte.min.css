@@ -2696,6 +2696,18 @@ a.btn.disabled, fieldset:disabled a.btn {
     background-color: #24135F !important;
 }
 
+.bg-actasER {
+    background-color: #FE7408 !important;
+}
+
+.bg-memo{
+    background-color: #28548F !important;
+}
+
+.bg-cedula {
+    background-color: #872886 !important;
+}
+
 
 .btn-primary:hover {
     color: #fff;

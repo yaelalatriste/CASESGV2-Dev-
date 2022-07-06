@@ -137,9 +137,6 @@ namespace CedulasEvaluacion.Repositories
                             }
                         }
 
-                        response.ImporteFacturado = await importeFacturado(id,response.ServicioId);
-                        response.ImporteNC = await importeNC(id,response.ServicioId);
-
                         return response;
                     }
                 }
@@ -606,36 +603,6 @@ namespace CedulasEvaluacion.Repositories
                 return 0;
             }
         }
-
-        /*Calculos Finales*/
-        public async Task<decimal> importeFacturado(int oficio, int servicio)
-        {
-            decimal total = 0;
-            var facturas = await GetFacturasOficio(oficio, servicio);
-            foreach (var tl in facturas)
-            {
-                if (tl.Tipo.Equals("Factura"))
-                {
-                    total += tl.Total;
-                }
-            }
-            return total;
-        }
-
-        public async Task<decimal> importeNC(int oficio, int servicio)
-        {
-            decimal total = 0;
-            var facturas = await GetFacturasOficio(oficio, servicio);
-            foreach (var tl in facturas)
-            {
-                if (!tl.Tipo.Equals("Factura"))
-                {
-                    total += tl.Total;
-                }
-            }
-            return total;
-        }
-
         //DashBoard de Financieros
         private DashboardFinancieros MapToValue(SqlDataReader reader)
         {
@@ -660,6 +627,9 @@ namespace CedulasEvaluacion.Repositories
                 Icono = reader["Icono"].ToString(),
                 Total = (int)reader["Total"],
                 TotalParcial = (int)reader["TotalParcial"],
+                APendientes = (int)reader["APendientes"],
+                CedulasPendientes = (int)reader["CedulasPendientes"],
+                MemosPendientes = (int)reader["MemosPendientes"],
                 ServicioId = (int)reader["ServicioId"]
             };
         }
@@ -704,18 +674,18 @@ namespace CedulasEvaluacion.Repositories
             return new Oficio
             {
                 Id = (int)reader["Id"],
-                Anio = (int)reader["Anio"],
                 ServicioId = reader["ServicioId"] != DBNull.Value ? (int)reader["ServicioId"]:0,
-                NumeroOficio = (int)reader["NumeroOficio"],
                 Servicio = reader["Nombre"].ToString(),
+                Anio = (int)reader["Anio"],
+                NumeroOficio = (int)reader["NumeroOficio"],
+                Estatus = reader["Estatus"] != DBNull.Value ? reader["Estatus"].ToString() : "",
+                FechaPagado = reader["FechaPagado"] != DBNull.Value ? Convert.ToDateTime(reader["FechaPagado"]) : Convert.ToDateTime("01/01/0001"),
                 NombreArchivo = reader["Archivo"] != DBNull.Value ? reader["Archivo"].ToString() : "",
-                ImporteOficio = reader["Importe"] != DBNull.Value ? Convert.ToDecimal(reader["Importe"]) : 0,
-                ImportePenas = reader["ImportePenas"] != DBNull.Value ? Convert.ToDecimal(reader["ImportePenas"]) : 0,
                 FechaTramitado = reader["FechaTramitado"] != DBNull.Value ? Convert.ToDateTime(reader["FechaTramitado"]) : Convert.ToDateTime("01/01/0001"),
-                Estatus = reader["Estatus"] != DBNull.Value ? reader["Estatus"].ToString():"",
-                SubtotalOficio = reader["SubtotalOficio"] != DBNull.Value ? Convert.ToDecimal(reader["SubtotalOficio"]):0,
-                TotalOficio = reader["TotalOficio"] != DBNull.Value ? Convert.ToDecimal(reader["TotalOficio"]) : 0,
-                FechaPagado = reader["FechaPagado"] != DBNull.Value ? Convert.ToDateTime(reader["FechaPagado"]):Convert.ToDateTime("01/01/0001"),
+                ImporteFacturado = reader["ImporteFacturado"] != DBNull.Value ? Convert.ToDecimal(reader["ImporteFacturado"]) : 0,
+                ImporteNC = reader["ImporteNC"] != DBNull.Value ? Convert.ToDecimal(reader["ImporteNC"]) : 0,
+                ImportePenas = reader["ImportePenas"] != DBNull.Value ? Convert.ToDecimal(reader["ImportePenas"]) : 0,
+                TotalOficio = reader["ImportePagar"] != DBNull.Value ? Convert.ToDecimal(reader["ImportePagar"]) : 0,
             };
         }
     }

@@ -641,7 +641,7 @@ namespace CedulasEvaluacion.Repositories
                 FacturasPendientes = (int)reader["FacturasPendientes"],
                 TotalPendiente = reader["TotalPendiente"].ToString(),
                 FacturasPagadas = (int)reader["FacturasPagadas"],
-                TotalPagado = reader["TotalPagado"].ToString(),
+                TotalPagado = (decimal)reader["TotalPagado"],
                 FacturasDGPPT = (int)reader["FacturasDGPPT"],
                 TotalDGPPT = reader["TotalDGPPT"].ToString(),
                 TotalFacturas = (int)reader["TotalFacturas"],

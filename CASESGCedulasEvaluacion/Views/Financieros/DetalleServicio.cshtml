@@ -5,6 +5,7 @@
     var estatus = new List<string>();
     var meses = new List<string>();
     var anio = 2023;
+    var totalOficios = 0.0;
 
     @foreach (var dt in     @Model.dashboard)
     {
@@ -60,21 +61,23 @@
                             <th>Número de Oficio</th>
                             <th>Estatus</th>
                             <th>Fecha de Pago</th>
+                            <th>Importe Facturado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var of in Model.oficio)
-                        {
-                            j++;
+                                    {
+                                        j++;
+                                        totalOficios = totalOficios+ Convert.ToDouble(of.ImporteFacturado);
                             <tr>
                                 <td>@j</td>
                                 <td>@of.Servicio</td>
                                 <td>@of.Anio</td>
-                                <td>@of.NumeroOficio/@of.Anio</td>
+                                <td class="text-center">@of.NumeroOficio/@of.Anio</td>
                                 <td>@of.Estatus</td>
                                 @if (@of.FechaPagado.ToString("dd/MM/yyyy").Equals("01/01/0001") && !@of.Estatus.Equals("Cancelado"))
-                                {
+                                           {
                                     <td class="text-center text-primary font-weight-bold">Pendiente</td>
                                 }
                                 else if (@of.Estatus.Equals("Cancelado"))
@@ -85,6 +88,7 @@
                                 {
                                     <td class="text-center text-success font-weight-bold">@of.FechaPagado.ToString("dd/MM/yyyy")</td>
                                 }
+                                <td class="text-center">@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @of.ImporteFacturado)</td>
                                 <td>
                                     @if (@of.Estatus.Equals("En Proceso"))
                                     {
@@ -114,7 +118,9 @@
                                                 <i class="fa-solid fa-file-exclamation text-primary mr-2"></i>
                                             </a>
                                             <a class="viewAcuse" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-file="@of.NombreArchivo" data-importe="@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", of.ImporteOficio)"
-                                               data-fechatramitado="@of.FechaTramitado.ToString("dd/MM/yyyy")" data-estatus="@of.Estatus" data-toggle="tooltip" title='Ver el soporte documental que acredita la prestación del servicio con el oficio número "@of.Anio/@of.NumeroOficio"'>
+                                               data-fechatramitado="@of.FechaTramitado.ToString("dd/MM/yyyy")" data-estatus="@of.Estatus" data-importenc="@of.ImporteNC" data-pagar="@of.TotalOficio"
+                                               data-importefacturado="@of.ImporteFacturado" data-penas="@of.ImportePenas"
+                                               data-toggle="tooltip" title='Ver el soporte documental que acredita la prestación del servicio con el oficio número "@of.Anio/@of.NumeroOficio"'>
                                                 <i class="fa-solid fa-file-check mr-2 text-success"></i>
                                             </a>
                                         }
@@ -136,10 +142,12 @@
                                             <i class="fas fa-eye text-success mr-2"></i>
                                         </a>
 
-                                        @if (!@of.NombreArchivo.Equals("")) { 
+                                        @if (!@of.NombreArchivo.Equals("")) {
                                          <a class="viewAcuse" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-file="@of.NombreArchivo" data-importe="@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", of.ImporteOficio)"
-                                               data-fechatramitado="@of.FechaTramitado.ToString("dd/MM/yyyy")" data-estatus="@of.Estatus" data-toggle="tooltip" title='Ver el soporte documental que acredita la prestación del servicio con el oficio número "@of.Anio/@of.NumeroOficio"'>
-                                            <i class="fa-solid fa-file-check mr-2 text-success"></i>
+                                               data-fechatramitado="@of.FechaTramitado.ToString("dd/MM/yyyy")" data-estatus="@of.Estatus" data-importenc="@of.ImporteNC" data-pagar="@of.TotalOficio"
+                                               data-importefacturado="@of.ImporteFacturado" data-penas="@of.ImportePenas"
+                                               data-toggle="tooltip" title='Ver el soporte documental que acredita la prestación del servicio con el oficio número "@of.Anio/@of.NumeroOficio"'>
+                                                <i class="fa-solid fa-file-check mr-2 text-success"></i>
                                          </a>
                                          <a class="updateAcuse" href="#" data-id="@of.Id" data-oficio="@of.NumeroOficio" data-anio="@of.Anio" data-file="@of.NombreArchivo" data-importe="@of.ImporteOficio"
                                                data-fechatramitado="@of.FechaTramitado.ToString("yyyy-MM-dd")" data-importepenas="@of.ImportePenas" data-toggle="tooltip" title='Modificar soporte documental que acredita la prestación del servicio con el oficio con número "@of.Anio/@of.NumeroOficio"'>
@@ -152,6 +160,12 @@
                             </tr>
                         }
                     </tbody>
+                    <tfoot class="font-weight-bold">
+                        <tr>
+                            <td colspan="6" class="text-right">Monto total de los oficios capturados: </td>
+                            <td class="text-center">@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @totalOficios)</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -169,12 +183,12 @@
                                         <th></th>
                                         @foreach (var est in lestatus)
                                         {
-                                            if (est.Equals("En Proceso") || est.Equals("Enviado a DAS") || est.Equals("Autorizada") || est.Equals("Rechazada")
-                                                || est.Equals("Trámite Rechazado"))
-                                            {
+                            if (est.Equals("En Proceso") || est.Equals("Enviado a DAS") || est.Equals("Autorizada") || est.Equals("Rechazada")
+                                || est.Equals("Trámite Rechazado"))
+                            {
                                                 <th>@est</th>
                                             }
-                                        }
+                        }
                                     </tr>
                                 </thead>
                                 <tbody id="tbl_op"></tbody>
@@ -198,11 +212,11 @@
                                         <th></th>
                                         @foreach (var est in lestatus)
                                         {
-                                            if (est.Equals("Revisión CAE") || est.Equals("Autorizado CAE"))
-                                            {
+                            if (est.Equals("Revisión CAE") || est.Equals("Autorizado CAE"))
+                            {
                                                 <th>@est</th>
                                             }
-                                        }
+                        }
                                     </tr>
                                 </thead>
                                 <tbody id="tbl_cae"></tbody>
@@ -224,11 +238,11 @@
                                         <th></th>
                                         @foreach (var est in lestatus)
                                         {
-                                            if (est.Equals("En Trámite") || est.Equals("Trámite de Pago") || est.Equals("Enviada a DGPPT") || est.Equals("Pagada"))
-                                            {
+                            if (est.Equals("En Trámite") || est.Equals("Trámite de Pago") || est.Equals("Enviada a DGPPT") || est.Equals("Pagada"))
+                            {
                                                 <th>@est</th>
                                             }
-                                        }
+                        }
                                     </tr>
                                 </thead>
                                 <tbody id="tbl_financieros"></tbody>
@@ -756,11 +770,17 @@
                 let numero = $(this).data('oficio');
                 let acuse = $(this).data('file');
                 let tbl = "<tr>"+
-                        "<td><strong>Número de Oficio: </strong>" + $(this).data('oficio')+"</td>"+
+                        "<td><strong>Número de Oficio: </strong>" + $(this).data('oficio') + "</td>" +
+                        "<td><strong>Año: </strong>" + $(this).data('anio') + "</td>" +
                         "<td><strong>Fecha de Trámite: </strong>"+$(this).data('fechatramitado')+"</td>"+
-                        "<td><strong>Importe: </strong>"+$(this).data('importe')+"</td>"+
                         "<td><strong>Estatus: </strong>"+$(this).data('estatus')+"</td>"+
-                    "</tr>";
+                    "</tr>"+
+                    "<tr>"+
+                        "<td><strong class='text-success'>Monto total de la(s) Factura(s): </strong>$" + $(this).data('importefacturado').toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')+"</td>" +
+                        "<td><strong class='text-danger'>Monto total de la(s) Nota(s) de Crédito: </strong>$" + $(this).data('importenc').toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')+"</td>" +
+                        "<td><strong class='text-danger'>Penas y Deductivas: </strong>$" + $(this).data('penas').toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')+"</td>" +
+                        "<td><strong class='text-success'>Monto total a Pagar: </strong>$" + $(this).data('pagar').toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')+"</td>" +
+                     "</tr>";
                 let data = "<object width='100%' height='700px' data='/view/acuseFinancieros/" + numero + "/"+acuse+"'></object>";
                 $('#titleAcuseOficio').text("Soporte documental que acredita la prestación del servicio con el oficio número - \"" + numero+ "\"");
                 $('#objectPdf').html(data);

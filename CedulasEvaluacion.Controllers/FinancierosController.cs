@@ -243,13 +243,41 @@ namespace CedulasEvaluacion.Controllers
                                            "</div>" +
                                        "</div>" +
                                        (resultado[j].TotalParcial != 0 ? "<div class='col-lg-12'>" +
-                                           "<div class='progress'>" +
+                                           "<div class='progress mt-2'>" +
                                                "<div class='progress-bar progress-bar-success progress-bar-striped progress-bar-animated bg-cedulasParciales' role='progressbar' " +
                                                "style='width: 100%'; >" +
                                                     "<span class='text-light font-weight-bold'>" + resultado[j].TotalParcial + " - cédula(s) parcialmente pagada(s)</span>" +
                                                "</div>" +
                                            "</div>" +
                                        "</div>":"")+
+                                       (resultado[j].APendientes != 0 ? "<div class='col-lg-12'>" +
+                                           "<div class='progress mt-2'>" +
+                                               "<div class='progress-bar progress-bar-success progress-bar-striped progress-bar-animated bg-actasER' role='progressbar' " +
+                                               "style='width: " + ((double)resultado[j].APendientes / (double)totales[i]) * 100.0 + "%'; >" +
+                                                    "<span class='" + text + " font-weight-bold'>" + resultado[j].APendientes + " - Acta(s) Pendiente(s) de Firma </span>" +
+                                               "</div>" +
+                                           "</div>" +
+                                       "</div>" : "") +
+                                        (resultado[j].CedulasPendientes != 0 ? "<div class='col-lg-12'>" +
+                                           "<div class='progress mt-2'>" +
+                                               "<div class='progress-bar progress-bar-success progress-bar-striped progress-bar-animated bg-cedula' role='progressbar' " +
+                                               "style='width: " + ((double)resultado[j].CedulasPendientes / (double)totales[i]) * 100.0 + "%'; >" +
+                                                    "<span class='" + text + " font-weight-bold'>" +
+                                                        resultado[j].CedulasPendientes + " - \"Cédula(s)\" pendiente(s) de validar " +
+                                                    "</span>" +
+                                               "</div>" +
+                                           "</div>" +
+                                       "</div>" : "") +
+                                       (resultado[j].MemosPendientes != 0 ? "<div class='col-lg-12'>" +
+                                           "<div class='progress mt-2'>" +
+                                               "<div class='progress-bar progress-bar-success progress-bar-striped progress-bar-animated bg-memo' role='progressbar' " +
+                                               "style='width: " + ((double)resultado[j].MemosPendientes / (double)totales[i]) * 100.0 + "%'; >" +
+                                                    "<span class='" + text + " font-weight-bold'>" + 
+                                                        resultado[j].MemosPendientes + " - \"Memorándum(s)\" pendiente(s) de validar "+
+                                                    "</span>" +
+                                               "</div>" +
+                                           "</div>" +
+                                       "</div>" : "") +
                                    "</div>" +
                                "</td>";
                         }
