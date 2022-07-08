@@ -680,8 +680,8 @@
 @*Fin Modal para la captura de Incidencias *@
 
 @* Modal para la ver Adjuntos *@
-<div class="modal fade" id="modal_pdf">
-    <div class="modal-dialog modal-xl">
+<div class="modal fade" id="show_pdf">
+    <div class="modal-dialog modal-xl-view">
         <div class="modal-content">
             <div class="modal-header bg-joke">
                 <h4 class="modal-title text-white" id="titlePDF"></h4>
@@ -689,19 +689,18 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body-view">
                 <table class="table">
                     <tr>
                         <td><strong>Folio: </strong> @Model.Folio</td>
                         <td><strong>Año: </strong>@Model.Anio</td>
                         <td><strong>Mes: </strong>@Model.Mes</td>
                         <td><strong>Inmueble: </strong>@Model.inmuebles.Nombre</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"><strong>Estatus: </strong>@Model.Estatus </td>
+                        <td><strong>Estatus: </strong>@Model.Estatus </td>
                     </tr>
                 </table>
-                <div class="row" id="entregablePDF"></div>
+                <div class="row" id="objectPdf">
+                </div>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -781,9 +780,9 @@
                             if (response.data.length > 0) {
                                 Swal.fire({
                                     'icon': 'warning',
-                                    'title': 'Servicio de Limpieza y Áreas Comunes',
+                                    'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
                                     'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" '+
-                                        '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
+                                        '<strong>se borrarán todas las incidencias. ¿Desea continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
                                     'confirmButtonText': 'Si, eliminar',
@@ -793,7 +792,7 @@
                                     if (p.isConfirmed) {
                                         Swal.fire({
                                             'icon': 'warning',
-                                            'title': 'Servicio de Limpieza y Áreas Comunes',
+                                            'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
                                             'text': 'Escriba la palabra BORRAR para confirmar el cambio de respuesta.',
                                             'confirmButtonColor': '#3085d6',
                                             'cancelButtonColor': '#d33',
@@ -807,7 +806,7 @@
                                                 axios.get('/limpieza/eliminarIncidencias/' + model.id).then(r => {
                                                     Swal.fire({
                                                         'icon': 'success',
-                                                        'title': 'Borrado finalizado',
+                                                        'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
                                                         'text': 'Las incidencias de esta pregunta fueron eliminadas correctamente.',
                                                     }).then(function () {
                                                         $('input:radio[name="pregunta2"][value="true"]').prop('checked', true);
@@ -848,9 +847,9 @@
                             if (response.data.length > 0) {
                                 Swal.fire({
                                     'icon': 'warning',
-                                    'title': 'Servicio de Limpieza y Áreas Comunes',
+                                    'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
                                     'html': '<strong>Advertencia:</strong><p>Tiene incidencias capturadas en esta pregunta, al cambiar la respuesta de "NO" a "SI" '+
-                                        '<strong>se borrarán todas las incidencias. ¿Deseas continuar? </strong></p>',
+                                        '<strong>se borrarán todas las incidencias. ¿Desea continuar? </strong></p>',
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
                                     'confirmButtonText': 'Si, eliminar',
@@ -860,7 +859,7 @@
                                     if (p.isConfirmed) {
                                         Swal.fire({
                                             'icon': 'warning',
-                                            'title': 'Servicio de Limpieza y Áreas Comunes',
+                                            'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
                                             'text': 'Escriba la palabra BORRAR para confirmar el cambio de respuesta.',
                                             'confirmButtonColor': '#3085d6',
                                             'cancelButtonColor': '#d33',
@@ -1002,7 +1001,7 @@
 
                         Swal.fire({
                             'icon': 'warning',
-                            'title': 'Servicio de Limpieza y Áreas Comunes',
+                            'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
                             'html': '<strong>Advertencia:</strong><p>¿Deseas eliminar la factura con Folio <strong>' + folio + '</strong> correspondiente al <strong>' +
                                 descripcion +'</strong>?</p>',
                             'confirmButtonColor': '#3085d6',
@@ -1014,7 +1013,7 @@
                             if (yes.isConfirmed) {
                                 Swal.fire({
                                     'icon': 'warning',
-                                    'title': 'Servicio de Limpieza y Áreas Comunes',
+                                    'title': 'Servicio de Limpieza en Áreas Comunes y Oficinas',
                                     'text': 'Escriba la palabra ELIMINAR en mayúsculas para confirmar el borrado de la factura con folio: '+folio,
                                     'confirmButtonColor': '#3085d6',
                                     'cancelButtonColor': '#d33',
@@ -1958,14 +1957,14 @@
                 /*FIN de elimina entregables*/
 
                 /*Ver archivo en modal*/
-                   $(document).on('click', '.view_file', function () {
-                        let nombre = $(this).data('file');
-                        let tipo = $(this).data('tipo');
-                        let url = '<object class="objectPdf" width="100%" height="450" embedded=True data="' + '/cedLimpieza/verArchivo/' + model.folio + '/' + nombre + '"></object>';
-                        $('#titlePDF').text("PDF - \"" + tipo + "\"");
-                        $('#entregablePDF').html(url);
-                        $('#modal_pdf').modal('show');
-                    });
+                $(document).on('click', '.view_file', function () {
+                    let nombre = $(this).data('file');
+                    let tipo = $(this).data('tipo');
+                    let data = "<object width='100%' height='710px' data='/cedLimpieza/verArchivo/" + model.folio + "/" + nombre + "'></object>";
+                    $('#titlePDF').text("PDF - \"" + tipo + "\"");
+                    $('#objectPdf').html(data);
+                    $('#show_pdf').modal('show');
+                });
                 /*FIN de ver archivo en modal*/
 
                 /*Validaciones Entregables*/

@@ -85,7 +85,7 @@ namespace CedulasEvaluacion.Repositories
                 return null;
             }
         }
-        public async Task<List<Oficio>> GetOficiosFinancieros(string servicio)
+        public async Task<List<Oficio>> GetOficiosFinancieros(string servicio,int anio)
         {
             try
             {
@@ -95,6 +95,7 @@ namespace CedulasEvaluacion.Repositories
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
+                        cmd.Parameters.Add(new SqlParameter("@anio", anio));
                         var response = new List<Oficio>();
                         await sql.OpenAsync();
 

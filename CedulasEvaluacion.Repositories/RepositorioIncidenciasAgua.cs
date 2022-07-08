@@ -231,7 +231,9 @@ namespace CedulasEvaluacion.Repositories
                 FechaRealizada = reader["FechaRealizada"] != DBNull.Value ? Convert.ToDateTime(reader["FechaRealizada"]) : DateTime.Now,
                 HoraProgramada = reader["HoraProgramada"] != DBNull.Value ? (TimeSpan)(reader["HoraProgramada"]) : TimeSpan.Parse("00:00:00"),
                 HoraRealizada = reader["HoraRealizada"] != DBNull.Value ? (TimeSpan)(reader["HoraRealizada"]) : TimeSpan.Parse("00:00:00"),
-                Comentarios = reader["Comentarios"] != DBNull.Value ? reader["Comentarios"].ToString() : ""
+                Comentarios = reader["Comentarios"] != DBNull.Value ? reader["Comentarios"].ToString() : "",
+                Penalizable = reader["Penalizable"] != DBNull.Value ? (bool)reader["Penalizable"] : false,
+                MontoPenalizacion = reader["MontoPenalizacion"] != DBNull.Value ? (decimal)reader["MontoPenalizacion"] : 0,
             };
         }
 

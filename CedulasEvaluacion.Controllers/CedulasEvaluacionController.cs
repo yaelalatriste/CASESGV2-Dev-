@@ -185,11 +185,11 @@ namespace CedulasEvaluacion.Controllers
                 {
                     if (respuestas[i].Respuesta == false)
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de limieza no portó identificación y/o uniforme en todo momento.")});
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de limpieza no portó identificación y/o uniforme en todo momento.")});
                     }
                     else
                     {
-                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de limieza portó identificación y/o uniforme en todo momento.") });
+                        local.SetParameters(new[] { new ReportParameter("pregunta" + (i + 1), "El personal de limpieza portó identificación y/o uniforme en todo momento.") });
                     }
                 }
                 else if (i == 3)

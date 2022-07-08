@@ -587,9 +587,35 @@
             }
 
             $("#dt_inmuebles").DataTable({
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Servicio de Fumigación y Control de Fauna Nociva - Listado de Oficios Capturados',
+                        className: "bg-cjf mr-1",
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Servicio de Fumigación y Control de Fauna Nociva - Listado de Oficios Capturados',
+                        className: "bg-cjf mr-1"
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Servicio de Fumigación y Control de Fauna Nociva - Listado de Oficios Capturados',
+                        text: 'Imprimir',
+                        className: "bg-cjf mr-1"
+                    },
+                    /*{
+                        extend: 'colvis',
+                        text: 'Ocultar Columnas',
+                        className: "bg-cjf"
+                    }*/],
+                autoWidth: false,
+                responsive: true,
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
                 },
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
                 "columnDefs": [
                     {
                         "targets": [cuentaTramites() > 0 ? 7 : null],

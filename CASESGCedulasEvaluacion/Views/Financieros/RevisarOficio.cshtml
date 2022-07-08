@@ -1,11 +1,11 @@
 ﻿@model CedulasEvaluacion.Entities.MFinancieros.Oficio;
 @{
-    ViewData["Title"] = "Detalle del Oficio - "+@Model.NumeroOficio+"/"+Model.Anio;
+    ViewData["Title"] = "Detalle del Oficio - "+@Model.NumeroOficio+"/"+Model.Anio+" del Servicio de "+Model.Servicio;
     var i = 0;
 }
 
 <div class="container-fluid">
-    <a href="/financieros/detalle/@Model.Servicio" type='button' class='btn-sm btn-warning float-right mr-2 mb-2' data-toggle="tooltip" title="Regresar al Detalle de Cédulas de @Model.Servicio" data-placement="top"><i class="fal fa-arrow-left"></i></a>
+    <a href="/financieros/detalle/@Model.Servicio?Anio=@Model.Anio" type='button' class='btn-sm btn-warning float-right mr-2 mb-2' data-toggle="tooltip" title="Regresar al Detalle de Cédulas de @Model.Servicio" data-placement="top"><i class="fal fa-arrow-left"></i></a>
     <div class="row col-lg-12 mt-5">
         <table class="table">
             <tr>
@@ -105,12 +105,35 @@
             });
 
             $("#tblOficio").DataTable({
-                paging: true,
-                bLengthChange: false,
-                pageLength: 100,
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Detalle del Oficio ' + model.numeroOficio,
+                        className: "bg-cjf mr-1",
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Detalle del Oficio ' + model.numeroOficio,
+                        className: "bg-cjf mr-1"
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Detalle del Oficio ' + model.numeroOficio,
+                        text: 'Imprimir',
+                        className: "bg-cjf mr-1"
+                    },
+                    /*{
+                        extend: 'colvis',
+                        text: 'Ocultar Columnas',
+                        className: "bg-cjf"
+                    }*/],
+                autoWidth: false,
+                responsive: true,
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
                 },
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
             });
         });
     </script>

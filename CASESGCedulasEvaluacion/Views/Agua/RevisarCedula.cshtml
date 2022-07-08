@@ -134,10 +134,9 @@
                                         {
                                             <h5 class="text-success lblEstatus"><strong>Estatus: </strong> @Model.Estatus</h5>
                                         }
-                                        @*<p class="text-sm">
-                                                @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[0].MontoPenalizacion + @Model.RespuestasEncuesta[1].MontoPenalizacion +
-                                                                                                      @Model.RespuestasEncuesta[2].MontoPenalizacion + @Model.RespuestasEncuesta[3].MontoPenalizacion
-                                                                                                      + Model.PenaCalificacion + Model.capacitacion.MontoPenalizacion + Model.TotalBajoDemanda);
+                                        <p class="text-sm">
+                                                @{decimal total = Convert.ToDecimal(@Model.RespuestasEncuesta[1].MontoPenalizacion + @Model.RespuestasEncuesta[2].MontoPenalizacion +
+                                                                                                      @Model.RespuestasEncuesta[3].MontoPenalizacion);
                                                 }
                                                 @if (total > 0)
                                                 {
@@ -153,12 +152,18 @@
                                                 }
                                             </p>
                                             <ul class="ml-4 mb-0 fa-ul">
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Uniforme: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Actividades en Equipo: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[3].MontoPenalizacion)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-tools"></i></span> <b>Entregables Bajo Demanda: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.TotalBajoDemanda)</li>
-                                                <li class="small mt-3"><span class="fa-li"><i class="fas fa-star"></i></span> <b> Calificación: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.PenaCalificacion)</li>
-                                            </ul>*@
+                                                <li class="small mt-3">
+                                                    <span class="fa-li"><i class="fas fa-tools"></i></span> 
+                                                    <b>Entrega de Garrafones: </b> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", 
+                                                                                    @Model.RespuestasEncuesta[1].MontoPenalizacion + 
+                                                                                    @Model.RespuestasEncuesta[2].MontoPenalizacion)
+                                                </li>
+                                                <li class="small mt-3">
+                                                    <span class="fa-li"><i class="fas fa-tools"></i></span> 
+                                                    <b>Características de los Garrafones: </b>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",
+                                                                                             @Model.RespuestasEncuesta[3].MontoPenalizacion)
+                                                </li>
+                                            </ul>
                                         <div>
                                             <img src="~/img/web1.jpg" alt="Alternate Text" width="40%" />
                                         </div>
@@ -194,6 +199,8 @@
                                             <th>Tipo</th>
                                             <th>Fecha Programada</th>
                                             <th>Fecha Realizada</th>
+                                            <th>¿Penalizable?</th>
+                                            <th>Monto de Penalización</th>
                                             <th>Comentarios</th>
                                         </tr>
                                     </thead>
@@ -207,6 +214,23 @@
                                                     <td>@inci.Tipo</td>
                                                     <td>@inci.FechaProgramada.ToString("dd/MM/yyyy")</td>
                                                     <td>@inci.FechaRealizada.ToString("dd/MM/yyyy")</td>
+                                                     @if (@inci.Penalizable)
+                                                     {
+                                                         <td class="text-center">
+                                                            <div class="icon">
+                                                                <i class="fas fa-times-circle text-danger"></i>
+                                                            </div>
+                                                         </td>
+                                                      }
+                                                      else
+                                                      {
+                                                         <td class="text-center">
+                                                             <div class="icon">
+                                                                 <i class="fas fa-check-circle text-success"></i>
+                                                             </div>
+                                                         </td>
+                                                      }
+                                                    <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@inci.MontoPenalizacion)</td>
                                                     <td>@inci.Comentarios</td>
                                                 </tr>
                                             }
@@ -231,7 +255,7 @@
                         </div>
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
+                                <strong>Penalización total: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[1].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>
@@ -279,6 +303,8 @@
                                         <th>Tipo</th>
                                         <th>Fecha Programada</th>
                                         <th>Fecha Realizada</th>
+                                        <th>¿Penalizable?</th>
+                                        <th>Monto de Penalización</th>
                                         <th>Comentarios</th>
                                     </tr>
                                 </thead>
@@ -292,6 +318,23 @@
                                                 <td>@inci.Tipo</td>
                                                 <td>@inci.FechaProgramada.ToString("dd/MM/yyyy")</td>
                                                 <td>@inci.FechaRealizada.ToString("dd/MM/yyyy")</td>
+                                                @if (@inci.Penalizable)
+                                                     {
+                                                         <td class="text-center">
+                                                            <div class="icon">
+                                                                <i class="fas fa-times-circle text-danger"></i>
+                                                            </div>
+                                                         </td>
+                                                      }
+                                                      else
+                                                      {
+                                                         <td class="text-center">
+                                                             <div class="icon">
+                                                                 <i class="fas fa-check-circle text-success"></i>
+                                                             </div>
+                                                         </td>
+                                                      }
+                                                    <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@inci.MontoPenalizacion)</td>
                                                 <td>@inci.Comentarios</td>
                                             </tr>
                                         }
@@ -315,7 +358,7 @@
                         </div>
                         <div class="col-lg-12">
                             <h5 class="text-danger ml-4">
-                                <strong>Penalización: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
+                                <strong>Penalización total: </strong> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @Model.RespuestasEncuesta[2].MontoPenalizacion)
                             </h5>
                         </div>
                     </div>
@@ -364,6 +407,8 @@
                                             <th>Tipo</th>
                                             <th>Fecha Programada</th>
                                             <th>Fecha Realizada</th>
+                                            <th>¿Penalizable?</th>
+                                            <th>Monto de Penalización</th>
                                             <th>Comentarios</th>
                                         </tr>
                                     </thead>
@@ -377,6 +422,23 @@
                                                     <td>@inci.Tipo</td>
                                                     <td>@inci.FechaProgramada.ToString("dd/MM/yyyy")</td>
                                                     <td>@inci.FechaRealizada.ToString("dd/MM/yyyy")</td>
+                                                    @if (@inci.Penalizable)
+                                                     {
+                                                         <td class="text-center">
+                                                            <div class="icon">
+                                                                <i class="fas fa-times-circle text-danger"></i>
+                                                            </div>
+                                                         </td>
+                                                      }
+                                                      else
+                                                      {
+                                                         <td class="text-center">
+                                                             <div class="icon">
+                                                                 <i class="fas fa-check-circle text-success"></i>
+                                                             </div>
+                                                         </td>
+                                                      }
+                                                    <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}",@inci.MontoPenalizacion)</td>
                                                     <td>@inci.Comentarios</td>
                                                 </tr>
                                             }

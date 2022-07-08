@@ -19,14 +19,16 @@ namespace CedulasEvaluacion.Controllers
         private readonly IRepositorioEvaluacionServicios vCedula;
         private readonly IRepositorioIncidenciasConvencional iConvencional;
         private readonly IRepositorioEntregablesCedula eConvencional;
+        private readonly IRepositorioInmuebles vInmuebles;
         private readonly IRepositorioFacturas vFacturas;
         private readonly IRepositorioUsuarios vUsuarios;
         private readonly IRepositorioPerfiles vPerfiles;
 
         public ConvencionalController(IRepositorioEvaluacionServicios viCedula, IRepositorioIncidenciasConvencional ivConvencional, IRepositorioEntregablesCedula ieConvencional, 
-                                      IRepositorioFacturas iFacturas, IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles)
+                                      IRepositorioFacturas iFacturas, IRepositorioUsuarios iUsuarios, IRepositorioPerfiles iPerfiles, IRepositorioInmuebles iVInmueble)
         {
             this.vCedula = viCedula ?? throw new ArgumentNullException(nameof(viCedula));
+            this.vInmuebles = iVInmueble ?? throw new ArgumentNullException(nameof(iVInmueble));
             this.iConvencional = ivConvencional ?? throw new ArgumentNullException(nameof(ivConvencional));
             this.eConvencional = ieConvencional ?? throw new ArgumentNullException(nameof(ieConvencional));
             this.vFacturas = iFacturas ?? throw new ArgumentNullException(nameof(iFacturas));
@@ -127,6 +129,7 @@ namespace CedulasEvaluacion.Controllers
                 }
                 cedula.URL = Request.QueryString.Value;
                 cedula.RespuestasEncuesta = await vCedula.obtieneRespuestas(id);
+                cedula.inmuebles = await vInmuebles.inmuebleById(cedula.InmuebleId);
                 cedula.facturas = await vFacturas.getFacturas(id, cedula.ServicioId);
                 cedula.TotalMontoFactura = vFacturas.obtieneTotalFacturas(cedula.facturas);
                 return View(cedula);

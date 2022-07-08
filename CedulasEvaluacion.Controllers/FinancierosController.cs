@@ -54,7 +54,7 @@ namespace CedulasEvaluacion.Controllers
                 models.dashboard = new List<DashboardFinancieros>();
                 models.dashboard = await vFinancieros.GetDetalleServicio(servicio, Anio);
                 models.oficio = new List<Oficio>();
-                models.oficio = await vFinancieros.GetOficiosFinancieros(servicio);
+                models.oficio = await vFinancieros.GetOficiosFinancieros(servicio,Anio);
                 return View(models);
             }
             return Redirect("/error/denied");

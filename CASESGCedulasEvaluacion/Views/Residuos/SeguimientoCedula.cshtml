@@ -1099,7 +1099,7 @@
                             return false;
                         }
 
-                        if ($('#customFile').val() == "") {
+                        if (($('#customFile').val() == "" && $('.custom-file-label').text() == "")) {
 
                             $('#customFile').addClass('is-invalid');
                             $('#error_customFile').css('display', 'block');
@@ -1109,6 +1109,7 @@
 
                         return true;
                     }
+
                     $("#customFile").on("change", function () {
                         var fileName = $(this).val().split("\\").pop();
                         var ext = fileName.split('.').pop();
@@ -1147,7 +1148,8 @@
 
                         formData.append("Id", id);
                         formData.append("CedulaEvaluacionId", model.id);
-                        formData.append("Archivo", file);
+                        if(file != null)
+                            formData.append("Archivo", file);
                         formData.append("Folio", folio);
                         formData.append("Tipo", tipo);
                         formData.append("Comentarios", comentarios);

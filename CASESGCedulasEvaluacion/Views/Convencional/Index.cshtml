@@ -3,7 +3,7 @@
 @{
     var i = 0;
     var user = Convert.ToInt32((@User.Claims.ElementAt(2).Value).Contains("Evaluador"));
-    ViewData["Title"] = "Servicio de Telefonía Convencional";
+    ViewData["Title"] = "Servicio de Telefonía Convencional y Servicios Adicionales";
 }
 
 <div class="container-fluid">
@@ -529,9 +529,35 @@
             }
 
             $("#dt_celular").DataTable({
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Servicio de Telefonía Convencional y Servicios Adicionales - Listado de Oficios Capturados',
+                        className: "bg-cjf mr-1",
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Servicio de Telefonía Convencional y Servicios Adicionales - Listado de Oficios Capturados',
+                        className: "bg-cjf mr-1"
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Servicio de Telefonía Convencional y Servicios Adicionales - Listado de Oficios Capturados',
+                        text: 'Imprimir',
+                        className: "bg-cjf mr-1"
+                    },
+                    /*{
+                        extend: 'colvis',
+                        text: 'Ocultar Columnas',
+                        className: "bg-cjf"
+                    }*/],
+                autoWidth: false,
+                responsive: true,
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
                 },
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
                 "columnDefs": [
                     {
                         "targets": [cuentaTramites() > 0 ? 7 : null],
@@ -548,7 +574,7 @@
                 if (estatus == 'Autorizada') {
                     Swal.fire({
                         'icon': 'info',
-                        'title': 'Servicio de Telefonía Convencional',
+                        'title': 'Servicio de Telefonía Convencional y Servicios Adicionales',
                         'html': '<p style="text-align: justify">La cédula de evaluación ya fue autorizada, no olvide firmarla electrónicamente y ' +
                             'posteriormente <strong>subirla en el sistema CASESGV2 en el apartado de "Seguimiento a la Cédula"</strong>, si tiene alguna duda por favor ' +
                             'comuníquese a la ext. 2574 o 2635. </p>'
@@ -564,7 +590,7 @@
                 Swal.fire({
                     'icon': 'info',
                     'customClass': 'swal-wide2',
-                    'title': 'Servicio de Telefonía Convencional',
+                    'title': 'Servicio de Telefonía Convencional y Servicios Adicionales',
                     'confirmButtonText': 'Cerrar',
                     'html': '<p class="text-justify"><b>Cédulas pendientes de dar seguimiento:</b> ' + desgloceCedulasEstatus() + '</p>'
                 });
@@ -572,7 +598,7 @@
             else if ((model.estatus != "" && model.estatus != null) && (model.mes == "" || model.mes == null) && (model.estatus != "Trámite de Pago" && model.estatus != "Enviada a DGPPT" && model.estatus != "Pagada")) {
                 Swal.fire({
                     'icon': 'info',
-                    'title': 'Servicio de Telefonía Convencional',
+                    'title': 'Servicio de Telefonía Convencional y Servicios Adicionales',
                     'customClass': 'swal-wide',
                     'confirmButtonText': 'Cerrar',
                     'html': '<p class="text-justify">En el estatus <b>' + model.estatus + '</b> cuenta con un total de <b>' + totalCedulasMes() + '</b> cédula(s) desglosadas en el(los) siguiente(s) mese(s):<br /></p>' +
