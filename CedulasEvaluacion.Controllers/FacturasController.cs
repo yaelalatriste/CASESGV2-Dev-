@@ -42,15 +42,12 @@ namespace CedulasEvaluacion.Controllers
             {
                 ModelsFacturas resultado = new ModelsFacturas();
                 resultado.Anio = anio;
-                resultado.facturasMes = await vFacturas.getFacturasTipo("Mes",anio);
                 resultado.facturasServicio = await vFacturas.getFacturasTipo("Servicio",anio);
+                resultado.facturasMes = await vFacturas.getFacturasTipo("Mes",anio);
                 resultado.facturasParciales = await vFacturas.getFacturasTipo("Parciales",anio);
                 if (Servicio != 0)
                 {
-                    if (Mes!= null && Tipo != null)
-                    {
-                        resultado.detalle = await vFacturas.getDetalleFacturacion(Servicio,Mes,Tipo,anio);
-                    }
+                    resultado.detalle = await vFacturas.getResumenFacturacion(Servicio, anio);
                     resultado.desgloceServicio = await vFacturas.getDesgloceFacturacion(Servicio,anio);
                 }
                 return View(resultado);

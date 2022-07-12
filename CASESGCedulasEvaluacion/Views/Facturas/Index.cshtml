@@ -7,6 +7,28 @@
     {
         totalFacturas += mes.TotalFacturas;
     }
+
+    var meses = new List<string>();
+    var fondos = new List<string>();
+
+    @if (@Model.detalle != null)
+    {
+        @foreach (var dt in @Model.detalle)
+        {
+            meses.Add(dt.Mes);
+        }
+
+        @foreach (var dt in @Model.detalle)
+        {
+            fondos.Add(dt.Fondo);
+        }
+    }
+
+    HashSet<string> quitaMeses = new HashSet<string>(meses);
+    List<string> lmeses = quitaMeses.ToList();
+
+    HashSet<string> quitaFondos = new HashSet<string>(fondos);
+    List<string> lFondos = quitaFondos.ToList();
 }
 
 <div class="container-fluid">
@@ -45,11 +67,8 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Facturas por Servicio</a>
                     </li>
-                    @*<li class="nav-item" role="presentation">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#facturasMes" role="tab" aria-controls="profile" aria-selected="false">Facturas por Mes</a>
-                    </li>*@
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#facturasParciales" role="tab" aria-controls="contact" aria-selected="false">Facturas Parcialmente Pagadas</a>
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#facturasParciales" role="tab" aria-controls="contact" aria-selected="false">Cédulas parcialmente pagadas</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -61,7 +80,7 @@
                                 <div class="col-md-2 text-center mt-3">
                                     <input type="text" class="facturasServicio" value="@servicio.TotalFacturas" data-width="100" data-height="100" data-fgColor="@servicio.Fondo"
                                            data-readonly="true" /><br />
-                                    <a href="#" class="font-weight-bold btnServicio" style="color: @servicio.Fondo" data-servicio="@servicio.Id"
+                                    <a href="#" class="font-weight-bold btnServicio" style="color: @servicio.Fondo" data-servicio="@servicio.Id" data-descripcion="@servicio.Descripcion"
                                        data-total="@servicio.TotalFacturas">
                                         @servicio.TotalFacturas - @servicio.Servicio
                                     </a>
@@ -69,21 +88,8 @@
                             }
                         </div>
                     </div>
-                    @*<div class="tab-pane fade mt-2 ml-3" id="facturasMes" role="tabpanel" aria-labelledby="profile-tab">
-                        <h4 class="mt-4">Facturas por Mes</h4>
-                        <div class="row col-lg-12">
-                            @foreach (var mes in Model.facturasMes)
-                            {
-                                <div class="col-1 text-center mt-3">
-                                    <input type="text" class="facturasMes" value="@mes.TotalFacturas" data-width="90" data-height="90" data-fgColor="@mes.Fondo"
-                                           data-readonly="true" data-max="@mes.TotalFacturas" />
-                                    <h6 class="font-weight-bold" style="color: @mes.Fondo">@mes.TotalFacturas - @mes.Mes</h6>
-                                </div>
-                            }
-                        </div>
-                    </div>*@
                     <div class="tab-pane fade mt-2 ml-3" id="facturasParciales" role="tabpanel" aria-labelledby="contact-tab">
-                        <h4 class="mt-4">Facturas Parcialmente Pagadas</h4>
+                        <h4 class="mt-4">Cédulas parcialmente pagadas</h4>
                         @if (Model.facturasParciales.Count != 0)
                         {
                             <div class="row col-lg-12">
@@ -91,14 +97,14 @@
                                 {
                                     <div class="col-1 text-center mt-3">
                                         <input type="text" class="facturasParciales" value="@parcial.TotalFacturas" data-width="90" data-height="90" data-fgColor="@parcial.Fondo"
-                                            data-readonly="true" data-max="@parcial.TotalFacturas" />
+                                               data-readonly="true" data-max="@parcial.TotalFacturas" />
                                         <h6 class="font-weight-bold" style="color: @parcial.Fondo">@parcial.TotalFacturas - @parcial.Servicio</h6>
                                     </div>
-                                 }
+                                }
                             </div>
                         }
-                        else 
-                        { 
+                        else
+                        {
                             <div class="col-lg-12">
                                 <div class="justify-content-center text-center">
                                     <p class="text-success font-weight-bold">No hay facturas pagadas parcialmente</p>
@@ -109,10 +115,168 @@
                 </div>
             </div>
         </div>
-        <div class="row col-lg-12 mt-3 justify-content-center" id="divDesgloce">
+        @if (Model.desgloceServicio != null)
+        {
+            <hr class="col-xs-12 mt-4 mb-2">
+            <h4 class="mt-2" id="servicioRevisado"></h4>
+        }
+        <div class="row col-lg-12 mt-3 mb-3 justify-content-start" id="divDesgloce">
             @if (Model.desgloceServicio != null)
             {
-                <div class="row col-lg-10">
+                <button class="btn btn-primary mr-3" id="btnDFacturas">Factura(s)</button>
+                <button class="btn btn-primary mr-3" id="btnDNC">Nota(s) de Crédito</button>
+                <button class="btn btn-primary mr-3" id="btnResumen">Resumen de Facturación</button>
+            }
+        </div>
+        <div class="row col-lg-12 mt-2 justify-content-center" id="divDesgloce">
+            @if (Model.desgloceServicio != null)
+            {
+                <div class="row col-lg-12" id="divResumen">
+                    <div class="col-lg-12">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            @for (var i = 0; i < lmeses.Count; i++)
+                            {
+                                if (i == 0)
+                                {
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#@lmeses[i]" role="tab" aria-controls="home" aria-selected="true">
+                                            @lmeses[i]
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#@lmeses[i]" role="tab" aria-controls="home" aria-selected="true">
+                                            @lmeses[i]
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            @for (var m = 0; m < lmeses.Count; m++)
+                            {
+                                int totalF = 0;
+                                decimal total = 0;
+                                decimal totalPagado = 0;
+                                var ms = "show active";
+                                <div class="tab-pane fade mt-2 ml-3 @(m == 0 ? ms : "")" id="@lmeses[m]">
+                                    <div class="row col-lg-13 mt-3">
+                                        <div class="col-md-4 mt-1">
+                                            <h4>Facturas de @lmeses[m]</h4>
+                                            <table class="table mt-3">
+                                                <thead>
+                                                    <tr class="h6">
+                                                        <th>Factura(s)</th>
+                                                        <th>Estatus</th>
+                                                        <th>Monto de la(s) Factura(s)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var dt in Model.detalle)
+                                                    {
+                                                        ms = dt.Mes;
+                                                        @if (dt.Tipo.Equals("Factura") && dt.Mes.Equals(lmeses[m]))
+                                                        {
+                                                            total += dt.TotalFinal;
+                                                            totalF += dt.TotalFacturas;
+                                                            @if (dt.Estatus.Equals("Pagada")) {
+                                                                totalPagado = dt.TotalFinal;
+                                                            }
+                                                            <tr>
+                                                                <td class="text-center">@dt.TotalFacturas</td>
+                                                                <td>
+                                                                    @(dt.Estatus.Equals("Proceso") ? "Pendientes" : dt.Estatus.Equals("Pendiente") ? "No Pagadas" : dt.Estatus)
+                                                                </td>
+                                                                <td class="text-right">@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @dt.TotalFinal)</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                                <tfooter>
+                                                    <tr class="font-weight-bold">
+                                                        <td>Total: @totalF Factura(s)</td>
+                                                        <td colspan="2" class="text-right">
+                                                           @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total)
+                                                        </td>
+                                                    </tr>
+                                                </tfooter>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-2 mt-5">
+                                            <center class="">
+                                                <input type="text" class="resumenFacturas" value="@(totalPagado != 0 ? (@totalPagado/@total)*100:0)" data-width="100" data-height="100" 
+                                                       data-fgColor="#157614" data-readonly="true" /><br />
+                                                <p style="color:#157614; font-weight: bold;">Porcentaje de Pago</p>
+                                            </center>
+                                        </div>
+                                        <div class="col-md-4 mt-1">
+                                            @{ total = 0; }
+                                            @{ totalF = 0; }
+                                            @{ totalPagado = 0; }
+                                            <h4>Nota(s) de Crédito (NC) de @lmeses[m]</h4>
+                                            <table class="table mt-3">
+                                                <thead>
+                                                    <tr class="h6">
+                                                        <th>Nota(s)</th>
+                                                        <th>Estatus</th>
+                                                        <th>Monto de la(s) Factura(s)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var dt in Model.detalle)
+                                                    {
+                                                        ms = dt.Mes;
+                                                        @if (dt.Tipo.Equals("NC") && dt.Mes.Equals(lmeses[m]))
+                                                        {
+                                                            total += dt.TotalFinal;
+                                                            totalF += dt.TotalFacturas;
+                                                            @if (dt.Estatus.Equals("Aplicada"))
+                                                            {
+                                                                totalPagado = dt.TotalFinal;
+                                                            }
+                                                            <tr>
+                                                                <td class="text-center">@dt.TotalFacturas</td>
+                                                                <td>
+                                                                    @(dt.Estatus.Equals("Aplicada") ? "Aplicada(s)": dt.Estatus.Equals("Aplicada") ? "Pendiente(s) de Aplicar": dt.Estatus)
+                                                                </td>
+                                                                <td class="text-right"> @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", @dt.TotalFinal)</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                                <tfooter>
+                                                    <tr class="font-weight-bold">
+                                                        @if (total != 0)
+                                                        {
+                                                            <td>Total: @totalF Nota(s) de crédito</td>
+                                                            <td colspan="2" class="text-right">
+                                                                @String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C}", total)
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td colspan="3" class="font-weight-bold text-center">No hay nota(s) de crédito para aplicar</td>
+                                                        }
+                                                    </tr>
+                                                </tfooter>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-2 mt-5">
+                                            <center>
+                                                <input type="text" class="resumenNC" value="@(totalPagado != 0 ? (@totalPagado/@total)*100:0)" data-width="100" data-height="100" data-fgColor="red"
+                                                       data-readonly="true" /><br />
+                                                <p style="color: red; font-weight: bold;">Porcentaje de Aplicación</p>
+                                            </center>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-lg-12 mb-4" id="divFacturas">
                     <h4>Factura(s) por Mes</h4>
                     <div class="row col-lg-12 mt-3">
                         @foreach (var servicio in Model.desgloceServicio)
@@ -123,11 +287,11 @@
 
                                 if (@servicio.TotalFacturas != 0)
                                 {
-                                    total = (Convert.ToDouble(@servicio.TotalPagado)/ Convert.ToDouble(@servicio.TotalFinal)) * 100.0;
+                                    total = (Convert.ToDouble(@servicio.TotalPagado) / Convert.ToDouble(@servicio.TotalFinal)) * 100.0;
                                 }
                                 <div class="col-md-2 text-center mt-3">
                                     <p class="font-weight-bold" style="color: @servicio.Fondo">@servicio.Mes</p>
-                                    <input type="text" class="desgloceServicio" value="@total.ToString("n2")" data-width="100" data-height="100" 
+                                    <input type="text" class="desgloceServicio" value="@(@total != 0 ? @total.ToString("n2"):"0")" data-width="100" data-height="100"
                                            data-fgColor="@servicio.Fondo" data-readonly="true" data-max="100" data-pp="28" /><br />
                                     <a href="#" class="font-weight-bold btnDetalle" style="color: @servicio.Fondo" data-tipo="@servicio.Tipo" data-mes="@servicio.Mes"
                                        data-servicio="@servicio.Id">
@@ -178,12 +342,29 @@
                                             </tfooter>
                                         </table>
                                     }
+                                    else
+                                    {
+                                        <table class="table">
+                                            <thead>
+                                                <tr class="h6">
+                                                    <th>Facturas</th>
+                                                    <th>Monto de la(s) Factura(s)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="font-weight-bold text-center">
+                                                    <td colspan="3">No hay facturación por pagar</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    }
                                 </div>
                             }
                         }
                     </div>
                 </div>
-                <div class="row col-lg-10 mt-3">
+                <div class="row col-lg-12 mt-3 mb-4" id="divNC">
                     <h4>Nota(s) de Crédito por Mes</h4>
                     <div class="row col-lg-12 mt-3">
                         @foreach (var servicio in Model.desgloceServicio)
@@ -194,12 +375,12 @@
 
                                 if (@servicio.TotalFacturas != 0)
                                 {
-                                   total = (@servicio.FacturasPagadas * 100.0) / @servicio.TotalFacturas;
+                                    total = (@servicio.FacturasPagadas * 100.0) / @servicio.TotalFacturas;
                                 }
-                                
+
                                 <div class="col-md-2 text-center mt-3">
                                     <p class="font-weight-bold" style="color: @servicio.Fondo">@servicio.Mes</p>
-                                    <input type="text" class="desgloceServicio" value="@total.ToString("n2")" data-width="100" data-height="100" data-fgColor="@servicio.Fondo"
+                                    <input type="text" class="desgloceServicio" value="@(total != 0 ? @total.ToString("n2"): "100")" data-width="100" data-height="100" data-fgColor="@servicio.Fondo"
                                            data-readonly="true" data-max="100" /><br />
                                     <a href="#" class="font-weight-bold btnDetalle" style="color: @servicio.Fondo" data-tipo="@servicio.Tipo" mes="@servicio.Mes"
                                        data-servicio="@servicio.Id">
@@ -210,7 +391,7 @@
                                     {
                                         <table class="table">
                                             <thead>
-                                                <tr class="h6">
+                                                <tr>
                                                     <th>Nota(s) de Crédito</th>
                                                     <th>Monto de la(s) Nota(s) de Crédito</th>
                                                 </tr>
@@ -250,6 +431,22 @@
                                             </tfooter>
                                         </table>
                                     }
+                                    else
+                                    {
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nota(s) de Crédito</th>
+                                                    <th>Monto de la(s) Nota(s) de Crédito</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="h6 font-weight-bold text-center">
+                                                    <td colspan="2">No hay nota(s) de crédito por aplicar</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    }
                                 </div>
                             }
                         }
@@ -279,7 +476,21 @@
         $(function () {
             var model = @Html.Raw(Json.Serialize(@Model));
             var totalFacturas = @totalFacturas;
-            var desgloceService = 0;
+            console.log(model);
+            /*Valores de la URL*/
+            var urlParams = new URLSearchParams(window.location.search);
+            var servicio = urlParams.get('Servicio');
+
+            for (var i = 0; i<model.facturasServicio.length; i++) {
+                if (model.facturasServicio[i].id == servicio) {
+                    $("#servicioRevisado").text("Servicio - "+model.facturasServicio[i].descripcion);
+                    break;
+                }
+            } 
+            
+
+            $("#divFacturas").css("display","none");
+            $("#divNC").css("display","none");
 
             $("#anioActual").val(@DateTime.Now.Year);
 
@@ -287,6 +498,25 @@
                 window.location.href = "?Anio="+$("#anioActual").val();
             });
 
+            /*Mostrar detalles*/
+                $('#btnDFacturas').click(function () {
+                    $("#divFacturas").css("display", "block");
+                    $("#divNC").css("display", "none");
+                    $("#divResumen").css("display", "none");
+                });
+
+                $('#btnDNC').click(function () {
+                    $("#divFacturas").css("display", "none");
+                    $("#divNC").css("display", "block");
+                    $("#divResumen").css("display", "none");
+                });
+
+                $('#btnResumen').click(function () {
+                    $("#divFacturas").css("display", "none");
+                    $("#divNC").css("display", "none");
+                    $("#divResumen").css("display", "block");
+                });
+            /*Fin de Mostrar detalles*/
 
             $('.btnServicio').click(function () {
                 desgloceService = $(this).data('total');
@@ -340,6 +570,26 @@
                 }
             });
 
+            /**************Resumen de Facturación***************/
+                $('.resumenFacturas').knob({
+                    format: function (value) {
+                        return value.toFixed(2) + '%';
+                    },
+                    draw: function () {
+                        $(this.i).css('transform', 'rotate(0deg)').css('font-size', '11pt');
+                    }
+                });
+
+                $('.resumenNC').knob({
+                    format: function (value) {
+                        return value.toFixed(2) + '%';
+                    },
+                    draw: function () {
+                        $(this.i).css('transform', 'rotate(0deg)').css('font-size', '11pt');
+                    }
+                });
+            /**************Resumen de Facturación***************/
+
             $('.btnDetalle').click(function () {
                 window.location.href = '?Servicio=' + $(this).data('servicio') + '&Mes=' + $(this).data('mes') + '&Tipo=' + $(this).data('tipo');
             });
@@ -355,7 +605,7 @@
                     $("#divDesgloce").css('display','none');
                 }
             });
-    
+
         });
     </script>
 }

@@ -279,7 +279,7 @@ namespace CedulasEvaluacion.Controllers
                 document.Replace("|EncabezadoInmueble|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.TipoInmueble) + " " + CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.Estado), false, true);
             }
 
-            document.Replace("|InmuebleEvaluado|", acta.InmuebleEvaluado, false, true);
+            document.Replace("|AdministracionInmueble|", acta.InmuebleEvaluado, false, true);
             document.Replace("|Puesto|", acta.PuestoAutoriza, false, true);
             document.Replace("|PuestoFirma|", CultureInfo.CurrentCulture.TextInfo.ToUpper(acta.PuestoAutoriza), false, true);
             document.Replace("|DomicilioInmueble|", acta.Direccion, false, true);

@@ -592,19 +592,17 @@ namespace CedulasEvaluacion.Repositories
             }
         }
 
-        public async Task<List<DesgloceServicio>> getDetalleFacturacion(int servicio, string mes,string tipo,int anio)
+        public async Task<List<DesgloceServicio>> getResumenFacturacion(int servicio, int anio)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("sp_getDetalleFacturasServicio", sql))
+                    using (SqlCommand cmd = new SqlCommand("sp_getResumenFacturasServicio", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@anio", anio));
                         cmd.Parameters.Add(new SqlParameter("@servicio", servicio));
-                        cmd.Parameters.Add(new SqlParameter("@mes", mes));
-                        cmd.Parameters.Add(new SqlParameter("@tipo", tipo));
                         var response = new List<DesgloceServicio>();
                         await sql.OpenAsync();
 
@@ -674,6 +672,7 @@ namespace CedulasEvaluacion.Repositories
             {
                 Id = (int)reader["Id"],
                 Servicio = reader["Servicio"].ToString(),
+                Descripcion = reader["Descripcion"].ToString(),
                 Fondo = reader["Fondo"].ToString(),
                 TotalFacturas = (int)reader["TotalFacturas"],
             };
@@ -683,13 +682,12 @@ namespace CedulasEvaluacion.Repositories
             return new DesgloceServicio
             {
                 Id = (int)reader["Id"],
+                Tipo = reader["Tipo"].ToString(),
                 Mes = reader["Mes"].ToString(),
-                Folio = reader["Folio"].ToString(),
-                Empresa = reader["Empresa"].ToString(),
                 Estatus = reader["Estatus"].ToString(),
-                EstatusFactura = reader["EstatusFactura"].ToString(),
-                Serie = reader["Serie"].ToString(),
-                FolioFactura = reader["FolioFactura"].ToString(),
+                Fondo = reader["Fondo"].ToString(),
+                TotalFacturas = (int) reader["FacturasGeneradas"],
+                TotalFinal = (decimal)reader["TotalFinal"],
             };
         }
 
