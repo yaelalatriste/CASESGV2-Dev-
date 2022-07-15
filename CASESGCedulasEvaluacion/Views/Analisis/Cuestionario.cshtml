@@ -1689,7 +1689,7 @@
                 /********************************** FIN Funciones Asincronas*********************************/
 
                 /*Enviar la Cedula*/
-            $('.btn_enviar').click(function () {
+                    $('.btn_enviar').click(function () {
                         var isContinue = true;
                         let i = 0;
                         var respuesta = null;
@@ -1778,6 +1778,8 @@
                                 });
                             }
                         } else {
+                            $('.btn_enviar').attr('disabled', true);
+                            $('.btn_guardar').attr('disabled', true);
                           validaEntregables();
                         }
 

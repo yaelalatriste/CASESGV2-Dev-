@@ -18,6 +18,7 @@ namespace CedulasEvaluacion.Entities.Vistas
         public int Anio { get; set; }
         public bool CedulaValidada { get; set; }
         public bool MemoValidado { get; set; }
+        public bool ActaFirmada { get; set; }
         public string NumFactura { get; set; }
         public string Servicio { get; set; }
         public string Estatus { get; set; }

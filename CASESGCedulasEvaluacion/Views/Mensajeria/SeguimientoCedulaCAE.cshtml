@@ -3,6 +3,7 @@
 @{
     int user = Convert.ToInt32(@User.Claims.ElementAt(0).Value + "");
     ViewData["Title"] = "Seguimiento a la Cédula del Servicio de Mensajería Acelerada: " + Model.Folio;
+    var actaFirmada = false;
 }
 
 <div class="row col-lg-12">
@@ -211,7 +212,8 @@
                                     <tr>
                                         @if (entre.Tipo.Equals("ActaER"))
                                         {
-                                            tipo = "Acta Entrega - Recepción";
+                                            tipo = entre.Firmado == true ? "Acta Entrega - Recepción (Firmada)":"Acta Entrega - Recepción";
+                                            actaFirmada = entre.Firmado == true ? true : false;
                                             <td>@Html.DisplayName(tipo)</td>
                                         }
                                         else if (entre.Tipo.Equals("Factura"))
@@ -588,7 +590,8 @@
     $(function () {
         var model = @Html.Raw(Json.Serialize(@Model));
         var usuario = @Html.Raw(Json.Serialize(@User.Claims.ElementAt(2).Value));
-        var tramitePago = false;
+        var tramitePago = @Html.Raw(Json.Serialize(actaFirmada));
+
         $("#divAvisoFinancieros").css('display', 'none');
 
         $('[data-toggle="tooltip"]').tooltip();
@@ -776,14 +779,14 @@
             });
 
             $(document).on('click', '.tramitar_pago', function () {
-                /*if (tramitePago == false) {
+                if (tramitePago == false) {
                     Swal.fire({
                         'icon': 'error',
                         'title': 'Servicio de Mensajería Acelerada',
                         'html': '<p style="text-align: justify">La cédula aún no puede enviarse a <b>"Trámite de pago"</b> ya que aún no se ha cargado el <b>"Acta Entrega - Recepción" firmada por el prestador de servicios.</b> Favor de revisar con el área de operación.</p>'
                     });
                     return false;
-                }*/
+                }
 
                 Swal.fire({
                     'icon': 'warning',
@@ -1221,15 +1224,6 @@
                         if (response[i].estatus == '' && response[i].tipo == "Cedula_Firmada") {
                             cedFirmada = true;
                         }
-
-                        if (response[i].tipo == "ActaER" && response[i].firmado == true) {
-                            actaFirmada = true;
-                            tramitePago = true;
-                        }
-                    }
-
-                    if (actaFirmada == false && (usuario == "Administrador" || usuario.indexOf("Evaluador"))) {
-                        options += '<option value="ActaER">Acta Entrega-Recepción (Firmada)</option>';
                     }
 
                     if (memo == false && model.estatus == "Autorizado CAE") {
@@ -1340,7 +1334,7 @@
                         }).catch(error => {
                             Swal.fire({
                                 'icon': "error",
-                                'title': 'Servicio de Mensajeria y Áreas Comunes',
+                                'title': 'Servicio de Mensajeria Acelerada',
                                 'text': 'Se presento un error al intentar adjuntar el archivo.'
                             });
                         });
@@ -1361,7 +1355,7 @@
                                     if (response.status == 200) {
                                         Swal.fire({
                                             'icon': "success",
-                                            'title': 'Servicio de Mensajeria y Áreas Comunes',
+                                            'title': 'Servicio de Mensajeria Acelerada',
                                             'text': 'Se adjuntó el entregable de forma correcta.'
                                         }).then(function () {
                                             window.location.reload();
@@ -1373,7 +1367,7 @@
                                 }).catch(error => {
                                     Swal.fire({
                                         'icon': "error",
-                                        'title': 'Servicio de Mensajeria y Áreas Comunes',
+                                        'title': 'Servicio de Mensajeria Acelerada',
                                         'text': 'Se presento un error al intentar adjuntar el entregable.'
                                     });
                                 });
@@ -1386,14 +1380,14 @@
                             } else {
                                 Swal.fire({
                                     'icon': "error",
-                                    'title': 'Servicio de Mensajeria y Áreas Comunes',
+                                    'title': 'Servicio de Mensajeria Acelerada',
                                     'text': 'Ya fue adjuntado un entregable con el tipo ' + tipo
                                 });
                             }
                         }).catch(e => {
                             Swal.fire({
                                 'icon': "error",
-                                'title': 'Servicio de Mensajeria y Áreas Comunes',
+                                'title': 'Servicio de Mensajeria Acelerada',
                                 'text': 'Ocurrío un error al válidar el entregable.'
                             });
                         });

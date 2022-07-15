@@ -142,29 +142,37 @@
                                 <td>@Html.DisplayFor(modelItem => item.Folio)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Mes)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Anio)</td>
-                                @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && item.Estatus.Equals("En Trámite"))
+                                @if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && 
+                                    (item.Estatus.Equals("En Trámite") || item.Estatus.Equals("Trámite de Pago") || item.Estatus.Equals("Enviada a DGPPT") || item.Estatus.Equals("Pagada")))
                                 {
-                                    @if (item.MemoValidado == true && item.CedulaValidada == true)
-                                    {
-                                        <td class="text-center">
-                                            <i class="fa-regular fa-check text-success"></i>
-                                            <i class="fa-regular fa-check text-success"></i>
-                                        </td>
-                                    }
-                                    else if ((item.MemoValidado == true && item.CedulaValidada == false) || (item.MemoValidado == false && item.CedulaValidada == true))
-                                    {
-                                        <td class="text-center">
-                                            <i class="fa-regular fa-check text-success"></i>
-                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
-                                        </td>
-                                    }
-                                    else if (item.MemoValidado == false && item.CedulaValidada == false)
-                                    {
-                                        <td class="text-center">
-                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
-                                            <i class="fa-regular fa-clipboard-check text-danger ml-2"></i>
-                                        </td>
-                                    }
+                                    <td class="text-center">
+                                        @if (item.MemoValidado == true)
+                                        {
+                                            <i class="fa-regular fa-check text-success mr-2"></i>
+                                        }
+                                        else 
+                                        { 
+                                            <i class="fa-regular fa-clipboard-check text-danger mr-2"></i>
+                                        }
+
+                                        @if (item.CedulaValidada == true)
+                                        {
+                                            <i class="fa-regular fa-check text-success mr-2"></i>
+                                        }
+                                        else 
+                                        { 
+                                            <i class="fa-regular fa-clipboard-check text-danger mr-2"></i>
+                                        }
+                                        
+                                        @if (item.ActaFirmada == true)
+                                        {
+                                            <i class="fa-regular fa-file-check text-success"></i>
+                                        }
+                                        else 
+                                        { 
+                                            <i class="fa-regular fa-file-xmark text-danger"></i>
+                                        }
+                                    </td>
                                 }
                                 else if (!(@User.Claims.ElementAt(2).Value).Contains("Evaluador") && !item.Estatus.Equals("En Trámite"))
                                 {

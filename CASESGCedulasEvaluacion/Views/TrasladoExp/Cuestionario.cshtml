@@ -1600,6 +1600,8 @@
                                 return false;
                             }
                         } else {
+                            $('.btn_enviar').attr('disabled', true);
+                            $('.btn_guardar').attr('disabled', true);
                             validaEntregables();
                         }
                     });

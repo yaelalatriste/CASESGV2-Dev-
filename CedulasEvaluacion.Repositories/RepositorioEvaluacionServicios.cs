@@ -512,6 +512,7 @@ namespace CedulasEvaluacion.Repositories
                 Anio = (int)reader["Anio"],
                 CedulaValidada = reader["CedulaValidada"] != DBNull.Value ? (bool)reader["CedulaValidada"] : false,
                 MemoValidado = reader["MemoValidado"] != DBNull.Value ? (bool) reader["MemoValidado"] : false,
+                ActaFirmada = reader["ActaFirmada"] != DBNull.Value ? (bool) reader["ActaFirmada"] : false,
                 Servicio = reader["Servicio"].ToString(),
                 Estatus = reader["Estatus"].ToString(),
                 FechaActualizacion = reader["FechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaActualizacion"]): Convert.ToDateTime(reader["FechaCreacion"])
